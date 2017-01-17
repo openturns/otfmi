@@ -52,8 +52,8 @@ def deviationFunction(x):
     y=(F*L*L*L)/(3.*E*I)
     return [y]
 
-deviation_py = ot.PythonFunction(4, 1, deviationFunction)
-deviation_py.enableHistory()
+model_py = ot.PythonFunction(4, 1, deviationFunction)
+model_py.enableHistory()
 
 #§ FMU model
 import otfmi
@@ -68,14 +68,14 @@ try:
     directory_platform = dict_platform[key_platform]
     path_fmu = os.path.join(path_here, "file", "fmu",
                             directory_platform, "deviation.fmu")
-    deviation_fmu = otfmi.FMUFunction(
+    model_fmu = otfmi.FMUFunction(
         path_fmu, inputs_fmu=["E", "F", "L", "I"], outputs_fmu="y")
 except (KeyError, FMUException):
     print ("This example is not available on your platform.\n"
            "Execution aborted.")
     sys.exit()
 
-deviation_fmu.enableHistory()
+model_fmu.enableHistory()
 
 def create_monte_carlo(model, inputRandomVector):
     """Create a Monte Carlo algorithm.
@@ -92,7 +92,7 @@ def create_monte_carlo(model, inputRandomVector):
     # Create an Event from this RandomVector
     threshold = 30
     myEvent = Event(outputVariableOfInterest, Greater(), threshold)
-    myEvent.setName("Deviation > 30 cm")
+    myEvent.setName("Deviation > %g cm" % threshold)
 
     # Create a Monte Carlo algorithm
     myAlgoMonteCarlo = MonteCarlo(myEvent)
@@ -154,12 +154,12 @@ def run_demo(seed=23091926):
 
     ot.RandomGenerator.SetSeed(seed)
     time_start = time.time()
-    probability_py = run_monte_carlo(deviation_py)
+    probability_py = run_monte_carlo(model_py)
     elapsed_py = time.time() - time_start
 
     ot.RandomGenerator.SetSeed(seed)
     time_start = time.time()
-    probability_fmu = run_monte_carlo(deviation_fmu)
+    probability_fmu = run_monte_carlo(model_fmu)
     elapsed_fmu = time.time() - time_start
 
     title = "Threshold exeedance probability:"
@@ -174,7 +174,7 @@ def run_demo(seed=23091926):
 
     from numpy import finfo
     if relative_error < finfo(float).eps:
-        print "Relative error is below machine precision"
+        print "Relative error is below machine precision."
     else:
         print "Relative error: %e" % relative_error
 

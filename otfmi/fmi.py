@@ -222,7 +222,7 @@ def apply_initialization_script(model, path_script):
             pass
 
 #§
-def get_name_variable(model):
+def get_name_variable(model, **kwargs):
     """Get the list of variable names.
 
     Parameters
@@ -231,7 +231,7 @@ def get_name_variable(model):
 
     """
 
-    return model.get_model_variables().keys()
+    return model.get_model_variables(**kwargs).keys()
 
 def get_causality(model):
     """Get the causality of the variables.
