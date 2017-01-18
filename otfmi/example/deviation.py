@@ -20,14 +20,10 @@ dict_platform = {("Linux", "64bit"):"linux64",
 import numpy as np
 import openturns as ot
 
-from openturns import (Event, MonteCarlo,
-                       Beta, LogNormal, Uniform, Greater, )
-
-
-E = Beta(0.93, 3.2, 28000000.0, 48000000.0)
-F = LogNormal(30000.0, 9000.0, 15000.0,  LogNormal.MUSIGMA)
-L = Uniform(250.0, 260.0)
-I = Beta(2.5, 4.0, 310.0, 450.0)
+E = ot.Beta(0.93, 3.2, 28000000.0, 48000000.0)
+F = ot.LogNormal(30000.0, 9000.0, 15000.0,  ot.LogNormal.MUSIGMA)
+L = ot.Uniform(250.0, 260.0)
+I = ot.Beta(2.5, 4.0, 310.0, 450.0)
 
 
 #§ Python model (reference)
@@ -91,11 +87,11 @@ def create_monte_carlo(model, inputRandomVector):
     outputVariableOfInterest = ot.RandomVector(model, inputRandomVector)
     # Create an Event from this RandomVector
     threshold = 30
-    myEvent = Event(outputVariableOfInterest, Greater(), threshold)
+    myEvent = ot.Event(outputVariableOfInterest, ot.Greater(), threshold)
     myEvent.setName("Deviation > %g cm" % threshold)
 
     # Create a Monte Carlo algorithm
-    myAlgoMonteCarlo = MonteCarlo(myEvent)
+    myAlgoMonteCarlo = ot.MonteCarlo(myEvent)
     myAlgoMonteCarlo.setBlockSize(100)
     myAlgoMonteCarlo.setMaximumCoefficientOfVariation(0.10)
 

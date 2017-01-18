@@ -15,23 +15,19 @@ dict_platform = {("Linux", "64bit"):"linux64",
 
 #§ Define the input distribution
 import openturns as ot
-from openturns import (PythonFunction, CorrelationMatrix, NormalCopula,
-                       ComposedDistribution,  RandomVector, Event, MonteCarlo,
-                       Beta, LogNormal, Uniform, Greater)
 
-
-E = Beta(0.93, 3.2, 28000000.0, 48000000.0)
-F = LogNormal(30000.0, 9000.0, 15000.0,  LogNormal.MUSIGMA)
-L = Uniform(250.0, 260.0)
-I = Beta(2.5, 4.0, 310.0, 450.0)
+E = ot.Beta(0.93, 3.2, 28000000.0, 48000000.0)
+F = ot.LogNormal(30000.0, 9000.0, 15000.0,  ot.LogNormal.MUSIGMA)
+L = ot.Uniform(250.0, 260.0)
+I = ot.Beta(2.5, 4.0, 310.0, 450.0)
 
 
 # Create the input probability distribution of dimension 4
-inputDistribution = ComposedDistribution([E, F, L, I])
+inputDistribution = ot.ComposedDistribution([E, F, L, I])
 # Give a description of each component of the input distribution
 inputDistribution.setDescription( ("E", "F", "L", "I") )
 # Create the input random vector
-inputRandomVector = RandomVector(inputDistribution)
+inputRandomVector = ot.RandomVector(inputDistribution)
 
 #§ FMU model
 import otfmi
@@ -110,7 +106,7 @@ def run_demo(n_simulation):
     highlevel = instantiate_highlevel(n_cpus=n_cpus_highlevel)
     print ("Instantiated an 'FMUFunction' with %d cores for"
            " multiprocessing." % n_cpus_highlevel)
-    outputVariableOfInterest = RandomVector(highlevel, inputRandomVector)
+    outputVariableOfInterest = ot.RandomVector(highlevel, inputRandomVector)
     print "Running %d simulations with %d cores." % (n_simulation,
                                                      n_cpus_highlevel)
     pause()
