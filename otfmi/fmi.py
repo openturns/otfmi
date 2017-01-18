@@ -248,6 +248,39 @@ def get_causality(model):
     return [model.get_variable_causality(name) for name in
             get_name_variable(model)]
 
+#§
+def get_fixed_value(model):
+    """Get the values of the variables with 'fixed' variability,
+    ignoring aliases.
+
+    Parameters:
+    ----------
+    model : Pyfmi model object (pyfmi.fmi.FMUModelXXX).
+
+    """
+
+    list_name_variable = model.get_model_variables(include_alias=False,
+                                                   variability=1).keys()
+    try:
+        model.setup_experiment()
+        model.initialize()
+    except pyfmi.fmi.FMUException:
+        pass
+    return {name:model.get(name) for name in list_name_variable}
+
+#§
+def set_dict_value(model, dict_value):
+    """Set values from a dictionary with variable names as keys.
+
+    Parameters:
+    ----------
+    model : Pyfmi model object (pyfmi.fmi.FMUModelXXX).
+
+    dict_value : Dictionary, with variable names as keys.
+
+    """
+
+    model.set(*zip(*dict_value.items()))
 
 #§
 # Local Variables:
