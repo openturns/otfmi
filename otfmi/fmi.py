@@ -211,15 +211,14 @@ def apply_initialization_script(model, path_script):
     """
 
     list_name, list_value = parse_initialization_script(path_script)
-
     try:
         model.set(list_name, list_value)
     except pyfmi.fmi.FMUException:
-        try:
-            for name, value  in zip(list_name, list_value):
+        for name, value  in zip(list_name, list_value):
+            try:
                 model.set(name, value)
-        except pyfmi.fmi.FMUException:
-            pass
+            except pyfmi.fmi.FMUException:
+                pass
 
 #§
 def get_name_variable(model, **kwargs):
