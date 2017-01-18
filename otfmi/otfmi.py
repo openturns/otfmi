@@ -118,7 +118,7 @@ class OpenTURNSFMUFunction(ot.OpenTURNSPythonFunction):
 
         self.n_cpus = n_cpus
 
-        self.initialization_script = initialization_script
+        self.initialize(initialization_script)
 
         self.__final = True # Boolean, if True (default), return only final
                             # values  instead of whole trajectories.
@@ -190,6 +190,26 @@ class OpenTURNSFMUFunction(ot.OpenTURNSPythonFunction):
     def getFMUOutputDescription(self):
         """Get the list of output variable names."""
         return self.outputs_fmu
+
+    def initialize(self, initialization_script=None):
+        """Initialize the FMU, using initialization script if available.
+
+        Parameters:
+        ----------
+        initialization_script : String (optional), path to the initialization
+        script.
+
+        """
+
+        self.initialization_script = initialization_script
+        self.model.setup_experiment()
+        try:
+            apply_initialization_script(self.model,
+                                        self.initialization_script)
+        except TypeError:
+            pass # No initialization script.
+        self.model.initialize()
+
 
     def simulate(self, value_input=None, reset=True, **kwargs):
         """Simulate the fmu.
