@@ -168,9 +168,19 @@ def parse_initialization_line(line):
     line : String, line to parse.
 
     """
+
+    # TODO: use a custom error for better discrimination in catching.
     name, value = line.split("=")
     name = name.strip()
-    value = float(value.split(";")[0])
+    value = value.split(";")[0]
+    try:
+        value = float(value)
+    except ValueError:
+        try:
+            value = {"true":True, "false":False}[value.lower()]
+        except KeyError:
+            message = "The value '%s' could not be interpreted." % value
+            raise ValueError, message
     return name, value
 
 def parse_initialization_script(path_script):
