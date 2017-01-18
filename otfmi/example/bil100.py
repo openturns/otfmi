@@ -9,7 +9,6 @@ reactor. The considered output is a partial power balance called “BIL100”.
 #§ Identifying the platform
 import os
 path_here = os.path.dirname(os.path.abspath(__file__))
-print path_here
 
 import imp
 utility = imp.load_source('utility', os.path.join(path_here, "utility.py"))
@@ -63,7 +62,8 @@ def instantiate_model(with_initialization_script=False):
                                 utility.get_directory_platform(),
                                 filename_fmu)
         model = otfmi.FMUFunction(path_fmu, inputs_fmu=inputs_fmu,
-                                  outputs_fmu=outputs_fmu)
+                                  outputs_fmu=outputs_fmu,
+                                  initialization_script=initialization_script)
     except (KeyError, FMUException):
         print ("This example is not available on your platform.\n"
                "Execution aborted.")
