@@ -17,6 +17,8 @@ import numpy as np
 
 from .fmi import simulate, strip_simulation
 
+import logger
+
 #§
 class FMUProcess(Process):
     """Process for running a single simulation of an FMU model.
@@ -31,6 +33,7 @@ class FMUProcess(Process):
     index : Integer, maintain sort order of the simulaltions.
 
     max_retry : Integer, maximun number of retries when simulation crash.
+    Retry 10 times by default.
 
     initialization_script : String, path to the script file.
 
@@ -41,7 +44,7 @@ class FMUProcess(Process):
 
     """
 
-    def __init__(self, model, queue, index, max_retry=5,
+    def __init__(self, model, queue, index, max_retry=10,
                  initialization_script=None, **kwargs):
         super(FMUProcess, self).__init__()
         self.model = model
@@ -56,6 +59,8 @@ class FMUProcess(Process):
         self.initialization_script = initialization_script
 
         self.__final = kwargs.pop("final", True)
+
+        self.__logger = kwargs.pop("logger", False)
 
         # Handle results in memory. Using file can induce ambiguities.
         # If required, AssimilationPy's fmu_pool may contain a solution.
@@ -78,6 +83,12 @@ class FMUProcess(Process):
         else:
             pass
             # A warning is issued retrospectively.
+
+            if self.__logger:
+                logger.log("Maximum number of retries reached. index=%d" %
+                           self.index )
+                logger.log("Input keyword arguments: index=%s" %
+                           self.kwargs_simulate)
 
         self.queue.put([self.index, result])
 
@@ -121,7 +132,7 @@ class FMUPool():
 
     """
 
-    def __init__(self, model, n_process=None):
+    def __init__(self, model, n_process=None, **kwargs):
         """
         Constructor that initializes the pool of processes that runs the
         simulations.
@@ -138,6 +149,9 @@ class FMUPool():
         n_process = min(n_process, multiprocessing.cpu_count() - 1)
         self.n_process_max = max(1, n_process)
 
+        self.__logger = kwargs.pop("logger", False)
+
+
     def run(self, list_kwargs):
         """Run the simulation of the model with using parallel processes.
 
@@ -151,6 +165,9 @@ class FMUPool():
         n_simulation = len(list_kwargs)
         list_process = [FMUProcess(self.model, queue, ii, **kwargs) for
                         ii, kwargs in enumerate(list_kwargs)]
+
+        if self.__logger:
+            logger.log("New run. n_simulation=%d" % n_simulation)
 
         dict_result = {}
 
@@ -188,9 +205,12 @@ class FMUPool():
 
         thread.join(0.5)
 
-        for value in dict_result.itervalues():
+        for key, value in dict_result.items():
             if isinstance(value, Exception):
                 print "Some simulations failed."
+                if self.__logger:
+                    logger.log("Failed simulation with index %d (error: %s)" %
+                               (key, value))
 
         # Sorting by keys.
         return zip(*sorted(dict_result.items(),

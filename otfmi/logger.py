@@ -6,9 +6,9 @@
 
 #§
 import time
-# import gmtime, strftime
 
-path_log = "fmupool.log"
+path_log = "%s_fmupool.log" % time.strftime("%y-%m-%d_%H-%M-%S",
+                                            time.gmtime())
 
 def log(text, record_time=True, path_log=path_log):
     """Append text to log file.
@@ -24,7 +24,7 @@ def log(text, record_time=True, path_log=path_log):
     """
 
     if record_time:
-        text = "%s: %s" % (current_time(), text)
+        text = "[%s] %s" % (current_time(), text)
     with open(path_log, "a") as f:
         f.write(text + "\n")
 
