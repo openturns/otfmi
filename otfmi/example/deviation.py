@@ -73,7 +73,7 @@ except (KeyError, FMUException):
 
 model_fmu.enableHistory()
 
-def create_monte_carlo(model, inputRandomVector):
+def create_monte_carlo(model, inputRandomVector, coefficient_variation):
     """Create a Monte Carlo algorithm.
 
     Parameters:
@@ -81,6 +81,9 @@ def create_monte_carlo(model, inputRandomVector):
     model : OpenTURNS NumericalMathFunction.
 
     inputRandomVector : OpenTURNS RandomVector, vector of random inputs.
+
+    coefficient_variation : Float, target for the coefficient of variation of
+    the estimator.
 
     """
 
@@ -93,16 +96,19 @@ def create_monte_carlo(model, inputRandomVector):
     # Create a Monte Carlo algorithm
     myAlgoMonteCarlo = ot.MonteCarlo(myEvent)
     myAlgoMonteCarlo.setBlockSize(100)
-    myAlgoMonteCarlo.setMaximumCoefficientOfVariation(0.10)
+    myAlgoMonteCarlo.setMaximumCoefficientOfVariation(coefficient_variation)
 
     return myAlgoMonteCarlo
 
-def run_monte_carlo(model):
+def run_monte_carlo(model, coefficient_variation=0.20):
     """Run Monte Carlo simulations.
 
     Parameters:
     ----------
     model : OpenTURNS NumericalMathFunction.
+
+    coefficient_variation : Float, target for the coefficient of variation of
+    the estimator.
 
     """
 
@@ -137,7 +143,7 @@ def run_monte_carlo(model):
 
     return probability
 
-def run_demo(seed=23091926):
+def run_demo(seed=23091926, coefficient_variation=0.20):
     """Run the demonstration
 
     Parameters:
@@ -145,17 +151,22 @@ def run_demo(seed=23091926):
     seed : Integer, seed of the random number generator. The default is
     23091926.
 
+    coefficient_variation : Float, target for the coefficient of variation of
+    the estimator.
+
     """
     import time
 
     ot.RandomGenerator.SetSeed(seed)
     time_start = time.time()
-    probability_py = run_monte_carlo(model_py)
+    probability_py = run_monte_carlo(
+        model_py, coefficient_variation=coefficient_variation)
     elapsed_py = time.time() - time_start
 
     ot.RandomGenerator.SetSeed(seed)
     time_start = time.time()
-    probability_fmu = run_monte_carlo(model_fmu)
+    probability_fmu = run_monte_carlo(
+        model_fmu, coefficient_variation=coefficient_variation)
     elapsed_fmu = time.time() - time_start
 
     title = "Threshold exeedance probability:"
@@ -186,6 +197,6 @@ if __name__ == "__main__":
 
 #§
 # Local Variables:
-# tmux-temp-file: "/cluster/home/girard/.tmp/tmux_buffer"
+# tmux-temp-file: "/home/girard/.tmp/tmux_buffer"
 # tmux-repl-window: "fmot"
 # End:
