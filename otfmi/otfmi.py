@@ -8,11 +8,12 @@ FMUFunction is NumericalMathFunction factory similar to PythonFunction.
 #§
 import openturns as ot
 import pyfmi
-from pyfmi import load_fmu
 import numpy as np
 
-from .fmi import (apply_initialization_script, simulate, reshape_input,
+from .fmi import (apply_initialization_script, reshape_input,
                   parse_kwargs_simulate, strip_simulation, get_name_variable)
+import fmi
+
 
 from .fmu_pool import FMUPool
 #§
@@ -41,6 +42,13 @@ class FMUFunction(ot.NumericalMathFunction):
     initialization_script : String (optional), path to the initialization
     script.
 
+    kind : String, one of "ME" (model exchange) or "CS" (co-simulation) to
+    select a kind of FMU if both are available.
+    Note:
+    Contrary to pyfmi, the default here is "CS" (co-simulation). The rationale
+    behind this choice is is that co-simulation may be used to impose a solver
+    not available in pyfmi.
+
     """
     # expect_trajectory : Boolean, if True, the call inputs are assumed to be
     # time dependent trajectories. Default is False
@@ -51,11 +59,11 @@ class FMUFunction(ot.NumericalMathFunction):
 
 
     def __new__(self, path_fmu=None, inputs_fmu=None, outputs_fmu=None,
-                inputs=None, outputs=None, n_cpus=None,
+                inputs=None, outputs=None, n_cpus=None, kind=None,
                 initialization_script=None):
         lowlevel = OpenTURNSFMUFunction(
             path_fmu=path_fmu, inputs_fmu=inputs_fmu, outputs_fmu=outputs_fmu,
-            inputs=inputs, n_cpus=n_cpus, outputs=outputs,
+            inputs=inputs, n_cpus=n_cpus, outputs=outputs, kind=kind,
             initialization_script=initialization_script)
 
         highlevel = ot.NumericalMathFunction(lowlevel)
@@ -88,6 +96,13 @@ class OpenTURNSFMUFunction(ot.OpenTURNSPythonFunction):
     initialization_script : String (optional), path to the initialization
     script.
 
+    kind : String, one of "ME" (model exchange) or "CS" (co-simulation) to
+    select a kind of FMU if both are available.
+    Note:
+    Contrary to pyfmi, the default here is "CS" (co-simulation). The rationale
+    behind this choice is is that co-simulation may be used to impose a solver
+    not available in pyfmi.
+
     expect_trajectory : Boolean, if True, the call inputs are assumed to be
     time dependent trajectories. Default is False
 
@@ -96,8 +111,9 @@ class OpenTURNSFMUFunction(ot.OpenTURNSPythonFunction):
 
     def __init__(self, path_fmu, inputs_fmu, outputs_fmu=None,
                  inputs=None, outputs=None, n_cpus=None,
-                 initialization_script=None, expect_trajectory=False):
-        self.load_fmu(path_fmu)
+                 initialization_script=None, kind=None,
+                 expect_trajectory=False):
+        self.load_fmu(path_fmu=path_fmu, kind=kind)
 
         self.inputs_fmu = inputs_fmu
         if outputs_fmu is None:
@@ -172,16 +188,26 @@ class OpenTURNSFMUFunction(ot.OpenTURNSPythonFunction):
         n_cpus = kwargs.pop("n_cpus", None)
         return self.simulate_sample(list_value_input, n_cpus=n_cpus, **kwargs)
 
-    def load_fmu(self, path_fmu, *args):
+    def load_fmu(self, path_fmu, kind=None, **kwargs):
         """Load an FMU.
 
         Parameters
         ----------
         path_fmu : String, path to the FMU file.
 
+        kind : String, one of "ME" (model exchange) or "CS" (co-simulation) to
+        select a kind of FMU if both are available.
+        Note:
+        Contrary to pyfmi, the default here is "CS" (co-simulation). The
+        rationale behind this choice is  is that co-simulation may be used to
+        impose a solver not available in pyfmi.
+
+        Additional keyword arguments are passed on to pyfmi's 'load_fmu'
+        function.
+
         """
 
-        self.model = pyfmi.load_fmu(fmu=path_fmu, *args)
+        self.model = fmi.load_fmu(path_fmu=path_fmu, kind=kind, **kwargs)
 
     def getFMUInputDescription(self):
         """Get the list of input variable names."""
@@ -240,7 +266,7 @@ class OpenTURNSFMUFunction(ot.OpenTURNSPythonFunction):
             dimension_input=self.getInputDimension(), final=self.__final,
             **kwargs)
 
-        simulation = simulate(self.model, reset=reset, **kwargs_simulate)
+        simulation = fmi.simulate(self.model, reset=reset, **kwargs_simulate)
 
         return strip_simulation(simulation,
                                 name_output=self.getOutputDescription(),
@@ -279,8 +305,10 @@ class OpenTURNSFMUFunction(ot.OpenTURNSPythonFunction):
                 name_output=self.getFMUOutputDescription(),
                 dimension_input=self.getInputDimension())
             list_kwargs.append(kwargs_simulate)
-        pool = FMUPool(self.model, n_process=n_cpus)
 
+
+        # if n_cpus > 1: # TODO?
+        pool = FMUPool(self.model, n_process=n_cpus)
         return pool.run(list_kwargs)
 
 #§

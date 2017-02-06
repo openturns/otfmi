@@ -7,6 +7,37 @@ import pyfmi
 import numpy as np
 
 #§
+def load_fmu(path_fmu, kind=None, **kwargs):
+    """Load and FMU.
+
+    Parameters:
+    ----------
+    path_fmu : String, path to the FMU file.
+
+    kind : String, one of "ME" (model exchange) or "CS" (co-simulation) to
+    select a kind of FMU if both are available.
+    Note:
+    Contrary to pyfmi, the default here is "CS" (co-simulation). The rationale
+    behind this choice is  is that co-simulation may be used to impose a
+    solver not available in pyfmi.
+
+    Additional keyword arguments are passed on to pyfmi's 'load_fmu' function.
+
+    """
+
+
+    if kind is None:
+        try:
+            return pyfmi.load_fmu(path_fmu, kind="CS")
+        except pyfmi.fmi.FMUException:
+            return pyfmi.load_fmu(path_fmu, kind="auto")
+    else:
+        return pyfmi.load_fmu(path_fmu, kind=kind)
+
+
+
+
+#§
 def simulate(model, initialization_script=None, reset=True, **kwargs):
     """Simulate an FMU.
 
