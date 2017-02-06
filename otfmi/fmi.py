@@ -55,6 +55,9 @@ def simulate(model, initialization_script=None, reset=True, **kwargs):
     """
     if reset:
         model.reset()
+        # Needed (?!) for restoring default values in some settings (windows
+        # co-simulation).
+        model.instantiate()
 
     try:
         apply_initialization_script(model, initialization_script)

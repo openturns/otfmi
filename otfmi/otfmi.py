@@ -2,7 +2,10 @@
 # Copyright 2016 EDF. This software was developed with the collaboration of
 # Phimeca Engineering (Sylvain Girard, girard@phimeca.com).
 """Provide a class for simulation and result handling of FMU.
-FMUFunction is NumericalMathFunction factory similar to PythonFunction.
+FMUFunction is NumericalMathFunction factory similar to OpenTURNS'
+PythonFunction.
+It relies on the lower level OpenTURNSFMUFunction, which is similar to
+OpenTURNS' (OpenTURNSPythonFunction.
 """
 
 #§
