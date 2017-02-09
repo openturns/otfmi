@@ -196,7 +196,3 @@ if __name__ == "__main__":
     run_demo()
 
 #§
-# Local Variables:
-# tmux-temp-file: "/home/girard/.tmp/tmux_buffer"
-# tmux-repl-window: "fmot"
-# End:

@@ -1,16 +1,14 @@
 # -*- coding: utf-8 -*-
 # Copyright 2016 EDF. This software was developed with the collaboration of
 # Phimeca Engineering (Sylvain Girard, girard@phimeca.com).
-"""
-"""
+"""Run the “BIL100” example (see “bil100.py”) using an FMU with harcoded
+initialization guess values."""
 
 #§
 import os
 path_here = os.path.dirname(os.path.abspath(__file__))
 import imp
 bil100 = imp.load_source('bil100', os.path.join(path_here, "bil100.py"))
-# import importlib
-# bil100 = importlib.import_module("bil100", path_here)
 
 def run_demo(seed=None, n_simulation=None):
     """Run the demonstration.
@@ -33,7 +31,3 @@ if __name__ == "__main__":
 
 
 #§
-# Local Variables:
-# tmux-temp-file: "/home/girard/.tmp/tmux_buffer"
-# tmux-repl-window: "fmot"
-# End:

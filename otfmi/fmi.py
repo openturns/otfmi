@@ -326,7 +326,3 @@ def set_dict_value(model, dict_value):
     model.set(*zip(*dict_value.items()))
 
 #§
-# Local Variables:
-# tmux-temp-file: "/cluster/home/girard/.tmp/tmux_buffer"
-# tmux-repl-window: "fmot"
-# End:

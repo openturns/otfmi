@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 # Copyright 2016 EDF. This software was developed with the collaboration of
 # Phimeca Engineering (Sylvain Girard, girard@phimeca.com).
-"""
-"""
+"""Utility functions for the examples."""
 
 #§
 import platform
@@ -17,7 +16,3 @@ def get_directory_platform():
     return dict_platform[key_platform]
 
 #§
-# Local Variables:
-# tmux-temp-file: "/home/girard/.tmp/tmux_buffer"
-# tmux-repl-window: "fmot"
-# End:

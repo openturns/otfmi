@@ -315,7 +315,3 @@ class OpenTURNSFMUFunction(ot.OpenTURNSPythonFunction):
         return pool.run(list_kwargs)
 
 #§
-# Local Variables:
-# tmux-temp-file: "/cluster/home/girard/.tmp/tmux_buffer"
-# tmux-repl-window: "fmot"
-# End:

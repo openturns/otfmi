@@ -151,7 +151,3 @@ if __name__ == "__main__":
      n_cpus_lowlevel, elapsed_lowlevel) = run_demo(n_simulation=n_simulation)
 
 #§
-# Local Variables:
-# tmux-temp-file: "/cluster/home/girard/.tmp/tmux_buffer"
-# tmux-repl-window: "fmot"
-# End:

@@ -217,7 +217,3 @@ class FMUPool():
                            key=operator.itemgetter(0)))[1]
 
 #§
-# Local Variables:
-# tmux-temp-file: "/cluster/home/girard/.tmp/tmux_buffer"
-# tmux-repl-window: "fmot"
-# End:
