@@ -132,7 +132,8 @@ def run_monte_carlo(model, coefficient_variation=0.20):
     inputRandomVector = ot.RandomVector(inputDistribution)
 
     # Setup Monte Carlo algorithm
-    myAlgoMonteCarlo = create_monte_carlo(model, inputRandomVector)
+    myAlgoMonteCarlo = create_monte_carlo(model, inputRandomVector,
+                                          coefficient_variation)
 
     # Perform the simulations
     myAlgoMonteCarlo.run()
