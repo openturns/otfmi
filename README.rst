@@ -18,26 +18,68 @@ module relies on one PyFMI, a module for manipulating FMUs within Python.
 Installation
 ============
 
-The distutils mechanism can be used:
+The otfmi module relies on PyFMI. It can be installed using the distutils
+mechanism (setupe.py) or the windows installer. Alternatively, it can be used
+without installation by adding the package directory ('otfmi') to the
+PYTHONPATH.
+
+
+Installation of PyFMI
+---------------------
+The otfmi module relies on PyFMI [PYFMI]_.
+On windows, PyFMI can be installed using an installer program is available.
+
+Otherwise, relying on Anaconda [ANACONDA]_ is recommended. Indeed, compiling
+PyFMI from sources and sorting out its dependencies can be troublesome. With
+Python installed from Anaconda, PyFMI is installed by the following command:
+
+    conda install -c https://conda.binstar.org/chria pyfmi
+
+Usage without installation
+---------------------------
+The module can be imported in a Python session as soon as
+the otfmi folder is listed in the PYTHONPATH environment variable. If you installed Python
+using Anaconda, the otfmi folder can be placed in any directory “monitored” by Anaconda,
+for instance C:\Users\username\Anaconda\lib\site-packages on Windows.
+
+Installation of otfmi
+---------------------
+The otfmi module can be installed from sources using the
+classical distutils procedure. From the main folder, run the following command:
 
     python setup.py install
 
-Alternatively, add the package directory ('otfmi') to the PYTHONPATH.
+On windows, it is possible to avoid resorting to command line interface by using the
+installer program otfmi-X.X.win32.exe ( X.X is the version number).
+
+Removal of otfmi
+----------------
+Removing otfmi if you installed it from the command line is just
+a matter of removing all created files. Usually, it is a single file, otfmi-X.X-py2.7.egg
+(X.X is the version number) located in the default directory for external module. The
+path to this directory depends on your Python installation. On Windows with Anaconda, it
+is C:\Users\username\Anaconda\lib\site-packages.
+The list of all created file can be retrieved by the following command
+
+    python setup.py install --record list_file.txt
 
 Documentation
 =============
 
-See the “User documentation” [1] for more usage instruction.
+See the “User documentation” [USER_DOC]_ for more usage instruction.
 
-See the “Project documentation” [2] for information about the module architecture.
+See the “Project documentation” [PROJECT_DOC]_ for information about the module architecture.
 
 Example scripts are given in the 'example' folder in the source tree.
-
-[1] Girard, Sylvain (2017). otfmi: simulate FMUs from OpenTURNS: User documentation. Tech. rep. RT-PMFRE-00997-003. Phimeca.
-[2] Girard, Sylvain (2017). otfmi: simulate FMUs from OpenTURNS: Project documentation. Tech. rep. RT-PMFRE-00997-002. Phimeca.
-
 
 License
 =======
 
 This package is the propriety of EDF.
+
+References
+==========
+.. [PYFMI] PyFMI Python module. url: http://www.jmodelica.org/page/4924
+.. [ANACONDA] Anaconda, Python distribution. url: http://continuum.io/downloads
+.. [USER_DOC] Girard, Sylvain (2017). otfmi: simulate FMUs from OpenTURNS: User documentation. Tech. rep. RT-PMFRE-00997-003. Phimeca.
+.. [PROJECT_DOC] Girard, Sylvain (2017). otfmi: simulate FMUs from OpenTURNS: Project documentation. Tech. rep. RT-PMFRE-00997-002. Phimeca.
