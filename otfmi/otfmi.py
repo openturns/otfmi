@@ -13,12 +13,9 @@ import openturns as ot
 import pyfmi
 import numpy as np
 
-from .fmi import (apply_initialization_script, reshape_input,
-                  parse_kwargs_simulate, strip_simulation, get_name_variable)
 import fmi
+import fmu_pool
 
-
-from .fmu_pool import FMUPool
 #§
 class FMUFunction(ot.NumericalMathFunction):
     """
@@ -233,7 +230,7 @@ class OpenTURNSFMUFunction(ot.OpenTURNSPythonFunction):
         self.initialization_script = initialization_script
         self.model.setup_experiment()
         try:
-            apply_initialization_script(self.model,
+            fmi.apply_initialization_script(self.model,
                                         self.initialization_script)
         except TypeError:
             pass # No initialization script.
@@ -263,7 +260,7 @@ class OpenTURNSFMUFunction(ot.OpenTURNSPythonFunction):
 
         kwargs.setdefault("initialization_script", self.initialization_script)
 
-        kwargs_simulate = parse_kwargs_simulate(
+        kwargs_simulate = fmi.parse_kwargs_simulate(
             value_input, name_input=self.getFMUInputDescription(),
             name_output=self.getFMUOutputDescription(),
             dimension_input=self.getInputDimension(), final=self.__final,
@@ -271,7 +268,7 @@ class OpenTURNSFMUFunction(ot.OpenTURNSPythonFunction):
 
         simulation = fmi.simulate(self.model, reset=reset, **kwargs_simulate)
 
-        return strip_simulation(simulation,
+        return fmi.strip_simulation(simulation,
                                 name_output=self.getOutputDescription(),
                                 final=self.__final)
 
@@ -303,7 +300,7 @@ class OpenTURNSFMUFunction(ot.OpenTURNSPythonFunction):
 
         list_kwargs = []
         for value_input in list_value_input:
-            kwargs_simulate = parse_kwargs_simulate(
+            kwargs_simulate = fmi.parse_kwargs_simulate(
                 value_input, name_input=self.getFMUInputDescription(),
                 name_output=self.getFMUOutputDescription(),
                 dimension_input=self.getInputDimension())
@@ -311,7 +308,7 @@ class OpenTURNSFMUFunction(ot.OpenTURNSPythonFunction):
 
 
         # if n_cpus > 1: # TODO?
-        pool = FMUPool(self.model, n_process=n_cpus)
+        pool = fmu_pool.FMUPool(self.model, n_process=n_cpus)
         return pool.run(list_kwargs)
 
 #§
