@@ -1,6 +1,3 @@
-Otfmi
-====
-
 This is the source tree or distribution for the otfmi package for simulating
 functional mockup units (FMUs) from OpenTURNS.
 
