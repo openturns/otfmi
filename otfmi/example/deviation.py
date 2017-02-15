@@ -177,8 +177,7 @@ def run_demo(seed=23091926, coefficient_variation=0.20):
     print "Full python: %f".rjust(justify) % probability_py
     print "FMU: %f".rjust(justify) % probability_fmu
 
-    relative_error = (abs(probability_py - probability_fmu) /
-                      (probability_py + probability_fmu) / 2.)
+    relative_error = (abs(probability_py - probability_fmu) / probability_py)
 
     from numpy import finfo
     if relative_error < finfo(float).eps:

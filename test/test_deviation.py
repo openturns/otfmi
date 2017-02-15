@@ -75,7 +75,7 @@ class TestModel(unittest.TestCase):
             self.model_fmu, coefficient_variation=coefficient_variation)
 
         relative_error = (abs(probability_py - probability_fmu) /
-                          (probability_py + probability_fmu) / 2.)
+                          probability_py)
 
         from numpy import finfo
         assert(relative_error < finfo(float).eps)
