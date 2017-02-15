@@ -20,11 +20,29 @@ dict_platform = {("Linux", "64bit"):"linux64",
 import numpy as np
 import openturns as ot
 
-E = ot.Beta(0.93, 3.2, 28000000.0, 48000000.0)
-F = ot.LogNormal(30000.0, 9000.0, 15000.0,  ot.LogNormal.MUSIGMA)
+E = ot.Beta(0.93, 3.2, 2.8e7, 4.8e7)
+F = ot.LogNormal(3.0e4, 9000.0, 15000.0,  ot.LogNormal.MUSIGMA)
 L = ot.Uniform(250.0, 260.0)
 I = ot.Beta(2.5, 4.0, 310.0, 450.0)
 
+# Create the Spearman correlation matrix of the input random vector
+RS = ot.CorrelationMatrix(4)
+RS[2,3] = -0.2
+
+# Evaluate the correlation matrix of the Normal copula from RS
+R = ot.NormalCopula.GetCorrelationFromSpearmanCorrelation(RS)
+
+# Create the Normal copula parametrized by R
+mycopula = ot.NormalCopula(R)
+
+# Create the input probability distribution of dimension 4
+inputDistribution = ot.ComposedDistribution([E, F, L, I], mycopula)
+
+# Give a description of each component of the input distribution
+inputDistribution.setDescription( ("E", "F", "L", "I") )
+
+# Create the input random vector
+inputRandomVector = ot.RandomVector(inputDistribution)
 
 #§ Python model (reference)
 def deviationFunction(x):
@@ -111,25 +129,6 @@ def run_monte_carlo(model, coefficient_variation=0.20):
     the estimator.
 
     """
-
-    # Create the Spearman correlation matrix of the input random vector
-    RS = ot.CorrelationMatrix(4)
-    RS[2,3] = -0.2
-
-    # Evaluate the correlation matrix of the Normal copula from RS
-    R = ot.NormalCopula.GetCorrelationFromSpearmanCorrelation(RS)
-
-    # Create the Normal copula parametrized by R
-    mycopula = ot.NormalCopula(R)
-
-    # Create the input probability distribution of dimension 4
-    inputDistribution = ot.ComposedDistribution([E, F, L, I], mycopula)
-
-    # Give a description of each component of the input distribution
-    inputDistribution.setDescription( ("E", "F", "L", "I") )
-
-    # Create the input random vector
-    inputRandomVector = ot.RandomVector(inputDistribution)
 
     # Setup Monte Carlo algorithm
     myAlgoMonteCarlo = create_monte_carlo(model, inputRandomVector,
