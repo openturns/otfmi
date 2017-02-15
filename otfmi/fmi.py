@@ -50,7 +50,7 @@ def simulate(model, initialization_script=None, reset=True, **kwargs):
     reset : Boolean, toggle reseting the FMU prior to simulation. True by
     default.
 
-    Additional keyword arguments are parsed by parse_kwargs_simulate.
+    Additional keyword arguments are passed on to pyfmi.simulate.
 
     """
     if reset:
@@ -270,9 +270,14 @@ def get_name_variable(model, **kwargs):
 
     Parameters
     ----------
-    model : Pyfmi model object (pyfmi.fmi.FMUModelXXX).
+    model : Pyfmi model object (pyfmi.fmi.FMUModelXXX) or path to an FMU.
 
     """
+
+    try:
+        model.get_model_variables
+    except AttributeError:
+        model = load_fmu(model)
 
     return model.get_model_variables(**kwargs).keys()
 
@@ -281,12 +286,17 @@ def get_causality(model):
 
     Parameters
     ----------
-    model : Pyfmi model object (pyfmi.fmi.FMUModelXXX).
+    model : Pyfmi model object (pyfmi.fmi.FMUModelXXX) or path to an FMU.
 
     PARAMETER(0), CALCULATED_PARAMETER(1), INPUT(2),
     OUTPUT(3), LOCAL(4), INDEPENDENT(5), UNKNOWN(6)
 
     """
+
+    try:
+        model.get_variable_causality
+    except AttributeError:
+        model = load_fmu(model)
 
     return [model.get_variable_causality(name) for name in
             get_name_variable(model)]
@@ -298,9 +308,14 @@ def get_fixed_value(model):
 
     Parameters:
     ----------
-    model : Pyfmi model object (pyfmi.fmi.FMUModelXXX).
+    model : Pyfmi model object (pyfmi.fmi.FMUModelXXX) or path to an FMU.
 
     """
+
+    try:
+        model.get_model_variables
+    except AttributeError:
+        model = load_fmu(model)
 
     list_name_variable = model.get_model_variables(include_alias=False,
                                                    variability=1).keys()
@@ -317,11 +332,16 @@ def set_dict_value(model, dict_value):
 
     Parameters:
     ----------
-    model : Pyfmi model object (pyfmi.fmi.FMUModelXXX).
+    model : Pyfmi model object (pyfmi.fmi.FMUModelXXX) or path to an FMU.
 
     dict_value : Dictionary, with variable names as keys.
 
     """
+
+    try:
+        model.set
+    except AttributeError:
+        model = load_fmu(model)
 
     model.set(*zip(*dict_value.items()))
 
