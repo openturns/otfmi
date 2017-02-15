@@ -5,6 +5,8 @@
 
 #§
 import platform
+import os
+
 dict_platform = {("Linux", "64bit"):"linux64",
                  ("Windows", "32bit"):"win32"}
 
@@ -14,5 +16,25 @@ def get_directory_platform():
     """
     key_platform = (platform.system(), platform.architecture()[0])
     return dict_platform[key_platform]
+
+def get_path_fmu(name):
+    """Get the path to an example FMU.
+
+    Parameters:
+    ----------
+    name : String, one of "deviation", "bil100" and
+    "bil100_initialization_script
+
+    """
+
+    path_here = os.path.dirname(os.path.abspath(__file__))
+    import pyfmi
+    try:
+        directory_platform = get_directory_platform()
+        return os.path.join(path_here, "file", "fmu", directory_platform,
+                            "%s.fmu" % name)
+    except (KeyError, pyfmi.fmi.FMUException):
+        print ("This example is not available on your platform.\n"
+               "Execution aborted.")
 
 #§
