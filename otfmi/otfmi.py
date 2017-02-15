@@ -25,16 +25,16 @@ class FMUFunction(ot.NumericalMathFunction):
     ----------
     path_fmu : String, path to the FMU file.
 
-    inputs_fmu : Sequence of string, names of the variable from the fmu to be
+    inputs_fmu : Sequence of strings, names of the variable from the fmu to be
     used as input variables.
 
-    outputs_fmu : Sequence of string, names of the variable from the fmu to be
+    outputs_fmu : Sequence of strings, names of the variable from the fmu to be
     used as output variables.
 
-    inputs : Sequence of string, optional names to use as variables
+    inputs : Sequence of strings, optional names to use as variables
     descriptions.
 
-    outputs : Sequence of string, optional names to use as variables
+    outputs : Sequence of strings, optional names to use as variables
     descriptions.
 
     n_cpus :  Integer, number of cores to use for multiprocessing.
@@ -79,16 +79,16 @@ class OpenTURNSFMUFunction(ot.OpenTURNSPythonFunction):
     ----------
     path_fmu : String, path to the FMU file.
 
-    inputs_fmu : Sequence of string, names of the variable from the fmu to be
+    inputs_fmu : Sequence of strings, names of the variable from the fmu to be
     used as input variables.
 
-    outputs_fmu : Sequence of string, names of the variable from the fmu to be
-    used as output variables.
+    outputs_fmu : Sequence of strings, names of the variable from the fmu to
+    be used as output variables.
 
-    inputs : Sequence of string, optional names to use as variables
+    inputs : Sequence of strings, optional names to use as variables
     descriptions.
 
-    outputs : Sequence of string, optional names to use as variables
+    outputs : Sequence of strings, optional names to use as variables
     descriptions.
 
     n_cpus :  Integer, number of cores to use for multiprocessing.
@@ -115,22 +115,13 @@ class OpenTURNSFMUFunction(ot.OpenTURNSPythonFunction):
                  expect_trajectory=False):
         self.load_fmu(path_fmu=path_fmu, kind=kind)
 
-        self.inputs_fmu = inputs_fmu
-        if outputs_fmu is None:
-            outputs_fmu = get_name_variable(self.model)
-
-        self.outputs_fmu = outputs_fmu
+        self._set_inputs_fmu(inputs_fmu)
+        self._set_outputs_fmu(outputs_fmu)
 
         super(OpenTURNSFMUFunction, self).__init__(n=len(inputs_fmu),
                                                    p=len(outputs_fmu))
-
-        if inputs is None:
-            inputs = inputs_fmu
-        if outputs is None:
-            outputs = outputs_fmu
-
-        self.setInputDescription(inputs)
-        self.setOutputDescription(outputs)
+        self._set_inputs(inputs)
+        self._set_outputs(outputs)
 
         self.n_cpus = n_cpus
 
@@ -141,6 +132,76 @@ class OpenTURNSFMUFunction(ot.OpenTURNSPythonFunction):
 
         self.__expect_trajectory = expect_trajectory
 
+
+    def _set_inputs_fmu(self, inputs_fmu, inputs=None):
+        """Set input variable names.
+
+        Parameters:
+        ----------
+        inputs_fmu : Sequence of strings, names of the variable from the fmu
+        to be used as input variables.
+
+        inputs : Sequence of strings, optional names to use as variables
+        descriptions.
+
+        """
+        difference = set(inputs_fmu).difference(
+            fmi.get_name_variable(self.model))
+        if difference:
+            raise pyfmi.common.io.VariableNotFoundError(", ".join(difference))
+        else:
+            self.inputs_fmu = inputs_fmu
+
+    def _set_inputs(self, inputs=None):
+        """Set input variable names.
+
+        Parameters:
+        ----------
+        inputs : Sequence of strings, optional names to use as variables
+        descriptions.
+
+        """
+        if inputs is None:
+            inputs = self.inputs_fmu
+        self.setInputDescription(inputs)
+
+
+    def _set_outputs_fmu(self, outputs_fmu, outputs=None):
+        """Set output variable names.
+
+        Parameters:
+        ----------
+        outputs_fmu : Sequence of strings, names of the variable from the fmu
+        to be used as output variables.
+
+        outputs : Sequence of strings, optional names to use as variables
+        descriptions.
+
+        """
+        if outputs_fmu is None:
+            outputs_fmu = fmi.get_name_variable(self.model)
+        else:
+            difference = set(outputs_fmu).difference(
+                fmi.get_name_variable(self.model))
+            if difference:
+                raise pyfmi.common.io.VariableNotFoundError(
+                    ", ".join(difference))
+
+        self.outputs_fmu = outputs_fmu
+
+
+    def _set_outputs(self, outputs=None):
+        """Set output variable names.
+
+        Parameters:
+        ----------
+        outputs : Sequence of strings, optional names to use as variables
+        descriptions.
+
+        """
+        if outputs is None:
+            outputs = self.outputs_fmu
+        self.setOutputDescription(outputs)
 
     def __call__(self, X, **kwargs):
         X = np.atleast_1d(np.squeeze(X))
