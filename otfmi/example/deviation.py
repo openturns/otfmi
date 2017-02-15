@@ -194,6 +194,12 @@ def run_demo(seed=23091926, coefficient_variation=0.20):
     print "FMU: %f".rjust(justify) % elapsed_fmu
 
 if __name__ == "__main__":
-    run_demo()
+    import sys
+    try:
+        coefficient_variation = sys.argv[1]
+    except IndexError:
+        coefficient_variation = 0.20
+
+    run_demo(coefficient_variation=coefficient_variation)
 
 #§
