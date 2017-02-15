@@ -195,7 +195,7 @@ def run_demo(seed=23091926, coefficient_variation=0.20):
 if __name__ == "__main__":
     import sys
     try:
-        coefficient_variation = sys.argv[1]
+        coefficient_variation = float(sys.argv[1])
     except IndexError:
         coefficient_variation = 0.20
 
