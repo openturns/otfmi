@@ -1,10 +1,7 @@
 include README.rst
-include otfmi/example/file/initialization_script/bil100.mos
-include otfmi/example/file/fmu/win32/bil100.fmu
-include otfmi/example/file/fmu/win32/deviation.fmu
-include otfmi/example/file/fmu/win32/bil100_initialization_script.fmu
-include otfmi/example/file/fmu/linux64/deviation.fmu
-
+recursive-include otfmi/example/file *.mos *.fmu
+graft doc
+prune doc/_generated
 
 global-exclude *~
 global-exclude *.pyo
