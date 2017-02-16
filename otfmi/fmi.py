@@ -10,16 +10,16 @@ import numpy as np
 def load_fmu(path_fmu, kind=None, **kwargs):
     """Load and FMU.
 
-    Parameters:
+    Parameters
     ----------
     path_fmu : String, path to the FMU file.
 
-    kind : String, one of "ME" (model exchange) or "CS" (co-simulation) to
-    select a kind of FMU if both are available.
-    Note:
-    Contrary to pyfmi, the default here is "CS" (co-simulation). The rationale
-    behind this choice is  is that co-simulation may be used to impose a
-    solver not available in pyfmi.
+    kind : String, one of "ME" (model exchange) or "CS" (co-simulation)
+        select a kind of FMU if both are available.
+        Note:
+        Contrary to pyfmi, the default here is "CS" (co-simulation). The
+        rationale behind this choice is is that co-simulation may be used to
+        impose a solver not available in pyfmi.
 
     Additional keyword arguments are passed on to pyfmi's 'load_fmu' function.
 
@@ -41,14 +41,14 @@ def load_fmu(path_fmu, kind=None, **kwargs):
 def simulate(model, initialization_script=None, reset=True, **kwargs):
     """Simulate an FMU.
 
-    Parameters:
+    Parameters
     ----------
     model : Pyfmi model object (pyfmi.fmi.FMUModelXXX).
 
     initialization_script : String, path to the script file.
 
-    reset : Boolean, toggle reseting the FMU prior to simulation. True by
-    default.
+    reset : Boolean
+        Toggle reseting the FMU prior to simulation. True by default.
 
     Additional keyword arguments are passed on to pyfmi.simulate.
 
@@ -73,7 +73,7 @@ def parse_kwargs_simulate(value_input=None, name_input=None,
     """Parse simulation key-word arguments and arrange for feeding the
     simulate method of pyfmi's model objects.
 
-    Parameters:
+    Parameters
     ----------
     value_input : Vector or array-like with time steps as rows.
 
@@ -83,9 +83,9 @@ def parse_kwargs_simulate(value_input=None, name_input=None,
 
     name_output : Sequence of string, output names.
 
-    final : Boolean, if True (default), return only final values instead of
-    whole trajectories.
-
+    final : Boolean
+        If True (default), return only final values instead of whole
+        trajectories.
 
     Additional (optional) keyword arguments:
     ----------------------------------------
@@ -118,15 +118,16 @@ def parse_kwargs_simulate(value_input=None, name_input=None,
 def strip_simulation(simulation, name_output, final):
     """Extract some final values or trajectories from a PyFMI result object.
 
-    Parameters:
+    Parameters
     ----------
     simulation : PyFMI result object (pyfmi.fmi_algorithm_drivers.FMIResult),
     simulation result.
 
     name_output : Sequence of strings, output variables names.
 
-    final : Boolean, if True (default), return only final values instead of
-    whole trajectories.
+    final : Boolean
+        If True (default), return only final values instead of whole
+        trajectories.
 
     """
 
@@ -306,7 +307,7 @@ def get_fixed_value(model):
     """Get the values of the variables with 'fixed' variability,
     ignoring aliases.
 
-    Parameters:
+    Parameters
     ----------
     model : Pyfmi model object (pyfmi.fmi.FMUModelXXX) or path to an FMU.
 
@@ -330,7 +331,7 @@ def get_fixed_value(model):
 def set_dict_value(model, dict_value):
     """Set values from a dictionary with variable names as keys.
 
-    Parameters:
+    Parameters
     ----------
     model : Pyfmi model object (pyfmi.fmi.FMUModelXXX) or path to an FMU.
 

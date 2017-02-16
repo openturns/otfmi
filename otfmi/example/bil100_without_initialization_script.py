@@ -13,7 +13,7 @@ bil100 = imp.load_source('bil100', os.path.join(path_here, "bil100.py"))
 def run_demo(seed=None, n_simulation=None):
     """Run the demonstration.
 
-    Parameters:
+    Parameters
     ----------
     seed : Integer, seed of the random number generator.
 

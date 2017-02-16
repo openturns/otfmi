@@ -48,7 +48,7 @@ inputRandomVector = ot.RandomVector(inputDistribution)
 def deviationFunction(x):
     """Python version of the physical model.
 
-    Parameters:
+    Parameters
     ----------
     x : Vector or array with individuals as rows, input values in the
     following order :
@@ -94,7 +94,7 @@ model_fmu.enableHistory()
 def create_monte_carlo(model, inputRandomVector, coefficient_variation):
     """Create a Monte Carlo algorithm.
 
-    Parameters:
+    Parameters
     ----------
     model : OpenTURNS NumericalMathFunction.
 
@@ -121,7 +121,7 @@ def create_monte_carlo(model, inputRandomVector, coefficient_variation):
 def run_monte_carlo(model, coefficient_variation=0.20):
     """Run Monte Carlo simulations.
 
-    Parameters:
+    Parameters
     ----------
     model : OpenTURNS NumericalMathFunction.
 
@@ -146,7 +146,7 @@ def run_monte_carlo(model, coefficient_variation=0.20):
 def run_demo(seed=23091926, coefficient_variation=0.20):
     """Run the demonstration
 
-    Parameters:
+    Parameters
     ----------
     seed : Integer, seed of the random number generator. The default is
     23091926.

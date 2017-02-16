@@ -25,29 +25,30 @@ class FMUFunction(ot.NumericalMathFunction):
     ----------
     path_fmu : String, path to the FMU file.
 
-    inputs_fmu : Sequence of strings, names of the variable from the fmu to be
-    used as input variables.
+    inputs_fmu : Sequence of strings
+        Names of the variable from the fmu to be used as input variables.
 
-    outputs_fmu : Sequence of strings, names of the variable from the fmu to be
-    used as output variables.
+    outputs_fmu : Sequence of strings,
+        Names of the variable from the fmu to be used as output variables.
 
-    inputs : Sequence of strings, optional names to use as variables
-    descriptions.
+    inputs : Sequence of strings
+        Optional names to use as variables descriptions.
 
-    outputs : Sequence of strings, optional names to use as variables
-    descriptions.
+    outputs : Sequence of strings
+        Optional names to use as variables descriptions.
 
-    n_cpus :  Integer, number of cores to use for multiprocessing.
+    n_cpus :  Integer
+        Number of cores to use for multiprocessing.
 
-    initialization_script : String (optional), path to the initialization
-    script.
+    initialization_script : String (optional)
+        Path to the initialization script.
 
-    kind : String, one of "ME" (model exchange) or "CS" (co-simulation) to
-    select a kind of FMU if both are available.
-    Note:
-    Contrary to pyfmi, the default here is "CS" (co-simulation). The rationale
-    behind this choice is is that co-simulation may be used to impose a solver
-    not available in pyfmi.
+    kind : String, one of "ME" (model exchange) or "CS" (co-simulation)
+        Select a kind of FMU if both are available.
+        Note:
+        Contrary to pyfmi, the default here is "CS" (co-simulation). The
+        rationale behind this choice is is that co-simulation may be used to
+        impose a solver not available in pyfmi.
 
     """
     # expect_trajectory : Boolean, if True, the call inputs are assumed to be
@@ -79,32 +80,34 @@ class OpenTURNSFMUFunction(ot.OpenTURNSPythonFunction):
     ----------
     path_fmu : String, path to the FMU file.
 
-    inputs_fmu : Sequence of strings, names of the variable from the fmu to be
-    used as input variables.
+    inputs_fmu : Sequence of strings
+        Names of the variable from the fmu to be used as input variables.
 
-    outputs_fmu : Sequence of strings, names of the variable from the fmu to
-    be used as output variables.
+    outputs_fmu : Sequence of strings
+        Names of the variable from the fmu to be used as output variables.
 
-    inputs : Sequence of strings, optional names to use as variables
-    descriptions.
+    inputs : Sequence of strings
+        Optional names to use as variables descriptions.
 
-    outputs : Sequence of strings, optional names to use as variables
-    descriptions.
+    outputs : Sequence of strings
+        Optional names to use as variables descriptions.
 
-    n_cpus :  Integer, number of cores to use for multiprocessing.
+    n_cpus :  Integer
+        Number of cores to use for multiprocessing. 
 
-    initialization_script : String (optional), path to the initialization
-    script.
+    initialization_script : String (optional)
+        Path to the initialization script.
 
-    kind : String, one of "ME" (model exchange) or "CS" (co-simulation) to
-    select a kind of FMU if both are available.
-    Note:
-    Contrary to pyfmi, the default here is "CS" (co-simulation). The rationale
-    behind this choice is is that co-simulation may be used to impose a solver
-    not available in pyfmi.
+    kind : String, one of "ME" (model exchange) or "CS" (co-simulation)
+        Select a kind of FMU if both are available.
+        Note:
+        Contrary to pyfmi, the default here is "CS" (co-simulation). The
+        rationale behind this choice is is that co-simulation may be used to
+        impose a solver not available in pyfmi.
 
-    expect_trajectory : Boolean, if True, the call inputs are assumed to be
-    time dependent trajectories. Default is False
+    expect_trajectory : Boolean
+        If True, the call inputs are assumed to be time dependent
+        trajectories. Default is False
 
 
     """
@@ -136,7 +139,7 @@ class OpenTURNSFMUFunction(ot.OpenTURNSPythonFunction):
     def _set_inputs_fmu(self, inputs_fmu, inputs=None):
         """Set input variable names.
 
-        Parameters:
+        Parameters
         ----------
         inputs_fmu : Sequence of strings, names of the variable from the fmu
         to be used as input variables.
@@ -155,7 +158,7 @@ class OpenTURNSFMUFunction(ot.OpenTURNSPythonFunction):
     def _set_inputs(self, inputs=None):
         """Set input variable names.
 
-        Parameters:
+        Parameters
         ----------
         inputs : Sequence of strings, optional names to use as variables
         descriptions.
@@ -169,7 +172,7 @@ class OpenTURNSFMUFunction(ot.OpenTURNSPythonFunction):
     def _set_outputs_fmu(self, outputs_fmu, outputs=None):
         """Set output variable names.
 
-        Parameters:
+        Parameters
         ----------
         outputs_fmu : Sequence of strings, names of the variable from the fmu
         to be used as output variables.
@@ -193,7 +196,7 @@ class OpenTURNSFMUFunction(ot.OpenTURNSPythonFunction):
     def _set_outputs(self, outputs=None):
         """Set output variable names.
 
-        Parameters:
+        Parameters
         ----------
         outputs : Sequence of strings, optional names to use as variables
         descriptions.
@@ -219,7 +222,7 @@ class OpenTURNSFMUFunction(ot.OpenTURNSPythonFunction):
     def _exec(self, value_input, **kwargs):
         """Simulate the FMU for a given set of input values.
 
-        Parameters:
+        Parameters
         ----------
         value_input : Vector or array-like with time steps as rows.
 
@@ -233,7 +236,7 @@ class OpenTURNSFMUFunction(ot.OpenTURNSPythonFunction):
     def _exec_sample(self, list_value_input, **kwargs):
         """Simulate the FMU multiple times.
 
-        Parameters:
+        Parameters
         ----------
         list_value_input : Sequence of vectors of input values.
 
@@ -256,12 +259,12 @@ class OpenTURNSFMUFunction(ot.OpenTURNSPythonFunction):
         ----------
         path_fmu : String, path to the FMU file.
 
-        kind : String, one of "ME" (model exchange) or "CS" (co-simulation) to
-        select a kind of FMU if both are available.
-        Note:
-        Contrary to pyfmi, the default here is "CS" (co-simulation). The
-        rationale behind this choice is  is that co-simulation may be used to
-        impose a solver not available in pyfmi.
+        kind : String, one of "ME" (model exchange) or "CS" (co-simulation)
+            Select a kind of FMU if both are available.
+            Note:
+            Contrary to pyfmi, the default here is "CS" (co-simulation). The
+            rationale behind this choice is is that co-simulation may be used
+            to impose a solver not available in pyfmi.
 
         Additional keyword arguments are passed on to pyfmi's 'load_fmu'
         function.
@@ -281,7 +284,7 @@ class OpenTURNSFMUFunction(ot.OpenTURNSPythonFunction):
     def initialize(self, initialization_script=None):
         """Initialize the FMU, using initialization script if available.
 
-        Parameters:
+        Parameters
         ----------
         initialization_script : String (optional), path to the initialization
         script.
@@ -301,7 +304,7 @@ class OpenTURNSFMUFunction(ot.OpenTURNSPythonFunction):
     def simulate(self, value_input=None, reset=True, **kwargs):
         """Simulate the fmu.
 
-        Parameters:
+        Parameters
         ----------
         value_input : Vector of input values.
 
@@ -309,6 +312,7 @@ class OpenTURNSFMUFunction(ot.OpenTURNSPythonFunction):
         default.
 
         Optional keyword arguments:
+        ---------------------------
         time : Sequence of floats, time vector.
 
         timestep : Float, timestep in seconds.
@@ -336,13 +340,14 @@ class OpenTURNSFMUFunction(ot.OpenTURNSPythonFunction):
     def simulate_sample(self, list_value_input, n_cpus=None, **kwargs):
         """Simulate the FMU multiple times.
 
-        Parameters:
+        Parameters
         ----------
         list_value_input : Sequence of vectors of input values.
 
-        n_cpus :  Integer, number of cores to use for multiprocessing. Use the
-        value of the 'n_cpus" attribute as default, or 1 (no multiprocessing)
-        if not set.
+        n_cpus :  Integer
+            Number of cores to use for multiprocessing. Use the value of the
+            'n_cpus" attribute as default, or 1 (no multiprocessing) if not
+            set.
 
         Additional keyword arguments are passed on to the 'simulate' method of
         the underlying PyFMI model object.

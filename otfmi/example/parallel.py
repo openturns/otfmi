@@ -44,7 +44,7 @@ path_here = os.path.dirname(os.path.abspath(__file__))
 def instantiate_highlevel(n_cpus=2):
     """Instantiate an FMUFunction and set number of cores to use.
 
-    Parameters:
+    Parameters
     ----------
     n_cpus : Integer, number of cores to use for multiprocessing.
 
@@ -94,7 +94,7 @@ def pause():
 def run_demo(n_simulation):
     """Run the demonstration.
 
-    Parameters:
+    Parameters
     ----------
     n_simulation : Integer, number of simulation to perform.
 

@@ -13,7 +13,7 @@ path_log = "%s_fmupool.log" % time.strftime("%y-%m-%d_%H-%M-%S",
 def log(text, record_time=True, path_log=path_log):
     """Append text to log file.
 
-    Parameters:
+    Parameters
     ----------
     text : String, text to write.
 

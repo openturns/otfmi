@@ -20,7 +20,7 @@ def get_directory_platform():
 def get_path_fmu(name):
     """Get the path to an example FMU.
 
-    Parameters:
+    Parameters
     ----------
     name : String, one of "deviation", "bil100" and
     "bil100_initialization_script

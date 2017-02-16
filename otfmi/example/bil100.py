@@ -30,7 +30,7 @@ def instantiate_model(inputs_fmu, outputs_fmu,
                       with_initialization_script=False):
     """Instantiate an FMUFunction and set number of cores to use.
 
-    Parameters:
+    Parameters
     ----------
     inputs_fmu : Sequence of strings, FMU input variable names.
 
@@ -89,7 +89,7 @@ inputRandomVector = ot.RandomVector(inputDistribution)
 def run_demo(with_initialization_script, seed=None, n_simulation=None):
     """Run the demonstration
 
-    Parameters:
+    Parameters
     ----------
     with_initialization_script : Boolean, wether or not to use an
     initialization script. If not (default), appropriate start values are
