@@ -76,7 +76,7 @@ Example scripts are given in the 'example' folder in the source tree.
 License
 =======
 
-This package is the propriety of EDF.
+This package is licensed under the LGPL3.
 
 References
 ==========

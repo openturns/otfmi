@@ -39,7 +39,7 @@ setup(
         'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Science/Research',
         'Topic :: Scientific/Engineering :: Mathematics',
-        'License :: Other/Proprietary License',
+        'License :: OSI Approved :: GNU Lesser General Public License v3 (LGPLv3)'
         'Programming Language :: Python :: 2',
         'Programming Language :: Python :: 2.6',
         'Programming Language :: Python :: 2.7',
