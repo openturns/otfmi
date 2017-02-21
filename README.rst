@@ -1,3 +1,7 @@
+.. image:: https://travis-ci.org/openturns/otfmi.svg?branch=master
+    :target: https://travis-ci.org/openturns/otfmi
+
+
 This is the source tree or distribution for the otfmi package for simulating
 functional mockup units (FMUs) from OpenTURNS.
 
