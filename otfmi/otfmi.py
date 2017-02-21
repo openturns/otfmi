@@ -93,7 +93,7 @@ class OpenTURNSFMUFunction(ot.OpenTURNSPythonFunction):
         Optional names to use as variables descriptions.
 
     n_cpus :  Integer
-        Number of cores to use for multiprocessing. 
+        Number of cores to use for multiprocessing.
 
     initialization_script : String (optional)
         Path to the initialization script.
@@ -121,8 +121,8 @@ class OpenTURNSFMUFunction(ot.OpenTURNSPythonFunction):
         self._set_inputs_fmu(inputs_fmu)
         self._set_outputs_fmu(outputs_fmu)
 
-        super(OpenTURNSFMUFunction, self).__init__(n=len(inputs_fmu),
-                                                   p=len(outputs_fmu))
+        super(OpenTURNSFMUFunction, self).__init__(n=len(self.inputs_fmu),
+                                                   p=len(self.outputs_fmu))
         self._set_inputs(inputs)
         self._set_outputs(outputs)
 
