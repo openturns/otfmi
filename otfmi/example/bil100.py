@@ -76,13 +76,13 @@ dict_distribution = {
 
 # Create the input probability distribution
 collectionMarginals = ot.DistributionCollection()
-for distribution in dict_distribution.values():
+for distribution in list(dict_distribution.values()):
     collectionMarginals.add(ot.Distribution(distribution))
 
 inputDistribution = ot.ComposedDistribution(collectionMarginals)
 
 # Give a description of each component of the input distribution
-inputDistribution.setDescription(dict_distribution.keys())
+inputDistribution.setDescription(list(dict_distribution.keys()))
 inputRandomVector = ot.RandomVector(inputDistribution)
 
 #§
@@ -134,22 +134,22 @@ def run_demo(with_initialization_script, seed=None, n_simulation=None):
     standardDeviation = np.std(outputSample)
 
     # Printing results
-    print "\n"
+    print("\n")
     if with_initialization_script:
-        print "The FMU was initialized with an initialization script."
+        print("The FMU was initialized with an initialization script.")
     else:
-        print "The FMU was initialized with hardcoded start values."
+        print("The FMU was initialized with hardcoded start values.")
     title = ("Empirical moments of the BIL100 computed with %d simulations:" %
              n_simulation)
-    print "\n%s" % title
-    print "-" * len(title)
+    print(("\n%s" % title))
+    print(("-" * len(title)))
     justify = 30
-    print "Mean : %g MW".rjust(justify)  % (empiricalMean / 1.e6)
-    print ("Standard deviation : %g MW".rjust(justify)  %
-           (standardDeviation / 1.e6))
+    print(("Mean : %g MW".rjust(justify)  % (empiricalMean / 1.e6)))
+    print(("Standard deviation : %g MW".rjust(justify)  %
+           (standardDeviation / 1.e6)))
 
-    print "\nTotal simulation time: %.2f s".rjust(justify) % elapsed
-    print "\n\n"
+    print(("\nTotal simulation time: %.2f s".rjust(justify) % elapsed))
+    print("\n\n")
 
 if __name__ == "__main__":
     run_demo(with_initialization_script=False)

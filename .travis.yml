@@ -2,15 +2,8 @@ language: cpp
 sudo: required
 
 install:
-  #- curl http://ubuntu.openturns.org/openturns.org-repo.key | sudo apt-key add -
-  #- echo deb http://ubuntu.openturns.org precise main | sudo tee /etc/apt/sources.list.d/openturns.list
-  #- sudo add-apt-repository ppa:martin-gieseking/ppa -y
-  #- sudo apt-get update
-  #- sudo apt-get -y install libopenturns-dev python-openturns cmake gfortran swig texlive-latex-recommended texlive-fonts-recommended texlive-latex-extra python-sphinx python-matplotlib dvisvgm
-## sphinx >=1.2 is looking better
-  #- pip install git+https://github.com/sphinx-doc/sphinx.git numpydoc urllib3[secure] --user
-  - wget -c --no-check-certificate https://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh -P /tmp
-  - bash /tmp/Miniconda-latest-Linux-x86_64.sh -b -p $HOME/miniconda
+  - wget -c --no-check-certificate https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -P /tmp
+  - bash /tmp/Miniconda3-latest-Linux-x86_64.sh -b -p $HOME/miniconda
   - export PATH="$HOME/miniconda/bin:$PATH"
   - conda install -y -c conda-forge openturns pyfmi sphinx nose scipy numpydoc
 
