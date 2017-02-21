@@ -1,1 +1,1 @@
-from otfmi import FMUFunction, OpenTURNSFMUFunction
+from .otfmi import FMUFunction, OpenTURNSFMUFunction

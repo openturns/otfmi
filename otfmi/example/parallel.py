@@ -78,18 +78,18 @@ def instantiate_lowlevel():
 def ask_n_cpus():
     """Get integer number of cores from user."""
     while True:
-        how_many = raw_input("How many cores do you want to use? ")
+        how_many = eval(input("How many cores do you want to use? "))
         if how_many.lower() in ("", "q", "quit", "exit"):
-            print "Aborted."
+            print("Aborted.")
             sys.exit()
         try:
             return int(how_many)
         except ValueError:
-            print "Please enter an integer."
+            print("Please enter an integer.")
 
 def pause():
     """Interrupt execution."""
-    raw_input("(press RETURN to continue)")
+    eval(input("(press RETURN to continue)"))
 
 def run_demo(n_simulation):
     """Run the demonstration.
@@ -104,34 +104,34 @@ def run_demo(n_simulation):
            " of cores is selected at instantiation.")
     n_cpus_highlevel = ask_n_cpus()
     highlevel = instantiate_highlevel(n_cpus=n_cpus_highlevel)
-    print ("Instantiated an 'FMUFunction' with %d cores for"
-           " multiprocessing." % n_cpus_highlevel)
+    print(("Instantiated an 'FMUFunction' with %d cores for"
+           " multiprocessing." % n_cpus_highlevel))
     outputVariableOfInterest = ot.RandomVector(highlevel, inputRandomVector)
-    print "Running %d simulations with %d cores." % (n_simulation,
-                                                     n_cpus_highlevel)
+    print(("Running %d simulations with %d cores." % (n_simulation,
+                                                     n_cpus_highlevel)))
     pause()
     title = "Simulation results:"
-    print title
-    print "-" * len(title)
+    print(title)
+    print(("-" * len(title)))
     start = time.time()
-    print outputVariableOfInterest.getSample(n_simulation)
+    print((outputVariableOfInterest.getSample(n_simulation)))
     elapsed_highlevel = time.time() - start
 
     print ("\nWith the lower level object 'OpenTURNSFMUFunction', the number"
            " of cores can be selected at runtimes.")
     lowlevel = instantiate_lowlevel()
-    print "Instantiated an 'OpenTURNSFMUFunction'"
+    print("Instantiated an 'OpenTURNSFMUFunction'")
     n_cpus_lowlevel = ask_n_cpus()
-    print "Running %d simulations with %d cores." % (n_simulation,
-                                                     n_cpus_lowlevel)
+    print(("Running %d simulations with %d cores." % (n_simulation,
+                                                     n_cpus_lowlevel)))
     pause()
     title = "Simulation results:"
-    print title
-    print "-" * len(title)
+    print(title)
+    print(("-" * len(title)))
     import numpy as np
     start = time.time()
-    print lowlevel(np.array(inputRandomVector.getSample(n_simulation)),
-                   n_cpus=n_cpus_lowlevel)
+    print((lowlevel(np.array(inputRandomVector.getSample(n_simulation)),
+                   n_cpus=n_cpus_lowlevel)))
     elapsed_lowlevel = time.time() - start
     return (n_simulation,
             n_cpus_highlevel, elapsed_highlevel,
@@ -140,11 +140,11 @@ def run_demo(n_simulation):
 if __name__ == "__main__":
     n_simulation = 40
     try:
-        n_simulation = int(raw_input("How many simulations do you want to"
+        n_simulation = int(eval(input("How many simulations do you want to"
                                      " perform (%d by default)? " %
-                                     n_simulation))
+                                     n_simulation)))
     except ValueError:
-        print "(Using the default number of simulations)."
+        print("(Using the default number of simulations).")
 
     (n_simulation,
      n_cpus_highlevel, elapsed_highlevel,

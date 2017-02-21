@@ -170,26 +170,26 @@ def run_demo(seed=23091926, coefficient_variation=0.20):
     elapsed_fmu = time.time() - time_start
 
     title = "Threshold exeedance probability:"
-    print "\n%s" % title
-    print "-" * len(title)
+    print(("\n%s" % title))
+    print(("-" * len(title)))
     justify = 20
-    print "Full python: %f".rjust(justify) % probability_py
-    print "FMU: %f".rjust(justify) % probability_fmu
+    print(("Full python: %f".rjust(justify) % probability_py))
+    print(("FMU: %f".rjust(justify) % probability_fmu))
 
     relative_error = (abs(probability_py - probability_fmu) / probability_py)
 
     from numpy import finfo
     if relative_error < finfo(float).eps:
-        print "Relative error is below machine precision."
+        print("Relative error is below machine precision.")
     else:
-        print "Relative error: %e" % relative_error
+        print(("Relative error: %e" % relative_error))
 
     title = "Computation time in seconds:"
-    print "\n%s" % title
-    print "-" * len(title)
+    print(("\n%s" % title))
+    print(("-" * len(title)))
     justify = 20
-    print "Full python: %f".rjust(justify) % elapsed_py
-    print "FMU: %f".rjust(justify) % elapsed_fmu
+    print(("Full python: %f".rjust(justify) % elapsed_py))
+    print(("FMU: %f".rjust(justify) % elapsed_fmu))
 
 if __name__ == "__main__":
     import sys

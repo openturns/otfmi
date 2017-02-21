@@ -13,8 +13,8 @@ import openturns as ot
 import pyfmi
 import numpy as np
 
-import fmi
-import fmu_pool
+from . import fmi
+from . import fmu_pool
 
 #§
 class FMUFunction(ot.NumericalMathFunction):

@@ -134,7 +134,7 @@ def strip_simulation(simulation, name_output, final):
     if final:
         return [simulation.final(name) for name in name_output]
     else:
-        raise NotImplementedError, "Only final==True is supported."
+        raise NotImplementedError("Only final==True is supported.")
         return (simulation["time"],
                 np.column_stack([simulation[name] for name in name_output]))
 
@@ -185,7 +185,7 @@ def guess_time(value_input, **kwargs):
         timestep = kwargs.pop("timestep", 1.)
         try:
             # Is it a time-indexed pandas dataframe?
-            time_index = value_input.values()[0].index
+            time_index = list(value_input.values())[0].index
         except AttributeError:
             # It is array-like.
             time = np.arange(np.alen(value_input)) * timestep
@@ -215,7 +215,7 @@ def parse_initialization_line(line):
             value = {"true":True, "false":False}[value.lower()]
         except KeyError:
             message = "The value '%s' could not be interpreted." % value
-            raise ValueError, message
+            raise ValueError(message)
     return name, value
 
 def parse_initialization_script(path_script):
@@ -280,7 +280,7 @@ def get_name_variable(model, **kwargs):
     except AttributeError:
         model = load_fmu(model)
 
-    return model.get_model_variables(**kwargs).keys()
+    return list(model.get_model_variables(**kwargs).keys())
 
 def get_causality(model):
     """Get the causality of the variables.
@@ -318,8 +318,8 @@ def get_fixed_value(model):
     except AttributeError:
         model = load_fmu(model)
 
-    list_name_variable = model.get_model_variables(include_alias=False,
-                                                   variability=1).keys()
+    list_name_variable = list(model.get_model_variables(include_alias=False,
+                                                   variability=1).keys())
     try:
         model.setup_experiment()
         model.initialize()
@@ -344,6 +344,6 @@ def set_dict_value(model, dict_value):
     except AttributeError:
         model = load_fmu(model)
 
-    model.set(*zip(*dict_value.items()))
+    model.set(*list(zip(*list(dict_value.items()))))
 
 #§

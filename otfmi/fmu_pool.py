@@ -17,7 +17,7 @@ import numpy as np
 
 from .fmi import simulate, strip_simulation
 
-import logger
+from . import logger
 
 #§
 class FMUProcess(Process):
@@ -71,7 +71,7 @@ class FMUProcess(Process):
     def run(self):
         """Run simulation and store results in the queue."""
 
-        for count_retry in xrange(self.max_retry):
+        for count_retry in range(self.max_retry):
             try:
                 simulation = simulate(self.model, **self.kwargs_simulate)
                 result = strip_simulation(simulation,
@@ -205,15 +205,15 @@ class FMUPool():
 
         thread.join(0.5)
 
-        for key, value in dict_result.items():
+        for key, value in list(dict_result.items()):
             if isinstance(value, Exception):
-                print "Some simulations failed."
+                print("Some simulations failed.")
                 if self.__logger:
                     logger.log("Failed simulation with index %d (error: %s)" %
                                (key, value))
 
         # Sorting by keys.
-        return zip(*sorted(dict_result.items(),
+        return zip(*sorted(list(dict_result.items()),
                            key=operator.itemgetter(0)))[1]
 
 #§
