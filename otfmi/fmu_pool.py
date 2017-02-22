@@ -213,7 +213,7 @@ class FMUPool():
                                (key, value))
 
         # Sorting by keys.
-        return zip(*sorted(list(dict_result.items()),
-                           key=operator.itemgetter(0)))[1]
+        return list(zip(*sorted(list(dict_result.items()),
+                           key=operator.itemgetter(0))))[1]
 
 #§

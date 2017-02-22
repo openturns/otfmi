@@ -28,7 +28,7 @@ class TestModel(unittest.TestCase):
         #§ Define the input distribution
         import numpy as np
         E = ot.Beta(0.93, 3.2, 28000000.0, 48000000.0)
-        F = ot.LogNormal(30000.0, 9000.0, 15000.0,  ot.LogNormal.MUSIGMA)
+        F = ot.LogNormalMuSigma(30000.0, 9000.0, 15000.0).getDistribution()
         L = ot.Uniform(250.0, 260.0)
         I = ot.Beta(2.5, 4.0, 310.0, 450.0)
 
@@ -46,7 +46,7 @@ class TestModel(unittest.TestCase):
             self.model_fmu = otfmi.FMUFunction(
                 path_fmu, inputs_fmu=["E", "F", "L", "I"], outputs_fmu="y")
         except (KeyError, FMUException):
-            raise RuntimeError, ("The test FMU 'deviation.fmu' is not"
+            raise RuntimeError ("The test FMU 'deviation.fmu' is not"
                                  " available on this platform")
         self.model_fmu.enableHistory()
 

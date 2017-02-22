@@ -21,7 +21,7 @@ import numpy as np
 import openturns as ot
 
 E = ot.Beta(0.93, 3.2, 2.8e7, 4.8e7)
-F = ot.LogNormal(3.0e4, 9000.0, 15000.0,  ot.LogNormal.MUSIGMA)
+F = ot.LogNormalMuSigma(3.0e4, 9000.0, 15000.0).getDistribution()
 L = ot.Uniform(250.0, 260.0)
 I = ot.Beta(2.5, 4.0, 310.0, 450.0)
 
