@@ -17,10 +17,18 @@ here = path.abspath(path.dirname(__file__))
 with open(path.join(here, 'README.rst'), encoding='utf-8') as f:
     long_description = f.read()
 
+
+# Get the version from __init__.py
+with open('otfmi/__init__.py') as fid:
+    for line in fid:
+        if line.startswith('__version__'):
+            version = line.strip().split()[-1][1:-1]
+            break
+
 setup(
     name='otfmi',
 
-    version='0.1',
+    version=version,
 
     description='Simulate FMUs from OpenTURNS.',
     long_description=long_description,
@@ -32,7 +40,7 @@ setup(
     maintainer='Sylvain Girard',
     maintainer_email='girard@phimeca.com',
 
-    license='Other/Proprietary License (EDF)',
+    license='License :: OSI Approved :: GNU Lesser General Public License v3 or later (LGPLv3+)',
 
     # See https://pypi.python.org/pypi?%3Aaction=list_classifiers
     classifiers=[
