@@ -68,8 +68,7 @@ def simulate(model, initialization_script=None, reset=True, **kwargs):
 
 #§
 def parse_kwargs_simulate(value_input=None, name_input=None,
-                          dimension_input=None, name_output=None,
-                          final=True, **kwargs):
+                          dimension_input=None, name_output=None, **kwargs):
     """Parse simulation key-word arguments and arrange for feeding the
     simulate method of pyfmi's model objects.
 
@@ -82,10 +81,6 @@ def parse_kwargs_simulate(value_input=None, name_input=None,
     dimension_input : Integer, number of inputs.
 
     name_output : Sequence of string, output names.
-
-    final : Boolean
-        If True (default), return only final values instead of whole
-        trajectories.
 
     Additional (optional) keyword arguments:
     ----------------------------------------
@@ -106,8 +101,11 @@ def parse_kwargs_simulate(value_input=None, name_input=None,
     kwargs.setdefault("options", kwargs.pop("dict_option", dict())) # alias.
     kwargs["options"]["filter"] = name_output
 
-    default_n_timestep = (np.alen(time), 1)[final]
-    kwargs["options"]["ncp"] = kwargs.pop("n_timestep", default_n_timestep)
+    try:
+        kwargs["start_time"] = time[0]
+        kwargs["final_time"] = time[-1]
+    except TypeError:
+        pass
 
     if value_input is not None:
         kwargs["input"] = (name_input, np.column_stack((time, value_input)))
@@ -184,10 +182,10 @@ def guess_time(value_input, **kwargs):
 
         timestep = kwargs.pop("timestep", 1.)
         try:
-            # Is it a time-indexed pandas dataframe?
+            # Is value_input a time-indexed pandas dataframe?
             time_index = list(value_input.values())[0].index
         except AttributeError:
-            # It is array-like.
+            # value_input is array-like.
             time = np.arange(np.alen(value_input)) * timestep
         else:
             time = (time_index - time_index[0]).total_seconds()
