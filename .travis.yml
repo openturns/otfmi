@@ -5,7 +5,7 @@ install:
   - wget -c --no-check-certificate https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -P /tmp
   - bash /tmp/Miniconda3-latest-Linux-x86_64.sh -b -p $HOME/miniconda
   - export PATH="$HOME/miniconda/bin:$PATH"
-  - conda install -y -c conda-forge openturns pyfmi sphinx nose scipy numpydoc
+  - conda install -y -c conda-forge openturns pyfmi sphinx nose numpydoc
 
 script:
   - nosetests
