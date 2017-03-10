@@ -71,7 +71,6 @@ model_py.enableHistory()
 
 #§ FMU model
 import otfmi
-from pyfmi.fmi import FMUException
 import sys
 
 import os
@@ -80,14 +79,14 @@ import os
 path_here = os.path.dirname(os.path.abspath(__file__))
 try:
     directory_platform = dict_platform[key_platform]
-    path_fmu = os.path.join(path_here, "file", "fmu",
-                            directory_platform, "deviation.fmu")
-    model_fmu = otfmi.FMUFunction(
-        path_fmu, inputs_fmu=["E", "F", "L", "I"], outputs_fmu="y")
-except (KeyError, FMUException):
+except KeyError:
     print ("This example is not available on your platform.\n"
            "Execution aborted.")
     sys.exit()
+path_fmu = os.path.join(path_here, "file", "fmu",
+                        directory_platform, "deviation.fmu")
+model_fmu = otfmi.FMUFunction(
+    path_fmu, inputs_fmu=["E", "F", "L", "I"], outputs_fmu="y")
 
 model_fmu.enableHistory()
 
