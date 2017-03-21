@@ -125,19 +125,24 @@ def strip_simulation(simulation, name_output, final):
 
     name_output : Sequence of strings, output variables names.
 
-    final : Boolean
-        If True (default), return only final values instead of whole
+    final : String
+        If "final" (default), return only final values instead of whole
         trajectories.
+        If "result" return the pyfmi "result" object.
+        If "trajectory" returns outputs trajectories.
 
     """
 
-    if final:
+    if final == "final":
         return [simulation.final(name) for name in name_output]
-    else:
-        raise NotImplementedError("Only final==True is supported.")
+    elif final == "result":
+        return simulation
+    elif final == "trajectory":
+        # raise NotImplementedError("Only final==True is supported.")
         return (simulation["time"],
                 np.column_stack([simulation[name] for name in name_output]))
-
+    else:
+        return simulation
 
 #§
 def reshape_input(value_input, input_dimension):
