@@ -130,9 +130,7 @@ class OpenTURNSFMUFunction(ot.OpenTURNSPythonFunction):
 
         self.initialize(initialization_script)
 
-        self.__final = True # Boolean, if True (default), return only final
-                            # values  instead of whole trajectories.
-
+        self.__final = "final"
         self.__expect_trajectory = expect_trajectory
 
 
