@@ -47,24 +47,22 @@ class FMUProcess(Process):
 
     def __init__(self, model, queue, index, max_retry=10,
                  initialization_script=None, **kwargs):
-        super(FMUProcess, self).__init__()
         self.model = model
         self.max_retry = max_retry
         self.queue = queue
         self.index = index
         self.name_output = kwargs.pop("name_output",
                                       kwargs["options"]["filter"])
-
-        self.kwargs_simulate = kwargs
-
         self.initialization_script = initialization_script
 
-        self.__final = kwargs.pop("final", True)
-
+        self.__final = kwargs.pop("final", None)
+        if self.__final == "result":
+            raise RuntimeError, ("The 'final' parameter cannot be set to"
+                                 " 'result' in FMUProcess.")
         self.__logger = kwargs.pop("logger", False)
-
+        self.kwargs_simulate = kwargs
         # Handle results in memory. Using file can induce ambiguities.
-        # If required, AssimilationPy's fmu_pool may contain a solution.
+        # If need be, AssimilationPy's fmu_pool may contain another solution.
         self.kwargs_simulate.setdefault("options",
                                         dict())["result_handling"] = "memory"
 
@@ -152,20 +150,25 @@ class FMUPool():
         self.__logger = kwargs.pop("logger", False)
 
 
-    def run(self, list_kwargs):
+    def run(self, list_kwargs, **kwargs_default):
         """Run the simulation of the model with using parallel processes.
 
         Parameters
         ----------
         list_kwargs : Sequence of dictionaries. See FMUProcess.
 
+        Additional keyword arguments are used as defaults for each simulation.
+
         """
 
         queue = Queue()
         n_simulation = len(list_kwargs)
-        list_process = [FMUProcess(self.model, queue, ii, **kwargs) for
-                        ii, kwargs in enumerate(list_kwargs)]
-
+        list_process = []
+        for ii, kwargs in enumerate(list_kwargs):
+            kwargs_updated = kwargs_default.copy()
+            kwargs_updated.update(kwargs)
+            list_process.append(FMUProcess(self.model, queue, ii,
+                                           **kwargs_updated))
         if self.__logger:
             logger.log("New run. n_simulation=%d" % n_simulation)
 

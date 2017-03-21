@@ -115,7 +115,7 @@ def parse_kwargs_simulate(value_input=None, name_input=None,
     return kwargs
 
 #§
-def strip_simulation(simulation, name_output, final):
+def strip_simulation(simulation, name_output, final=None):
     """Extract some final values or trajectories from a PyFMI result object.
 
     Parameters
@@ -133,16 +133,19 @@ def strip_simulation(simulation, name_output, final):
 
     """
 
+    if final is None:
+        final = "final"
+
     if final == "final":
         return [simulation.final(name) for name in name_output]
     elif final == "result":
         return simulation
     elif final == "trajectory":
-        # raise NotImplementedError("Only final==True is supported.")
         return (simulation["time"],
                 np.column_stack([simulation[name] for name in name_output]))
     else:
-        return simulation
+        raise ValueError, ("Unexpected value for the 'final' parameter:"
+                           " '%s'." % final)
 
 #§
 def reshape_input(value_input, input_dimension):
