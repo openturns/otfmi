@@ -200,7 +200,7 @@ if __name__ == "__main__":
     try:
         coefficient_variation = float(sys.argv[1])
     except IndexError:
-        coefficient_variation = 0.20
+        coefficient_variation = 0.50
 
     run_demo(coefficient_variation=coefficient_variation)
 
