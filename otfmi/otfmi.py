@@ -115,7 +115,7 @@ class OpenTURNSFMUFunction(ot.OpenTURNSPythonFunction):
     def __init__(self, path_fmu, inputs_fmu, outputs_fmu=None,
                  inputs=None, outputs=None, n_cpus=None,
                  initialization_script=None, kind=None,
-                 expect_trajectory=False):
+                 expect_trajectory=False, **kwargs):
         self.load_fmu(path_fmu=path_fmu, kind=kind)
 
         self._set_inputs_fmu(inputs_fmu)
@@ -130,9 +130,8 @@ class OpenTURNSFMUFunction(ot.OpenTURNSPythonFunction):
 
         self.initialize(initialization_script)
 
-        self.__final = "final"
         self.__expect_trajectory = expect_trajectory
-
+        self.__final = kwargs.pop("final", None)
 
     def _set_inputs_fmu(self, inputs_fmu, inputs=None):
         """Set input variable names.
@@ -334,8 +333,8 @@ class OpenTURNSFMUFunction(ot.OpenTURNSPythonFunction):
         simulation = fmi.simulate(self.model, reset=reset, **kwargs_simulate)
 
         return fmi.strip_simulation(simulation,
-                                name_output=self.getOutputDescription(),
-                                final=self.__final)
+                                    name_output=self.getOutputDescription(),
+                                    final=self.__final)
 
     def simulate_sample(self, list_value_input, n_cpus=None, **kwargs):
         """Simulate the FMU multiple times.
@@ -375,6 +374,6 @@ class OpenTURNSFMUFunction(ot.OpenTURNSPythonFunction):
 
         # if n_cpus > 1: # TODO?
         pool = fmu_pool.FMUPool(self.model, n_process=n_cpus)
-        return pool.run(list_kwargs)
+        return pool.run(list_kwargs, final=self.__final)
 
 #§
