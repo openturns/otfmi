@@ -18,7 +18,12 @@ script:
   - flake8 . --exit-zero
   - nosetests --nocapture
   - python setup.py install
-  - cd doc && make html BUILDDIR=~/.local/share/otfmi/doc
+  - pushd doc && make html BUILDDIR=~/.local/share/otfmi/doc && popd
+  # run tests in py2.7
+  - conda create -y -n py27 python=2.7
+  - source activate py27
+  - conda install -y -c conda-forge openturns pyfmi nose
+  - nosetests --nocapture
 
 after_success:
   - test "$TRAVIS_PULL_REQUEST" = "false" -a "$TRAVIS_BRANCH" = "master" || exit 0
