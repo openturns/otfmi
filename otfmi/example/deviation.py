@@ -86,12 +86,12 @@ try:
         path_fmu, inputs_fmu=["E", "F", "L", "I"], outputs_fmu="y")
 except KeyError:
     raise RuntimeError ("Tests are not available on your platform"
-                        " (%s)." % key_platform)
+                        " (%s)." % "-".join(key_platform))
     sys.exit()
 except FMUException:
     raise FMUException ("The test FMU 'deviation.fmu' is not"
                         " available on your platform (%s)." %
-                        key_platform)
+                        "-".join(key_platform))
     sys.exit()
 model_fmu.enableHistory()
 
