@@ -33,8 +33,14 @@ def get_path_fmu(name):
         directory_platform = get_directory_platform()
         return os.path.join(path_here, "file", "fmu", directory_platform,
                             "%s.fmu" % name)
-    except (KeyError, pyfmi.fmi.FMUException):
-        print ("This example is not available on your platform.\n"
-               "Execution aborted.")
+    except KeyError:
+        raise RuntimeError ("Examples are not available on your platform"
+                            " (%s)." % key_platform)
+        sys.exit()
+    except FMUException:
+        raise FMUException ("The example FMU '%s' is not"
+                            " available on your platform (%s)." %
+                            (name, key_platform))
+        sys.exit()
 
 #§
