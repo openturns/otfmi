@@ -8,3 +8,8 @@ install:
 
 build_script:
   - nosetests --nocapture
+  # run tests with py2.7
+  - conda create -y -n py27 python=2.7
+  - activate py27
+  - conda install -y -c conda-forge pyfmi openturns nose
+  - nosetests --nocapture
