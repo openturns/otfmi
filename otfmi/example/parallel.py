@@ -57,13 +57,13 @@ def instantiate_highlevel(n_cpus=2):
             path_fmu, inputs_fmu=["E", "F", "L", "I"], outputs_fmu="y",
             n_cpus=n_cpus)
     except KeyError:
-        raise RuntimeError ("Examples are not available on your platform"
-                            " (%s)." % "-".join(key_platform))
+        raise RuntimeError("Examples are not available on your platform"
+                           " (%s)." % "-".join(key_platform))
         sys.exit()
     except FMUException:
-        raise FMUException ("The example FMU 'deviation.fmu' is not"
-                            " available on your platform (%s)." %
-                            "-".join(key_platform))
+        raise FMUException("The example FMU 'deviation.fmu' is not"
+                           " available on your platform (%s)." %
+                           "-".join(key_platform))
         sys.exit()
 
 def instantiate_lowlevel():
@@ -75,13 +75,13 @@ def instantiate_lowlevel():
         return otfmi.OpenTURNSFMUFunction(
             path_fmu, inputs_fmu=["E", "F", "L", "I"], outputs_fmu="y")
     except KeyError:
-        raise RuntimeError ("Examples are not available on your platform"
-                            " (%s)." % "-".join(key_platform))
+        raise RuntimeError("Examples are not available on your platform"
+                           " (%s)." % "-".join(key_platform))
         sys.exit()
     except FMUException:
-        raise FMUException ("The example FMU 'deviation.fmu' is not"
-                            " available on your platform (%s)." %
-                            "-".join(key_platform))
+        raise FMUException("The example FMU 'deviation.fmu' is not"
+                           " available on your platform (%s)." %
+                           "-".join(key_platform))
         sys.exit()
 
 def ask_n_cpus():

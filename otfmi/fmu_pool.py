@@ -57,8 +57,8 @@ class FMUProcess(Process):
 
         self.__final = kwargs.pop("final", None)
         if self.__final == "result":
-            raise RuntimeError, ("The 'final' parameter cannot be set to"
-                                 " 'result' in FMUProcess.")
+            raise RuntimeError("The 'final' parameter cannot be set to"
+                               " 'result' in FMUProcess.")
         self.__logger = kwargs.pop("logger", False)
         self.kwargs_simulate = kwargs
         # Handle results in memory. Using file can induce ambiguities.
@@ -210,11 +210,11 @@ class FMUPool():
 
         for key, value in list(dict_result.items()):
             if isinstance(value, Exception):
-                print("Some simulations failed.")
+                # Some simulations failed
                 if self.__logger:
                     logger.log("Failed simulation with index %d (error: %s)" %
                                (key, value))
-
+                raise value
         # Sorting by keys.
         return list(zip(*sorted(list(dict_result.items()),
                            key=operator.itemgetter(0))))[1]

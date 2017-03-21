@@ -144,8 +144,8 @@ def strip_simulation(simulation, name_output, final=None):
         return (simulation["time"],
                 np.column_stack([simulation[name] for name in name_output]))
     else:
-        raise ValueError, ("Unexpected value for the 'final' parameter:"
-                           " '%s'." % final)
+        raise ValueError("Unexpected value for the 'final' parameter: '%s'." %
+                         final)
 
 #§
 def reshape_input(value_input, input_dimension):
