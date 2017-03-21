@@ -45,9 +45,13 @@ class TestModel(unittest.TestCase):
                                     directory_platform, "deviation.fmu")
             self.model_fmu = otfmi.FMUFunction(
                 path_fmu, inputs_fmu=["E", "F", "L", "I"], outputs_fmu="y")
-        except (KeyError, FMUException):
-            raise RuntimeError ("The test FMU 'deviation.fmu' is not"
-                                 " available on this platform")
+        except KeyError:
+            raise RuntimeError ("Tests are not available on your platform"
+                                " (%s)." % key_platform)
+        except FMUException:
+            raise FMUException ("The test FMU 'deviation.fmu' is not"
+                                 " available on your platform (%s)." %
+                                key_platform)
         self.model_fmu.enableHistory()
 
     # def tearDown(self):

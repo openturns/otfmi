@@ -56,9 +56,14 @@ def instantiate_model(inputs_fmu, outputs_fmu,
         model = otfmi.FMUFunction(path_fmu, inputs_fmu=inputs_fmu,
                                   outputs_fmu=outputs_fmu,
                                   initialization_script=initialization_script)
-    except (KeyError, FMUException):
-        print ("This example is not available on your platform.\n"
-               "Execution aborted.")
+    except KeyError:
+        raise RuntimeError ("Examples are not available on your platform"
+                            " (%s)." % key_platform)
+        sys.exit()
+    except FMUException:
+        raise FMUException ("The example FMU '%s' is not"
+                            " available on your platform (%s)." %
+                            (filename_fmu, key_platform)
         sys.exit()
     model.enableHistory()
     return model

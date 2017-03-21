@@ -84,11 +84,15 @@ try:
                             directory_platform, "deviation.fmu")
     model_fmu = otfmi.FMUFunction(
         path_fmu, inputs_fmu=["E", "F", "L", "I"], outputs_fmu="y")
-except (KeyError, FMUException):
-    print ("This example is not available on your platform.\n"
-           "Execution aborted.")
+except KeyError:
+    raise RuntimeError ("Tests are not available on your platform"
+                        " (%s)." % key_platform)
     sys.exit()
-
+except FMUException:
+    raise FMUException ("The test FMU 'deviation.fmu' is not"
+                        " available on your platform (%s)." %
+                        key_platform)
+    sys.exit()
 model_fmu.enableHistory()
 
 def create_monte_carlo(model, inputRandomVector, coefficient_variation):

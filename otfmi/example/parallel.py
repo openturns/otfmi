@@ -56,9 +56,14 @@ def instantiate_highlevel(n_cpus=2):
         return otfmi.FMUFunction(
             path_fmu, inputs_fmu=["E", "F", "L", "I"], outputs_fmu="y",
             n_cpus=n_cpus)
-    except (KeyError, FMUException):
-        print ("This example is not available on your platform.\n"
-               "Execution aborted.")
+    except KeyError:
+        raise RuntimeError ("Examples are not available on your platform"
+                            " (%s)." % key_platform)
+        sys.exit()
+    except FMUException:
+        raise FMUException ("The example FMU 'deviation.fmu' is not"
+                            " available on your platform (%s)." %
+                            key_platform)
         sys.exit()
 
 def instantiate_lowlevel():
@@ -69,11 +74,15 @@ def instantiate_lowlevel():
                                 directory_platform, "deviation.fmu")
         return otfmi.OpenTURNSFMUFunction(
             path_fmu, inputs_fmu=["E", "F", "L", "I"], outputs_fmu="y")
-    except (KeyError, FMUException):
-        print ("This example is not available on your platform.\n"
-               "Execution aborted.")
+    except KeyError:
+        raise RuntimeError ("Examples are not available on your platform"
+                            " (%s)." % key_platform)
         sys.exit()
-
+    except FMUException:
+        raise FMUException ("The example FMU 'deviation.fmu' is not"
+                            " available on your platform (%s)." %
+                            key_platform)
+        sys.exit()
 
 def ask_n_cpus():
     """Get integer number of cores from user."""
