@@ -57,8 +57,10 @@ def simulate(model, initialization_script=None, reset=True, **kwargs):
         model.reset()
         # Needed (?!) for restoring default values in some settings (windows
         # co-simulation).
-        model.instantiate()
-
+        try:
+            model.instantiate()
+        except AttributeError:
+            pass # Probably FMI version 1.
     try:
         apply_initialization_script(model, initialization_script)
     except TypeError:
