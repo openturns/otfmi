@@ -34,13 +34,13 @@ def get_path_fmu(name):
         return os.path.join(path_here, "file", "fmu", directory_platform,
                             "%s.fmu" % name)
     except KeyError:
-        raise RuntimeError ("Examples are not available on your platform"
-                            " (%s)." % "-".join(key_platform))
+        raise RuntimeError("Examples are not available on your platform"
+                           " (%s)." % "-".join(key_platform))
         sys.exit()
     except FMUException:
-        raise FMUException ("The example FMU '%s' is not"
-                            " available on your platform (%s)." %
-                            (name, "-".join(key_platform)))
+        raise FMUException("The example FMU '%s' is not"
+                           " available on your platform (%s)." %
+                           (name, "-".join(key_platform)))
         sys.exit()
 
 #§
