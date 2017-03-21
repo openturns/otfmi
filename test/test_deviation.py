@@ -9,7 +9,6 @@ dict_platform = {("Linux", "64bit"):"linux64",
 
 import numpy as np
 import unittest
-import os
 
 import openturns as ot
 
@@ -17,7 +16,6 @@ import openturns as ot
 import otfmi
 import otfmi.example.deviation
 from pyfmi.fmi import FMUException
-import sys
 
 import os
 
