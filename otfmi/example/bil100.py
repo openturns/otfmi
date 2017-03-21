@@ -58,12 +58,12 @@ def instantiate_model(inputs_fmu, outputs_fmu,
                                   initialization_script=initialization_script)
     except KeyError:
         raise RuntimeError ("Examples are not available on your platform"
-                            " (%s)." % key_platform)
+                            " (%s)." % "-".join(key_platform))
         sys.exit()
     except FMUException:
         raise FMUException ("The example FMU '%s' is not"
                             " available on your platform (%s)." %
-                            (filename_fmu, key_platform)
+                            (filename_fmu, "-".join(key_platform))
         sys.exit()
     model.enableHistory()
     return model
