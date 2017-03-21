@@ -292,10 +292,13 @@ class OpenTURNSFMUFunction(ot.OpenTURNSPythonFunction):
         """
 
         self.initialization_script = initialization_script
-        self.model.setup_experiment()
+        try:
+            self.model.setup_experiment()
+        except AttributeError:
+            pass # Probably FMI version 1.
         try:
             fmi.apply_initialization_script(self.model,
-                                        self.initialization_script)
+                                            self.initialization_script)
         except TypeError:
             pass # No initialization script.
         self.model.initialize()
