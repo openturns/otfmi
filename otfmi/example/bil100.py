@@ -63,7 +63,7 @@ def instantiate_model(inputs_fmu, outputs_fmu,
     except FMUException:
         raise FMUException("The example FMU '%s' is not"
                            " available on your platform (%s)." %
-                           (filename_fmu, "-".join(key_platform))
+                           (filename_fmu, "-".join(key_platform)))
         sys.exit()
     model.enableHistory()
     return model
