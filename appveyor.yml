@@ -1,8 +1,15 @@
 install:
-  - appveyor-retry appveyor DownloadFile https://repo.continuum.io/miniconda/Miniconda2-latest-Windows-x86.exe
-  - start /wait "" Miniconda2-latest-Windows-x86.exe /InstallationType=JustMe /AddToPath=0 /RegisterPython=0 /S /D=C:\Libraries\miniconda
+  - appveyor-retry appveyor DownloadFile https://repo.continuum.io/miniconda/Miniconda3-latest-Windows-x86.exe
+  - start /wait "" Miniconda3-latest-Windows-x86.exe /InstallationType=JustMe /AddToPath=0 /RegisterPython=0 /S /D=C:\Libraries\miniconda
   - set PATH=%PATH%;C:\Libraries\miniconda;C:\Libraries\miniconda\Scripts
+  - conda create -y -n py35 python=3.5
+  - activate py35
   - conda install -y -c conda-forge pyfmi openturns nose
 
 build_script:
+  - nosetests --nocapture
+  # run tests with py2.7
+  - conda create -y -n py27 python=2.7
+  - activate py27
+  - conda install -y -c conda-forge pyfmi openturns nose
   - nosetests --nocapture
