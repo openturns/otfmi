@@ -310,6 +310,30 @@ def get_causality(model):
     return [model.get_variable_causality(name) for name in
             get_name_variable(model)]
 
+
+def get_variability(model):
+    """Get the variability of the variables.
+
+    Parameters
+    ----------
+    model : Pyfmi model object (pyfmi.fmi.FMUModelXXX) or path to an FMU.
+
+    Returns
+    -------
+    variability : list of int
+        FMI1: CONSTANT(0), PARAMETER(1), DISCRETE(2), CONTINUOUS(3), UNKNOWN(4)
+        FMI2: CONSTANT(0), FIXED(1), TUNABLE(2), DISCRETE(3), CONTINUOUS(4), UNKNOWN(5)
+    """
+
+    try:
+        model.get_variable_variability
+    except AttributeError:
+        model = load_fmu(model)
+
+    return [model.get_variable_variability(name) for name in
+            get_name_variable(model)]
+
+
 #§
 def get_fixed_value(model):
     """Get the values of the variables with 'fixed' variability,
