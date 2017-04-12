@@ -281,6 +281,10 @@ def get_name_variable(model, **kwargs):
     ----------
     model : Pyfmi model object (pyfmi.fmi.FMUModelXXX) or path to an FMU.
 
+    Returns
+    -------
+    var_names : list of str
+        Variable names
     """
 
     try:
