@@ -297,9 +297,11 @@ def get_causality(model):
     ----------
     model : Pyfmi model object (pyfmi.fmi.FMUModelXXX) or path to an FMU.
 
-    PARAMETER(0), CALCULATED_PARAMETER(1), INPUT(2),
-    OUTPUT(3), LOCAL(4), INDEPENDENT(5), UNKNOWN(6)
-
+    Returns
+    -------
+    causality : list of int
+        FMI1: INPUT(0), OUTPUT(1), INTERNAL(2), NONE(3), UNKNOWN(4)
+        FMI2: PARAMETER(0), CALCULATED_PARAMETER(1), INPUT(2), OUTPUT(3), LOCAL(4), INDEPENDENT(5), UNKNOWN(6)
     """
 
     try:
