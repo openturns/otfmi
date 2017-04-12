@@ -365,6 +365,32 @@ def get_fixed_value(model):
         pass
     return {name:model.get(name) for name in list_name_variable}
 
+
+
+def get_start_value(model):
+    """Get the values of the variables with a start value ignoring aliases.
+
+    Parameters
+    ----------
+    model : Pyfmi model object (pyfmi.fmi.FMUModelXXX) or path to an FMU.
+
+    Returns
+    -------
+    start_vars : dict of float
+        Values of start variables
+
+    """
+
+    try:
+        model.get_model_variables
+    except AttributeError:
+        model = load_fmu(model)
+
+    list_name_variable = list(model.get_model_variables(include_alias=False,
+                                                   only_start=True).keys())
+    return {name:model.get_variable_start(name) for name in list_name_variable}
+
+
 #§
 def set_dict_value(model, dict_value):
     """Set values from a dictionary with variable names as keys.
