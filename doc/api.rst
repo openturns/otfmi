@@ -25,6 +25,8 @@ This is the user manual for the Python bindings to the :code:`otfmi` library.
 
     fmi.get_name_variable
     fmi.get_causality
+    fmi.get_variability
     fmi.get_fixed_value
+    fmi.get_start_value
     fmi.set_dict_value
 
