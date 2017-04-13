@@ -305,6 +305,7 @@ def get_causality(model):
     -------
     causality : list of int
         FMI1: INPUT(0), OUTPUT(1), INTERNAL(2), NONE(3), UNKNOWN(4)
+
         FMI2: PARAMETER(0), CALCULATED_PARAMETER(1), INPUT(2), OUTPUT(3), LOCAL(4), INDEPENDENT(5), UNKNOWN(6)
     """
 
@@ -328,6 +329,7 @@ def get_variability(model):
     -------
     variability : list of int
         FMI1: CONSTANT(0), PARAMETER(1), DISCRETE(2), CONTINUOUS(3), UNKNOWN(4)
+
         FMI2: CONSTANT(0), FIXED(1), TUNABLE(2), DISCRETE(3), CONTINUOUS(4), UNKNOWN(5)
     """
 
