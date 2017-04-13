@@ -281,6 +281,10 @@ def get_name_variable(model, **kwargs):
     ----------
     model : Pyfmi model object (pyfmi.fmi.FMUModelXXX) or path to an FMU.
 
+    Returns
+    -------
+    var_names : list of str
+        Variable names
     """
 
     try:
@@ -297,9 +301,11 @@ def get_causality(model):
     ----------
     model : Pyfmi model object (pyfmi.fmi.FMUModelXXX) or path to an FMU.
 
-    PARAMETER(0), CALCULATED_PARAMETER(1), INPUT(2),
-    OUTPUT(3), LOCAL(4), INDEPENDENT(5), UNKNOWN(6)
-
+    Returns
+    -------
+    causality : list of int
+        FMI1: INPUT(0), OUTPUT(1), INTERNAL(2), NONE(3), UNKNOWN(4)
+        FMI2: PARAMETER(0), CALCULATED_PARAMETER(1), INPUT(2), OUTPUT(3), LOCAL(4), INDEPENDENT(5), UNKNOWN(6)
     """
 
     try:
@@ -309,6 +315,30 @@ def get_causality(model):
 
     return [model.get_variable_causality(name) for name in
             get_name_variable(model)]
+
+
+def get_variability(model):
+    """Get the variability of the variables.
+
+    Parameters
+    ----------
+    model : Pyfmi model object (pyfmi.fmi.FMUModelXXX) or path to an FMU.
+
+    Returns
+    -------
+    variability : list of int
+        FMI1: CONSTANT(0), PARAMETER(1), DISCRETE(2), CONTINUOUS(3), UNKNOWN(4)
+        FMI2: CONSTANT(0), FIXED(1), TUNABLE(2), DISCRETE(3), CONTINUOUS(4), UNKNOWN(5)
+    """
+
+    try:
+        model.get_variable_variability
+    except AttributeError:
+        model = load_fmu(model)
+
+    return [model.get_variable_variability(name) for name in
+            get_name_variable(model)]
+
 
 #§
 def get_fixed_value(model):
@@ -334,6 +364,32 @@ def get_fixed_value(model):
     except pyfmi.fmi.FMUException:
         pass
     return {name:model.get(name) for name in list_name_variable}
+
+
+
+def get_start_value(model):
+    """Get the values of the variables with a start value ignoring aliases.
+
+    Parameters
+    ----------
+    model : Pyfmi model object (pyfmi.fmi.FMUModelXXX) or path to an FMU.
+
+    Returns
+    -------
+    start_vars : dict of float
+        Values of start variables
+
+    """
+
+    try:
+        model.get_model_variables
+    except AttributeError:
+        model = load_fmu(model)
+
+    list_name_variable = list(model.get_model_variables(include_alias=False,
+                                                   only_start=True).keys())
+    return {name:model.get_variable_start(name) for name in list_name_variable}
+
 
 #§
 def set_dict_value(model, dict_value):
