@@ -38,7 +38,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'otfmi'
-copyright = u'2017'
+copyright = u'2017 EDF'
 author = u'Sylvain Girard'
 
 # List of patterns, relative to source directory, that match files and
