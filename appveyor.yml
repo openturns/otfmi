@@ -1,7 +1,5 @@
 install:
-  - appveyor-retry appveyor DownloadFile https://repo.continuum.io/miniconda/Miniconda3-latest-Windows-x86.exe
-  - start /wait "" Miniconda3-latest-Windows-x86.exe /InstallationType=JustMe /AddToPath=0 /RegisterPython=0 /S /D=C:\Libraries\miniconda
-  - set PATH=%PATH%;C:\Libraries\miniconda;C:\Libraries\miniconda\Scripts
+  - set PATH=%PATH%;C:\Miniconda36;C:\Miniconda36\Scripts
   - conda install -y -c conda-forge pyfmi openturns nose
 
 build_script:
