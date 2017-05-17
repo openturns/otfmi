@@ -44,7 +44,7 @@ Usage without installation
 The module can be imported in a Python session as soon as
 the otfmi folder is listed in the PYTHONPATH environment variable. If you installed Python
 using Anaconda, the otfmi folder can be placed in any directory “monitored” by Anaconda,
-for instance C:\Users\username\Anaconda\lib\site-packages on Windows.
+for instance C:\\Users\\username\\Anaconda\\lib\\site-packages on Windows.
 
 Installation of otfmi
 ---------------------
@@ -62,7 +62,7 @@ Removing otfmi if you installed it from the command line is just
 a matter of removing all created files. Usually, it is a single file, otfmi-X.X-py2.7.egg
 (X.X is the version number) located in the default directory for external module. The
 path to this directory depends on your Python installation. On Windows with Anaconda, it
-is C:\Users\username\Anaconda\lib\site-packages.
+is C:\\Users\\username\\Anaconda\\lib\\site-packages.
 The list of all created file can be retrieved by the following command
 
     python setup.py install --record list_file.txt
