@@ -311,11 +311,9 @@ class OpenTURNSFMUFunction(ot.OpenTURNSPythonFunction):
         reset : Boolean, toggle reseting the FMU prior to simulation. True by
         default.
 
-        Optional keyword arguments:
-        ---------------------------
-        time : Sequence of floats, time vector.
+        time : Sequence of floats, time vector (optional).
 
-        timestep : Float, timestep in seconds.
+        timestep : Float, timestep in seconds (optional).
 
         Additional keyword arguments are passed on to the 'simulate' method of
         the underlying PyFMI model object.
