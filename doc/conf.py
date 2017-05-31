@@ -2,6 +2,7 @@
 
 import sys
 import os
+import subprocess
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
@@ -15,7 +16,6 @@ extensions = [
     'sphinx.ext.todo',
     'sphinx.ext.intersphinx',
     'sphinx.ext.autosummary',
-    'sphinx.ext.mathjax',
     'numpydoc',
 ]
 
@@ -26,6 +26,22 @@ autosummary_generate = True
 numpydoc_show_class_members = True
 numpydoc_class_members_toctree = False
 
+try:
+    import sphinx.ext.imgmath
+    extensions.append('sphinx.ext.imgmath')
+    imgmath_latex_preamble = "\usepackage{%smath_notations}" % (
+        os.path.dirname(__file__) + os.sep)
+    imgmath_use_preview = True
+    if subprocess.call('dvisvgm -V', shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE) == 0:
+        imgmath_image_format = 'svg'
+except ImportError:
+    extensions.append('sphinx.ext.pngmath')
+    pngmath_latex_preamble = "\usepackage{%smath_notations}" % (
+        os.path.dirname(__file__) + os.sep)
+    # The next option is used for smart-alignment of math images on the text.
+    # It only works when the preview-latex package is installed.
+    # See http://sphinx-doc.org/latest/ext/math.html#confval-pngmath_use_preview
+    pngmath_use_preview = True
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
