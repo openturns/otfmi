@@ -84,16 +84,13 @@ def parse_kwargs_simulate(value_input=None, name_input=None,
 
     name_output : Sequence of string, output names.
 
-    Additional (optional) keyword arguments:
-    ----------------------------------------
-    time : Sequence of floats, time vector.
+    time : Sequence of floats, time vector (optional).
 
-    timestep : Float, timestep in seconds.
+    timestep : Float, timestep in seconds (optional).
 
-    n_timestep : Integer, number of timesteps.
+    n_timestep : Integer, number of timesteps (optional).
 
-    options : Dictionary, see pyfmi .simulate method.
-
+    options : Dictionary, see pyfmi .simulate methodi (optional).
 
     """
 
@@ -176,11 +173,9 @@ def guess_time(value_input, **kwargs):
     value_input : Pandas dataframe with a time index or array-like with
     timesteps as rows.
 
-    Additional (optional) keyword arguments:
-    ----------------------------------------
-    time : Sequence of floats, time vector.
+    time : Sequence of floats, time vector (optional).
 
-    timestep : Float, timestep in seconds.
+    timestep : Float, timestep in secondsi (optional).
 
     """
 
