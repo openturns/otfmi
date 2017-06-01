@@ -17,6 +17,7 @@ install:
 
 script:
   - flake8 . --exit-zero
+  - ./mo2fmu.sh ./otfmi/example/file/deviation.mo ./otfmi/example/file/fmu/linux64/deviation.fmu
   - nosetests --nocapture
   - python setup.py install
   - pushd doc && make html BUILDDIR=~/.local/share/otfmi/doc && popd
