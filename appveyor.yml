@@ -1,7 +1,6 @@
 install:
   - set PATH=%PATH%;C:\Miniconda36;C:\Miniconda36\Scripts
   - conda install -y -c conda-forge pyfmi openturns nose
-  - conda update -y python
 
 build_script:
   - nosetests --nocapture
