@@ -1,4 +1,4 @@
-model deviationpoutre
+model deviation
   "Model from here: http://doc.openturns.org/openturns-latest/html/ExamplesGuide/cid1.xhtml#cid1"
   output Real y;
   input Real E (start=3.0e7);
@@ -24,4 +24,4 @@ equation
             fillPattern =                                                                                                    FillPattern.Solid, extent={{-9.9219,-4.0169},{9.9219,4.0169}}, textString
             =                                                                                                    "L", fontName="Arial")}),
       Diagram(coordinateSystem(preserveAspectRatio=false)));
-end deviationpoutre;
+end deviation;
