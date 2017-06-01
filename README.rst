@@ -70,9 +70,9 @@ The list of all created file can be retrieved by the following command
 Documentation
 =============
 
-See the “User documentation” [USER_DOC]_ for more usage instruction.
+See the “User documentation” [USERDOC]_ for more usage instruction.
 
-See the “Project documentation” [PROJECT_DOC]_ for information about the module architecture.
+See the “Project documentation” [PROJECTDOC]_ for information about the module architecture.
 
 Example scripts are given in the 'example' folder in the source tree.
 
@@ -85,5 +85,5 @@ References
 ==========
 .. [PYFMI] PyFMI Python module. url: http://www.jmodelica.org/page/4924
 .. [ANACONDA] Anaconda, Python distribution. url: http://continuum.io/downloads
-.. [USER_DOC] Girard, Sylvain (2017). otfmi: simulate FMUs from OpenTURNS: User documentation. Tech. rep. RT-PMFRE-00997-003. Phimeca.
-.. [PROJECT_DOC] Girard, Sylvain (2017). otfmi: simulate FMUs from OpenTURNS: Project documentation. Tech. rep. RT-PMFRE-00997-002. Phimeca.
+.. [USERDOC] Girard, Sylvain (2017). otfmi: simulate FMUs from OpenTURNS: User documentation. Tech. rep. RT-PMFRE-00997-003. Phimeca.
+.. [PROJECTDOC] Girard, Sylvain (2017). otfmi: simulate FMUs from OpenTURNS: Project documentation. Tech. rep. RT-PMFRE-00997-002. Phimeca.
