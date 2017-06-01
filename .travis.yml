@@ -5,7 +5,7 @@ sudo: required
 install:
   - sudo apt-get -y install texlive-latex-recommended texlive-fonts-recommended texlive-latex-extra
   # openmodelica
-  - echo deb http://build.openmodelica.org/apt trusty nightly | sudo tee /etc/apt/sources.list.d/openmodelica.list
+  - echo deb http://build.openmodelica.org/apt trusty stable | sudo tee /etc/apt/sources.list.d/openmodelica.list
   - wget -q http://build.openmodelica.org/apt/openmodelica.asc -O- | sudo apt-key add -
   - sudo apt-get update
   - sudo apt-get -y install openmodelica
