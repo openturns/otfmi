@@ -48,7 +48,7 @@ def simulate(model, initialization_script=None, reset=True, **kwargs):
     initialization_script : String, path to the script file.
 
     reset : Boolean
-        Toggle reseting the FMU prior to simulation. True by default.
+        Toggle resetting the FMU prior to simulation. True by default.
 
     Additional keyword arguments are passed on to pyfmi.simulate.
 
