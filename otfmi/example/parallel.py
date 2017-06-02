@@ -127,7 +127,7 @@ def run_demo(n_simulation):
     elapsed_highlevel = time.time() - start
 
     print ("\nWith the lower level object 'OpenTURNSFMUFunction', the number"
-           " of cores can be selected at runtimes.")
+           " of cores can be selected at runtime.")
     lowlevel = instantiate_lowlevel()
     print("Instantiated an 'OpenTURNSFMUFunction'")
     n_cpus_lowlevel = ask_n_cpus()
