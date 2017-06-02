@@ -17,7 +17,7 @@ def log(text, record_time=True, path_log=path_log):
     ----------
     text : String, text to write.
 
-    record_time : Boolean, wether to prepend time before text.
+    record_time : Boolean, whether to prepend time before text.
 
     path_log : String, path to log file.
 

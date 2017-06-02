@@ -27,11 +27,11 @@ class FMUProcess(Process):
     ----------
     model : Pyfmi model object (pyfmi.fmi.FMUModelXXX).
 
-    queue : multiprocesing.Queue
+    queue : multiprocessing.Queue
         Buffer where simulations results are temporarily stored.
 
     index : Integer
-        Maintain sort order of the simulaltions.
+        Maintain sort order of the simulations.
 
     max_retry : Integer
         Maximun number of retries when simulation crash.

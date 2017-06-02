@@ -308,12 +308,12 @@ class OpenTURNSFMUFunction(ot.OpenTURNSPythonFunction):
         ----------
         value_input : Vector of input values.
 
-        reset : Boolean, toggle reseting the FMU prior to simulation. True by
+        reset : Boolean, toggle resetting the FMU prior to simulation. True by
         default.
 
         time : Sequence of floats, time vector (optional).
 
-        timestep : Float, timestep in seconds (optional).
+        timestep : Float, time step in seconds (optional).
 
         Additional keyword arguments are passed on to the 'simulate' method of
         the underlying PyFMI model object.
@@ -359,7 +359,7 @@ class OpenTURNSFMUFunction(ot.OpenTURNSPythonFunction):
 
         kwargs.setdefault("initialization_script", self.initialization_script)
 
-        #T?ODO: refactorize parsing of kwargs?
+        #TODO: re-factorize parsing of kwargs?
 
         list_kwargs = []
         for value_input in list_value_input:

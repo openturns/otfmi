@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # Copyright 2016 EDF. This software was developed with the collaboration of
 # Phimeca Engineering (Sylvain Girard, girard@phimeca.com).
-"""Estimate a threshold exeedance probability with both Python and FMU models.
+"""Estimate a threshold exceedance probability with both Python and FMU models.
 The physical model represents the deviation of a cantilever beam subjected to
 a load. The probability that the deviation exceeds a given threshold is
 estimated by straightforward Monte Carlo sampling.
@@ -173,7 +173,7 @@ def run_demo(seed=23091926, coefficient_variation=0.20):
         model_fmu, coefficient_variation=coefficient_variation)
     elapsed_fmu = time.time() - time_start
 
-    title = "Threshold exeedance probability:"
+    title = "Threshold exceedance probability:"
     print(("\n%s" % title))
     print(("-" * len(title)))
     justify = 20

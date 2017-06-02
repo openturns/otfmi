@@ -36,9 +36,9 @@ def instantiate_model(inputs_fmu, outputs_fmu,
 
     outpus_fmu : Sequence of strings, FMU output variable names.
 
-    with_initialization_script : Boolean, wether or not to use an
+    with_initialization_script : Boolean, whether or not to use an
     initialization script. If not (default), appropriate start values are
-    hardcoded in the FMU.
+    hard-coded in the FMU.
 
     """
     if with_initialization_script:
@@ -96,9 +96,9 @@ def run_demo(with_initialization_script, seed=None, n_simulation=None):
 
     Parameters
     ----------
-    with_initialization_script : Boolean, wether or not to use an
+    with_initialization_script : Boolean, whether or not to use an
     initialization script. If not (default), appropriate start values are
-    hardcoded in the FMU.
+    hard-coded in the FMU.
 
 
     seed : Integer, seed of the random number generator. The default is
@@ -143,7 +143,7 @@ def run_demo(with_initialization_script, seed=None, n_simulation=None):
     if with_initialization_script:
         print("The FMU was initialized with an initialization script.")
     else:
-        print("The FMU was initialized with hardcoded start values.")
+        print("The FMU was initialized with hard-coded start values.")
     title = ("Empirical moments of the BIL100 computed with %d simulations:" %
              n_simulation)
     print(("\n%s" % title))
