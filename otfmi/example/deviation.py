@@ -100,7 +100,7 @@ def create_monte_carlo(model, inputRandomVector, coefficient_variation):
 
     Parameters
     ----------
-    model : OpenTURNS NumericalMathFunction.
+    model : OpenTURNS Function.
 
     inputRandomVector : OpenTURNS RandomVector, vector of random inputs.
 
@@ -127,7 +127,7 @@ def run_monte_carlo(model, coefficient_variation=0.20):
 
     Parameters
     ----------
-    model : OpenTURNS NumericalMathFunction.
+    model : OpenTURNS Function.
 
     coefficient_variation : Float, target for the coefficient of variation of
     the estimator.
