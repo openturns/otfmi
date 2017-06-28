@@ -2,10 +2,10 @@
 # Copyright 2016 EDF. This software was developed with the collaboration of
 # Phimeca Engineering (Sylvain Girard, girard@phimeca.com).
 """Provide a class for simulation and result handling of FMU.
-FMUFunction is NumericalMathFunction factory similar to OpenTURNS'
+FMUFunction is Function factory similar to OpenTURNS'
 PythonFunction.
 It relies on the lower level OpenTURNSFMUFunction, which is similar to
-OpenTURNS' (OpenTURNSPythonFunction.
+OpenTURNS' OpenTURNSPythonFunction.
 """
 
 #§
@@ -17,9 +17,9 @@ from . import fmi
 from . import fmu_pool
 
 #§
-class FMUFunction(ot.NumericalMathFunction):
+class FMUFunction(ot.Function):
     """
-    Override NumericalMathFunction from Python.
+    Override Function from Python.
 
     Parameters
     ----------
@@ -54,7 +54,7 @@ class FMUFunction(ot.NumericalMathFunction):
     # expect_trajectory : Boolean, if True, the call inputs are assumed to be
     # time dependent trajectories. Default is False
     # TODO: Not implemented yet. Currently the __call__ from
-    # NumericalMathFunction gets in the way and switch to sample execution.
+    # Function gets in the way and switch to sample execution.
     # Hence a sequence of vectors is expected but a single vector is
     # outputted.
 
@@ -67,14 +67,14 @@ class FMUFunction(ot.NumericalMathFunction):
             inputs=inputs, n_cpus=n_cpus, outputs=outputs, kind=kind,
             initialization_script=initialization_script)
 
-        highlevel = ot.NumericalMathFunction(lowlevel)
+        highlevel = ot.Function(lowlevel)
         # highlevel._model = lowlevel.model
         return highlevel
 
 #§
 class OpenTURNSFMUFunction(ot.OpenTURNSPythonFunction):
     """
-    Override NumericalMathFunction from Python.
+    Override Function from Python.
 
     Parameters
     ----------
