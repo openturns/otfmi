@@ -23,7 +23,7 @@ Installation
 ============
 
 The otfmi module relies on PyFMI. It can be installed using the distutils
-mechanism (setupe.py) or the windows installer. Alternatively, it can be used
+mechanism (setup.py) or the windows installer. Alternatively, it can be used
 without installation by adding the package directory ('otfmi') to the
 PYTHONPATH.
 
@@ -85,5 +85,5 @@ References
 ==========
 .. [PYFMI] PyFMI Python module. url: http://www.jmodelica.org/page/4924
 .. [ANACONDA] Anaconda, Python distribution. url: http://continuum.io/downloads
-.. [USERDOC] Girard, Sylvain (2017). otfmi: simulate FMUs from OpenTURNS: User documentation. Tech. rep. RT-PMFRE-00997-003. Phimeca.
-.. [PROJECTDOC] Girard, Sylvain (2017). otfmi: simulate FMUs from OpenTURNS: Project documentation. Tech. rep. RT-PMFRE-00997-002. Phimeca.
+.. [USERDOC] Girard, Sylvain (2017). otfmi: simulate FMUs from OpenTURNS: User documentation. Tech. rep. RT-PMFRE-00997-003. EDF.
+.. [PROJECTDOC] Girard, Sylvain (2017). otfmi: simulate FMUs from OpenTURNS: Project documentation. Tech. rep. RT-PMFRE-00997-002. EDF.
