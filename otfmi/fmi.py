@@ -408,3 +408,66 @@ def set_dict_value(model, dict_value):
     model.set(*list(zip(*list(dict_value.items()))))
 
 #§
+def format_trajectory(model, time, trajectory, time_interpolate=None):
+    """Store trajectories in a dictionary, and possibly reinterpolate them.
+
+    Arguments:
+    model -- OpenTURNSFMUFunction, simulated model.
+
+    time -- Sequence of floats, simulation time.
+
+    trajectory -- Array of floats, trajectories.
+
+    time_interpolate -- Sequence of floats, time for interpolation of
+    trajectories.
+
+    """
+
+    list_output = model.getFMUOutputDescription()
+
+    if time_interpolate is not None:
+        list_trajectory = [np.interp(time_interpolate, time, zz) for zz in
+                           trajectory.T]
+    else:
+        list_trajectory = list(trajectory.T)
+
+    dict_trajectory = {key:value for key, value in
+                       zip(list_output, list_trajectory)}
+    return dict_trajectory
+
+#§
+#TODO: refactor format_sample_trajectory.
+def format_sample_trajectory(model, list_output, time_interpolate=None):
+    """Store samples of trajectories in a dictionary, and possibly
+    reinterpolate them.
+
+    Arguments:
+    model -- OpenTURNSFMUFunction, simulated model.
+
+    list_output trajectory -- Sequence of pairs of time (vector of floats) and
+    trajectories (array of floats).
+
+    time_interpolate -- Sequence of floats, time for interpolation of
+    trajectories.
+
+    """
+
+    list_dict_trajectory = []
+    for time, trajectory in list_output:
+        list_dict_trajectory.append(format_trajectory(
+            model, time, trajectory, time_interpolate=time_interpolate))
+
+    dict_trajectory_sample = dict()
+    for name_output in model.getFMUOutputDescription():
+        dict_trajectory_sample[name_output] = np.column_stack(
+            [dd[name_output] for dd in list_dict_trajectory])
+
+    if time_interpolate is None:
+        list_time, _ = zip(*list_output)
+    else:
+        list_time = [time_interpolate for _ in xrange(len(list_output))]
+
+    return list_time, dict_trajectory_sample
+
+
+#§
