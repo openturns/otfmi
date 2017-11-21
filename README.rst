@@ -85,5 +85,5 @@ References
 ==========
 .. [PYFMI] PyFMI Python module. url: http://www.jmodelica.org/page/4924
 .. [ANACONDA] Anaconda, Python distribution. url: http://continuum.io/downloads
-.. [USERDOC] Girard, Sylvain (2017). otfmi: simulate FMUs from OpenTURNS: User documentation. Tech. rep. RT-PMFRE-00997-003. EDF. url: https://www.researchgate.net/profile/Sylvain_Girard3/publication/321183987_otfmi_simulate_FMU_from_OpenTURNS_user_documentation/links/
-.. [PROJECTDOC] Girard, Sylvain (2017). otfmi: simulate FMUs from OpenTURNS: Project documentation. Tech. rep. RT-PMFRE-00997-002. EDF. url: https://www.researchgate.net/profile/Sylvain_Girard3/publication/321183987_otfmi_simulate_FMU_from_OpenTURNS_project_documentation/links/
+.. [USERDOC] Girard, Sylvain (2017). otfmi: simulate FMUs from OpenTURNS: User documentation. Tech. rep. RT-PMFRE-00997-003. EDF. url: https://www.researchgate.net/publication/321184021_otfmi_simulate_FMUs_from_OpenTURNS_user_documentation
+.. [PROJECTDOC] Girard, Sylvain (2017). otfmi: simulate FMUs from OpenTURNS: Project documentation. Tech. rep. RT-PMFRE-00997-002. EDF. url: https://www.researchgate.net/profile/Sylvain_Girard3/publication/321183987_otfmi_simulate_FMU_from_OpenTURNS_project_documentation
