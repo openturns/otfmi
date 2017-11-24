@@ -1,5 +1,10 @@
 install:
   - set PATH=%PATH%;C:\Miniconda36;C:\Miniconda36\Scripts
+  - conda create -y -n py27 python=2.7
+  - activate py27
+  - conda update --all
+  - conda install -y scipy
+  - python -c "import scipy.interpolate"
   - conda config --add channels conda-forge
   - conda install -y pyfmi openturns nose
 
