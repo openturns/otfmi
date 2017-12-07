@@ -1,7 +1,11 @@
 install:
-  - set PATH=%PATH%;C:\Miniconda36;C:\Miniconda36\Scripts
+  - set PATH=C:\Miniconda36;C:\Miniconda36\Scripts;%PATH%
   - conda config --add channels conda-forge
-  - conda install -y pyfmi openturns nose
+  - conda update -y conda
+  - conda update -y --all
+  - conda install -y matplotlib
+  - python -c "import tornado"
+  - python -c "import matplotlib.pyplot as plt"
 
 build_script:
   - nosetests --nocapture
