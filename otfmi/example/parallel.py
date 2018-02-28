@@ -86,8 +86,15 @@ def instantiate_lowlevel():
 
 def ask_n_cpus():
     """Get integer number of cores from user."""
+    version_python = sys.version_info.major
+    query = "How many cores do you want to use? "
+
     while True:
-        how_many = eval(input("How many cores do you want to use? "))
+        if version_python == 3:
+            eval(input(query))
+        else:
+            how_many = raw_input(query)
+
         if how_many.lower() in ("", "q", "quit", "exit"):
             print("Aborted.")
             sys.exit()
@@ -149,9 +156,9 @@ def run_demo(n_simulation):
 if __name__ == "__main__":
     n_simulation = 40
     try:
-        n_simulation = int(eval(input("How many simulations do you want to"
-                                     " perform (%d by default)? " %
-                                     n_simulation)))
+        query = ("How many simulations do you want to perform"
+                 " (%d by default)?" % n_simulation)
+        n_simulation = int(raw_input(query))
     except ValueError:
         print("(Using the default number of simulations).")
 
