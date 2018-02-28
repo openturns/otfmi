@@ -366,7 +366,7 @@ class OpenTURNSFMUFunction(ot.OpenTURNSPythonFunction):
             kwargs_simulate = fmi.parse_kwargs_simulate(
                 value_input, name_input=self.getFMUInputDescription(),
                 name_output=self.getFMUOutputDescription(),
-                dimension_input=self.getInputDimension(), **kwargs) # Check
+                dimension_input=self.getInputDimension(), **kwargs)
             list_kwargs.append(kwargs_simulate)
 
 

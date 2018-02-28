@@ -88,8 +88,6 @@ def parse_kwargs_simulate(value_input=None, name_input=None,
 
     timestep : Float, timestep in seconds (optional).
 
-    n_timestep : Integer, number of timesteps (optional).
-
     options : Dictionary, see pyfmi .simulate methodi (optional).
 
     """
@@ -101,8 +99,8 @@ def parse_kwargs_simulate(value_input=None, name_input=None,
     kwargs["options"]["filter"] = name_output
 
     try:
-        kwargs["start_time"] = time[0]
-        kwargs["final_time"] = time[-1]
+        kwargs.setdefault("start_time", time[0])
+        kwargs.setdefault("final_time", time[-1])
     except TypeError:
         pass
 
@@ -175,7 +173,7 @@ def guess_time(value_input, **kwargs):
 
     time : Sequence of floats, time vector (optional).
 
-    timestep : Float, timestep in secondsi (optional).
+    timestep : Float, timestep in seconds (optional).
 
     """
 
