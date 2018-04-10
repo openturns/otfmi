@@ -67,7 +67,6 @@ def deviationFunction(x):
     return [y]
 
 model_py = ot.PythonFunction(4, 1, deviationFunction)
-model_py.enableHistory()
 
 #§ FMU model
 import otfmi
@@ -93,7 +92,6 @@ except FMUException:
                        " available on your platform (%s)." %
                        "-".join(key_platform))
     sys.exit()
-model_fmu.enableHistory()
 
 def create_monte_carlo(model, inputRandomVector, coefficient_variation):
     """Create a Monte Carlo algorithm.

@@ -32,7 +32,6 @@ class TestModel(unittest.TestCase):
 
         self.model_py = ot.PythonFunction(
             4, 1, otfmi.example.deviation.deviationFunction)
-        self.model_py.enableHistory()
 
         #§ FMU model
         path_example = os.path.dirname(os.path.abspath(
@@ -50,7 +49,6 @@ class TestModel(unittest.TestCase):
             raise FMUException ("The test FMU 'deviation.fmu' is not"
                                  " available on your platform (%s)." %
                                 key_platform)
-        self.model_fmu.enableHistory()
 
     # def tearDown(self):
         # pass

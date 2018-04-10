@@ -65,7 +65,6 @@ def instantiate_model(inputs_fmu, outputs_fmu,
                            " available on your platform (%s)." %
                            (filename_fmu, "-".join(key_platform)))
         sys.exit()
-    model.enableHistory()
     return model
 
 #§ 2. Random vector definition
