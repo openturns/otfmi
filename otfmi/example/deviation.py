@@ -114,7 +114,8 @@ def create_monte_carlo(model, inputRandomVector, coefficient_variation):
     myEvent.setName("Deviation > %g cm" % threshold)
 
     # Create a Monte Carlo algorithm
-    myAlgoMonteCarlo = ot.MonteCarlo(myEvent)
+    experiment = ot.MonteCarloExperiment()
+    myAlgoMonteCarlo = ot.ProbabilitySimulationAlgorithm(myEvent, experiment)
     myAlgoMonteCarlo.setBlockSize(100)
     myAlgoMonteCarlo.setMaximumCoefficientOfVariation(coefficient_variation)
 
