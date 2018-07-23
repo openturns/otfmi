@@ -5,7 +5,8 @@ key_platform = (platform.system(), platform.architecture()[0])
 # Call to either 'platform.system' or 'platform.architecture' *after*
 # importing pyfmi causes a segfault.
 dict_platform = {("Linux", "64bit"):"linux64",
-                 ("Windows", "32bit"):"win32"}
+                 ("Windows", "32bit"):"win32",
+                 ("Windows", "64bit"):"win64"}
 
 import numpy as np
 import unittest
