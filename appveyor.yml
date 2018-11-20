@@ -1,6 +1,8 @@
 install:
   - set PATH=%PATH%;C:\Miniconda36-x64;C:\Miniconda36-x64\Scripts
   - conda config --add channels conda-forge
+  - conda install -y pyagrum
+  - python bug41.py
   - conda install -y pyfmi openturns nose
 
 build_script:
