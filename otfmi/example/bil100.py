@@ -123,7 +123,7 @@ def run_demo(with_initialization_script, seed=None, n_simulation=None):
         inputs_fmu=inputs_fmu, outputs_fmu=outputs_fmu,
         with_initialization_script=with_initialization_script)
     # Create the output random vector
-    outputRandomVector = ot.RandomVector(model, inputRandomVector)
+    outputRandomVector = ot.CompositeRandomVector(model, inputRandomVector)
     outputRandomVector.setDescription(["Puissance thermique du primaire"])
 
 

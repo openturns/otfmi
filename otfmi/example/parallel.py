@@ -123,7 +123,7 @@ def run_demo(n_simulation):
     highlevel = instantiate_highlevel(n_cpus=n_cpus_highlevel)
     print(("Instantiated an 'FMUFunction' with %d cores for"
            " multiprocessing." % n_cpus_highlevel))
-    outputVariableOfInterest = ot.RandomVector(highlevel, inputRandomVector)
+    outputVariableOfInterest = ot.CompositeRandomVector(highlevel, inputRandomVector)
     print(("Running %d simulations with %d cores." % (n_simulation,
                                                      n_cpus_highlevel)))
     pause()
