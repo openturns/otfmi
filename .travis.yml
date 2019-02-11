@@ -3,17 +3,12 @@ sudo: required
 
 install:
   - sudo apt-get -y install texlive-latex-recommended texlive-fonts-recommended texlive-latex-extra
-  # openmodelica
-  - echo deb http://build.openmodelica.org/apt trusty stable | sudo tee /etc/apt/sources.list.d/openmodelica.list
-  - wget -q http://build.openmodelica.org/apt/openmodelica.asc -O- | sudo apt-key add -
-  - sudo apt-get update
-  - sudo apt-get -y install openmodelica
   # conda
   - wget -c --no-check-certificate https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -P /tmp
   - bash /tmp/Miniconda3-latest-Linux-x86_64.sh -b -p $HOME/miniconda
   - export PATH="$HOME/miniconda/bin:$PATH"
   - conda config --add channels conda-forge
-  - conda install -y openturns pyfmi sphinx nose numpydoc flake8
+  - conda install -y openturns pyfmi sphinx nose numpydoc flake8 omcompiler
 
 script:
   - flake8 . --exit-zero
