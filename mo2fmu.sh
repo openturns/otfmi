@@ -31,7 +31,7 @@ cd ${temp_dir}
 cat > mo2fmu.mos <<EOF
 loadFile("${mofile}");
 getErrorString();
-translateModelFMU(deviation, version="2.0", fmuType="cs");
+translateModelFMU(${modelname}, version="2.0", fmuType="cs");
 getErrorString();
 EOF
 
