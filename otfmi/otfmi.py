@@ -119,6 +119,9 @@ class OpenTURNSFMUFunction(ot.OpenTURNSPythonFunction):
         self.load_fmu(path_fmu=path_fmu, kind=kind)
 
         self._set_inputs_fmu(inputs_fmu)
+        if outputs_fmu is None:
+            outputs_fmu = fmi.get_name_variable(self.model)
+
         self._set_outputs_fmu(outputs_fmu)
 
         super(OpenTURNSFMUFunction, self).__init__(n=len(self.inputs_fmu),
