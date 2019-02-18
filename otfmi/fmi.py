@@ -88,7 +88,7 @@ def parse_kwargs_simulate(value_input=None, name_input=None,
 
     timestep : Float, timestep in seconds (optional).
 
-    options : Dictionary, see pyfmi .simulate methodi (optional).
+    options : Dictionary, see pyfmi .simulate method (optional).
 
     """
 
@@ -442,7 +442,7 @@ def format_sample_trajectory(model, list_output, time_interpolate=None):
     Arguments:
     model -- OpenTURNSFMUFunction, simulated model.
 
-    list_output trajectory -- Sequence of pairs of time (vector of floats) and
+    list_output -- Sequence of pairs of time (vector of floats) and
     trajectories (array of floats).
 
     time_interpolate -- Sequence of floats, time for interpolation of
