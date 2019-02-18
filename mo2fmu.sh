@@ -1,12 +1,12 @@
 #!/bin/sh
 
-# rebuild fmu for a specific openmodelica version on a specific distro
+# Export a modelica model (.mo) file to FMU (.fmu)
 
 set -e
 
 usage()
 {
-  echo "Usage: ${0} model.mo [model.fmu]"
+  echo "Usage: ${0} source.mo [destination.fmu]"
   exit 1
 }
 
@@ -19,22 +19,17 @@ modelname=`basename ${mofile} | cut -d '.' -f 1`
 
 if test $# -eq 2
 then
-  fmufile=`readlink -f ${2}`
+  destination=`readlink -f ${2}`
 else
-  fmufile=`echo ${mofile} | cut -d '.' -f 1`.fmu
+  destination=${PWD}
 fi
 
-temp_dir=`mktemp -d`
-
-cd ${temp_dir}
-
-cat > mo2fmu.mos <<EOF
-loadFile("${mofile}");
-getErrorString();
-translateModelFMU(deviation, version="2.0", fmuType="cs");
-getErrorString();
+# export fmu in temp dir
+temp_dir=`mktemp -d` && cd ${temp_dir} && cat > mo2fmu.mos <<EOF
+loadFile("${mofile}"); getErrorString();
+translateModelFMU(${modelname}, version="2.0", fmuType="cs"); getErrorString();
 EOF
-
 omc mo2fmu.mos
 
-cp -v ${modelname}.fmu ${fmufile}
+mv ${modelname}.fmu ${destination}
+
