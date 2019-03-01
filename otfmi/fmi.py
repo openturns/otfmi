@@ -469,3 +469,60 @@ def format_sample_trajectory(model, list_output, time_interpolate=None):
 
 
 #§
+def simulate_trajectory(path_fmu, value_input, timestep,
+                        list_input=None, list_output=None,
+                        final_time=None, ncp=None):
+    """Simulate a sample of trajectories with an FMU.
+
+    Arguments:
+    list_input -- Sequence of strings, input names.
+
+    list_output -- Sequence of strings or single string, output names.
+
+    path_fmu -- String, path to FMU.
+
+    value_input -- Sequence of floats, input values.
+
+    timestep -- Float or sequence of floats, time step or sequence of times
+    for trajectory interpolation.
+
+    final_time -- Float, simulation final time.
+
+    """
+
+    try:
+        list_output.__iter__
+    except AttributeError:
+        list_output = [list_output]
+
+    model = otfmi.OpenTURNSFMUFunction(path_fmu=path_fmu,
+                                       inputs_fmu=list_input,
+                                       outputs_fmu=list_output)
+    model._OpenTURNSFMUFunction__final = "trajectory"
+    model._OpenTURNSFMUFunction__expect_trajectory = False # False is the default
+
+    try:
+        timestep.__iter__
+    except AttributeError:
+        time_interpolate = np.linspace(0, final_time,
+                                       final_time / float(timestep))
+    else:
+        time_interpolate = timestep
+        final_time = time_interpolate[-1]
+
+
+    options = dict()
+    if ncp is not None:
+        options["ncp"] = ncp
+
+    out = model.simulate_sample(list_value_input=value_input,
+                                final_time=final_time,
+                                options=options)
+    list_time, dict_trajectory = format_sample_trajectory(
+        model, out, time_interpolate)
+    time = list_time[0]
+    return time, dict_trajectory
+
+
+
+#§
