@@ -37,7 +37,8 @@ Otherwise, relying on Anaconda [ANACONDA]_ is recommended. Indeed, compiling
 PyFMI from sources and sorting out its dependencies can be troublesome. With
 Python installed from Anaconda, PyFMI is installed by the following command:
 
-    conda install -c https://conda.binstar.org/chria pyfmi
+    conda config --add channels conda-forge
+    conda install pyfmi
 
 Usage without installation
 ---------------------------
