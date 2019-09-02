@@ -1,6 +1,8 @@
 install:
-  - set CONDA_ROOT=C:\Miniconda36-x64
-  - set PATH=%PATH%;C:\Miniconda36-x64;C:\Miniconda36-x64\Scripts
+  - curl -fSsLO https://repo.anaconda.com/miniconda/Miniconda3-latest-Windows-x86_64.exe
+  - set CONDA_ROOT="C:\miniconda3-x64"
+  - Miniconda3-latest-Windows-x86_64.exe /InstallationType=JustMe /S /D=%CONDA_ROOT%
+  - call %CONDA_ROOT%\Scripts\activate.bat
   - conda config --add channels conda-forge
   - conda install -y pyfmi openturns nose
 
