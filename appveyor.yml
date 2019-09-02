@@ -11,5 +11,6 @@ build_script:
   # run tests with py2.7
   - conda create -y -n py27 python=2.7
   - conda activate py27
+  - set PATH=%PATH%;%CONDA_ROOT%;%CONDA_ROOT%\Scripts
   - conda install -y pyfmi openturns nose
   - nosetests --nocapture
