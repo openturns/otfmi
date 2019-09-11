@@ -8,6 +8,7 @@ a load. The probability that the deviation exceeds a given threshold is
 estimated by straightforward Monte Carlo sampling.
 """
 
+from __future__ import print_function
 #§ Identifying the platform
 import platform
 key_platform = (platform.system(), platform.architecture()[0])
@@ -161,6 +162,12 @@ def run_demo(seed=23091926, coefficient_variation=0.20):
     """
     import time
 
+    # test evaluation
+    print('eval sample...', end='')
+    xs = inputRandomVector.getSample(5)
+    ys = model_fmu(xs)
+    print('ok:', xs, ys)
+
     ot.RandomGenerator.SetSeed(seed)
     time_start = time.time()
     probability_py = run_monte_carlo(
@@ -174,11 +181,11 @@ def run_demo(seed=23091926, coefficient_variation=0.20):
     elapsed_fmu = time.time() - time_start
 
     title = "Threshold exceedance probability:"
-    print(("\n%s" % title))
-    print(("-" * len(title)))
+    print("\n%s" % title)
+    print("-" * len(title))
     justify = 20
-    print(("Full python: %f".rjust(justify) % probability_py))
-    print(("FMU: %f".rjust(justify) % probability_fmu))
+    print("Full python: %f".rjust(justify) % probability_py)
+    print("FMU: %f".rjust(justify) % probability_fmu)
 
     relative_error = (abs(probability_py - probability_fmu) / probability_py)
 
@@ -189,11 +196,11 @@ def run_demo(seed=23091926, coefficient_variation=0.20):
         print(("Relative error: %e" % relative_error))
 
     title = "Computation time in seconds:"
-    print(("\n%s" % title))
-    print(("-" * len(title)))
+    print("\n%s" % title)
+    print("-" * len(title))
     justify = 20
-    print(("Full python: %f".rjust(justify) % elapsed_py))
-    print(("FMU: %f".rjust(justify) % elapsed_fmu))
+    print("Full python: %f".rjust(justify) % elapsed_py)
+    print("FMU: %f".rjust(justify) % elapsed_fmu)
 
 if __name__ == "__main__":
     import sys
