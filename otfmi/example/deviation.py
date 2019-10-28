@@ -112,7 +112,7 @@ def create_monte_carlo(model, inputRandomVector, coefficient_variation):
     outputVariableOfInterest = ot.CompositeRandomVector(model, inputRandomVector)
     # Create an Event from this RandomVector
     threshold = 30
-    myEvent = ot.Event(outputVariableOfInterest, ot.Greater(), threshold)
+    myEvent = ot.ThresholdEvent(outputVariableOfInterest, ot.Greater(), threshold)
     myEvent.setName("Deviation > %g cm" % threshold)
 
     # Create a Monte Carlo algorithm
