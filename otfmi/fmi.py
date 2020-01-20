@@ -5,6 +5,7 @@
 #§
 import pyfmi
 import numpy as np
+from distutils.version import LooseVersion
 
 #§
 def load_fmu(path_fmu, kind=None, **kwargs):
@@ -97,6 +98,9 @@ def parse_kwargs_simulate(value_input=None, name_input=None,
 
     kwargs.setdefault("options", kwargs.pop("dict_option", dict())) # alias.
     kwargs["options"]["filter"] = name_output
+    # https://github.com/modelon-community/PyFMI/commit/df8228d4d97cfde3cd3fc321a4f3da31b417d4be
+    if LooseVersion(pyfmi.__version__)  >= '2.6':
+        kwargs["options"]["silent_mode"] = True
 
     try:
         kwargs.setdefault("start_time", time[0])
