@@ -4,11 +4,7 @@ install:
   - Miniconda3-latest-Windows-x86_64.exe /InstallationType=JustMe /S /D=%CONDA_ROOT%
   - call %CONDA_ROOT%\Scripts\activate.bat
   - conda config --add channels conda-forge
-  - conda install -y pyfmi openturns nose
+  - conda install -y pyfmi openturns nose otmorris
 
 build_script:
-  - nosetests --nocapture
-  # run tests with py2.7
-  - conda create -y -n py27 python=2.7 pyfmi openturns nose
-  - conda activate py27
-  - nosetests --nocapture
+  - python otm.py
