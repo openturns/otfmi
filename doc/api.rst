@@ -12,6 +12,7 @@ This is the user manual for the Python bindings to the :code:`otfmi` library.
 
     FMUFunction
     OpenTURNSFMUFunction
+    FunctionExporter
 
 .. autosummary::
     :toctree: _generated/
