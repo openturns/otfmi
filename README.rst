@@ -22,27 +22,14 @@ module relies on PyFMI, a module for manipulating FMUs within Python.
 Installation
 ============
 
-The preferred installation procedure uses Anaconda. Use the following command
+The preferred installation procedure uses Conda. Use the following commands::
 
-    conda install -c conda-forge otfmi 
+    conda config --add channels conda-forge
+    conda install otfmi 
 
 It can be installed using the distutils mechanism (setup.py) or the windows installer.
 Alternatively, it can be used without installation by adding the package directory ('otfmi') to the
 PYTHONPATH.
-
-Installation of PyFMI (if need be)
----------------------
-
-The otfmi module relies on PyFMI [PYFMI]_.
-If you did not use anaconda to install Otfmi, you may need to install PyFMI.
-
-On windows, PyFMI can be installed using the installer program.
-
-Otherwise, relying on Anaconda [ANACONDA]_ is recommended. Indeed, compiling
-PyFMI from sources and sorting out its dependencies can be troublesome. With
-Python installed from Anaconda, PyFMI is installed by the following command:
-
-    conda install -c conda-forge pyfmi
 
 Usage without installation
 ---------------------------
@@ -51,8 +38,8 @@ the otfmi folder is listed in the PYTHONPATH environment variable. If you instal
 using Anaconda, the otfmi folder can be placed in any directory “monitored” by Anaconda,
 for instance C:\\Users\\username\\Anaconda\\lib\\site-packages on Windows.
 
-Installation of otfmi from sources
----------------------
+Installation from sources
+-------------------------
 The otfmi module can be installed from sources using the
 classical distutils procedure. From the main folder, run the following command:
 
@@ -61,8 +48,8 @@ classical distutils procedure. From the main folder, run the following command:
 On windows, it is possible to avoid resorting to command line interface by using the
 installer program otfmi-X.X.win32.exe ( X.X is the version number).
 
-Manual removal of otfmi
-----------------
+Manual removal
+--------------
 Removing otfmi if you installed it from sources with setup.py is just
 a matter of removing all created files. Usually, it is a single file, otfmi-X.X-py2.7.egg
 (X.X is the version number) located in the default directory for external module. The
