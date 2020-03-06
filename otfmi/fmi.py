@@ -193,7 +193,7 @@ def guess_time(value_input, **kwargs):
             time_index = list(value_input.values())[0].index
         except AttributeError:
             # value_input is array-like.
-            time = np.arange(np.alen(value_input)) * timestep
+            time = np.arange(len(value_input)) * timestep
         else:
             time = (time_index - time_index[0]).total_seconds()
     return time, kwargs
