@@ -42,14 +42,14 @@ class TestPyfmi(unittest.TestCase):
     def test_simulate(self):
         """Simulate an fmu."""
         model = pyfmi.load_fmu(self.path_fmu)
-        model.simulate()
+        model.simulate(options={'silent_mode': True})
 
     def test_reset(self):
         """Reset an fmu."""
         model = pyfmi.load_fmu(self.path_fmu)
-        model.simulate()
+        model.simulate(options={'silent_mode': True})
         model.reset()
-        model.simulate()
+        model.simulate(options={'silent_mode': True})
 
 
 #§
