@@ -1,0 +1,11 @@
+2020-03-31 - release 0.4
+- Add FMUExporter
+
+2019-05-11 - release 0.3
+- Add simulate_trajectory
+
+2018-04-10 - release 0.2
+- Add trajectory management
+
+2017-06-02 - release 0.1
+- First release
