@@ -8,7 +8,6 @@ dict_platform = {("Linux", "64bit"):"linux64",
                  ("Windows", "32bit"):"win32",
                  ("Windows", "64bit"):"win64"}
 
-import numpy as np
 import unittest
 
 import openturns as ot
@@ -24,12 +23,6 @@ import os
 class TestModel(unittest.TestCase):
     def setUp(self):
         """Load FMU and setup pure python reference."""
-        #§ Define the input distribution
-        import numpy as np
-        E = ot.Beta(0.93, 3.2, 28000000.0, 48000000.0)
-        F = ot.LogNormalMuSigma(30000.0, 9000.0, 15000.0).getDistribution()
-        L = ot.Uniform(250.0, 260.0)
-        I = ot.Beta(2.5, 4.0, 310.0, 450.0)
 
         self.model_py = ot.PythonFunction(
             4, 1, otfmi.example.deviation.deviationFunction)
