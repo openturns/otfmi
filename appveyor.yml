@@ -14,7 +14,3 @@ install:
 
 build_script:
   - nosetests --nocapture
-  # run tests with py2.7
-  - conda create -y -n py27 python=2.7 pyfmi openturns nose
-  - conda activate py27
-  - nosetests --nocapture
