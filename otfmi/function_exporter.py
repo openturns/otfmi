@@ -40,11 +40,11 @@ class FunctionExporter(object):
         """
 
         self.function_ = function
-        assert len(start) == function.getInputDimension(), "wrong input dimension"
+        assert len(start) == function.getInputDimension(), 'wrong input dimension'
         self.start_ = start
         self.workdir_ = tempfile.mkdtemp()
 
-    def export(self, fmu_path, verbose=False):
+    def export(self, fmu_path, fmuType='cs', verbose=False):
         """
         Export to FMU file.
 
@@ -54,9 +54,13 @@ class FunctionExporter(object):
         ----------
         fmu_path : str
             Path to the generated .fmu file.
+        fmuType : str, default=cs
+            FMU type, either me (model exchange), cs (co-simulation), me_cs (both model exchange and co-simulation)
         verbose : bool
             Verbose output (default=False).
         """
+
+        assert fmuType in ['me', 'cs', 'me_cs'], 'Invalid fmuType'
 
         # export the function to xml
         study = ot.Study()
@@ -157,7 +161,7 @@ class FunctionExporter(object):
         # export the fmu
         with open(os.path.join(self.workdir_, 'mo2fmu.mos'), 'w') as mos:
             mos.write('loadFile("wrapper.mo"); getErrorString();\n')
-            mos.write('translateModelFMU(wrapper, fmuType="cs"); getErrorString()\n')
+            mos.write('translateModelFMU(wrapper, fmuType="' + fmuType + '"); getErrorString()\n')
         subprocess.run(['omc', 'mo2fmu.mos'], capture_output=not verbose, cwd=self.workdir_, check=True)
         shutil.move(os.path.join(self.workdir_, "wrapper.fmu"), fmu_path)
 
