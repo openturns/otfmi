@@ -17,7 +17,7 @@ class TestExport(unittest.TestCase):
         # export fmu
         path_fmu = os.path.join(tempfile.mkdtemp(), 'deviation.fmu')
         fe = otfmi.FunctionExporter(f, start)
-        fe.export(path_fmu, verbose=True)
+        fe.export(path_fmu, fmuType='cs', verbose=True)
         assert os.path.isfile(path_fmu), "fmu not created"
 
         # reimport fmu
