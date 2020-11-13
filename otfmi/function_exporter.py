@@ -14,10 +14,7 @@ if sys.version_info < (3, 7):
         outs, errs = proc.communicate()
         rc = proc.poll()
         if check and rc != 0:
-            if capture_output:
-                raise RuntimeError('process exited with code '+str(rc)+' stdout:'+str(outs)+ ' stderr:'+str(errs))
-            else:
-                raise RuntimeError('process exited with code '+str(rc))
+            raise RuntimeError('process exited with code '+str(rc))
         return (rc == 0)
 
     subprocess.run = subprocess_run
