@@ -45,6 +45,10 @@ class FunctionExporter(object):
         """
 
         self.function_ = function
+        try:
+            [float(x) for x in start]
+        except Exception:
+            raise TypeError('start must be a sequence of float')
         assert len(start) == function.getInputDimension(), 'wrong input dimension'
         self.start_ = start
         self.workdir_ = tempfile.mkdtemp()
