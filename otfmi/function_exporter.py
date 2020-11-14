@@ -172,6 +172,10 @@ class FunctionExporter(object):
         shutil.move(os.path.join(self.workdir_, "wrapper.fmu"), fmu_path)
 
     def cleanup(self):
-        """Cleanup files."""
+        """
+        Cleanup files.
+        
+        Do not call while the exported function still needs to be called.
+        """
         shutil.rmtree(self.workdir_)
 
