@@ -60,12 +60,15 @@ class FunctionExporter(object):
         ----------
         fmu_path : str
             Path to the generated .fmu file.
+            The model name is taken from the base name.
         fmuType : str, default=cs
             FMU type, either me (model exchange), cs (co-simulation), me_cs (both model exchange and co-simulation)
         verbose : bool
             Verbose output (default=False).
         """
 
+        assert isinstance(fmu_path, str), 'fmu_path must be str'
+        className, extension = os.path.splitext(os.path.basename(fmu_path))
         assert fmuType in ['me', 'cs', 'me_cs'], 'Invalid fmuType'
 
         # export the function to xml
@@ -129,7 +132,7 @@ class FunctionExporter(object):
 
         # build C wrapper
         with open(os.path.join(self.workdir_, 'CMakeLists.txt'), 'w') as cm:
-            cm.write('cmake_minimum_required (VERSION 2.8)\n')
+            cm.write('cmake_minimum_required (VERSION 3.2)\n')
             cm.write('set (CMAKE_BUILD_TYPE "Release" CACHE STRING "build type")\n')
             cm.write('project (wrapper C)\n')
             cm.write('if (POLICY CMP0091)\n  cmake_policy (SET CMP0091 NEW)\nendif()\n')
@@ -146,7 +149,7 @@ class FunctionExporter(object):
 
         # the modelica wrapper
         with open(os.path.join(self.workdir_, 'wrapper.mo'), 'w') as mo:
-            mo.write('model wrapper\n\n')
+            mo.write('model '+ className + '\n\n')
             mo.write('function ExternalFunc\n')
             mo.write('  input Real['+str(self.function_.getInputDimension())+'] x;\n')
             mo.write('  output Real['+str(self.function_.getOutputDimension())+'] y;\n')
@@ -162,14 +165,14 @@ class FunctionExporter(object):
             mo.write('equation\n')
             for output_name, i in zip(self.function_.getOutputDescription(), range(self.function_.getOutputDimension())):
                 mo.write('  '+output_name+' = output_array_zzz__['+str(i)+'];\n')
-            mo.write('end wrapper;\n')
+            mo.write('end '+ className + ';\n')
 
         # export the fmu
         with open(os.path.join(self.workdir_, 'mo2fmu.mos'), 'w') as mos:
             mos.write('loadFile("wrapper.mo"); getErrorString();\n')
-            mos.write('translateModelFMU(wrapper, fmuType="' + fmuType + '"); getErrorString()\n')
+            mos.write('translateModelFMU(' + className + ', fmuType="' + fmuType + '"); getErrorString()\n')
         subprocess.run(['omc', 'mo2fmu.mos'], capture_output=not verbose, cwd=self.workdir_, check=True)
-        shutil.move(os.path.join(self.workdir_, "wrapper.fmu"), fmu_path)
+        shutil.move(os.path.join(self.workdir_, className + extension), fmu_path)
 
     def cleanup(self):
         """
