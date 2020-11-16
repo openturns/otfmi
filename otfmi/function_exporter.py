@@ -172,7 +172,7 @@ class FunctionExporter(object):
             mos.write('loadFile("wrapper.mo"); getErrorString();\n')
             mos.write('translateModelFMU(' + className + ', fmuType="' + fmuType + '"); getErrorString()\n')
         subprocess.run(['omc', 'mo2fmu.mos'], capture_output=not verbose, cwd=self.workdir_, check=True)
-        shutil.move(os.path.join(self.workdir_, className + extension), fmu_path)
+        shutil.move(os.path.join(self.workdir_, className + extension), os.path.expanduser(fmu_path))
 
     def cleanup(self):
         """
