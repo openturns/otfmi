@@ -7,6 +7,7 @@ import os
 import tempfile
 import sys
 import shutil
+import math as m
 
 class TestExport(unittest.TestCase):
 
@@ -34,6 +35,26 @@ class TestExport(unittest.TestCase):
         y = model_fmu(x)
         print(y)
         assert abs(y[0] - 13.1598) < 1e-4, "wrong value"
+
+        if 0:
+            # field function
+            mesh = ot.RegularGrid(0, 1, 100)
+            g = ot.SymbolicFunction(['t', 'a', 'b'], ['a*sin(t)+b'])
+            f = ot.VertexValuePointToFieldFunction(mesh, f)
+            start = [4.0, 5.0]
+
+            # export
+            fe = otfmi.FunctionExporter(f, start)
+            fe.export(path_fmu, fmuType='cs', verbose=True)
+            assert os.path.isfile(path_fmu), "fmu not created"
+
+            # import
+            import pyfmi
+            model = pyfmi.load_fmu(path_fmu)
+            model.initialize()
+            res = model.simulate(options={'silent_mode': True})
+            print(model.get_model_variables().keys())
+            print(res['y0'])
 
         shutil.rmtree(temp_path)
 

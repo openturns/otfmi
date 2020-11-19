@@ -35,12 +35,13 @@ class FunctionExporter(object):
         """
         Parameters
         ----------
-        function : :py:class:`openturns.Function`
+        function : :py:class:`openturns.Function` or :py:class:`openturns.PointToFieldFunction`
             Function to export.
         start : sequence of float
             Initial input values.
         """
 
+        assert hasattr(function, 'getInputDimension'), 'not an openturns function'
         self.function_ = function
         try:
             [float(x) for x in start]
@@ -80,6 +81,12 @@ class FunctionExporter(object):
         with open(xml_path, 'rb') as f:
             xml_data = f.read()
 
+        field = hasattr(self.function_, 'getOutputMesh')
+        flat_size = self.function_.getOutputDimension()
+        if field:
+            n_pt = self.function_.getOutputMesh().getVerticesNumber()
+            flat_size *= n_pt
+
         # the C wrapper called by modelica
         with open(os.path.join(workdir, 'wrapper.c'), 'w') as c:
             c.write('#define _XOPEN_SOURCE 500\n')
@@ -96,17 +103,16 @@ class FunctionExporter(object):
             c.write('  int i;\n')
             c.write('  static int count = 0;\n')
             c.write('  static int hits = 0;\n')
+            if field:
+                c.write('  static int findex = 0;\n')
             #c.write('  printf("count=%d hits=%d\\n", count, hits);\n')
             c.write('  int same_x;\n')
             c.write('  static double prev_x['+str(self.function_.getInputDimension())+'];\n')
-            c.write('  static double prev_y['+str(self.function_.getOutputDimension())+'];\n')
+            c.write('  static double prev_y['+str(flat_size)+'];\n')
             c.write('  same_x = count;\n')
             c.write('  for (i = 0; i < nin; ++ i) {\n')
             c.write('    if(x[i] != prev_x[i]) same_x = 0;\n  }\n')
-            c.write('  if (same_x) {\n')
-            c.write('    for(i = 0; i < nout; ++ i) y[i] = prev_y[i];\n')
-            c.write('    ++ hits;\n')
-            c.write('  } else {\n')
+            c.write('  if (!same_x) {\n')
             c.write('    char workdir[] = "' + workdir.replace("\\", "\\\\") + '";\n')
             c.write('    if (access(workdir, R_OK) == -1)\n#ifdef _WIN32\n      _mkdir(workdir);\n#else\n      mkdir(workdir, 0733);\n#endif\n')
             c.write('    fptr = fopen("'+os.path.join(workdir, "point.in").replace("\\", "\\\\")+'", "w");\n')
@@ -123,29 +129,43 @@ class FunctionExporter(object):
             c.write('      fptr = fopen(py_path, "w");\n')
             c.write('      fprintf(fptr, "import openturns as ot\\nstudy = ot.Study()\\n");\n')
             c.write('      fprintf(fptr, "study.setStorageManager(ot.XMLStorageManager(\\\"%s\\\"))\\n", xml_path);\n')
-            c.write('      fprintf(fptr, "study.load()\\nfunction = ot.Function()\\nstudy.fillObject(\\\"function\\\", function)\\n");\n')
+            c.write('      fprintf(fptr, "study.load()\\n");\n')
+            if field:
+                c.write('      fprintf(fptr, "function = ot.PointToFieldFunction()\\n");\n')
+            else:
+                c.write('      fprintf(fptr, "function = ot.Function()\\n");\n')
+            c.write('      fprintf(fptr, "study.fillObject(\\\"function\\\", function)\\n");\n')
             c.write('      fprintf(fptr, "x = []\\n");\n')
             c.write('      fprintf(fptr, "with open(\\"'+os.path.join(workdir, "point.in").replace("\\", "\\\\")+'\\", \\"r\\") as f:\\n");\n')
             c.write('      fprintf(fptr, "    for line in f.readlines():\\n");\n')
             c.write('      fprintf(fptr, "        x.append(float(line))\\n");\n')
             c.write('      fprintf(fptr, "y = function(x)\\n");\n')
+            if field:
+                c.write('      fprintf(fptr, "y = y.asPoint()\\n");\n')
             c.write('      fprintf(fptr, "with open(\\"'+os.path.join(workdir, 'point.out').replace("\\", "\\\\")+'\\", \\"w\\") as f:\\n");\n')
             c.write('      fprintf(fptr, "    for v in y:\\n");\n')
-            c.write('      fprintf(fptr, "        f.write(str(v))\\n");\n')
+            c.write('      fprintf(fptr, "        f.write(str(v)+\\"\\\\n\\")\\n");\n')
             c.write('      fclose(fptr); };\n')
-            c.write('    rc = system("python '+os.path.join(workdir, 'wrapper.py').replace("\\", "\\\\")+'");\n')
+            c.write('    rc = system("python '+os.path.join(workdir, 'wrapper.py').replace("\\", "\\\\")+'> /tmp/a.out 2>&1");\n')
             c.write('    fptr = fopen("'+os.path.join(workdir, 'point.out').replace("\\", "\\\\")+'", "r");\n')
-            c.write('    for (i = 0; i < nout; ++ i)\n')
-            c.write('      rc = fscanf(fptr, "%lf", &y[i]);\n')
+            c.write('    for (i = 0; i < ' + str(flat_size) + '; ++ i)\n')
+            c.write('      rc = fscanf(fptr, "%lf", &prev_y[i]);\n')
             c.write('    fclose(fptr);\n')
             c.write('    memcpy(prev_x, x, nin * sizeof(double));\n')
-            c.write('    memcpy(prev_y, y, nout * sizeof(double));\n')
+            if field:
+                c.write('    findex = 0;\n')
             c.write('  }\n')
+            c.write('  else ++ hits;\n')
+            if field:
+                c.write('  for (i = 0; i < nout; ++ i) y[i] = prev_y[i + (findex % ' + str(n_pt) + ')];\n')
+                c.write('  ++ findex;\n')
+            else:
+                c.write('  for (i = 0; i < nout; ++ i) y[i] = prev_y[i];\n')
             c.write('  ++ count;\n}\n')
 
         # build C wrapper
         with open(os.path.join(workdir, 'CMakeLists.txt'), 'w') as cm:
-            cm.write('cmake_minimum_required (VERSION 2.8)\n')
+            cm.write('cmake_minimum_required (VERSION 3.2)\n')
             cm.write('set (CMAKE_BUILD_TYPE "Release" CACHE STRING "build type")\n')
             cm.write('project (wrapper C)\n')
             cm.write('if (POLICY CMP0091)\n  cmake_policy (SET CMP0091 NEW)\nendif()\n')
