@@ -5,6 +5,8 @@ import platform
 import subprocess
 import shutil
 import sys
+import dill
+dill.settings['recurse'] = True
 
 # py<37 has no capture_output keyword (py<3 has no subprocess.run at all)
 if sys.version_info < (3, 7):
@@ -113,6 +115,9 @@ class FunctionExporter(object):
             c.write('  for (i = 0; i < nin; ++ i) {\n')
             c.write('    if(x[i] != prev_x[i]) same_x = 0;\n  }\n')
             c.write('  if (!same_x) {\n')
+            if field:
+                c.write('    findex = 0;\n')
+            c.write('    memcpy(prev_x, x, nin * sizeof(double));\n')
             c.write('    char workdir[] = "' + workdir.replace("\\", "\\\\") + '";\n')
             c.write('    if (access(workdir, R_OK) == -1)\n#ifdef _WIN32\n      _mkdir(workdir);\n#else\n      mkdir(workdir, 0733);\n#endif\n')
             c.write('    fptr = fopen("'+os.path.join(workdir, "point.in").replace("\\", "\\\\")+'", "w");\n')
@@ -146,14 +151,12 @@ class FunctionExporter(object):
             c.write('      fprintf(fptr, "    for v in y:\\n");\n')
             c.write('      fprintf(fptr, "        f.write(str(v)+\\"\\\\n\\")\\n");\n')
             c.write('      fclose(fptr); };\n')
-            c.write('    rc = system("python '+os.path.join(workdir, 'wrapper.py').replace("\\", "\\\\")+'> /tmp/a.out 2>&1");\n')
+            c.write('    rc = system("python '+os.path.join(workdir, 'wrapper.py').replace("\\", "\\\\")+'> '+os.path.join(workdir, 'error.log').replace("\\", "\\\\")+' 2>&1");\n')
+            c.write('    if (rc != 0) printf("otfmi: error running \\"python '+os.path.join(workdir, 'wrapper.py').replace("\\", "\\\\")+ '\\" rc=%d\\n", rc);\n')
             c.write('    fptr = fopen("'+os.path.join(workdir, 'point.out').replace("\\", "\\\\")+'", "r");\n')
             c.write('    for (i = 0; i < ' + str(flat_size) + '; ++ i)\n')
             c.write('      rc = fscanf(fptr, "%lf", &prev_y[i]);\n')
             c.write('    fclose(fptr);\n')
-            c.write('    memcpy(prev_x, x, nin * sizeof(double));\n')
-            if field:
-                c.write('    findex = 0;\n')
             c.write('  }\n')
             c.write('  else ++ hits;\n')
             if field:
