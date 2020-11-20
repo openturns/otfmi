@@ -197,7 +197,7 @@ class FunctionExporter(object):
             mo.write('  Real output_array_zzz__['+str(self.function_.getOutputDimension())+'] = ExternalFunc({'+', '.join(self.function_.getInputDescription())+'});\n');
             mo.write('equation\n')
             for output_name, i in zip(self.function_.getOutputDescription(), range(self.function_.getOutputDimension())):
-                mo.write('  '+output_name+' = output_array_zzz__['+str(i)+'];\n')
+                mo.write('  '+output_name+' = output_array_zzz__['+str(i + 1)+'];\n')
             mo.write('end '+ className + ';\n')
 
         # export the fmu
