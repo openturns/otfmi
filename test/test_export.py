@@ -39,8 +39,13 @@ class TestExport(unittest.TestCase):
         if 0:
             # field function
             mesh = ot.RegularGrid(0, 1, 100)
-            g = ot.SymbolicFunction(['t', 'a', 'b'], ['a*sin(t)+b'])
-            f = ot.VertexValuePointToFieldFunction(mesh, f)
+            #g = ot.SymbolicFunction(['t', 'a', 'b'], ['a*sin(t)+b'])
+            #f = ot.VertexValuePointToFieldFunction(g, mesh)
+            def g(X):
+                a, b = X
+                Y = [[a*m.sin(t)+b] for t in range(100)]
+                return Y
+            f = ot.PythonPointToFieldFunction(2, mesh, 1, g)
             start = [4.0, 5.0]
 
             # export
