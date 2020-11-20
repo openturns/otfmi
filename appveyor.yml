@@ -13,7 +13,7 @@ install:
   # conda-forge's scipy>=1.5.3 dlls conflict with openturns
   # from scipy.sparse.linalg import LinearOperator
   - conda install -y "scipy<=1.5.2"
-  - conda install -y pyfmi openturns nose
+  - conda install -y pyfmi openturns dill nose
 
 build_script:
   - nosetests --nocapture

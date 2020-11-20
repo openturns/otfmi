@@ -15,7 +15,7 @@ install:
   - conda config --add channels conda-forge
   - conda config --set channel_priority strict
   - conda update -y conda
-  - conda install -y openturns pyfmi sphinx nose numpydoc flake8 omcompiler
+  - conda install -y openturns dill pyfmi sphinx nose numpydoc flake8 omcompiler
 
 script:
   - flake8 . --exit-zero
