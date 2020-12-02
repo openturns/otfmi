@@ -31,18 +31,18 @@ def path2uri(path):
 
 
 class FunctionExporter(object):
-    """Function to FMU export."""
+    """
+    Fonction export.
+
+    Parameters
+    ----------
+    function : :py:class:`openturns.Function`
+        Function to export.
+    start : sequence of float
+        Initial input values.
+    """
 
     def __init__(self, function, start):
-        """
-        Parameters
-        ----------
-        function : :py:class:`openturns.Function` or :py:class:`openturns.PointToFieldFunction`
-            Function to export.
-        start : sequence of float
-            Initial input values.
-        """
-
         assert hasattr(function, 'getInputDimension'), 'not an openturns function'
         self.function_ = function
         try:
