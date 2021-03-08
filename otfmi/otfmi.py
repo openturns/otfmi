@@ -9,10 +9,11 @@ OpenTURNS' OpenTURNSPythonFunction.
 """
 
 #§
-import openturns as ot
+
 import pyfmi
 import numpy as np
 import os
+import openturns as ot
 
 from . import fmi
 from . import fmu_pool

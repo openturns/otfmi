@@ -2,6 +2,7 @@ import tempfile
 import openturns as ot
 import os
 import platform
+import re
 import subprocess
 import shutil
 import sys
@@ -193,14 +194,14 @@ class FunctionExporter(object):
             mo.write('  annotation(Library="cwrapper", LibraryDirectory="'+path2uri(workdir)+'");\n')
             mo.write('end ExternalFunc;\n\n')
             for input_name, input_value,  in zip(self.function_.getInputDescription(), self.start_):
-                mo.write('  input Real '+input_name + '(start='+str(input_value)+');\n')
+                mo.write('  input Real ' + re.sub(r'\W', '_', input_name) + '(start=' + str(input_value) + ');\n')
             for output_name in self.function_.getOutputDescription():
-                mo.write('  output Real '+output_name + ';\n')
+                mo.write('  output Real ' + re.sub(r'\W', '_', output_name) + ';\n')
             mo.write('protected\n')
             mo.write('  Real output_array_zzz__['+str(self.function_.getOutputDimension())+'] = ExternalFunc({'+', '.join(self.function_.getInputDescription())+'});\n');
             mo.write('equation\n')
             for output_name, i in zip(self.function_.getOutputDescription(), range(self.function_.getOutputDimension())):
-                mo.write('  '+output_name+' = output_array_zzz__['+str(i + 1)+'];\n')
+                mo.write('  ' + re.sub(r'\W', '_', output_name) + ' = output_array_zzz__[' + str(i + 1) + '];\n')
             mo.write('end '+ className + ';\n')
 
         # export the fmu
