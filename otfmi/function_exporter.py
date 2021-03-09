@@ -198,7 +198,8 @@ class FunctionExporter(object):
             for output_name in self.function_.getOutputDescription():
                 mo.write('  output Real ' + re.sub(r'\W', '_', output_name) + ';\n')
             mo.write('protected\n')
-            mo.write('  Real output_array_zzz__['+str(self.function_.getOutputDimension())+'] = ExternalFunc({'+', '.join(self.function_.getInputDescription())+'});\n');
+            mo.write('  Real output_array_zzz__[' + str(self.function_.getOutputDimension())+'] = ExternalFunc({' + \
+                     ', '.join([re.sub(r'\W', '_', input_name) for input_name in self.function_.getInputDescription()]) + '});\n');
             mo.write('equation\n')
             for output_name, i in zip(self.function_.getOutputDescription(), range(self.function_.getOutputDimension())):
                 mo.write('  ' + re.sub(r'\W', '_', output_name) + ' = output_array_zzz__[' + str(i + 1) + '];\n')
