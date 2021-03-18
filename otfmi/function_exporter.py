@@ -52,36 +52,29 @@ class FunctionExporter(object):
             raise TypeError('start must be a sequence of float')
         assert len(start) == function.getInputDimension(), 'wrong input dimension'
         self.start_ = start
+        self.workdir = tempfile.mkdtemp()
+        self._xml_path = os.path.join(self.workdir, 'function.xml')
 
-    def export(self, fmu_path, fmuType='cs', verbose=False):
+    def _export_xml(self):
         """
-        Export to FMU file.
-
-        Requires CMake, a C compiler and omc the OpenModelica compiler.
+        Export the OpenTurns function as xml.
 
         Parameters
         ----------
-        fmu_path : str
-            Path to the generated .fmu file.
-            The model name is taken from the base name.
-        fmuType : str, default=cs
-            FMU type, either me (model exchange), cs (co-simulation), me_cs (both model exchange and co-simulation)
-        verbose : bool
-            Verbose output (default=False).
         """
-
-        assert isinstance(fmu_path, str), 'fmu_path must be str'
-        className, extension = os.path.splitext(os.path.basename(fmu_path))
-        assert fmuType in ['me', 'cs', 'me_cs'], 'Invalid fmuType'
-        workdir = tempfile.mkdtemp()
-
-        # export the function to xml
         study = ot.Study()
-        xml_path = os.path.join(workdir, 'function.xml')
-        study.setStorageManager(ot.XMLStorageManager(xml_path))
+        study.setStorageManager(ot.XMLStorageManager(self._xml_path))
         study.add('function', self.function_)
         study.save()
-        with open(xml_path, 'rb') as f:
+
+    def _write_cwrapper(self):
+        """
+        Write the C wrapper.
+
+        Parameters
+        ----------
+        """
+        with open(self._xml_path, 'rb') as f:
             xml_data = f.read()
 
         field = hasattr(self.function_, 'getOutputMesh')
@@ -90,8 +83,7 @@ class FunctionExporter(object):
             n_pt = self.function_.getOutputMesh().getVerticesNumber()
             flat_size *= n_pt
 
-        # the C wrapper called by modelica
-        with open(os.path.join(workdir, 'wrapper.c'), 'w') as c:
+        with open(os.path.join(self.workdir, 'wrapper.c'), 'w') as c:
             c.write('#define _XOPEN_SOURCE 500\n')
             c.write('#define  _POSIX_C_SOURCE 200809L\n')
             c.write('#include <stdio.h>\n')
@@ -119,18 +111,18 @@ class FunctionExporter(object):
             if field:
                 c.write('    findex = 0;\n')
             c.write('    memcpy(prev_x, x, nin * sizeof(double));\n')
-            c.write('    char workdir[] = "' + workdir.replace("\\", "\\\\") + '";\n')
+            c.write('    char workdir[] = "' + self.workdir.replace("\\", "\\\\") + '";\n')
             c.write('    if (access(workdir, R_OK) == -1)\n#ifdef _WIN32\n      _mkdir(workdir);\n#else\n      mkdir(workdir, 0733);\n#endif\n')
-            c.write('    fptr = fopen("'+os.path.join(workdir, "point.in").replace("\\", "\\\\")+'", "w");\n')
+            c.write('    fptr = fopen("'+os.path.join(self.workdir, "point.in").replace("\\", "\\\\")+'", "w");\n')
             c.write('    for (i = 0; i < nin; ++ i)\n')
             c.write('      fprintf(fptr, "%lf\\n", x[i]);\n')
             c.write('    fclose(fptr);\n')
-            c.write('    char xml_path[] = "'+os.path.join(workdir, 'function.xml').replace("\\", "\\\\")+'";\n')
+            c.write('    char xml_path[] = "'+os.path.join(self.workdir, 'function.xml').replace("\\", "\\\\")+'";\n')
             c.write('    if (access(xml_path, R_OK) == -1) {\n')
             c.write('      fptr = fopen(xml_path, "wb");\n')
             c.write('      fwrite (xml_data, sizeof(char), sizeof(xml_data), fptr);\n')
             c.write('      fclose(fptr); }\n')
-            c.write('    char py_path[] = "'+os.path.join(workdir, 'wrapper.py').replace("\\", "\\\\")+'";\n')
+            c.write('    char py_path[] = "'+os.path.join(self.workdir, 'wrapper.py').replace("\\", "\\\\")+'";\n')
             c.write('    if (access(py_path, R_OK) == -1) {\n')
             c.write('      fptr = fopen(py_path, "w");\n')
             c.write('      fprintf(fptr, "import openturns as ot\\nstudy = ot.Study()\\n");\n')
@@ -142,19 +134,19 @@ class FunctionExporter(object):
                 c.write('      fprintf(fptr, "function = ot.Function()\\n");\n')
             c.write('      fprintf(fptr, "study.fillObject(\\\"function\\\", function)\\n");\n')
             c.write('      fprintf(fptr, "x = []\\n");\n')
-            c.write('      fprintf(fptr, "with open(\\"'+os.path.join(workdir, "point.in").replace("\\", "\\\\")+'\\", \\"r\\") as f:\\n");\n')
+            c.write('      fprintf(fptr, "with open(\\"'+os.path.join(self.workdir, "point.in").replace("\\", "\\\\")+'\\", \\"r\\") as f:\\n");\n')
             c.write('      fprintf(fptr, "    for line in f.readlines():\\n");\n')
             c.write('      fprintf(fptr, "        x.append(float(line))\\n");\n')
             c.write('      fprintf(fptr, "y = function(x)\\n");\n')
             if field:
                 c.write('      fprintf(fptr, "y = y.asPoint()\\n");\n')
-            c.write('      fprintf(fptr, "with open(\\"'+os.path.join(workdir, 'point.out').replace("\\", "\\\\")+'\\", \\"w\\") as f:\\n");\n')
+            c.write('      fprintf(fptr, "with open(\\"'+os.path.join(self.workdir, 'point.out').replace("\\", "\\\\")+'\\", \\"w\\") as f:\\n");\n')
             c.write('      fprintf(fptr, "    for v in y:\\n");\n')
             c.write('      fprintf(fptr, "        f.write(str(v)+\\"\\\\n\\")\\n");\n')
             c.write('      fclose(fptr); };\n')
-            c.write('    rc = system("python '+os.path.join(workdir, 'wrapper.py').replace("\\", "\\\\")+'> '+os.path.join(workdir, 'error.log').replace("\\", "\\\\")+' 2>&1");\n')
-            c.write('    if (rc != 0) printf("otfmi: error running \\"python '+os.path.join(workdir, 'wrapper.py').replace("\\", "\\\\")+ '\\" rc=%d\\n", rc);\n')
-            c.write('    fptr = fopen("'+os.path.join(workdir, 'point.out').replace("\\", "\\\\")+'", "r");\n')
+            c.write('    rc = system("python '+os.path.join(self.workdir, 'wrapper.py').replace("\\", "\\\\")+'> '+os.path.join(self.workdir, 'error.log').replace("\\", "\\\\")+' 2>&1");\n')
+            c.write('    if (rc != 0) printf("otfmi: error running \\"python '+os.path.join(self.workdir, 'wrapper.py').replace("\\", "\\\\")+ '\\" rc=%d\\n", rc);\n')
+            c.write('    fptr = fopen("'+os.path.join(self.workdir, 'point.out').replace("\\", "\\\\")+'", "r");\n')
             c.write('    for (i = 0; i < ' + str(flat_size) + '; ++ i)\n')
             c.write('      rc = fscanf(fptr, "%lf", &prev_y[i]);\n')
             c.write('    fclose(fptr);\n')
@@ -167,8 +159,18 @@ class FunctionExporter(object):
                 c.write('  for (i = 0; i < nout; ++ i) y[i] = prev_y[i];\n')
             c.write('  ++ count;\n}\n')
 
-        # build C wrapper
-        with open(os.path.join(workdir, 'CMakeLists.txt'), 'w') as cm:
+    def _build_cwrapper(self, verbose):
+        """
+        Build C wrapper.
+
+        Requires CMake, a C compiler.
+
+        Parameters
+        ----------
+        verbose : bool
+            Verbose output (default=False).
+        """
+        with open(os.path.join(self.workdir, 'CMakeLists.txt'), 'w') as cm:
             cm.write('cmake_minimum_required (VERSION 3.2)\n')
             cm.write('set (CMAKE_BUILD_TYPE "Release" CACHE STRING "build type")\n')
             cm.write('project (wrapper C)\n')
@@ -181,34 +183,175 @@ class FunctionExporter(object):
         cmake_args=['cmake', '.']
         if sys.platform.startswith('win') and platform.architecture()[0] == '64bit':
             cmake_args.insert(1, '-DCMAKE_GENERATOR_PLATFORM=x64')
-        subprocess.run(cmake_args, capture_output=not verbose, cwd=workdir, check=True)
-        subprocess.run(['cmake', '--build', '.', '--config', 'Release'], capture_output=not verbose, cwd=workdir, check=True)
+        subprocess.run(cmake_args, capture_output=not verbose, cwd=self.workdir, check=True)
+        subprocess.run(['cmake', '--build', '.', '--config', 'Release'], capture_output=not verbose, cwd=self.workdir, check=True)
 
-        # the modelica wrapper
-        with open(os.path.join(workdir, 'wrapper.mo'), 'w') as mo:
+    def _set_input_output(self):
+        """
+        Define the inputs and outputs in Modelica language..
+
+        Parameters
+        ----------
+        """
+        string = ""
+        for input_name, input_value,  in zip(
+                self.function_.getInputDescription(), self.start_):
+            string = string + '  input Real ' + re.sub(r'\W', '_',
+               input_name) + '(start='+ str(input_value) + ');\n'
+        for output_name in self.function_.getOutputDescription():
+            string = string + '  output Real ' + re.sub(r'\W', '_',
+                output_name) + ';\n'
+        return string
+
+
+    def _set_connector(self):
+        """
+        Define the inputs and outputs as OMEdit connectors.
+
+        Parameters
+        ----------
+        """
+        list_input_position = sorted(
+                [(ii + 1) // 2 * 20 * (-1)**ii for ii in range(len(
+                    self.function_.getInputDescription()))], reverse=True)
+        list_output_position = sorted(
+            [(ii + 1) // 2 * 20 * (-1)**ii for ii in range(len(
+                self.function_.getOutputDescription()))], reverse=True)
+
+        string = ""
+        for ii in range(len(self.function_.getInputDescription())):
+            input_name = self.function_.getInputDescription()[ii]
+            underscore_input_name = re.sub(r'\W', '_', input_name)
+            y_origin = list_input_position[ii]
+            string = string + """  Modelica.Blocks.Interfaces.RealInput {}\n   
+                annotation(Placement(visible = true,\n
+                transformation(origin={{-106, {}}}, extent={{{{-20, -20}}
+                , {{20, 20}}}}),\n
+                iconTransformation(origin={{-106, {}}}, extent={{{{-10,
+                -10}}, {{10, 10}}}})));\n""".format(
+                    underscore_input_name, y_origin, y_origin)
+
+        for ii in range(len(self.function_.getOutputDescription())):
+            output_name = self.function_.getOutputDescription()[ii]
+            underscore_output_name = re.sub(r'\W', '_', output_name)
+            y_origin = list_output_position[ii]
+            string = string + """  Modelica.Blocks.Interfaces.RealOutput {}\n
+                annotation(Placement(visible = true, transformation(
+                origin={{106, {}}}, extent = {{{{-20, -20}}, {{20,
+                20}}}}),\n
+                iconTransformation(origin={{106, {}}}, extent={{{{-10,
+                -10}}, {{10, 10}}}})));\n""".format(
+                    underscore_output_name, y_origin, y_origin)
+        return string
+
+    def _write_modelica_wrapper(self, className, dirName, gui):
+        """
+        Write the Modelica model importing Cfunction.
+
+        Parameters
+        ----------
+        className : str
+            The model prefix, used as name for the file and the model itself.
+        dirName : str
+            Name of the folder required by the user
+        gui : bool
+            If True, define the input/output connectors.
+            The model cannot be exported as FMU in command line if gui=True.
+        """
+        with open(os.path.join(self.workdir, 'wrapper.mo'), 'w') as mo:
             mo.write('model '+ className + '\n\n')
             mo.write('function ExternalFunc\n')
             mo.write('  input Real['+str(self.function_.getInputDimension())+'] x;\n')
             mo.write('  output Real['+str(self.function_.getOutputDimension())+'] y;\n')
             mo.write('  external "C" c_func('+str(self.function_.getInputDimension())+', x, '+str(self.function_.getOutputDimension())+', y);\n')
-            mo.write('  annotation(Library="cwrapper", LibraryDirectory="'+path2uri(workdir)+'");\n')
+            mo.write('  annotation(Library="cwrapper",                LibraryDirectory="' + path2uri(dirName)+'");\n')
             mo.write('end ExternalFunc;\n\n')
-            for input_name, input_value,  in zip(self.function_.getInputDescription(), self.start_):
-                mo.write('  input Real ' + re.sub(r'\W', '_', input_name) + '(start=' + str(input_value) + ');\n')
-            for output_name in self.function_.getOutputDescription():
-                mo.write('  output Real ' + re.sub(r'\W', '_', output_name) + ';\n')
+
+            if gui:
+                mo.write(self._set_connector())
+            else:
+                mo.write(self._set_input_output())
+
             mo.write('protected\n')
-            mo.write('  Real output_array_zzz__[' + str(self.function_.getOutputDimension())+'] = ExternalFunc({' + \
-                     ', '.join([re.sub(r'\W', '_', input_name) for input_name in self.function_.getInputDescription()]) + '});\n');
+            mo.write('  Real output_array_zzz__['+str
+                (self.function_.getOutputDimension())+'] = ExternalFunc({'
+                +', '.join([re.sub(r'\W', '_', name) for name in
+                    self.function_.getInputDescription()])+'});\n');
             mo.write('equation\n')
             for output_name, i in zip(self.function_.getOutputDescription(), range(self.function_.getOutputDimension())):
                 mo.write('  ' + re.sub(r'\W', '_', output_name) + ' = output_array_zzz__[' + str(i + 1) + '];\n')
             mo.write('end '+ className + ';\n')
 
-        # export the fmu
-        with open(os.path.join(workdir, 'mo2fmu.mos'), 'w') as mos:
+    def export_model(self, model_path, gui=False, verbose=False,
+            move=True):
+        """
+        Export to model file.
+
+        Requires CMake, a C compiler.
+
+        Parameters
+        ----------
+        model_path : str
+            Path to the generated .model file.
+            The model name is taken from the base name.
+        gui : bool
+            If True, define the input/output connectors.
+            The model cannot be exported as FMU in command line if gui=True.
+        verbose : bool
+            Verbose output (default=False).
+        move : bool
+            Move the model from temporary folder to user folder (default=True)
+        """
+
+        assert isinstance(model_path, str), 'model_path must be str'
+        className, extension = os.path.splitext(os.path.basename(model_path))
+        assert extension=='.mo', 'Invalid model'
+        dirName = os.path.expanduser(os.path.dirname(model_path))
+
+        self._export_xml()
+        self._write_cwrapper()
+        self._build_cwrapper(verbose)
+        self._write_modelica_wrapper(className, dirName, gui)
+        
+        if move:
+            list_file = [
+                "function.xml", "libcwrapper.a", "wrapper.c", "wrapper.mo"]
+            for file in list_file:
+                shutil.move(os.path.join(self.workdir, file),
+                            os.path.join(dirName, file))
+            shutil.rmtree(self.workdir)
+
+    def export_fmu(self, fmu_path, fmuType='me', verbose=False):
+        """
+        Export the Modelica model as FMU.
+
+        Requires CMake, a C compiler and omc the OpenModelica compiler.
+        If the model does not already exist, or if the existing model uses
+        OMEdit connectors, the model is (re)created.
+        Parameters
+        ----------
+        fmu_path : str
+            Path to the generated .fmu file.
+        fmuType : str
+            model type, either me (model exchange), cs (co-simulation), me_cs (both model exchange and co-simulation)
+        verbose : bool
+            Verbose output (default=False).
+        """
+
+        className, extension = os.path.splitext(os.path.basename(fmu_path))
+        assert extension=='.fmu', 'Please give a FMU name as argument :)'
+        dirName = os.path.expanduser(os.path.dirname(fmu_path))
+        model_path = fmu_path.replace("fmu", "mo")
+        if not os.path.exists(self.workdir):
+            os.makedirs(self.workdir)
+        self.export_model(model_path, gui=False, verbose=verbose, move=False)
+
+        with open(os.path.join(self.workdir, 'mo2fmu.mos'), 'w') as mos:
             mos.write('loadFile("wrapper.mo"); getErrorString();\n')
             mos.write('translateModelFMU(' + className + ', fmuType="' + fmuType + '"); getErrorString()\n')
-        subprocess.run(['omc', 'mo2fmu.mos'], capture_output=not verbose, cwd=workdir, check=True)
-        shutil.move(os.path.join(workdir, className + extension), os.path.expanduser(fmu_path))
-        shutil.rmtree(workdir)
+        subprocess.run(['omc', 'mo2fmu.mos'], capture_output=not verbose, cwd=self.workdir, check=True)
+        
+        shutil.move(
+            os.path.join(self.workdir, os.path.basename(fmu_path)),
+            os.path.join(dirName, os.path.basename(fmu_path)))
+        shutil.rmtree(self.workdir)
