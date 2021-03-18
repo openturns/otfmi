@@ -1,14 +1,19 @@
 install:
+  # omc
+  - choco install openmodelica --version=1.14.1
+  - set PATH=%PATH%;C:\Program Files\OpenModelica1.14.1-64bit\bin
+  - omc --version
+  # conda
   - curl -fSsLO https://repo.anaconda.com/miniconda/Miniconda3-latest-Windows-x86_64.exe
   - set CONDA_ROOT="C:\miniconda3-x64"
   - Miniconda3-latest-Windows-x86_64.exe /InstallationType=JustMe /S /D=%CONDA_ROOT%
   - call %CONDA_ROOT%\Scripts\activate.bat
   - conda config --add channels conda-forge
-  - conda install -y pyfmi openturns nose
+  - conda update -y conda
+  # conda-forge's scipy>=1.5.3 dlls conflict with openturns
+  # from scipy.sparse.linalg import LinearOperator
+  - conda install -y "scipy<=1.5.2"
+  - conda install -y pyfmi openturns dill nose
 
 build_script:
-  - nosetests --nocapture
-  # run tests with py2.7
-  - conda create -y -n py27 python=2.7 pyfmi openturns nose
-  - conda activate py27
   - nosetests --nocapture

@@ -9,9 +9,11 @@ OpenTURNS' OpenTURNSPythonFunction.
 """
 
 #§
-import openturns as ot
+
 import pyfmi
 import numpy as np
+import os
+import openturns as ot
 
 from . import fmi
 from . import fmu_pool
@@ -271,7 +273,7 @@ class OpenTURNSFMUFunction(ot.OpenTURNSPythonFunction):
 
         """
 
-        self.model = fmi.load_fmu(path_fmu=path_fmu, kind=kind, **kwargs)
+        self.model = fmi.load_fmu(path_fmu=os.path.expanduser(path_fmu), kind=kind, **kwargs)
 
     def getFMUInputDescription(self):
         """Get the list of input variable names."""
@@ -329,7 +331,7 @@ class OpenTURNSFMUFunction(ot.OpenTURNSPythonFunction):
         kwargs_simulate = fmi.parse_kwargs_simulate(
             value_input, name_input=self.getFMUInputDescription(),
             name_output=self.getFMUOutputDescription(),
-            dimension_input=self.getInputDimension(), **kwargs)
+            dimension_input=self.getInputDimension(), model=self.model, **kwargs)
 
         simulation = fmi.simulate(self.model, reset=reset, **kwargs_simulate)
 
@@ -369,7 +371,8 @@ class OpenTURNSFMUFunction(ot.OpenTURNSPythonFunction):
             kwargs_simulate = fmi.parse_kwargs_simulate(
                 value_input, name_input=self.getFMUInputDescription(),
                 name_output=self.getFMUOutputDescription(),
-                dimension_input=self.getInputDimension(), **kwargs)
+                dimension_input=self.getInputDimension(),
+                model=self.model, **kwargs)
             list_kwargs.append(kwargs_simulate)
 
 

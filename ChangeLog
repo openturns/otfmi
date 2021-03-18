@@ -1,0 +1,23 @@
+2021-03-08 - release 0.8
+- FMUExporter array index & varname dot fixes
+
+2020-11-13 - release 0.7
+- FMUExporter decides className from fmu_path
+
+2020-11-13 - release 0.6
+- FMUExporter fix
+
+2020-11-13 - release 0.5
+- fmutype keyword for FMUExporter
+
+2020-03-31 - release 0.4
+- Add FMUExporter
+
+2019-05-11 - release 0.3
+- Add simulate_trajectory
+
+2018-04-10 - release 0.2
+- Add trajectory management
+
+2017-06-02 - release 0.1
+- First release

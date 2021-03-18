@@ -1,5 +1,4 @@
 language: generic
-sudo: false
 
 addons:
   apt:
@@ -14,7 +13,9 @@ install:
   - bash /tmp/Miniconda3-latest-Linux-x86_64.sh -b -p $HOME/miniconda
   - export PATH="$HOME/miniconda/bin:$PATH"
   - conda config --add channels conda-forge
-  - conda install -y openturns pyfmi sphinx nose numpydoc flake8 omcompiler
+  - conda config --set channel_priority strict
+  - conda update -y conda
+  - conda install -y openturns dill pyfmi sphinx nose numpydoc flake8 omcompiler
 
 script:
   - flake8 . --exit-zero
@@ -22,11 +23,6 @@ script:
   - nosetests --nocapture
   - python setup.py install
   - pushd doc && make html BUILDDIR=~/.local/share/otfmi/doc && popd
-  # run tests in py2.7
-  - conda create -y -n py27 python=2.7
-  - source activate py27
-  - conda install -y openturns pyfmi nose
-  - nosetests --nocapture
 
 after_success:
   - test "$TRAVIS_PULL_REQUEST" = "false" -a "$TRAVIS_BRANCH" = "master" || exit 0

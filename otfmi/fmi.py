@@ -5,6 +5,7 @@
 #§
 import pyfmi
 import numpy as np
+from distutils.version import LooseVersion
 
 #§
 def load_fmu(path_fmu, kind=None, **kwargs):
@@ -70,7 +71,8 @@ def simulate(model, initialization_script=None, reset=True, **kwargs):
 
 #§
 def parse_kwargs_simulate(value_input=None, name_input=None,
-                          dimension_input=None, name_output=None, **kwargs):
+                          dimension_input=None, name_output=None,
+                          model=None, **kwargs):
     """Parse simulation key-word arguments and arrange for feeding the
     simulate method of pyfmi's model objects.
 
@@ -84,12 +86,7 @@ def parse_kwargs_simulate(value_input=None, name_input=None,
 
     name_output : Sequence of string, output names.
 
-    time : Sequence of floats, time vector (optional).
-
-    timestep : Float, timestep in seconds (optional).
-
-    options : Dictionary, see pyfmi .simulate method (optional).
-
+    model : fmu model.
     """
 
     value_input = reshape_input(value_input, dimension_input)
@@ -97,6 +94,11 @@ def parse_kwargs_simulate(value_input=None, name_input=None,
 
     kwargs.setdefault("options", kwargs.pop("dict_option", dict())) # alias.
     kwargs["options"]["filter"] = name_output
+
+    # https://github.com/modelon-community/PyFMI/commit/df8228d4d97cfde3cd3fc321a4f3da31b417d4be
+    # only available for CS model
+    if (LooseVersion(pyfmi.__version__)  >= '2.6') and ('FMUModelCS' in model.__class__.__name__):
+        kwargs["options"]["silent_mode"] = True
 
     try:
         kwargs.setdefault("start_time", time[0])
@@ -189,7 +191,7 @@ def guess_time(value_input, **kwargs):
             time_index = list(value_input.values())[0].index
         except AttributeError:
             # value_input is array-like.
-            time = np.arange(np.alen(value_input)) * timestep
+            time = np.arange(len(value_input)) * timestep
         else:
             time = (time_index - time_index[0]).total_seconds()
     return time, kwargs
