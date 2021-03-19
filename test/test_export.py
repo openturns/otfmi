@@ -90,8 +90,7 @@ class TestExport(unittest.TestCase):
             mos.write('simulate ({}, stopTime=3.0);\n'.format(
                 className))
 
-        subprocess.run(['omc', '{}'.format(path_mos)], capture_output=True,
-           cwd=temp_path, check=True)
+        subprocess.run(['omc', '{}'.format(path_mos)], capture_output=True, check=True)
 
         shutil.rmtree(temp_path)
 
