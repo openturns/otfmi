@@ -43,14 +43,15 @@ class FunctionExporter(object):
         Initial input values.
     """
 
-    def __init__(self, function, start):
+    def __init__(self, function, start=None):
         assert hasattr(function, 'getInputDimension'), 'not an openturns function'
         self.function_ = function
-        try:
-            [float(x) for x in start]
-        except Exception:
-            raise TypeError('start must be a sequence of float')
-        assert len(start) == function.getInputDimension(), 'wrong input dimension'
+        if start is not None:
+            try:
+                [float(x) for x in start]
+            except Exception:
+                raise TypeError('start must be a sequence of float')
+            assert len(start) == function.getInputDimension(), 'wrong input dimension'
         self.start_ = start
         self.workdir = tempfile.mkdtemp()
         self._xml_path = os.path.join(self.workdir, 'function.xml')
@@ -194,10 +195,15 @@ class FunctionExporter(object):
         ----------
         """
         string = ""
-        for input_name, input_value,  in zip(
-                self.function_.getInputDescription(), self.start_):
-            string = string + '  input Real ' + re.sub(r'\W', '_',
-               input_name) + '(start='+ str(input_value) + ');\n'
+        if self.start_ is None:
+            for input_name in self.function_.getInputDescription():
+                string = string + '  input Real ' + re.sub(
+                    r'\W', '_', input_name) + ' ;\n'
+        else:
+            for input_name, input_value,  in zip(
+                    self.function_.getInputDescription(), self.start_):
+                string = string + '  input Real ' + re.sub(r'\W', '_',
+                    input_name) + '(start='+ str(input_value) + ');\n'
         for output_name in self.function_.getOutputDescription():
             string = string + '  output Real ' + re.sub(r'\W', '_',
                 output_name) + ';\n'
@@ -258,7 +264,8 @@ class FunctionExporter(object):
             If True, define the input/output connectors.
             The model cannot be exported as FMU in command line if gui=True.
         """
-        with open(os.path.join(self.workdir, 'wrapper.mo'), 'w') as mo:
+        with open(os.path.join(
+                self.workdir, '{}.mo'.format(className)), 'w') as mo:
             mo.write('model '+ className + '\n\n')
             mo.write('function ExternalFunc\n')
             mo.write('  input Real['+str(self.function_.getInputDimension())+'] x;\n')
@@ -295,8 +302,10 @@ class FunctionExporter(object):
             Path to the generated .model file.
             The model name is taken from the base name.
         gui : bool
-            If True, define the input/output connectors.
-            The model cannot be exported as FMU in command line if gui=True.
+            If True, define the input/output connectors. 
+                In this case, given start values ARE NOT TAKEN INTO ACCOUNT.
+            If False, input and outputs are defined in Modelica code.
+                In this case only, the model can be exported as FMU using OMC command line. 
         verbose : bool
             Verbose output (default=False).
         move : bool
@@ -304,7 +313,9 @@ class FunctionExporter(object):
         """
 
         assert isinstance(model_path, str), 'model_path must be str'
-        className, extension = os.path.splitext(os.path.basename(model_path))
+        rawClassName, extension = os.path.splitext(
+            os.path.basename(model_path))
+        className = rawClassName[0].upper() + rawClassName[1:]
         assert extension=='.mo', 'Invalid model'
         dirName = os.path.expanduser(os.path.dirname(model_path))
 
@@ -315,7 +326,8 @@ class FunctionExporter(object):
         
         if move:
             list_file = [
-                "function.xml", "libcwrapper.a", "wrapper.c", "wrapper.mo"]
+                "function.xml", "libcwrapper.a", "wrapper.c",
+                className + extension]
             for file in list_file:
                 shutil.move(os.path.join(self.workdir, file),
                             os.path.join(dirName, file))
@@ -338,7 +350,9 @@ class FunctionExporter(object):
             Verbose output (default=False).
         """
 
-        className, extension = os.path.splitext(os.path.basename(fmu_path))
+        rawClassName, extension = os.path.splitext(os.path.basename(fmu_path))
+        className = rawClassName[0].upper() + rawClassName[1:]
+        # name starting with lower case causes connection issues in OMEdit
         assert extension=='.fmu', 'Please give a FMU name as argument :)'
         dirName = os.path.expanduser(os.path.dirname(fmu_path))
         model_path = fmu_path.replace("fmu", "mo")
@@ -347,11 +361,12 @@ class FunctionExporter(object):
         self.export_model(model_path, gui=False, verbose=verbose, move=False)
 
         with open(os.path.join(self.workdir, 'mo2fmu.mos'), 'w') as mos:
-            mos.write('loadFile("wrapper.mo"); getErrorString();\n')
+            mos.write(
+                'loadFile("{}.mo"); getErrorString();\n'.format(className))
             mos.write('translateModelFMU(' + className + ', fmuType="' + fmuType + '"); getErrorString()\n')
         subprocess.run(['omc', 'mo2fmu.mos'], capture_output=not verbose, cwd=self.workdir, check=True)
         
         shutil.move(
-            os.path.join(self.workdir, os.path.basename(fmu_path)),
-            os.path.join(dirName, os.path.basename(fmu_path)))
+            os.path.join(self.workdir, className + extension),
+            os.path.join(dirName, className + extension))
         shutil.rmtree(self.workdir)
