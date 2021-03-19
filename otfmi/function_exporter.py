@@ -250,7 +250,7 @@ class FunctionExporter(object):
                     underscore_output_name, y_origin, y_origin)
         return string
 
-    def _write_modelica_wrapper(self, className, dirName, gui):
+    def _write_modelica_wrapper(self, className, dirName, gui, move):
         """
         Write the Modelica model importing Cfunction.
 
@@ -271,7 +271,10 @@ class FunctionExporter(object):
             mo.write('  input Real['+str(self.function_.getInputDimension())+'] x;\n')
             mo.write('  output Real['+str(self.function_.getOutputDimension())+'] y;\n')
             mo.write('  external "C" c_func('+str(self.function_.getInputDimension())+', x, '+str(self.function_.getOutputDimension())+', y);\n')
-            mo.write('  annotation(Library="cwrapper",                LibraryDirectory="' + path2uri(dirName)+'");\n')
+            if move:
+                mo.write('  annotation(Library="cwrapper",                LibraryDirectory="' + path2uri(dirName)+'");\n')
+            else:
+                mo.write('  annotation(Library="cwrapper",                   LibraryDirectory="' + path2uri(self.workdir)+'");\n')
             mo.write('end ExternalFunc;\n\n')
 
             if gui:
@@ -322,7 +325,7 @@ class FunctionExporter(object):
         self._export_xml()
         self._write_cwrapper()
         self._build_cwrapper(verbose)
-        self._write_modelica_wrapper(className, dirName, gui)
+        self._write_modelica_wrapper(className, dirName, gui, move)
         
         if move:
             list_file = [
