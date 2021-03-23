@@ -328,8 +328,12 @@ class FunctionExporter(object):
         self._write_modelica_wrapper(className, dirName, gui, move)
         
         if move:
+            if sys.platform.startswith('win'):
+                libname = "cwrapper.lib"
+            else:
+                libname = "libcwrapper.a"
             list_file = [
-                "function.xml", "libcwrapper.a", "wrapper.c",
+                "function.xml", libname, "wrapper.c",
                 className + extension]
             for file in list_file:
                 shutil.move(os.path.join(self.workdir, file),
