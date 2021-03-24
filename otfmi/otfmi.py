@@ -303,7 +303,10 @@ class OpenTURNSFMUFunction(ot.OpenTURNSPythonFunction):
                                             self.initialization_script)
         except TypeError:
             pass # No initialization script.
-        self.model.initialize()
+        try:
+             self.model.initialize()
+        except pyfmi.fmi.FMUException as ex:
+            raise pyfmi.fmi.FMUException(str(ex)+'\n'+'\n'.join([str(line) for line in self.model.get_log()]))
 
 
     def simulate(self, value_input=None, reset=True, **kwargs):
