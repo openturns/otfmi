@@ -160,11 +160,42 @@ class FunctionExporter(object):
                 c.write('  for (i = 0; i < nout; ++ i) y[i] = prev_y[i];\n')
             c.write('  ++ count;\n}\n')
 
+            with open(os.path.join(self.workdir, 'wrapper.cxx'), 'w') as cxx:
+                cxx.write('#include <sys/stat.h>\n')
+                cxx.write('#include <iostream>\n')
+                cxx.write('#include <openturns/Function.hxx>\n')
+                cxx.write('#include <openturns/PointToFieldFunction.hxx>\n')
+                cxx.write('#include <openturns/Study.hxx>\n')
+                cxx.write('#include <openturns/XMLStorageManager.hxx>\n')
+                cxx.write('extern "C" {\n')
+                cxx.write('unsigned char xml_data[] = { ' + ','.join(['0x{:02x}'.format(byte) for byte in xml_data]) + '};\n')
+                cxx.write('void c_func(int nin, double x[], int nout, double y[])\n{\n')
+                cxx.write('  const char workdir[] = "' + self.workdir.replace("\\", "\\\\") + '";\n')
+                cxx.write('  if (access(workdir, R_OK) == -1)\n#ifdef _WIN32\n      _mkdir(workdir);\n#else\n      mkdir(workdir, 0733);\n#endif\n')
+                cxx.write('  const char xml_path[] = "'+os.path.join(self.workdir, 'function.xml').replace("\\", "\\\\")+'";\n')
+                cxx.write('  std::ofstream xmlFile;\n')
+                cxx.write('  xmlFile.open (xml_path, std::ios::out | std::ios::binary);\n')
+                cxx.write('  xmlFile << xml_data;\n')
+                cxx.write('  xmlFile.close();\n')
+                cxx.write('  OT::Study study;\n')
+                cxx.write('  study.setStorageManager(OT::XMLStorageManager(xml_path));\n')
+                cxx.write('  study.load();\n')
+                if field:
+                    cxx.write('  OT::PointToFieldFunction function;\n')
+                else:
+                    cxx.write('  OT::Function function;\n')
+                cxx.write('  study.fillObject(\"function\", function);\n')
+                cxx.write('  OT::Point inP(nin);\n')
+                cxx.write('  std::copy(x, x + nin, inP.begin());\n')
+                cxx.write('  const OT::Point outP(function(inP));\n')
+                cxx.write('  std::copy(outP.begin(), outP.end(), y);\n')
+                cxx.write('}} // extern C\n')
+
     def _build_cwrapper(self, verbose):
         """
         Build C wrapper.
 
-        Requires CMake, a C compiler.
+        Requires CMake, a C++ compiler.
 
         Parameters
         ----------
@@ -174,13 +205,22 @@ class FunctionExporter(object):
         with open(os.path.join(self.workdir, 'CMakeLists.txt'), 'w') as cm:
             cm.write('cmake_minimum_required (VERSION 3.2)\n')
             cm.write('set (CMAKE_BUILD_TYPE "Release" CACHE STRING "build type")\n')
-            cm.write('project (wrapper C)\n')
+            cm.write('set (CMAKE_ARCHIVE_OUTPUT_DIRECTORY_RELEASE ${CMAKE_BINARY_DIR})\n')
+            cm.write('set (CMAKE_LIBRARY_OUTPUT_DIRECTORY_RELEASE ${CMAKE_BINARY_DIR})\n')
+            cm.write('set (CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE ${CMAKE_BINARY_DIR})\n')
+            cm.write('project (wrapper)\n')
             cm.write('if (POLICY CMP0091)\n  cmake_policy (SET CMP0091 NEW)\nendif()\n')
             # openmodelica uses -Bstatic on Linux
             cm.write('add_library (cwrapper STATIC wrapper.c)\n')
             cm.write('set_target_properties (cwrapper PROPERTIES POSITION_INDEPENDENT_CODE ON MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")\n')
-            cm.write('set_target_properties (cwrapper PROPERTIES ARCHIVE_OUTPUT_DIRECTORY_RELEASE ${CMAKE_BINARY_DIR} LIBRARY_OUTPUT_DIRECTORY_RELEASE ${CMAKE_BINARY_DIR} RUNTIME_OUTPUT_DIRECTORY_RELEASE ${CMAKE_BINARY_DIR})\n')
             cm.write('if (MSVC)\n  target_compile_definitions(cwrapper PRIVATE _CRT_SECURE_NO_WARNINGS)\nendif()\n')
+            cm.write('if (UNIX)\n')
+            cm.write('  find_package (OpenTURNS REQUIRED)\n')
+            cm.write('  message (STATUS "Found OpenTURNS: ${OPENTURNS_ROOT_DIR} (found version ${OPENTURNS_VERSION_STRING})")\n')
+            cm.write('  set (CMAKE_CXX_STANDARD 11)\n')
+            cm.write('  add_library (cxxwrapper SHARED wrapper.cxx)\n')
+            cm.write('  target_link_libraries (cxxwrapper OT)\n')
+            cm.write('endif ()\n')
         cmake_args=['cmake', '.']
         if sys.platform.startswith('win') and platform.architecture()[0] == '64bit':
             cmake_args.insert(1, '-DCMAKE_GENERATOR_PLATFORM=x64')
@@ -333,7 +373,7 @@ class FunctionExporter(object):
             else:
                 libname = "libcwrapper.a"
             list_file = [
-                "function.xml", libname, "wrapper.c",
+                "function.xml", libname, "wrapper.c", "wrapper.cxx",
                 className + extension]
             for file in list_file:
                 shutil.move(os.path.join(self.workdir, file),
@@ -347,6 +387,7 @@ class FunctionExporter(object):
         Requires CMake, a C compiler and omc the OpenModelica compiler.
         If the model does not already exist, or if the existing model uses
         OMEdit connectors, the model is (re)created.
+
         Parameters
         ----------
         fmu_path : str
@@ -359,6 +400,7 @@ class FunctionExporter(object):
 
         rawClassName, extension = os.path.splitext(os.path.basename(fmu_path))
         className = rawClassName[0].upper() + rawClassName[1:]
+        tmp_fmu_path = os.path.join(self.workdir, className + extension)
         # name starting with lower case causes connection issues in OMEdit
         assert extension=='.fmu', 'Please give a FMU name as argument :)'
         dirName = os.path.expanduser(os.path.dirname(fmu_path))
@@ -370,10 +412,37 @@ class FunctionExporter(object):
         with open(os.path.join(self.workdir, 'mo2fmu.mos'), 'w') as mos:
             mos.write(
                 'loadFile("{}.mo"); getErrorString();\n'.format(className))
-            mos.write('translateModelFMU(' + className + ', fmuType="' + fmuType + '"); getErrorString()\n')
+            mos.write('buildModelFMU(' + className + ', fmuType="' + fmuType + '"); getErrorString()\n')
         subprocess.run(['omc', 'mo2fmu.mos'], capture_output=not verbose, cwd=self.workdir, check=True)
-        
-        shutil.move(
-            os.path.join(self.workdir, className + extension),
-            os.path.join(dirName, className + extension))
+
+        # get omc prefix through the scripting api
+        with open(os.path.join(self.workdir, 'prefix.mos'), 'w') as mos:
+            mos.write('echo(false);\n')
+            mos.write('system("echo " + getInstallationDirectoryPath());\n')
+        cp = subprocess.run(['omc', 'prefix.mos'], capture_output=True, cwd=self.workdir, check=True)
+        omc_prefix = cp.stdout.decode().splitlines()[0]
+
+        # rebuild fmu with cxx wrapper instead
+        if sys.platform.startswith('linux'):
+
+            # extract the fmu into a new directory
+            rebuild_dir = os.path.join(self.workdir, 'rebuild')
+            os.makedirs(rebuild_dir)
+            unzip_cmd = ['unzip'] if shutil.which('unzip') is not None else ['bsdtar', '-xf']
+            unzip_cmd.append(tmp_fmu_path)
+            subprocess.run(unzip_cmd, capture_output=not verbose, cwd=rebuild_dir, check=True)
+
+            # link with cxx wrapper
+            subprocess.run(['sed', '-i', 's|-lcwrapper|@BDYNAMIC@ -lcxxwrapper -Wl,-rpath,$$ORIGIN|g', 'Makefile.in'], capture_output=not verbose, cwd=os.path.join(rebuild_dir, 'sources'), check=True)
+            shutil.copy(os.path.join(self.workdir, 'libcxxwrapper.so'), os.path.join(rebuild_dir, 'binaries', 'linux64'))
+
+            # rebuild the fmu
+            configure_env = os.environ.copy()
+            configure_env['CPPFLAGS'] = '-I' + omc_prefix + '/include/omc/c/fmi'
+            subprocess.run(['./configure'], capture_output=not verbose, cwd=os.path.join(rebuild_dir, 'sources'), check=True, env=configure_env)
+            subprocess.run(['make', 'nozip'], capture_output=not verbose, cwd=os.path.join(rebuild_dir, 'sources'), check=True)
+            os.remove(tmp_fmu_path)
+            subprocess.run(['zip', '-r', tmp_fmu_path, 'sources', 'binaries', 'resources', 'modelDescription.xml'], capture_output=not verbose, cwd=rebuild_dir, check=True)
+
+        shutil.move(tmp_fmu_path, os.path.join(dirName, className + extension))
         shutil.rmtree(self.workdir)
