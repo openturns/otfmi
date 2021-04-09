@@ -1,5 +1,5 @@
 model deviation
-  "Model from here: http://doc.openturns.org/openturns-latest/html/ExamplesGuide/cid1.xhtml#cid1"
+  "Model from here: http://openturns.github.io/openturns/master/usecases/use_case_cantilever_beam.html"
   output Real y;
   input Real E (start=3.0e7);
   input Real F (start=3.0e4);
