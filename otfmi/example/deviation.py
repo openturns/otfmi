@@ -84,7 +84,7 @@ try:
     path_fmu = os.path.join(path_here, "file", "fmu",
                             directory_platform, "deviation.fmu")
     model_fmu = otfmi.FMUFunction(
-        path_fmu, inputs_fmu=["E", "F", "L", "I"], outputs_fmu="y")
+        path_fmu, inputs_fmu=["E", "F", "L", "I"], outputs_fmu=["y"])
 except KeyError:
     raise RuntimeError("Tests are not available on your platform"
                        " (%s)." % "-".join(key_platform))
