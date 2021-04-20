@@ -26,7 +26,7 @@ fi
 
 # export fmu in temp dir
 temp_dir=`mktemp -d` && cd ${temp_dir} && cat > mo2fmu.mos <<EOF
-loadModel(Modelica);
+//loadModel(Modelica);
 loadFile("${mofile}"); getErrorString();
 translateModelFMU(${modelname}, version="2.0", fmuType="cs"); getErrorString();
 EOF
