@@ -127,7 +127,7 @@ class FunctionExporter(object):
             c.write('    if (access(py_path, R_OK) == -1) {\n')
             c.write('      fptr = fopen(py_path, "w");\n')
             c.write('      fprintf(fptr, "import openturns as ot\\nstudy = ot.Study()\\n");\n')
-            c.write('      fprintf(fptr, "study.setStorageManager(ot.XMLStorageManager(\\\"%s\\\"))\\n", xml_path);\n')
+            c.write('      fprintf(fptr, "study.setStorageManager(ot.XMLStorageManager(r\\\"%s\\\"))\\n", xml_path);\n')
             c.write('      fprintf(fptr, "study.load()\\n");\n')
             if field:
                 c.write('      fprintf(fptr, "function = ot.PointToFieldFunction()\\n");\n')
@@ -135,13 +135,13 @@ class FunctionExporter(object):
                 c.write('      fprintf(fptr, "function = ot.Function()\\n");\n')
             c.write('      fprintf(fptr, "study.fillObject(\\\"function\\\", function)\\n");\n')
             c.write('      fprintf(fptr, "x = []\\n");\n')
-            c.write('      fprintf(fptr, "with open(\\"'+os.path.join(self.workdir, "point.in").replace("\\", "\\\\")+'\\", \\"r\\") as f:\\n");\n')
+            c.write('      fprintf(fptr, "with open(r\\"'+os.path.join(self.workdir, "point.in").replace("\\", "\\\\")+'\\", \\"r\\") as f:\\n");\n')
             c.write('      fprintf(fptr, "    for line in f.readlines():\\n");\n')
             c.write('      fprintf(fptr, "        x.append(float(line))\\n");\n')
             c.write('      fprintf(fptr, "y = function(x)\\n");\n')
             if field:
                 c.write('      fprintf(fptr, "y = y.asPoint()\\n");\n')
-            c.write('      fprintf(fptr, "with open(\\"'+os.path.join(self.workdir, 'point.out').replace("\\", "\\\\")+'\\", \\"w\\") as f:\\n");\n')
+            c.write('      fprintf(fptr, "with open(r\\"'+os.path.join(self.workdir, 'point.out').replace("\\", "\\\\")+'\\", \\"w\\") as f:\\n");\n')
             c.write('      fprintf(fptr, "    for v in y:\\n");\n')
             c.write('      fprintf(fptr, "        f.write(str(v)+\\"\\\\n\\")\\n");\n')
             c.write('      fclose(fptr); };\n')
@@ -182,8 +182,8 @@ class FunctionExporter(object):
             cm.write('set_target_properties (cwrapper PROPERTIES ARCHIVE_OUTPUT_DIRECTORY_RELEASE ${CMAKE_BINARY_DIR} LIBRARY_OUTPUT_DIRECTORY_RELEASE ${CMAKE_BINARY_DIR} RUNTIME_OUTPUT_DIRECTORY_RELEASE ${CMAKE_BINARY_DIR})\n')
             cm.write('if (MSVC)\n  target_compile_definitions(cwrapper PRIVATE _CRT_SECURE_NO_WARNINGS)\nendif()\n')
         cmake_args=['cmake', '.']
-        if sys.platform.startswith('win') and platform.architecture()[0] == '64bit':
-            cmake_args.insert(1, '-DCMAKE_GENERATOR_PLATFORM=x64')
+        if sys.platform.startswith('win'):
+            cmake_args.insert(1, '-DCMAKE_GENERATOR_PLATFORM=Win32')
         subprocess.run(cmake_args, capture_output=not verbose, cwd=self.workdir, check=True)
         subprocess.run(['cmake', '--build', '.', '--config', 'Release'], capture_output=not verbose, cwd=self.workdir, check=True)
 
@@ -347,12 +347,14 @@ class FunctionExporter(object):
         Requires CMake, a C compiler and omc the OpenModelica compiler.
         If the model does not already exist, or if the existing model uses
         OMEdit connectors, the model is (re)created.
+
         Parameters
         ----------
         fmu_path : str
             Path to the generated .fmu file.
         fmuType : str
-            model type, either me (model exchange), cs (co-simulation), me_cs (both model exchange and co-simulation)
+            model type, either me (model exchange), cs (co-simulation),
+            me_cs (both model exchange and co-simulation)
         verbose : bool
             Verbose output (default=False).
         """
