@@ -1,6 +1,6 @@
 install:
   # omc
-  - choco install openmodelica --version=1.17.0
+  - choco install openmodelica
   - set PATH=%PATH%;C:\Program Files\OpenModelica1.17.0-64bit\bin
   - omc --version
   # conda
