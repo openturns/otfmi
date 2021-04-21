@@ -347,12 +347,14 @@ class FunctionExporter(object):
         Requires CMake, a C compiler and omc the OpenModelica compiler.
         If the model does not already exist, or if the existing model uses
         OMEdit connectors, the model is (re)created.
+
         Parameters
         ----------
         fmu_path : str
             Path to the generated .fmu file.
         fmuType : str
-            model type, either me (model exchange), cs (co-simulation), me_cs (both model exchange and co-simulation)
+            model type, either me (model exchange), cs (co-simulation),
+            me_cs (both model exchange and co-simulation)
         verbose : bool
             Verbose output (default=False).
         """
