@@ -7,6 +7,7 @@ import os
 import tempfile
 import sys
 import math as m
+import shutil
 import subprocess
 
 class TestExport(unittest.TestCase):
@@ -61,10 +62,10 @@ class TestExport(unittest.TestCase):
             print(model.get_model_variables().keys())
             print(res['y0'])
 
-        # shutil.rmtree(temp_path)
+        shutil.rmtree(temp_path)
 
     def test_export_model(self):
-    #     # export model
+        # export model
         f = ot.SymbolicFunction(['E', 'F', 'L', 'I'], ['(F*L^3)/(3.0*E*I)'])
         start = [3e7, 3e4, 250.0, 400.0]
 
@@ -89,7 +90,7 @@ class TestExport(unittest.TestCase):
 
         subprocess.run(['omc', '{}'.format(path_mos)], capture_output=True, check=True)
 
-        # shutil.rmtree(temp_path)
+        shutil.rmtree(temp_path)
 
 
 if __name__ == '__main__':
