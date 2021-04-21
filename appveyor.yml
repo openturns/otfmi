@@ -1,6 +1,6 @@
 install:
   # omc
-  - choco install openmodelica
+  - choco install openmodelica --version=1.17.0
   - set PATH=%PATH%;C:\Program Files\OpenModelica1.17.0-64bit\bin
   - omc --version
   # conda
@@ -11,4 +11,6 @@ install:
   - conda install -y pyfmi openturns dill nose
 
 build_script:
+  - python setup.py install
+  - mo2fmu -h
   - nosetests --nocapture
