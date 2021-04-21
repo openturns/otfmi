@@ -182,8 +182,8 @@ class FunctionExporter(object):
             cm.write('set_target_properties (cwrapper PROPERTIES ARCHIVE_OUTPUT_DIRECTORY_RELEASE ${CMAKE_BINARY_DIR} LIBRARY_OUTPUT_DIRECTORY_RELEASE ${CMAKE_BINARY_DIR} RUNTIME_OUTPUT_DIRECTORY_RELEASE ${CMAKE_BINARY_DIR})\n')
             cm.write('if (MSVC)\n  target_compile_definitions(cwrapper PRIVATE _CRT_SECURE_NO_WARNINGS)\nendif()\n')
         cmake_args=['cmake', '.']
-        if sys.platform.startswith('win') and platform.architecture()[0] == '64bit':
-            cmake_args.insert(1, '-DCMAKE_GENERATOR_PLATFORM=x64')
+        if sys.platform.startswith('win'):
+            cmake_args.insert(1, '-DCMAKE_GENERATOR_PLATFORM=Win32')
         subprocess.run(cmake_args, capture_output=not verbose, cwd=self.workdir, check=True)
         subprocess.run(['cmake', '--build', '.', '--config', 'Release'], capture_output=not verbose, cwd=self.workdir, check=True)
 
