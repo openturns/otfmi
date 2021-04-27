@@ -8,9 +8,9 @@ install:
   - set CONDA_ROOT="%UserProfile%\Miniforge3"
   - Miniforge3-Windows-x86_64.exe /InstallationType=JustMe /S /D=%CONDA_ROOT%
   - call %CONDA_ROOT%\Scripts\activate.bat
-  - conda install -y pyfmi openturns dill nose
+  - conda install -y pyfmi openturns dill pytest
 
 build_script:
   - python setup.py install
   - mo2fmu -h
-  - nosetests --nocapture
+  - pytest -s
