@@ -1,3 +1,7 @@
+2021-04-24 - release 0.10
+- fixes for win32/dymola
+- mo2fmu module/entrypoint
+
 2021-03-24 - release 0.9
 - Allow to export .mo
 - Better exception message
