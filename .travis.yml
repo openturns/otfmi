@@ -12,14 +12,14 @@ install:
   - wget -c --no-check-certificate https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-Linux-x86_64.sh -P /tmp
   - bash /tmp/Miniforge3-Linux-x86_64.sh -b -p $HOME/miniforge
   - export PATH="$HOME/miniforge/bin:$PATH"
-  - conda install -y openturns dill pyfmi sphinx nose numpydoc flake8 omcompiler
+  - conda install -y openturns dill pyfmi sphinx pytest numpydoc flake8 omcompiler
 
 script:
   - flake8 . --exit-zero
   - python setup.py install
   - mo2fmu -h
   - mo2fmu ./otfmi/example/file/deviation.mo ./otfmi/example/file/fmu/linux64/deviation.fmu
-  - nosetests --nocapture
+  - pytest -s
   - pushd doc && make html BUILDDIR=~/.local/share/otfmi/doc && popd
 
 after_success:
