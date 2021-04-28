@@ -8,9 +8,11 @@ install:
   - set CONDA_ROOT="%UserProfile%\Miniforge3"
   - Miniforge3-Windows-x86_64.exe /InstallationType=JustMe /S /D=%CONDA_ROOT%
   - call %CONDA_ROOT%\Scripts\activate.bat
-  - conda install -y pyfmi openturns dill nose
+  - conda install -y pyfmi openturns dill pytest
 
+  # conda-forge's scipy>=1.5.3 dlls conflict with openturns: from scipy.sparse.linalg import LinearOperator
+  - pip install scipy --force-reinstall --no-deps
 build_script:
   - python setup.py install
   - mo2fmu -h
-  - nosetests --nocapture
+  - pytest -s
