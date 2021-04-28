@@ -45,7 +45,7 @@ def mo2fmu(path_mo, path_fmu='', fmuType="cs", libs=[], verbose=False):
     if verbose:
         with open(path_mos) as mos:
             print(mos.read())
-    subprocess.run(['omc', 'mo2fmu.mos'], capture_output=not verbose, cwd=workdir, check=True)
+    subprocess.run(['omc', 'mo2fmu.mos'], capture_output=not verbose, shell=sys.platform.startswith('win'), cwd=workdir, check=True)
     temp_fmu = os.path.join(workdir, model_name) + '.fmu'
     if path_fmu == '':
         path_fmu = os.path.join(os.getcwd(), model_name) + '.fmu'
