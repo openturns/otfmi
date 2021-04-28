@@ -40,7 +40,7 @@ def mo2fmu(path_mo, path_fmu='', fmuType="cs", libs=[], verbose=False):
     with open(path_mos, 'w') as mos:
         for lib in libs:
              mos.write('loadModel('+lib+'); getErrorString();\n')
-        mos.write('loadFile("' + os.path.abspath(path_mo) + '"); getErrorString();\n')
+        mos.write('loadFile("' + os.path.abspath(path_mo).replace("\\", "\\\\") + '"); getErrorString();\n')
         mos.write('translateModelFMU(' + model_name + ', version="2.0", fmuType="' + fmuType + '"); getErrorString();\n')
     if verbose:
         with open(path_mos) as mos:
