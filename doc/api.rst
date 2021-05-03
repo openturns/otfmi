@@ -17,7 +17,6 @@ This is the user manual for the Python bindings to the :code:`otfmi` library.
 .. autosummary::
     :toctree: _generated/
 
-
     fmi.load_fmu
     fmi.simulate
     fmi.parse_kwargs_simulate
@@ -31,3 +30,4 @@ This is the user manual for the Python bindings to the :code:`otfmi` library.
     fmi.get_start_value
     fmi.set_dict_value
 
+    mo2fmu.mo2fmu

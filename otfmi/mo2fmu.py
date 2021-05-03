@@ -5,7 +5,7 @@ import subprocess
 import shutil
 import sys
 
-def mo2fmu(path_mo, path_fmu='', fmuType="cs", libs=[], verbose=False):
+def mo2fmu(path_mo, path_fmu='', fmuType="cs", version="2.0", libs=[], verbose=False):
     """
     Export a model .mo to .fmu.
     
@@ -19,6 +19,8 @@ def mo2fmu(path_mo, path_fmu='', fmuType="cs", libs=[], verbose=False):
     fmuType : str
         model type, either me (model exchange), cs (co-simulation),
         me_cs (both model exchange and co-simulation)
+    version : str, default="2.0"
+        fmi version
     libs : list of str, default=[]
         List of required libraries passed to loadModel
     verbose : bool, default=False
@@ -39,9 +41,9 @@ def mo2fmu(path_mo, path_fmu='', fmuType="cs", libs=[], verbose=False):
     model_name = os.path.splitext(os.path.basename(path_mo))[0]
     with open(path_mos, 'w') as mos:
         for lib in libs:
-             mos.write('loadModel('+lib+'); getErrorString();\n')
+             mos.write('loadModel(' + lib + '); getErrorString();\n')
         mos.write('loadFile("' + os.path.abspath(path_mo).replace("\\", "\\\\") + '"); getErrorString();\n')
-        mos.write('translateModelFMU(' + model_name + ', version="2.0", fmuType="' + fmuType + '"); getErrorString();\n')
+        mos.write('translateModelFMU(' + model_name + ', version="' + version + '", fmuType="' + fmuType + '"); getErrorString();\n')
     if verbose:
         with open(path_mos) as mos:
             print(mos.read())
