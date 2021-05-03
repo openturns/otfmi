@@ -11,7 +11,7 @@ install:
   - conda install -y pyfmi openturns dill pytest
 
   # conda-forge's scipy>=1.5.3 dlls conflict with openturns: from scipy.sparse.linalg import LinearOperator
-  - pip install scipy --force-reinstall --no-deps
+  #- pip install scipy --force-reinstall --no-deps
 build_script:
   - python setup.py install
   - mo2fmu -h
