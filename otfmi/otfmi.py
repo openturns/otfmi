@@ -242,17 +242,12 @@ class OpenTURNSFMUFunction(ot.OpenTURNSPythonFunction):
         ----------
         list_value_input : Sequence of vectors of input values.
 
-        n_cpus :  Integer, number of cores to use for multiprocessing. Use the
-        value of the 'n_cpus" attribute as default, or 1 (no multiprocessing)
-        if not set.
-
         Additional keyword arguments are passed on to the 'simulate' method of
         the underlying PyFMI model object.
 
         """
 
-        n_cpus = kwargs.pop("n_cpus", None)
-        return self.simulate_sample(list_value_input, n_cpus=n_cpus, **kwargs)
+        return self.simulate_sample(list_value_input, **kwargs)
 
     def load_fmu(self, path_fmu, kind=None, **kwargs):
         """Load an FMU.
@@ -342,28 +337,22 @@ class OpenTURNSFMUFunction(ot.OpenTURNSPythonFunction):
                                     name_output=self.getOutputDescription(),
                                     final=self.__final)
 
-    def simulate_sample(self, list_value_input, n_cpus=None, **kwargs):
+    def simulate_sample(self, list_value_input, **kwargs):
         """Simulate the FMU multiple times.
 
         Parameters
         ----------
         list_value_input : Sequence of vectors of input values.
 
-        n_cpus :  Integer
-            Number of cores to use for multiprocessing. Use the value of the
-            'n_cpus" attribute as default, or 1 (no multiprocessing) if not
-            set.
-
         Additional keyword arguments are passed on to the 'simulate' method of
         the underlying PyFMI model object.
 
         """
 
-        if n_cpus is None:
-            if self.n_cpus is None:
-                n_cpus = 1
-            else:
-                n_cpus = self.n_cpus
+        if self.n_cpus is None:
+            n_cpus = 1
+        else:
+            n_cpus = self.n_cpus
 
         kwargs.setdefault("initialization_script", self.initialization_script)
 
