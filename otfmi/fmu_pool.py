@@ -47,6 +47,7 @@ class FMUProcess(Process):
 
     def __init__(self, model, queue, index, max_retry=10,
                  initialization_script=None, **kwargs):
+        super().__init__()
         self.model = model
         self.max_retry = max_retry
         self.queue = queue
@@ -119,7 +120,7 @@ def threaded_function(queue, dict_result, n_result):
             n += 1
 
 #§
-class FMUPool():
+class FMUPool:
     """Manage a pool of processes that execute parallel simulation of an FMU
     model.
 
