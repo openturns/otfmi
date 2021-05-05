@@ -150,12 +150,17 @@ class OpenTURNSFMUFunction(ot.OpenTURNSPythonFunction):
         descriptions.
 
         """
-        difference = set(inputs_fmu).difference(
-            fmi.get_name_variable(self.model))
+        difference = set(inputs_fmu).difference(fmi.get_name_variable(self.model))
         if difference:
             raise pyfmi.common.io.VariableNotFoundError(", ".join(difference))
-        else:
-            self.inputs_fmu = inputs_fmu
+
+        causality = dict(zip(inputs_fmu, fmi.get_causality(self.model, inputs_fmu)))
+        for name in inputs_fmu:
+            if (self.model.get_version() == '2.0' and not causality[name] in [pyfmi.fmi.FMI2_PARAMETER, pyfmi.fmi.FMI2_INPUT]) \
+                or (self.model.get_version() == '1.0' and causality[name] != pyfmi.fmi.FMI_INPUT):
+                raise ValueError('Variable "' + name + '" cannot be used as a function input (causality=' + str(causality[name]) + ')')
+
+        self.inputs_fmu = inputs_fmu
 
     def _set_inputs(self, inputs=None):
         """Set input variable names.
@@ -186,12 +191,9 @@ class OpenTURNSFMUFunction(ot.OpenTURNSPythonFunction):
         if outputs_fmu is None:
             outputs_fmu = fmi.get_name_variable(self.model)
         else:
-            difference = set(outputs_fmu).difference(
-                fmi.get_name_variable(self.model))
+            difference = set(outputs_fmu).difference(fmi.get_name_variable(self.model))
             if difference:
-                raise pyfmi.common.io.VariableNotFoundError(
-                    ", ".join(difference))
-
+                raise pyfmi.common.io.VariableNotFoundError(", ".join(difference))
         self.outputs_fmu = outputs_fmu
 
 
