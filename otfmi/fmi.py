@@ -113,7 +113,7 @@ def parse_kwargs_simulate(value_input=None, name_input=None,
         fmix_input = pyfmi.fmi.FMI2_INPUT if model.get_version() == '2.0' else pyfmi.fmi.FMI_INPUT
 
         # remap desired variables to fmi inputs/parameters:
-        causality = dict(zip(get_name_variable(model), get_causality(model)))
+        causality = dict(zip(name_input, get_causality(model, name_input)))
         name_input_fmi = [var for var in name_input if causality[var] == fmix_input]
 
         # 1. PARAMETER variables must be set using model.set (initialization_parameters)
@@ -326,12 +326,15 @@ def get_name_variable(model, **kwargs):
 
     return list(model.get_model_variables(**kwargs).keys())
 
-def get_causality(model):
+def get_causality(model, names=None):
     """Get the causality of the variables.
 
     Parameters
     ----------
     model : Pyfmi model object (pyfmi.fmi.FMUModelXXX) or path to an FMU.
+
+    names : Sequence of string, default=None
+        Variable names
 
     Returns
     -------
@@ -346,8 +349,10 @@ def get_causality(model):
     except AttributeError:
         model = load_fmu(model)
 
-    return [model.get_variable_causality(name) for name in
-            get_name_variable(model)]
+    if names is None:
+        names = get_name_variable(model)
+
+    return [model.get_variable_causality(name) for name in names]
 
 
 def get_variability(model):
