@@ -1,3 +1,9 @@
+2021-05-06 - release 0.11
+- allow to simulate parameter in ME mode
+- fix logging from a read-only directory
+- automatically populate input/output variables
+- variability checks
+
 2021-04-24 - release 0.10
 - fixes for win32/dymola
 - mo2fmu module/entrypoint
