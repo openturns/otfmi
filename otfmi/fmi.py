@@ -6,6 +6,8 @@
 import pyfmi
 import numpy as np
 from distutils.version import LooseVersion
+import os
+import tempfile
 
 #§
 def load_fmu(path_fmu, kind=None, **kwargs):
@@ -26,20 +28,20 @@ def load_fmu(path_fmu, kind=None, **kwargs):
 
     """
 
+    # pyfmi writes a log in current folder even with log_level=0
+    log_file_name = "" if os.access('.', os.W_OK) else os.path.join(tempfile.gettempdir(), os.path.basename(path_fmu) + '_log.txt')
 
     if kind is None:
         try:
-            return pyfmi.load_fmu(path_fmu, kind="CS")
+            return pyfmi.load_fmu(path_fmu, kind="CS", log_file_name=log_file_name)
         except pyfmi.fmi.FMUException:
-            return pyfmi.load_fmu(path_fmu, kind="auto")
+            return pyfmi.load_fmu(path_fmu, kind="auto", log_file_name=log_file_name)
     else:
-        return pyfmi.load_fmu(path_fmu, kind=kind)
-
-
+        return pyfmi.load_fmu(path_fmu, kind=kind, log_file_name=log_file_name)
 
 
 #§
-def simulate(model, initialization_script=None, reset=True, **kwargs):
+def simulate(model, initialization_script=None, initialization_parameters=None, reset=True, **kwargs):
     """Simulate an FMU.
 
     Parameters
@@ -47,6 +49,8 @@ def simulate(model, initialization_script=None, reset=True, **kwargs):
     model : Pyfmi model object (pyfmi.fmi.FMUModelXXX).
 
     initialization_script : String, path to the script file.
+
+    initialization_parameters : tuple of keys/values to initialize parameters
 
     reset : Boolean
         Toggle resetting the FMU prior to simulation. True by default.
@@ -67,11 +71,14 @@ def simulate(model, initialization_script=None, reset=True, **kwargs):
     except TypeError:
         pass
 
+    if initialization_parameters is not None:
+        apply_initialization_parameters(model, initialization_parameters)
+
     return model.simulate(**kwargs)
 
 #§
 def parse_kwargs_simulate(value_input=None, name_input=None,
-                          dimension_input=None, name_output=None,
+                          name_output=None,
                           model=None, **kwargs):
     """Parse simulation key-word arguments and arrange for feeding the
     simulate method of pyfmi's model objects.
@@ -82,15 +89,13 @@ def parse_kwargs_simulate(value_input=None, name_input=None,
 
     name_input : Sequence of string, input names.
 
-    dimension_input : Integer, number of inputs.
-
     name_output : Sequence of string, output names.
 
     model : fmu model.
     """
 
-    value_input = reshape_input(value_input, dimension_input)
-    time, kwargs = guess_time(value_input, **kwargs)
+    value_input_array = reshape_input(value_input, len(name_input))
+    time, kwargs = guess_time(value_input_array, **kwargs)
 
     kwargs.setdefault("options", kwargs.pop("dict_option", dict())) # alias.
     kwargs["options"]["filter"] = name_output
@@ -107,7 +112,30 @@ def parse_kwargs_simulate(value_input=None, name_input=None,
         pass
 
     if value_input is not None:
-        kwargs["input"] = (name_input, np.column_stack((time, value_input)))
+        fmix_input = pyfmi.fmi.FMI2_INPUT if model.get_version() == '2.0' else pyfmi.fmi.FMI_INPUT
+
+        # remap desired variables to fmi inputs/parameters:
+        causality = dict(zip(name_input, get_causality(model, name_input)))
+        name_input_fmi = [var for var in name_input if causality[var] == fmix_input]
+
+        # 1. PARAMETER variables must be set using model.set (initialization_parameters)
+        if model.get_version() == '2.0':
+            name_parameter_fmi = [var for var in name_input if causality[var] == pyfmi.fmi.FMI2_PARAMETER]
+            indices_parameter_fmi = [i for i in range(len(name_input)) if causality[name_input[i]] == pyfmi.fmi.FMI2_PARAMETER]
+            value_parameter_fmi = [value_input[k] for k in indices_parameter_fmi]
+            if len(name_parameter_fmi) > 0:
+                kwargs["initialization_parameters"] = (name_parameter_fmi, value_parameter_fmi)
+
+        # 2. INPUT variables values are passed with model.simulate (input)
+        indices_input_fmi = [i for i in range(len(name_input)) if causality[name_input[i]] == fmix_input]
+        value_input_fmi = [value_input[k] for k in indices_input_fmi]
+        value_input_fmi = reshape_input(value_input_fmi, len(name_input_fmi))
+        if len(name_input_fmi) > 0:
+            kwargs["input"] = (name_input_fmi, np.column_stack((time, value_input_fmi)))
+
+    # pyfmi writes a result file in current folder
+    if not os.access('.', os.W_OK):
+        kwargs['options']['result_file_name'] = os.path.join(tempfile.gettempdir(), model.get_identifier() + '_result.mat')
 
     return kwargs
 
@@ -247,6 +275,28 @@ def parse_initialization_script(path_script):
     return list_name, list_value
 
 
+def apply_initialization_parameters(model, initialization_parameters):
+    """Apply a list of initialization parameters to a model.
+
+    Parameters
+    ----------
+    model : Pyfmi model object (pyfmi.fmi.FMUModelXXX).
+
+    initialization_parameters : tuple of keys/values
+
+    """
+
+    list_name, list_value = initialization_parameters
+    try:
+        model.set(list_name, list_value)
+    except pyfmi.fmi.FMUException:
+        for name, value in zip(list_name, list_value):
+            try:
+                model.set(name, value)
+            except pyfmi.fmi.FMUException:
+                pass
+
+
 def apply_initialization_script(model, path_script):
     """Apply an initialization script to a model.
 
@@ -259,14 +309,7 @@ def apply_initialization_script(model, path_script):
     """
 
     list_name, list_value = parse_initialization_script(path_script)
-    try:
-        model.set(list_name, list_value)
-    except pyfmi.fmi.FMUException:
-        for name, value  in zip(list_name, list_value):
-            try:
-                model.set(name, value)
-            except pyfmi.fmi.FMUException:
-                pass
+    apply_initialization_parameters((list_name, list_value))
 
 #§
 def get_name_variable(model, **kwargs):
@@ -289,12 +332,15 @@ def get_name_variable(model, **kwargs):
 
     return list(model.get_model_variables(**kwargs).keys())
 
-def get_causality(model):
+def get_causality(model, names=None):
     """Get the causality of the variables.
 
     Parameters
     ----------
     model : Pyfmi model object (pyfmi.fmi.FMUModelXXX) or path to an FMU.
+
+    names : Sequence of string, default=None
+        Variable names
 
     Returns
     -------
@@ -309,8 +355,34 @@ def get_causality(model):
     except AttributeError:
         model = load_fmu(model)
 
-    return [model.get_variable_causality(name) for name in
-            get_name_variable(model)]
+    if names is None:
+        names = get_name_variable(model)
+
+    return [model.get_variable_causality(name) for name in names]
+
+
+def get_causality_str(model, name):
+    """
+    Get the causality of a variable.
+
+    Parameters
+    ----------
+    model : pyfmi.fmi.FMUModelXXX or str
+        Pyfmi model object or path to an FMU.
+    
+    name : str
+        Variable name
+
+    Returns
+    -------
+    causality : str
+        Causality identifier
+    """
+
+    causality1str = {pyfmi.fmi.FMI_INPUT: 'INPUT', pyfmi.fmi.FMI_OUTPUT: 'OUTPUT', pyfmi.fmi.FMI_INTERNAL: 'INTERNAL', pyfmi.fmi.FMI_NONE: 'NONE'}
+    causality2str = {pyfmi.fmi.FMI2_PARAMETER: 'PARAMETER', pyfmi.fmi.FMI2_CALCULATED_PARAMETER: 'CALCULATED_PARAMETER', pyfmi.fmi.FMI2_INPUT: 'INPUT', pyfmi.fmi.FMI2_OUTPUT: 'OUTPUT', pyfmi.fmi.FMI2_LOCAL: 'LOCAL', pyfmi.fmi.FMI2_INDEPENDENT: 'INDEPENDENT', pyfmi.fmi.FMI2_UNKNOWN: 'UNKNOWN'}
+    causalitystr = {'1.0': causality1str, '2.0': causality2str}
+    return causalitystr[model.get_version()].get(get_causality(model, [name])[0], 'UNKNOWN')
 
 
 def get_variability(model):
