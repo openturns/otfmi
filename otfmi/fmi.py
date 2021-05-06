@@ -6,6 +6,8 @@
 import pyfmi
 import numpy as np
 from distutils.version import LooseVersion
+import os
+import tempfile
 
 #§
 def load_fmu(path_fmu, kind=None, **kwargs):
@@ -26,16 +28,16 @@ def load_fmu(path_fmu, kind=None, **kwargs):
 
     """
 
+    # pyfmi writes a log in current folder even with log_level=0
+    log_file_name = "" if os.access('.', os.W_OK) else os.path.join(tempfile.gettempdir(), os.path.basename(path_fmu) + '_log.txt')
 
     if kind is None:
         try:
-            return pyfmi.load_fmu(path_fmu, kind="CS")
+            return pyfmi.load_fmu(path_fmu, kind="CS", log_file_name=log_file_name)
         except pyfmi.fmi.FMUException:
-            return pyfmi.load_fmu(path_fmu, kind="auto")
+            return pyfmi.load_fmu(path_fmu, kind="auto", log_file_name=log_file_name)
     else:
-        return pyfmi.load_fmu(path_fmu, kind=kind)
-
-
+        return pyfmi.load_fmu(path_fmu, kind=kind, log_file_name=log_file_name)
 
 
 #§
@@ -130,6 +132,10 @@ def parse_kwargs_simulate(value_input=None, name_input=None,
         value_input_fmi = reshape_input(value_input_fmi, len(name_input_fmi))
         if len(name_input_fmi) > 0:
             kwargs["input"] = (name_input_fmi, np.column_stack((time, value_input_fmi)))
+
+    # pyfmi writes a result file in current folder
+    if not os.access('.', os.W_OK):
+        kwargs['options']['result_file_name'] = os.path.join(tempfile.gettempdir(), model.get_identifier() + '_result.mat')
 
     return kwargs
 
