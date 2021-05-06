@@ -24,7 +24,7 @@ class TestSampling(unittest.TestCase):
             mo.write('  input Real x1 = 1;\n')
             mo.write('  input Real x2 = 1;\n')
             mo.write('  input Real x3 = 1;\n')
-            mo.write('  Real f;\n')
+            mo.write('  output Real f;\n')
             mo.write('  Real d;\n')
             mo.write('equation\n')
             mo.write('  f = sin(x1) + a * sin(x2)^2 + b * x3^4 * sin(x1);\n')
@@ -33,7 +33,7 @@ class TestSampling(unittest.TestCase):
         otfmi.mo2fmu(path_mo, path_fmu, fmuType="cs", verbose=True)
 
         # reimport fmu
-        model_fmu = otfmi.FMUFunction(path_fmu, inputs_fmu=['x1', 'x2', 'x3'], outputs_fmu=['f'])
+        model_fmu = otfmi.FMUFunction(path_fmu)
         print(model_fmu, model_fmu.getInputDescription(), model_fmu.getOutputDescription())
         model_symbolic = ot.SymbolicFunction(['x1', 'x2', 'x3'], ['sin(x1) + 7 * sin(x2)^2 + 0.05 * x3^4 * sin(x1)'])
 

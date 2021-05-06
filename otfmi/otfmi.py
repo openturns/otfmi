@@ -27,11 +27,13 @@ class FMUFunction(ot.Function):
     ----------
     path_fmu : String, path to the FMU file.
 
-    inputs_fmu : Sequence of strings
+    inputs_fmu : Sequence of strings, default=None
         Names of the variable from the fmu to be used as input variables.
+        By default assigns variables with FMI causality INPUT.
 
-    outputs_fmu : Sequence of strings,
+    outputs_fmu : Sequence of strings, default=None
         Names of the variable from the fmu to be used as output variables.
+        By default assigns variables with FMI causality OUTPUT.
 
     inputs : Sequence of strings
         Optional names to use as variables descriptions.
@@ -82,11 +84,13 @@ class OpenTURNSFMUFunction(ot.OpenTURNSPythonFunction):
     ----------
     path_fmu : String, path to the FMU file.
 
-    inputs_fmu : Sequence of strings
+    inputs_fmu : Sequence of strings, default=None
         Names of the variable from the fmu to be used as input variables.
+        By default assigns variables with FMI causality INPUT.
 
-    outputs_fmu : Sequence of strings
+    outputs_fmu : Sequence of strings, default=None
         Names of the variable from the fmu to be used as output variables.
+        By default assigns variables with FMI causality OUTPUT.
 
     inputs : Sequence of strings
         Optional names to use as variables descriptions.
@@ -114,16 +118,13 @@ class OpenTURNSFMUFunction(ot.OpenTURNSPythonFunction):
 
     """
 
-    def __init__(self, path_fmu, inputs_fmu, outputs_fmu=None,
+    def __init__(self, path_fmu, inputs_fmu=None, outputs_fmu=None,
                  inputs=None, outputs=None, n_cpus=None,
                  initialization_script=None, kind=None,
                  expect_trajectory=False, **kwargs):
         self.load_fmu(path_fmu=path_fmu, kind=kind)
 
         self._set_inputs_fmu(inputs_fmu)
-        if outputs_fmu is None:
-            outputs_fmu = fmi.get_name_variable(self.model)
-
         self._set_outputs_fmu(outputs_fmu)
 
         super(OpenTURNSFMUFunction, self).__init__(n=len(self.inputs_fmu),
@@ -138,27 +139,31 @@ class OpenTURNSFMUFunction(ot.OpenTURNSPythonFunction):
         self.__expect_trajectory = expect_trajectory
         self.__final = kwargs.pop("final", None)
 
-    def _set_inputs_fmu(self, inputs_fmu, inputs=None):
+    def _set_inputs_fmu(self, inputs_fmu):
         """Set input variable names.
 
         Parameters
         ----------
-        inputs_fmu : Sequence of strings, names of the variable from the fmu
-        to be used as input variables.
-
-        inputs : Sequence of strings, optional names to use as variables
-        descriptions.
-
+        inputs_fmu : Sequence of strings
+            Names of the variable from the fmu to be used as input variables.
         """
-        difference = set(inputs_fmu).difference(fmi.get_name_variable(self.model))
-        if difference:
-            raise pyfmi.common.io.VariableNotFoundError(", ".join(difference))
 
-        causality = dict(zip(inputs_fmu, fmi.get_causality(self.model, inputs_fmu)))
-        for name in inputs_fmu:
-            if (self.model.get_version() == '2.0' and not causality[name] in [pyfmi.fmi.FMI2_PARAMETER, pyfmi.fmi.FMI2_INPUT]) \
-                or (self.model.get_version() == '1.0' and causality[name] != pyfmi.fmi.FMI_INPUT):
-                raise ValueError('Variable "' + name + '" cannot be used as a function input (causality=' + str(causality[name]) + ')')
+        all_vars = fmi.get_name_variable(self.model)
+        causality = dict(zip(all_vars, fmi.get_causality(self.model, all_vars)))
+
+        if inputs_fmu is None:
+            # choose all variables with variability INPUT
+            fmix_input = pyfmi.fmi.FMI2_INPUT if self.model.get_version() == '2.0' else pyfmi.fmi.FMI_INPUT
+            inputs_fmu = [name for name in all_vars if causality[name] == fmix_input]
+        else:
+            difference = set(inputs_fmu).difference(all_vars)
+            if difference:
+                raise pyfmi.common.io.VariableNotFoundError(", ".join(difference))
+
+            for name in inputs_fmu:
+                if (self.model.get_version() == '2.0' and not causality[name] in [pyfmi.fmi.FMI2_PARAMETER, pyfmi.fmi.FMI2_INPUT]) \
+                    or (self.model.get_version() == '1.0' and causality[name] != pyfmi.fmi.FMI_INPUT):
+                    raise ValueError('Variable "' + name + '" cannot be used as a function input (causality=' + str(causality[name]) + ')')
 
         self.inputs_fmu = inputs_fmu
 
@@ -176,20 +181,24 @@ class OpenTURNSFMUFunction(ot.OpenTURNSPythonFunction):
         self.setInputDescription(inputs)
 
 
-    def _set_outputs_fmu(self, outputs_fmu, outputs=None):
+    def _set_outputs_fmu(self, outputs_fmu):
         """Set output variable names.
 
         Parameters
         ----------
-        outputs_fmu : Sequence of strings, names of the variable from the fmu
-        to be used as output variables.
-
-        outputs : Sequence of strings, optional names to use as variables
-        descriptions.
-
+        outputs_fmu : Sequence of strings
+            Names of the variable from the fmu to be used as output variables.
         """
+
+        all_vars = fmi.get_name_variable(self.model)
+        causality = dict(zip(all_vars, fmi.get_causality(self.model, all_vars)))
+
         if outputs_fmu is None:
-            outputs_fmu = fmi.get_name_variable(self.model)
+            # choose all variables with variability OUTPUT
+            fmix_output = pyfmi.fmi.FMI2_OUTPUT if self.model.get_version() == '2.0' else pyfmi.fmi.FMI_OUTPUT
+            outputs_fmu = [name for name in all_vars if causality[name] == fmix_output]
+            if len(outputs_fmu) == 0:
+                raise pyfmi.common.io.VariableNotFoundError("No variables marked as OUTPUT please specify outputs_fmu")
         else:
             difference = set(outputs_fmu).difference(fmi.get_name_variable(self.model))
             if difference:
