@@ -361,6 +361,30 @@ def get_causality(model, names=None):
     return [model.get_variable_causality(name) for name in names]
 
 
+def get_causality_str(model, name):
+    """
+    Get the causality of a variable.
+
+    Parameters
+    ----------
+    model : pyfmi.fmi.FMUModelXXX or str
+        Pyfmi model object or path to an FMU.
+    
+    name : str
+        Variable name
+
+    Returns
+    -------
+    causality : str
+        Causality identifier
+    """
+
+    causality1str = {pyfmi.fmi.FMI_INPUT: 'INPUT', pyfmi.fmi.FMI_OUTPUT: 'OUTPUT', pyfmi.fmi.FMI_INTERNAL: 'INTERNAL', pyfmi.fmi.FMI_NONE: 'NONE'}
+    causality2str = {pyfmi.fmi.FMI2_PARAMETER: 'PARAMETER', pyfmi.fmi.FMI2_CALCULATED_PARAMETER: 'CALCULATED_PARAMETER', pyfmi.fmi.FMI2_INPUT: 'INPUT', pyfmi.fmi.FMI2_OUTPUT: 'OUTPUT', pyfmi.fmi.FMI2_LOCAL: 'LOCAL', pyfmi.fmi.FMI2_INDEPENDENT: 'INDEPENDENT', pyfmi.fmi.FMI2_UNKNOWN: 'UNKNOWN'}
+    causalitystr = {'1.0': causality1str, '2.0': causality2str}
+    return causalitystr[model.get_version()].get(get_causality(model, [name])[0], 'UNKNOWN')
+
+
 def get_variability(model):
     """Get the variability of the variables.
 
