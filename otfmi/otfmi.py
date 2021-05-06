@@ -163,7 +163,7 @@ class OpenTURNSFMUFunction(ot.OpenTURNSPythonFunction):
             for name in inputs_fmu:
                 if (self.model.get_version() == '2.0' and not causality[name] in [pyfmi.fmi.FMI2_PARAMETER, pyfmi.fmi.FMI2_INPUT]) \
                     or (self.model.get_version() == '1.0' and causality[name] != pyfmi.fmi.FMI_INPUT):
-                    raise ValueError('Variable "' + name + '" cannot be used as a function input (causality=' + str(causality[name]) + ')')
+                    raise ValueError('Variable "' + name + '" cannot be used as a function input (causality ' + fmi.get_causality_str(self.model, name) + ')')
 
         self.inputs_fmu = inputs_fmu
 
@@ -203,6 +203,11 @@ class OpenTURNSFMUFunction(ot.OpenTURNSPythonFunction):
             difference = set(outputs_fmu).difference(fmi.get_name_variable(self.model))
             if difference:
                 raise pyfmi.common.io.VariableNotFoundError(", ".join(difference))
+
+            for name in outputs_fmu:
+                if (self.model.get_version() == '2.0' and not causality[name] in [pyfmi.fmi.FMI2_LOCAL, pyfmi.fmi.FMI2_OUTPUT]) \
+                    or (self.model.get_version() == '1.0' and causality[name] != pyfmi.fmi.FMI_OUTPUT):
+                    raise ValueError('Variable "' + name + '" cannot be used as a function output (causality ' + fmi.get_causality_str(self.model, name) + ')')
         self.outputs_fmu = outputs_fmu
 
 
