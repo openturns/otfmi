@@ -35,14 +35,14 @@ numpydoc_class_members_toctree = False
 try:
     import sphinx.ext.imgmath
     extensions.append('sphinx.ext.imgmath')
-    imgmath_latex_preamble = "\usepackage{%smath_notations}" % (
+    imgmath_latex_preamble = r'\usepackage{{{0}math_notations}}'.format(
         os.path.dirname(__file__) + os.sep)
     imgmath_use_preview = True
     if subprocess.call('dvisvgm -V', shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE) == 0:
         imgmath_image_format = 'svg'
 except ImportError:
     extensions.append('sphinx.ext.pngmath')
-    pngmath_latex_preamble = "\usepackage{%smath_notations}" % (
+    pngmath_latex_preamble = r'\usepackage{{{0}math_notations}}'.format(
         os.path.dirname(__file__) + os.sep)
     # The next option is used for smart-alignment of math images on the text.
     # It only works when the preview-latex package is installed.
