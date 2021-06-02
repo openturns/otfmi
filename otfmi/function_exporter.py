@@ -332,9 +332,7 @@ class FunctionExporter(object):
                 libname = "cwrapper.lib"
             else:
                 libname = "libcwrapper.a"
-            list_file = [
-                "function.xml", libname, "wrapper.c",
-                className + extension]
+            list_file = [libname, className + extension]
             for file in list_file:
                 shutil.move(os.path.join(self.workdir, file),
                             os.path.join(dirName, file))
