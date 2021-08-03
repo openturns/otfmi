@@ -1,0 +1,60 @@
+name: Build
+on: [push, pull_request]
+jobs:
+  linux:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build
+        run: |
+          docker pull openturns/archlinux-module
+          docker run -e MAKEFLAGS='-j2' -v `pwd`:/io openturns/archlinux-module /io/.ci_support/run_docker_linux.sh `id -u` `id -g`
+      - name: Upload
+        if: ${{ github.ref == 'refs/heads/master' }}
+        run: |
+          git clone --depth 1 https://${{ secrets.GH_TOKEN }}@github.com/openturns/openturns.github.io.git /tmp/io
+          mkdir -p /tmp/io/otfmi/master
+          cp -r html/* /tmp/io/otfmi/master
+          cd /tmp/io
+          touch .nojekyll
+          git config user.email "support@gh.com"
+          git config user.name "GitHub Actions"
+          git add -A .
+          git diff --cached && exit 0
+          git commit -a -m "GitHub Actions build ${GITHUB_REPOSITORY} ${GITHUB_RUN_ID}"
+          git push --quiet origin master > /dev/null 2>&1
+
+  conda-linux:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: conda-incubator/setup-miniconda@v2
+        with:
+          miniforge-version: latest
+      - name: Build
+        shell: bash -l {0}
+        run: |
+          conda install -y pyfmi openturns pytest omcompiler
+          python setup.py install
+          mo2fmu -h
+          mo2fmu ./otfmi/example/file/deviation.mo ./otfmi/example/file/fmu/linux64/deviation.fmu
+          pytest test -s
+
+  conda-windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: conda-incubator/setup-miniconda@v2
+        with:
+          miniforge-version: latest
+      - name: Build
+        run: |
+          choco install openmodelica --version=1.17.0
+          $env:PATH += ";C:\Program Files\OpenModelica1.17.0-64bit\bin"
+          conda install -y pyfmi openturns pytest
+          # conda-forge's scipy>=1.5.3 dlls conflict with openturns: from scipy.sparse.linalg import LinearOperator
+          pip install scipy --force-reinstall --no-deps
+          python setup.py install
+          mo2fmu -h
+          pytest test -s
+
