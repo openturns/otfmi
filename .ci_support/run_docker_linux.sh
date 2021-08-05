@@ -2,6 +2,8 @@
 
 set -xe
 
+export SOURCE_DATE_EPOCH=1609455600
+
 cp -r /io/* /tmp
 cd /tmp
 python setup.py install --user
