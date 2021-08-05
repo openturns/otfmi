@@ -20,7 +20,7 @@ jobs:
           git config user.email "support@gh.com"
           git config user.name "GitHub Actions"
           git add -A .
-          git diff --cached && exit 0
+          if test `git diff HEAD | wc -c` -eq 0; then exit 0; fi
           git commit -a -m "GitHub Actions build ${GITHUB_REPOSITORY} ${GITHUB_RUN_ID}"
           git push --quiet origin master > /dev/null 2>&1
 
