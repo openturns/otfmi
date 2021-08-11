@@ -1,5 +1,5 @@
-.. image:: https://github.com/openturns/ottemplate/actions/workflows/build.yml/badge.svg?branch=master
-    :target: https://github.com/openturns/ottemplate/actions/workflows/build.yml
+.. image:: https://github.com/openturns/otfmi/actions/workflows/build.yml/badge.svg?branch=master
+    :target: https://github.com/openturns/otfmi/actions/workflows/build.yml
 
 OTFMI Module
 ============
