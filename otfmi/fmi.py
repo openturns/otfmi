@@ -445,8 +445,8 @@ def get_start_value(model):
 
     Returns
     -------
-    start_vars : dict of float
-        Values of start variables
+    start_vars : dict of int/float
+        Names and values of start variables
 
     """
 
@@ -455,8 +455,13 @@ def get_start_value(model):
     except AttributeError:
         model = load_fmu(model)
 
-    list_name_variable = list(model.get_model_variables(include_alias=False,
+    list_name_variable = []
+    # type: Real==0, Int==1, Bool=2, String==3, Enumeration==4)
+    for typ in range(3):
+        lnvt = list(model.get_model_variables(type=typ, include_alias=False,
                                                    only_start=True).keys())
+        list_name_variable.extend(lnvt)
+
     return {name:model.get_variable_start(name) for name in list_name_variable}
 
 
