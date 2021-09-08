@@ -1,3 +1,6 @@
+2021-09-07 - release 0.12
+- get_start_value to filter out string variables
+
 2021-05-06 - release 0.11
 - allow to simulate parameter in ME mode
 - fix logging from a read-only directory
