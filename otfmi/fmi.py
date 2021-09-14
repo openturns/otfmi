@@ -105,11 +105,9 @@ def parse_kwargs_simulate(value_input=None, name_input=None,
     if (LooseVersion(pyfmi.__version__)  >= '2.6') and ('FMUModelCS' in model.__class__.__name__):
         kwargs["options"]["silent_mode"] = True
 
-    try:
+    if len(time) > 1:
         kwargs.setdefault("start_time", time[0])
         kwargs.setdefault("final_time", time[-1])
-    except TypeError:
-        pass
 
     if value_input is not None:
         fmix_input = pyfmi.fmi.FMI2_INPUT if model.get_version() == '2.0' else pyfmi.fmi.FMI_INPUT
