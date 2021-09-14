@@ -51,7 +51,7 @@ class FMUFunction(ot.Function):
         Select a kind of FMU if both are available.
         Note:
         Contrary to pyfmi, the default here is "CS" (co-simulation). The
-        rationale behind this choice is is that co-simulation may be used to
+        rationale behind this choice is that co-simulation may be used to
         impose a solver not available in pyfmi.
 
     """
