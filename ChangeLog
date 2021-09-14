@@ -1,3 +1,6 @@
+2021-09-14 - release 0.13
+- dont force final_time in vector mode
+
 2021-09-07 - release 0.12
 - get_start_value to filter out string variables
 
