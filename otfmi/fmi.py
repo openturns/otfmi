@@ -63,6 +63,7 @@ def simulate(model, initialization_script=None, initialization_parameters=None, 
         # Needed (?!) for restoring default values in some settings (windows
         # co-simulation).
         try:
+            model.free_instance()
             model.instantiate()
         except AttributeError:
             pass # Probably FMI version 1.
