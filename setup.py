@@ -82,9 +82,7 @@ setup(
     # installed, specify them here.  If using Python 2.6 or less, then these
     # have to be included in MANIFEST.in as well.
     package_data={
-        "otfmi": ["example/file/fmu/linux64/*.fmu",
-                  "example/file/fmu/win32/*.fmu",
-                  "example/file/initialization_script/*.mos"]
+        "otfmi": ["example/file/initialization_script/*.mos"]
     },
 
     # Although 'package_data' is the preferred approach, in some case you may

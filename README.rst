@@ -45,7 +45,7 @@ classical distutils procedure. From the main folder, run the following command:
     python setup.py install
 
 On windows, it is possible to avoid resorting to command line interface by using the
-installer program otfmi-X.X.win32.exe ( X.X is the version number).
+installer program otfmi-X.X.win32.exe (where X.X is the version number).
 
 Manual removal
 --------------
@@ -67,6 +67,8 @@ See the “Project documentation” [PROJECTDOC]_ for information about the modu
 
 Example scripts are given in the 'example' folder in the source tree.
 
+Example FMU files are provided at [FMUDEMOS]_.
+
 License
 =======
 
@@ -78,3 +80,4 @@ References
 .. [ANACONDA] Anaconda, Python distribution. url: http://continuum.io/downloads
 .. [USERDOC] Girard, Sylvain (2017). otfmi: simulate FMUs from OpenTURNS: User documentation. Tech. rep. RT-PMFRE-00997-003. EDF. url: https://openturns.github.io/openturns/papers/otfmi_user_documentation.pdf
 .. [PROJECTDOC] Girard, Sylvain (2017). otfmi: simulate FMUs from OpenTURNS: Project documentation. Tech. rep. RT-PMFRE-00997-002. EDF. url: https://openturns.github.io/openturns/papers/otfmi_project_documentation.pdf
+.. [FMUDEMOS] FMU demonstration files. https://github.com/openturns/otfmi/tree/master/otfmi/example/file/fmu
