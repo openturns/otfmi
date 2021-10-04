@@ -58,8 +58,8 @@ The list of all created file can be retrieved by the following command
 
     python setup.py install --record list_file.txt
 
-Documentation
-=============
+References
+==========
 
 See the “User documentation” [USERDOC]_ for more usage instruction.
 
@@ -74,8 +74,8 @@ License
 
 This package is licensed under the LGPL3.
 
-References
-==========
+Bibliography
+============
 .. [PYFMI] PyFMI Python module. url: https://github.com/modelon-community/PyFMI
 .. [ANACONDA] Anaconda, Python distribution. url: http://continuum.io/downloads
 .. [USERDOC] Girard, Sylvain (2017). otfmi: simulate FMUs from OpenTURNS: User documentation. Tech. rep. RT-PMFRE-00997-003. EDF. url: https://openturns.github.io/openturns/papers/otfmi_user_documentation.pdf
