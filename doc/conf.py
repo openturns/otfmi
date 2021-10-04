@@ -85,7 +85,7 @@ todo_include_todos = True
 # html_theme_path = [alabaster.get_path()]
 # html_theme = 'alabaster'
 
-html_theme = 'classic'
+html_theme = 'nature'
 # html_sidebars = {
 #     '**': [
 #         # 'about.html',

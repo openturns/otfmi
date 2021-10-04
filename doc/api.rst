@@ -1,18 +1,22 @@
-========================
-Documentation of the API
-========================
+===
+API
+===
 
-This is the user manual for the Python bindings to the :code:`otfmi` library.
+This is the user manual for the :code:`otfmi` library.
 
 .. currentmodule:: otfmi
+
+Top-level classes:
 
 .. autosummary::
     :toctree: _generated/
     :template: class.rst_t
 
     FMUFunction
-    OpenTURNSFMUFunction
     FunctionExporter
+    FMUPointToFieldFunction
+
+Lower-level utility functions:
 
 .. autosummary::
     :toctree: _generated/

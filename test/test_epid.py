@@ -6,6 +6,7 @@ import os
 import tempfile
 import math as m
 import shutil
+import openturns as ot
 
 
 class TestEpid(unittest.TestCase):
@@ -31,11 +32,21 @@ class TestEpid(unittest.TestCase):
             mo.write('end epid;\n')
         otfmi.mo2fmu(path_mo, path_fmu, fmuType="me", verbose=True)
 
+        # time-invariant function
         model_fmu = otfmi.FMUFunction(path_fmu, inputs_fmu=['infection_rate', 'healing_rate'], outputs_fmu=['infected'])
         x = [0.07, 0.02]
         y = model_fmu(x)
         print('y=', y)
         assert m.fabs(y[0]-258.205) < 1e-2, "wrong value"
+
+        # time-variant function
+        mesh = ot.RegularGrid(0.0, 0.5, 100)
+        model_fmu = otfmi.FMUPointToFieldFunction(mesh, path_fmu, inputs_fmu=['infection_rate', 'healing_rate'], outputs_fmu=['infected'])
+        x = [0.07, 0.02]
+        y = model_fmu(x)
+        print('y=', y)
+        assert m.fabs(y[0][0]-1.0) < 1e-2, "wrong value"
+        assert m.fabs(y[-1][0]-260.8) < 1e-2, "wrong value"
         shutil.rmtree(temp_path)
 
 if __name__ == '__main__':

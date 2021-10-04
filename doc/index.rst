@@ -1,5 +1,5 @@
 ===================
-Otfmi documentation
+OTFMI documentation
 ===================
 
 Table of contents
@@ -11,6 +11,6 @@ Table of contents
     README.rst
 
 .. toctree::
-    :maxdepth: 3
+    :maxdepth: 1
 
     api.rst
