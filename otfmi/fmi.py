@@ -308,7 +308,7 @@ def apply_initialization_script(model, path_script):
     """
 
     list_name, list_value = parse_initialization_script(path_script)
-    apply_initialization_parameters((list_name, list_value))
+    apply_initialization_parameters(model, (list_name, list_value))
 
 #§
 def get_name_variable(model, **kwargs):
