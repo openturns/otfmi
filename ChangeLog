@@ -1,6 +1,5 @@
 wip - release 0.15
 - Add FMUPointToFieldFunction
-- Removed demo FMU files from the package.
 
 2021-09-15 - release 0.14
 - fix memory leak
