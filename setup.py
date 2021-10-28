@@ -84,7 +84,6 @@ setup(
     package_data={
         "otfmi": ["example/file/initialization_script/*.mos",
                   "example/file/fmu/linux64/*.fmu",
-                  "example/file/fmu/win32/*.fmu",
                   "example/file/fmu/win64/*.fmu"]
     },
 
