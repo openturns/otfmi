@@ -14,7 +14,6 @@ key_platform = (platform.system(), platform.architecture()[0])
 # Call to either 'platform.system' or 'platform.architecture' *after*
 # importing pyfmi causes a segfault.
 dict_platform = {("Linux", "64bit"):"linux64",
-                 ("Windows", "32bit"):"win32",
                  ("Windows", "64bit"):"win64"}
 input_value = [0.007, 0.02]
 
