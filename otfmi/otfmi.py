@@ -448,9 +448,10 @@ class OpenTURNSFMUPointToFieldFunction(ot.OpenTURNSPythonPointToFieldFunction):
 
         self._set_inputs_fmu(inputs_fmu)
         self._set_outputs_fmu(outputs_fmu)
+        self.mesh = mesh
 
-        super(OpenTURNSFMUPointToFieldFunction, self).__init__(len(self.inputs_fmu), mesh,
-                                                               len(self.outputs_fmu))
+        super(OpenTURNSFMUPointToFieldFunction, self).__init__(
+            len(self.inputs_fmu), mesh, len(self.outputs_fmu))
         self._set_inputs(inputs)
         self._set_outputs(outputs)
 
@@ -551,8 +552,18 @@ class OpenTURNSFMUPointToFieldFunction(ot.OpenTURNSPythonPointToFieldFunction):
         See the 'simulate' method for additional keyword arguments.
 
         """
+        final_time = self.adapt_final_time()
+        return self.simulate(value_input=value_input, final_time=final_time,
+           **kwargs)
 
-        return self.simulate(value_input=value_input, **kwargs)
+    def adapt_final_time(self):
+        """Adapt FMU stop time to the mesh given by the user.
+
+        """
+        meshSample = self.mesh.getVertices()
+        final_time = meshSample.getMax()[0]
+        return final_time
+
 
     def load_fmu(self, path_fmu, kind=None, **kwargs):
         """Load an FMU.
