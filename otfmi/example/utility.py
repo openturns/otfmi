@@ -8,7 +8,6 @@ import platform
 import os
 
 dict_platform = {("Linux", "64bit"):"linux64",
-                 ("Windows", "32bit"):"win32",
                  ("Windows", "64bit"):"win64"}
 
 def get_directory_platform():
