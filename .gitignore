@@ -15,7 +15,4 @@ otfmi/example/file/initialization_script/debug_deviation.mos
 otfmi/example/status
 otfmi/example/success
 test/deviationpoutre_log.txt
-test/deviationl_log.txt
-test/epid_log.txt
-test/epid_result.txt
 tmp.org

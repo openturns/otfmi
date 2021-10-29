@@ -30,6 +30,7 @@ def simulate_with_pyfmi(path_fmu):
     infected_column = list_variable.index("infected") + 1
     # +1 stands for time column, inserted as first in the data matrix
     list_last_infected_value = check_result.data_matrix[infected_column][-5:-1]
+    print(list_last_infected_value)
     return list_last_infected_value
 
 
@@ -70,35 +71,17 @@ class TestEpid(unittest.TestCase):
         assert y[0] > min(list_last_infected_value)
 
     def test_timevariant_function(self):
-        """Check that FMUPointToFieldFunction returns a trajectory.
-        """
+        """Check that FMUPointToFieldFunction returns a trajectory."""
         mesh = ot.RegularGrid(0.0, 0.5, 100)
-        function = otfmi.FMUPointToFieldFunction(
+        model_fmu = otfmi.FMUPointToFieldFunction(
             mesh,
             self.path_fmu,
             inputs_fmu=['infection_rate', 'healing_rate'],
             outputs_fmu=['infected'])
-        y = function(input_value)
+        y = model_fmu(input_value)
+        print('y=', y)
         assert y.getMax()[0] - y.getMin()[0] > 0
         assert m.fabs(y[0][0] - 1.0) < 1e-2, "wrong value"
-
-    def test_set_final_time(self):
-        """Check the variation of model outputs after the default FMU stop time.
-        """
-        model = pyfmi.load_fmu(self.path_fmu)
-        default_stop_time = model.get_default_experiment_stop_time()
-        last_index = round(default_stop_time)
-        interval = 13
-        mesh = ot.RegularGrid(0.0, 1., last_index + interval)
-        function = otfmi.OpenTURNSFMUPointToFieldFunction(
-            mesh,
-            self.path_fmu,
-            inputs_fmu=['infection_rate', 'healing_rate'],
-            outputs_fmu=['infected'])
-        y = function(input_value)
-        post_stop_sample = y.select(
-            list(range(last_index, last_index + interval)))
-        assert post_stop_sample.getMin()[0] < post_stop_sample.getMax()[0]
 
 
 if __name__ == '__main__':
