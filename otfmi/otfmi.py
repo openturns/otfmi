@@ -456,10 +456,9 @@ class OpenTURNSFMUPointToFieldFunction(ot.OpenTURNSPythonPointToFieldFunction):
 
         self._set_inputs_fmu(inputs_fmu)
         self._set_outputs_fmu(outputs_fmu)
-        self.mesh = mesh
 
         super(OpenTURNSFMUPointToFieldFunction, self).__init__(len
-            (self.inputs_fmu), self.mesh,
+            (self.inputs_fmu), mesh,
                                                                len(self.outputs_fmu))
         self._set_inputs(inputs)
         self._set_outputs(outputs)
@@ -583,12 +582,13 @@ class OpenTURNSFMUPointToFieldFunction(ot.OpenTURNSPythonPointToFieldFunction):
         """Raise an error if the mesh is not comprised between the start and
         final simulation time.
         """
-        mesh_min = self.mesh.getValues()[0]
+        mesh = self.getOutputMesh()
+        mesh_min = mesh.getVertices().getMin()[0]
         assert mesh_min >= self.start_time, """The mesh start time must be >= to FMU start time.\n
             To set the FMU start time, use the argument *start_time* in
             FMUPointToFieldFunction constructor."""
 
-        mesh_max = self.mesh.getValues()[-1]
+        mesh_max = mesh.getVertices().getMax()[0]
         assert mesh_max <= self.final_time, """The mesh final time must be >= to FMU final time.\n
             To set the FMU final time, use the argument final_time in
             FMUPointToFieldFunction constructor."""
