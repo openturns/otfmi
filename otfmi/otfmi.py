@@ -47,7 +47,12 @@ class FMUFunction(ot.Function):
     initialization_script : str (optional)
         Path to the initialization script.
 
-    kind : str, one of "ME" (model exchange) or "CS" (co-simulation)
+    final_time : float
+        The output variables value is collected at t=final_time and returned by
+        FMUFunction.
+
+    kind : str, one of "ME" (model exchange) or "CS" 
+        (co-simulation)
         Select a kind of FMU if both are available.
         Note:
         Contrary to pyfmi, the default here is "CS" (co-simulation). The
@@ -65,11 +70,11 @@ class FMUFunction(ot.Function):
 
     def __new__(self, path_fmu=None, inputs_fmu=None, outputs_fmu=None,
                 inputs=None, outputs=None, n_cpus=None, kind=None,
-                initialization_script=None):
+                initialization_script=None, final_time=None):
         lowlevel = OpenTURNSFMUFunction(
             path_fmu=path_fmu, inputs_fmu=inputs_fmu, outputs_fmu=outputs_fmu,
             inputs=inputs, n_cpus=n_cpus, outputs=outputs, kind=kind,
-            initialization_script=initialization_script)
+            initialization_script=initialization_script, final_time=final_time)
 
         highlevel = ot.Function(lowlevel)
         # highlevel._model = lowlevel.model
@@ -104,6 +109,10 @@ class OpenTURNSFMUFunction(ot.OpenTURNSPythonFunction):
     initialization_script : str (optional)
         Path to the initialization script.
 
+    final_time : float
+        The output variables value is collected at t=final_time and returned by
+        FMUFunction.
+
     kind : str, one of "ME" (model exchange) or "CS" (co-simulation)
         Select a kind of FMU if both are available.
         Note:
@@ -121,7 +130,7 @@ class OpenTURNSFMUFunction(ot.OpenTURNSPythonFunction):
     def __init__(self, path_fmu, inputs_fmu=None, outputs_fmu=None,
                  inputs=None, outputs=None, n_cpus=None,
                  initialization_script=None, kind=None,
-                 expect_trajectory=False, **kwargs):
+                 expect_trajectory=False, final_time=None, **kwargs):
         self.load_fmu(path_fmu=path_fmu, kind=kind)
 
         self._set_inputs_fmu(inputs_fmu)
@@ -131,6 +140,7 @@ class OpenTURNSFMUFunction(ot.OpenTURNSPythonFunction):
                                                    p=len(self.outputs_fmu))
         self._set_inputs(inputs)
         self._set_outputs(outputs)
+        self._set_final_time(final_time)
 
         self.n_cpus = n_cpus
 
@@ -236,6 +246,19 @@ class OpenTURNSFMUFunction(ot.OpenTURNSPythonFunction):
                 return self._exec_sample(X, **kwargs)
             else:
                 return self._exec(X, **kwargs)
+
+    def _set_final_time(self, final_time):
+        """Extract final time from keywords if exists.
+
+        Parameters
+        ----------
+        final_time: float (must be >= 0).
+
+        """
+        if final_time is not None:
+            self.final_time = final_time
+        else:
+            self.final_time = self.model.get_default_experiment_stop_time()
 
     def _exec(self, value_input, **kwargs):
         """Simulate the FMU for a given set of input values.
@@ -347,7 +370,11 @@ class OpenTURNSFMUFunction(ot.OpenTURNSPythonFunction):
             name_output=self.getFMUOutputDescription(),
             model=self.model, **kwargs)
 
-        simulation = fmi.simulate(self.model, reset=reset, **kwargs_simulate)
+        if "final_time" in kwargs.keys():
+            raise Warning("final_time must be set in the constructor.")
+
+        simulation = fmi.simulate(self.model, reset=reset,
+            final_time=self.final_time, **kwargs_simulate)
 
         return fmi.strip_simulation(simulation,
                                     name_output=self.getOutputDescription(),
@@ -424,14 +451,21 @@ class FMUPointToFieldFunction(ot.PointToFieldFunction):
         rationale behind this choice is that co-simulation may be used to
         impose a solver not available in pyfmi.
 
+    start_time : float
+        The FMU simulation start time.
+
+    final_time : float
+        The FMU simulation stop time.
+
     """
     def __new__(self, mesh, path_fmu=None, inputs_fmu=None, outputs_fmu=None,
                 inputs=None, outputs=None, kind=None,
-                initialization_script=None):
+                initialization_script=None, start_time=None, final_time=None):
         lowlevel = OpenTURNSFMUPointToFieldFunction(mesh,
             path_fmu=path_fmu, inputs_fmu=inputs_fmu, outputs_fmu=outputs_fmu,
             inputs=inputs, outputs=outputs, kind=kind,
-            initialization_script=initialization_script)
+            initialization_script=initialization_script, start_time=start_time,
+            final_time=final_time)
 
         highlevel = ot.PointToFieldFunction(lowlevel)
         # highlevel._model = lowlevel.model
@@ -443,16 +477,21 @@ class OpenTURNSFMUPointToFieldFunction(ot.OpenTURNSPythonPointToFieldFunction):
     def __init__(self, mesh, path_fmu, inputs_fmu=None, outputs_fmu=None,
                  inputs=None, outputs=None,
                  initialization_script=None, kind=None,
-                 expect_trajectory=False, **kwargs):
+                 expect_trajectory=False, start_time=None,
+                 final_time=None, **kwargs):
         self.load_fmu(path_fmu=path_fmu, kind=kind)
 
         self._set_inputs_fmu(inputs_fmu)
         self._set_outputs_fmu(outputs_fmu)
 
-        super(OpenTURNSFMUPointToFieldFunction, self).__init__(len(self.inputs_fmu), mesh,
+        super(OpenTURNSFMUPointToFieldFunction, self).__init__(len
+            (self.inputs_fmu), mesh,
                                                                len(self.outputs_fmu))
         self._set_inputs(inputs)
         self._set_outputs(outputs)
+        self._set_final_time(final_time)
+        self._set_start_time(start_time)
+        self._assert_mesh_pertinence()
 
         self.initialize(initialization_script)
   
@@ -540,6 +579,48 @@ class OpenTURNSFMUPointToFieldFunction(ot.OpenTURNSPythonPointToFieldFunction):
         if outputs is None:
             outputs = self.outputs_fmu
         self.setOutputDescription(outputs)
+
+    def _set_final_time(self, final_time):
+        """Extract final time from keywords if exists.
+
+        Parameters
+        ----------
+        final_time: float (must be >= 0).
+
+        """
+        if final_time is not None:
+            self.final_time = final_time
+        else:
+            self.final_time = self.model.get_default_experiment_stop_time()
+
+    def _set_start_time(self, start_time):
+        """Extract start time from keywords if exists.
+
+        Parameters
+        ----------
+        start_time: float (must be >= 0)
+        
+        """
+        if start_time is not None:
+            self.start_time = start_time
+        else:
+            self.start_time = self.model.get_default_experiment_start_time()
+
+    def _assert_mesh_pertinence(self):
+        """Raise an error if the mesh is not comprised between the start and
+        final simulation time.
+        """
+        mesh = self.getOutputMesh()
+        mesh_min = mesh.getVertices().getMin()[0]
+        assert mesh_min >= self.start_time, """The mesh start time must be >= to FMU start time.\n
+            To set the FMU start time, use the argument *start_time* in
+            FMUPointToFieldFunction constructor."""
+
+        mesh_max = mesh.getVertices().getMax()[0]
+        assert mesh_max <= self.final_time, """The mesh final time must be >= to FMU final time.\n
+            To set the FMU final time, use the argument final_time in
+            FMUPointToFieldFunction constructor."""
+
 
     def _exec(self, value_input, **kwargs):
         """Simulate the FMU for a given set of input values.
@@ -635,7 +716,16 @@ class OpenTURNSFMUPointToFieldFunction(ot.OpenTURNSPythonPointToFieldFunction):
             name_output=self.getFMUOutputDescription(),
             model=self.model, **kwargs)
 
-        simulation = fmi.simulate(self.model, reset=reset, **kwargs_simulate)
+        if "final_time" in kwargs.keys():
+            raise Warning("final_time must be set in the constructor.")
+        if "start_time" in kwargs.keys():
+            raise Warning("start_time must be set in the constructor.")
+
+        simulation = fmi.simulate(self.model, 
+            reset=reset,
+            start_time=self.start_time,
+            final_time=self.final_time, 
+            **kwargs_simulate)
 
         time, values = fmi.strip_simulation(simulation,
                                     name_output=self.getOutputDescription(),
