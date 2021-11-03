@@ -46,30 +46,55 @@ class TestEpid(unittest.TestCase):
             directory_platform = dict_platform[key_platform]
             self.path_fmu = os.path.join(path_example, "file", "fmu",
                 directory_platform, fmu_name)
-            self.model_fmu = otfmi.FMUFunction(
-                self.path_fmu,
-                inputs_fmu=["infection_rate", "healing_rate"],
-                outputs_fmu=["infected"])
         except KeyError:
             raise RuntimeError(
                 "Tests are not available on your platform (%s)." % key_platform)
         except FMUException:
             raise FMUException("The test FMU is not available on your platform (%s)." % key_platform)
 
-    def test_empty(self):
-        """Check module import and setup.
-        """
-        pass
+        self.mesh = ot.RegularGrid(2.0, 0.5, 50)
 
-    def test_fmufunction_interpolation(self):
-        """Check that FMUFunction returns a point corresponding to Pyfmi's
-        interpolated output.
-        """
-        list_last_infected_value = simulate_with_pyfmi(self.path_fmu)
-        y = self.model_fmu(input_value)
-        assert y[0] < max(list_last_infected_value)
-        assert y[0] > min(list_last_infected_value)
 
+    def test_start_time_coherence(self):
+        """Check if incoherent start time raises an error
+        """
+        model_fmu = otfmi.OpenTURNSFMUPointToFieldFunction(
+            self.mesh,
+            self.path_fmu,
+            inputs_fmu=['infection_rate', 'healing_rate'],
+            outputs_fmu=['infected'],
+            start_time=10)
+        self.assertRaises(AssertionError, model_fmu._exec, input_value)
+
+    def test_start_time(self):
+        """Check if start times are taken into account.
+        """
+        model_fmu_1 = otfmi.OpenTURNSFMUPointToFieldFunction(
+            self.mesh,
+            self.path_fmu,
+            inputs_fmu=['infection_rate', 'healing_rate'],
+            outputs_fmu=['infected'],
+            start_time=0)
+        model_fmu_2 = otfmi.OpenTURNSFMUPointToFieldFunction(
+            self.mesh,
+            self.path_fmu,
+            inputs_fmu=['infection_rate', 'healing_rate'],
+            outputs_fmu=['infected'],
+            start_time=1)
+        y1 = model_fmu_1(input_value)
+        y2 = model_fmu_2(input_value)
+        assert(y2[0][0] - y1[0][0] != 0)
+
+    def test_final_time_coherence(self):
+        """Check if incoherent final time raises an error.
+        """
+        model_fmu = otfmi.OpenTURNSFMUPointToFieldFunction(
+            self.mesh,
+            self.path_fmu,
+            inputs_fmu=['infection_rate', 'healing_rate'],
+            outputs_fmu=['infected'],
+            final_time=10)
+        self.assertRaises(AssertionError, model_fmu._exec, input_value)
 
 if __name__ == '__main__':
     unittest.main()
