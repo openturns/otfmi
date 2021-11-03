@@ -47,7 +47,12 @@ class FMUFunction(ot.Function):
     initialization_script : str (optional)
         Path to the initialization script.
 
-    kind : str, one of "ME" (model exchange) or "CS" (co-simulation)
+    final_time : float
+        The output variables value is collected at t=final_time and returned by
+        FMUFunction.
+
+    kind : str, one of "ME" (model exchange) or "CS" 
+        (co-simulation)
         Select a kind of FMU if both are available.
         Note:
         Contrary to pyfmi, the default here is "CS" (co-simulation). The
@@ -103,6 +108,10 @@ class OpenTURNSFMUFunction(ot.OpenTURNSPythonFunction):
 
     initialization_script : str (optional)
         Path to the initialization script.
+
+    final_time : float
+        The output variables value is collected at t=final_time and returned by
+        FMUFunction.
 
     kind : str, one of "ME" (model exchange) or "CS" (co-simulation)
         Select a kind of FMU if both are available.
