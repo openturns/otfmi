@@ -58,13 +58,13 @@ class TestEpid(unittest.TestCase):
     def test_start_time_coherence(self):
         """Check if incoherent start time raises an error
         """
-        model_fmu = otfmi.OpenTURNSFMUPointToFieldFunction(
+        self.assertRaises(AssertionError,
+            otfmi.OpenTURNSFMUPointToFieldFunction,
             self.mesh,
             self.path_fmu,
             inputs_fmu=['infection_rate', 'healing_rate'],
             outputs_fmu=['infected'],
             start_time=10)
-        self.assertRaises(AssertionError, model_fmu._exec, input_value)
 
     def test_start_time(self):
         """Check if start times are taken into account.
@@ -88,13 +88,13 @@ class TestEpid(unittest.TestCase):
     def test_final_time_coherence(self):
         """Check if incoherent final time raises an error.
         """
-        model_fmu = otfmi.OpenTURNSFMUPointToFieldFunction(
+        self.assertRaises(AssertionError,
+            otfmi.OpenTURNSFMUPointToFieldFunction,
             self.mesh,
             self.path_fmu,
             inputs_fmu=['infection_rate', 'healing_rate'],
             outputs_fmu=['infected'],
             final_time=10)
-        self.assertRaises(AssertionError, model_fmu._exec, input_value)
 
 if __name__ == '__main__':
     unittest.main()
