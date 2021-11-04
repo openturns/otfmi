@@ -8,6 +8,7 @@ import numpy as np
 from distutils.version import LooseVersion
 import os
 import tempfile
+import warnings
 
 #§
 def load_fmu(path_fmu, kind=None, **kwargs):
@@ -267,7 +268,9 @@ def parse_initialization_script(path_script):
             try:
                 name, value = parse_initialization_line(line)
             except ValueError:
-                pass
+                warnings.warn(
+                    "Following line could not be parsed:\n {}".format(line),
+                    SyntaxWarning)
             else:
                 list_name.append(name)
                 list_value.append(value)
