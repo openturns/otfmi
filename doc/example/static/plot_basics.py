@@ -2,7 +2,7 @@
 # @Author: Claire-Eleuthèriane Gerrer
 # @Date:   2021-10-26 09:44:54
 # @Last Modified by:   Claire-Eleuthèriane Gerrer
-# @Last Modified time: 2021-11-04 09:01:55
+# @Last Modified time: 2021-11-30 15:29:32
 
 
 """
@@ -12,8 +12,7 @@ FMUFunction basics
 
 # %%
 # ``otfmi.FMUFunction`` enables to use OpenTURNS' high
-# level algorithms by wrapping the FMU into an OpenTURNS
-# `Function <http://shorturl.at/cAGH1>`_ object.
+# level algorithms by wrapping the FMU into an :py:class:`openturns.Function` object.
 
 # %%
 # ------------

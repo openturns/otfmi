@@ -2,7 +2,7 @@
 # @Author: Claire-Eleuthèriane Gerrer
 # @Date:   2021-10-29 09:28:13
 # @Last Modified by:   Claire-Eleuthèriane Gerrer
-# @Last Modified time: 2021-11-30 15:18:46
+# @Last Modified time: 2021-11-30 15:32:38
 
 """
 FMUPointToFieldFunction basics
@@ -10,12 +10,11 @@ FMUPointToFieldFunction basics
 """
 
 # %%
-# ``otfmi.FMUPointToFieldFunction`` wraps the FMU into an OpenTURNS
-# `PointToFieldFunction <http://shorturl.at/abtDU>`_ object.
-# This kind of function accepts `Points <http://shorturl.at/mEI46>`_ or
-# `Samples <http://shorturl.at/kmpqN>`_ as inputs, and outputs a
-# `Sample <http://shorturl.at/kmpqN>`_ or a set of
-# `Fields <http://shorturl.at/ptDKW>`_.
+# ``otfmi.FMUPointToFieldFunction`` wraps the FMU into an
+# :py:class:`openturns.PointToFieldFunction` object.
+# This kind of function accepts :py:class:`openturns.Point` or
+# :py:class:`openturns.Sample` as inputs, and outputs a
+# :py:class:`openturns.Sample` or a set of :py:class:`openturns.Field`.
 
 # %%
 # ------------
@@ -43,7 +42,7 @@ print(meshSample)
 #    The FMU output is then interpolated on the user-provided time grid. 
 
 # %%
-# Wrap the FMU in an OpenTURNS' PointToFieldFunction object:
+# Wrap the FMU in an :py:class:`openturns.PointToFieldFunction` object:
 
 function = otfmi.FMUPointToFieldFunction(
     mesh,
@@ -61,8 +60,8 @@ print(type(function))
 #    uncontrolled simulation duration.
 
 # %%
-# Simulate the function on an input Point yields an output Sample, corresponding
-# to the output evolution over time:
+# Simulate the function on an input :py:class:`openturns.Point` yields an output
+# :py:class:`openturns.Sample`, corresponding to the output evolution over time:
 
 inputPoint = ot.Point([0.007])
 outputSample = function(inputPoint)
@@ -74,8 +73,8 @@ plt.plot(meshSample, outputSample)
 plt.show()
 
 # %%
-# Simulate the function on a input Sample yields a set of Fields,
-# called `ProcessSample <http://shorturl.at/auCM6>`_:
+# Simulate the function on a input :py:class:`openturns.Sample` yields a set of
+# fields called :py:class:`openturns.ProcessSample`:
 
 inputSample = ot.Sample(
     [[0.007],

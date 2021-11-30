@@ -7,11 +7,9 @@ over time** (*static* versus *dynamic* analyses).
 Static analysis
 ---------------
 
-The class **FMUFunction** wraps the FMU in an OpenTURNS
-`Function <http://shorturl.at/cAGH1>`__. Its output corresponds to the
-FMU’s output at its last simulation time. When the FMU is static
-(i.e. its output is time-independent), the value of the last simulation
-time is indifferent.
+
+The class **FMUFunction** wraps the FMU in an :py:class:`openturns.Function`. Its output corresponds to the
+FMU’s output at its last simulation time. When the FMU is static (i.e. its output is time-independent), the value of the last simulation time is indifferent.
 
 .. currentmodule:: otfmi
 
@@ -21,8 +19,7 @@ time is indifferent.
 
        FMUFunction
 
-Its lower-level counterpart is **OpenTURNSFMUFunction**, closer to
-PyFMI’s methods but not directly usable with OpenTURNS.
+Its lower-level counterpart is **OpenTURNSFMUFunction**, closer to PyFMI’s methods but not directly usable with OpenTURNS.
 
 .. autosummary::
    :toctree: _generated/
@@ -33,10 +30,7 @@ PyFMI’s methods but not directly usable with OpenTURNS.
 Dynamic analysis
 ----------------
 
-The class **FMUPointToFieldFunction** wraps the FMU in an OpenTURNS
-`PointToFieldFunction <http://shorturl.at/aduBM>`__. Its output is a
-`Field <http://shorturl.at/ptDKW>`__ gathering the outputs as function
-of time.
+The class **FMUPointToFieldFunction** wraps the FMU in an :py:class:`openturns.PointToFieldFunction`. Its output is a :py:class:`openturns.Field` gathering the outputs as function of time.
 
 .. autosummary::
    :toctree: _generated/
@@ -44,8 +38,7 @@ of time.
 
    FMUPointToFieldFunction
 
-Its lower-level counterpart is **OpenTURNSFMUPointToFieldFunction**,
-closer to PyFMI’s methods but not directly usable with OpenTURNS.
+Its lower-level counterpart is **OpenTURNSFMUPointToFieldFunction**, closer to PyFMI’s methods but not directly usable with OpenTURNS.
 
 .. autosummary::
    :toctree: _generated/
@@ -56,8 +49,7 @@ closer to PyFMI’s methods but not directly usable with OpenTURNS.
 Common low-level functions
 --------------------------
 
-The submodule **otfmi.fmi** gathers a set of useful functions, employed
-by the (higher-level) classes mentionned above.
+The submodule **otfmi.fmi** gathers a set of useful functions, employed by the (higher-level) classes mentionned above.
 
 .. autosummary::
    :toctree: _generated/fmi/
@@ -76,8 +68,7 @@ by the (higher-level) classes mentionned above.
 From OpenTURNS to FMU
 ---------------------
 
-Otfmi can also embed an OpenTURNS function in a Modelica model and/or
-FMU.
+Otfmi can also embed an OpenTURNS function in a Modelica model and/or FMU.
 
 .. autosummary::
    :toctree: _generated/
