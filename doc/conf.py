@@ -20,7 +20,6 @@ extensions = [
     'sphinx.ext.intersphinx',
     'sphinx.ext.autosummary',
     'numpydoc',
-    'sphinx.ext.mathjax',
     'sphinx_gallery.gen_gallery',
 ]
 
