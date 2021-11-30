@@ -8,6 +8,7 @@ import numpy as np
 from distutils.version import LooseVersion
 import os
 import tempfile
+import warnings
 
 #§
 def load_fmu(path_fmu, kind=None, **kwargs):
@@ -81,8 +82,8 @@ def simulate(model, initialization_script=None, initialization_parameters=None, 
 def parse_kwargs_simulate(value_input=None, name_input=None,
                           name_output=None,
                           model=None, **kwargs):
-    """Parse simulation key-word arguments and arrange for feeding the
-    simulate method of pyfmi's model objects.
+    """Parse simulation keyword arguments and feed the
+    simulate method of pyfmi's object.
 
     Parameters
     ----------
@@ -267,7 +268,9 @@ def parse_initialization_script(path_script):
             try:
                 name, value = parse_initialization_line(line)
             except ValueError:
-                pass
+                warnings.warn(
+                    "Following line could not be parsed:\n {}".format(line),
+                    SyntaxWarning)
             else:
                 list_name.append(name)
                 list_value.append(value)
@@ -332,7 +335,11 @@ def get_name_variable(model, **kwargs):
     return list(model.get_model_variables(**kwargs).keys())
 
 def get_causality(model, names=None):
-    """Get the causality of the variables.
+    """Get the causality of the variables (input, output, or other).
+
+    If the variable causality is "input" or "parameter", its value can be
+    modified using otfmi.fmi.set_dict_value. Setting the value of a variable
+    with other causality is not possible (nonphysical).
 
     Parameters
     ----------
@@ -362,7 +369,11 @@ def get_causality(model, names=None):
 
 def get_causality_str(model, name):
     """
-    Get the causality of a variable.
+    Get the causality of a variable (input, output, or other).
+
+    If the variable causality is "input" or "parameter", its value can be
+    modified using otfmi.fmi.set_dict_value. Setting the value of a variable
+    with other causality is not possible (nonphysical).
 
     Parameters
     ----------
@@ -385,7 +396,8 @@ def get_causality_str(model, name):
 
 
 def get_variability(model):
-    """Get the variability of the variables.
+    """Get the variability of the variables (constant, discrete, continuous,
+    or other).
 
     Parameters
     ----------
