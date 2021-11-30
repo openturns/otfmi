@@ -1,18 +1,15 @@
 *.pyc
 *~
+*.mat
+*.mos
+*_log.txt
 
 doc/_generated/
+doc/auto_*
 otfmi.egg-info/
 build/
 dist/
 
-otfmi/example/*.txt
-
-otfmi/example/file/initialization_script/bil100_combined.mos
-otfmi/example/file/initialization_script/bil100_minimal.mos
-otfmi/example/file/initialization_script/debug.mos
-otfmi/example/file/initialization_script/debug_deviation.mos
 otfmi/example/status
 otfmi/example/success
-test/deviationpoutre_log.txt
 tmp.org

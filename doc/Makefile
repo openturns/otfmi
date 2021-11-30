@@ -5,7 +5,7 @@
 SPHINXOPTS    =
 SPHINXBUILD   = sphinx-build
 PAPER         =
-BUILDDIR      = ../build/
+BUILDDIR      = ../build
 PDFBUILDDIR   = /tmp
 PDF           = $(BUILDDIR)
 

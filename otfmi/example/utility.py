@@ -22,8 +22,7 @@ def get_path_fmu(name):
 
     Parameters
     ----------
-    name : String, one of "deviation", "bil100" and
-    "bil100_initialization_script
+    name : String, one of "deviation", "epid"
 
     """
 
