@@ -1,9 +1,6 @@
-recommonmark
 sphinxcontrib-bibtex
-sphinx_markdown_tables
 renku-sphinx-theme
 sphinx-gallery
 sphinxemoji
 numpydoc
-myst-parser
 matplotlib
