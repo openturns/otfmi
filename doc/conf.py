@@ -75,7 +75,7 @@ except ImportError:
 templates_path = ['_templates']
 
 # The suffix(es) of source filenames.
-source_suffix = ['.rst', '.md']
+source_suffix = ['.rst']
 
 # The master toctree document.
 master_doc = 'index'
@@ -115,8 +115,8 @@ html_theme = 'renku'
 # }
 
 html_theme_options = {
-     # 'logo': 'LogoPhiHaut.png',
-     # 'logo_name': 'Otfmi',
+     'logo': '_static/LogoPhiHaut.png',
+     'logo_name': 'Otfmi',
      'prev_next_buttons_location': None
 #     # 'description': 'Description of the module',
 #     #'github_repo': 'otfmi',

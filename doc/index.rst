@@ -14,7 +14,7 @@ The core features of Otfmi are:
      :align: left
      :scale: 5%
 
-| Otfmi is notably employed as backend for `Persalys <https://persalys.fr/?la=en>`__ (`OpenTURNS <http://openturns.github.io/openturns/master/contents.html>`__ GUI). 
+| Otfmi is notably employed as backend for `Persalys <https://persalys.fr/?la=en>`__ (OpenTURNS GUI). 
 | The software is free and can be downloaded `here <https://persalys.fr/obtenir.php?la=en">`__.
 
 .. container:: clearer
