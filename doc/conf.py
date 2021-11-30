@@ -22,7 +22,6 @@ extensions = [
     'numpydoc',
     'sphinx.ext.mathjax',
     'sphinx_gallery.gen_gallery',
-    'sphinxemoji.sphinxemoji',
 ]
 
 sphinx_gallery_conf = {

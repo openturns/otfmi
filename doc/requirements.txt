@@ -1,6 +1,5 @@
 sphinxcontrib-bibtex
 renku-sphinx-theme
 sphinx-gallery
-sphinxemoji
 numpydoc
 matplotlib
