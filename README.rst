@@ -31,15 +31,10 @@ Once Conda is available, use the following commands to install OTFMI::
     conda install -y otfmi 
 
 
+Documentation
+=============
 
-References
-==========
-
-See the “User documentation” [USERDOC]_ for more usage instruction.
-
-See the “Project documentation” [PROJECTDOC]_ for information about the module architecture.
-
-Example scripts are given in the 'example' folder in the source tree.
+A complete documentation, including onboarding examples and concrete applications, is available `here <http://openturns.github.io/otfmi/master/>`_.
 
 Example FMU files are provided at [FMUDEMOS]_.
 
