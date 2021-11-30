@@ -79,12 +79,12 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'otfmi'
-copyright = u'2017 EDF'
+copyright = u'2017-2021 EDF-Phimeca'
 author = u'Sylvain Girard'
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
-exclude_patterns = ["_build"]
+exclude_patterns = []
 
 
 # If true, the current module name will be prepended to all description
