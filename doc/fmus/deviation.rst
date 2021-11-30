@@ -16,13 +16,14 @@ We consider a cantilever beam defined by its Young’s modulus ``E``, its length
 
 The mechanical equation ruling the deviation writes:
 
-.. code:: {math}
+.. math::
 
    Y = \frac{FL^3}{3EI}
 
 This model is implemented in Modelica language:
 
 .. code::
+
    model deviation
      output Real y;
      input Real E (start=3.0e7);

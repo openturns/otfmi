@@ -29,6 +29,7 @@ time writes:
 This model is implemented in Modelica language. The default simulation time is 50 units of time (days for instance).
 
 .. code::
+
    model epid
 
    parameter Real total_pop = 700;

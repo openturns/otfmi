@@ -2,7 +2,7 @@
 # @Author: Claire-Eleuthèriane Gerrer
 # @Date:   2021-10-29 09:28:13
 # @Last Modified by:   Claire-Eleuthèriane Gerrer
-# @Last Modified time: 2021-11-22 09:05:06
+# @Last Modified time: 2021-11-30 15:18:46
 
 """
 FMUPointToFieldFunction basics
@@ -21,7 +21,7 @@ FMUPointToFieldFunction basics
 # ------------
 
 # %%
-# | First, retrieve the path to *epid.fmu*.
+# First, retrieve the path to *epid.fmu*.
 # Recall the deviation model is dynamic, i.e. its output evolves over
 # time.
 
@@ -39,8 +39,8 @@ print(meshSample)
 
 # %%
 # .. note::
-# The FMU solver uses its own time grid for simulation. 
-# The FMU output is then interpolated on the user-provided time grid. 
+#    The FMU solver uses its own time grid for simulation. 
+#    The FMU output is then interpolated on the user-provided time grid. 
 
 # %%
 # Wrap the FMU in an OpenTURNS' PointToFieldFunction object:

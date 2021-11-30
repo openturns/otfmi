@@ -2,7 +2,7 @@
 # @Author: Claire-Eleuthèriane Gerrer
 # @Date:   2021-10-29 09:28:13
 # @Last Modified by:   Claire-Eleuthèriane Gerrer
-# @Last Modified time: 2021-11-22 14:50:22
+# @Last Modified time: 2021-11-30 15:16:16
 
 """
 Metamodel a FMU time-dependent output
@@ -241,4 +241,5 @@ print(Q2)
 # - `sensitivity analysis <http://shorturl.at/dDK24>`_,
 # - `uncertainty propagation <http://shorturl.at/quFIP>`_,
 # - `estimate a failure probability <http://shorturl.at/emLQY>`_,
+# 
 # etc.

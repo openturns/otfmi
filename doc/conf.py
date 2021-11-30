@@ -113,8 +113,6 @@ html_theme = 'renku'
 # }
 
 html_theme_options = {
-     'logo': '_static/LogoPhiHaut.png',
-     'logo_name': 'Otfmi',
      'prev_next_buttons_location': None
 #     # 'description': 'Description of the module',
 #     #'github_repo': 'otfmi',
