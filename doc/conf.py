@@ -5,6 +5,7 @@ import os
 import subprocess
 from distutils.version import LooseVersion
 import sphinx
+import sphinx_gallery
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
@@ -19,7 +20,28 @@ extensions = [
     'sphinx.ext.intersphinx',
     'sphinx.ext.autosummary',
     'numpydoc',
+    'myst_parser',
+    'sphinx.ext.mathjax',
+    'sphinx_gallery.gen_gallery',
+    'sphinxemoji.sphinxemoji',
 ]
+
+sphinx_gallery_conf = {
+
+     'examples_dirs': ['application', 'example/static', 'example/dynamic',
+     'example/low_level', 'example/ot_to_fmu'], # # path to
+     # example scripts
+     'gallery_dirs': ['auto_application', 'auto_example/static',
+     'auto_example/dynamic', 'auto_example/low_level',
+     'auto_example/ot_to_fmu'],
+     # path to where to save gallery gen. output
+
+     'filename_pattern': '/plot_',
+     'show_signature': False
+     }
+
+
+
 
 if LooseVersion(sphinx.__version__) >= '1.8':
     autodoc_default_options = {'members': None, 'inherited-members': None}
@@ -53,19 +75,19 @@ except ImportError:
 templates_path = ['_templates']
 
 # The suffix(es) of source filenames.
-source_suffix = '.rst'
+source_suffix = ['.rst', '.md']
 
 # The master toctree document.
 master_doc = 'index'
 
 # General information about the project.
 project = u'otfmi'
-copyright = u'2017-2021 EDF-Phimeca'
+copyright = u'2017 EDF'
 author = u'Sylvain Girard'
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
-exclude_patterns = []
+exclude_patterns = ["_build"]
 
 
 # If true, the current module name will be prepended to all description
@@ -81,11 +103,7 @@ todo_include_todos = True
 
 # -- Options for HTML output ----------------------------------------------
 
-# import alabaster
-# html_theme_path = [alabaster.get_path()]
-# html_theme = 'alabaster'
-
-html_theme = 'nature'
+html_theme = 'renku'
 # html_sidebars = {
 #     '**': [
 #         # 'about.html',
@@ -96,14 +114,17 @@ html_theme = 'nature'
 #     ]
 # }
 
-# html_theme_options = {
-#     # 'logo': 'LogoPhiHaut.png',
-#     #'logo_name': 'otfmi',
+html_theme_options = {
+     # 'logo': 'LogoPhiHaut.png',
+     # 'logo_name': 'Otfmi',
+     'prev_next_buttons_location': None
 #     # 'description': 'Description of the module',
-#     # 'github_repo': 'otfmi',
+#     #'github_repo': 'otfmi',
 #     # 'github_banner': True,
 #     # 'show_related': True
-# }
+}
+
+html_show_sourcelink = False
 
 # The name of an image file (within the static path) to use as favicon of the
 # docs.  This file should be a Windows icon file (.ico) being 16x16 or 32x32

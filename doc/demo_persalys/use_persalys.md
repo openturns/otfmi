@@ -1,0 +1,109 @@
+# Analyse the sensitivities with Persalys
+
+<img src="../_static/logo_persalys.png" align="left" width="60px"/>
+<a href="https://persalys.fr/?la=en"> Persalys</a> is a graphical user interface to some Otfmi and <a href="http://openturns.github.io/openturns/master/contents.html">OpenTURNS</a> methods.</br>
+The software is free and can be downloaded <a href="https://persalys.fr/obtenir.php?la=en">here</a>.</br>
+
+<br clear="left"/>
+
+A parabolic solar collector concentrates the sun light on a tube via parabolic mirrors. A fluid (generally oil) circulates in this tube and heats up thanks to the reverberated sunlight. 
+
+We model this installation in Modelica using the [ThermoSysPro](https://thermosyspro.com/) component [SolarCollector](https://thermosyspro.gitlab.io/documentation/src/Solar/Collectors/SolarCollector.html). The collector inputs (atmospheric temperature, sun radiation and sun incidence angle) are set to constant values. We collect the heat flow between the collector output and a source of constant temperature symbolizing an infinite oil flow in the tube.
+
+This model is static, i.e. **its output does not depend on time**.
+
+```{eval-rst}
+:download:`Download the Modelica model <../fmus/Solar.mo>`
+```
+
+
+```{eval-rst}
+.. image:: /_static/demo_persalys/SolarCollector.png
+   :scale: 80 %
+   :alt: alternate text
+   :align: center
+```
+
+
+**Which input variable(s) influence the most the heat flow ?**
+
+Sobol' first-order indices quantify the proportion of the output variance explained by an input variable. As Sobol' first-order indices for all input variables sum to 1, they provide a ranking of the input variables. The higher the index is, the more influent the input variable is.
+
+We use Persalys to compute the Sobol' indices for the three input variables : the atmospheric temperature `T_atm.k`, `angle_incidence.k`, `radiation.k`.
+
+-----
+
+The solar collector model is exported under the FMI standard 2.0 (Co-Simulation format) into *Solar.fmu*. We first load the FMU in Persalys v11.0.
+
+```{eval-rst}
+.. image:: /_static/demo_persalys/select_fmu.png
+   :scale: 60 %
+   :alt: alternate text
+   :align: center
+```
+
+To select the FMU in the files tree view, we click on the three dots at the right of the empty line. A new window opens, in which we select the FMU named _Solar.fmu_.
+```{eval-rst}
+.. image:: /_static/demo_persalys/select_fmu_name.png
+   :scale: 60 %
+   :alt: alternate text
+   :align: center
+```
+
+Once the FMU is loaded, all its variables (inputs, outputs, local quantities, etc) are displayed. We select the variables for the sensitivity analysis :
+- `heatFlow`: output variable,
+- `T_atm.k`, `angle_incidence.k`, `radiation.k`: input variables.
+
+```{eval-rst}
+.. image:: /_static/demo_persalys/select_one_input.png
+   :scale: 60 %
+   :alt: alternate text
+   :align: center
+```
+
+Now that the variables are set, Persalys ''tree of possibles'' appears. The methods which can be used are colored in deep blue, whereas the methods with prerequisite steps appear with a forbidden pannel.
+
+We can see that, before performing sensitivity analysis, we first have to set a probabilistic model. In other words, we have to set the probability distribution of the 3 input variables.
+```{eval-rst}
+.. image:: /_static/demo_persalys/tree.png
+   :scale: 60 %
+   :alt: alternate text
+   :align: center
+```
+
+We consider the following laws for the input variables:
+- sun incidence angle: normal law $\mathcal{N}(30, 3)$. It corresponds to a fixed time in the day (with the sun incidence angle varying slightly around its nominal value).
+- sun radiation: truncated normal law $\mathcal{N}(70, 50)$. It corresponds to a standard sunlight, varying depending on the weather.
+- atmospheric temperature: normal law $\mathcal{N}(300, 10)$. It corresponds to variations depending on the season.
+
+```{eval-rst}
+.. image:: /_static/demo_persalys/probabilistic_model.png
+   :scale: 60 %
+   :alt: alternate text
+   :align: center
+```
+
+We select the Sobol' indices as method for sensitivity analysis.
+```{eval-rst}
+.. image:: /_static/demo_persalys/start_sobol.png
+   :scale: 60 %
+   :alt: alternate text
+   :align: center
+```
+
+Sobol' indices are displayed as a graph. The sun radiation is the variable with the strongest influence on the output.
+```{eval-rst}
+.. image:: /_static/demo_persalys/sobol_result.png
+   :scale: 60 %
+   :alt: alternate text
+   :align: center
+```
+
+Keep in mind that the result relies on 2 assumptions:
+- the input variables are independent,
+- the input variables follow the probability distributions set here above.
+
+
+-------
+
+For further exploration of the solar collector model with Persalys, see [Analysis and reduction of models using Persalys](https://www.researchgate.net/publication/354810878_Analysis_and_reduction_of_models_using_Persalys). In this paper, metamodeling (aka model reduction) is performed on the solar collector. The OpenTURNS metamodel is then inserted in a solar power plant model using [FMUExporter](/auto_example/ot_to_fmu/plot_model_exporter).

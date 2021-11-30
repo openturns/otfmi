@@ -1,7 +1,14 @@
 *.pyc
 *~
+*.mat
 
 doc/_generated/
+doc/auto_*
+doc/*.txt
+doc/*.mos
+doc/example/*.mos
+doc/use_case/*.mos
+doc/*/*.mat
 otfmi.egg-info/
 build/
 dist/
