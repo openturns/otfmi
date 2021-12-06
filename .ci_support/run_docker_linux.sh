@@ -3,7 +3,6 @@
 set -xe
 
 export SOURCE_DATE_EPOCH=1609455600
-sudo pacman -Sy python-pip --noconfirm
 pip install -r /io/doc/requirements.txt
 
 cp -r /io/* /tmp
