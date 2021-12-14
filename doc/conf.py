@@ -112,11 +112,8 @@ html_theme = 'renku'
 # }
 
 html_theme_options = {
-     'prev_next_buttons_location': None
-#     # 'description': 'Description of the module',
-#     #'github_repo': 'otfmi',
-#     # 'github_banner': True,
-#     # 'show_related': True
+    'prev_next_buttons_location': None,
+    'github_user': 'openturns'
 }
 
 html_show_sourcelink = False
