@@ -1,9 +1,9 @@
 Otfmi documentation
 ===================
 
-Otfmi facilitates the probabilistic study of functional mockup units (FMUs) by interfacing `OpenTURNS <http://openturns.github.io/openturns/master/contents.html>`__ with `PyFMI <https://pypi.org/project/PyFMI/>`__. Using Otfmi, modelers can perform advanced probabilistic analysis on their FMU.
+`Otfmi <https://github.com/openturns/otfmi>`__ facilitates the probabilistic study of functional mockup units (FMUs) by interfacing `OpenTURNS <http://openturns.github.io/openturns/master/contents.html>`__ with `PyFMI <https://pypi.org/project/PyFMI/>`__. Using Otfmi, modelers can perform advanced probabilistic analysis on their FMU.
 
-The core features of Otfmi are:
+The core features of `Otfmi <https://github.com/openturns/otfmi>`__ are:
 
 * load an FMU in an OpenTURNS object
 * set some initial values to ease initialisation
@@ -14,7 +14,7 @@ The core features of Otfmi are:
      :align: left
      :scale: 5%
 
-| Otfmi is notably employed as backend for `Persalys <https://persalys.fr/?la=en>`__ (OpenTURNS GUI). 
+| `Otfmi <https://github.com/openturns/otfmi>`__ is notably employed as backend for `Persalys <https://persalys.fr/?la=en>`__ (OpenTURNS GUI). 
 | The software is free and can be downloaded `here <https://persalys.fr/obtenir.php?la=en">`__.
 
 .. container:: clearer
