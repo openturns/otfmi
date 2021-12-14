@@ -48,9 +48,6 @@ setup(
         'Intended Audience :: Science/Research',
         'Topic :: Scientific/Engineering :: Mathematics',
         'License :: OSI Approved :: GNU Lesser General Public License v3 (LGPLv3)',
-        'Programming Language :: Python :: 2',
-        'Programming Language :: Python :: 2.6',
-        'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
     ],
 
@@ -66,7 +63,7 @@ setup(
     # requirements files see:
     # https://packaging.python.org/en/latest/requirements.html
     install_requires=['numpy',
-                      'pyfmi',
+                      'pyfmi>=2.6',
                       'dill'],
 
     # List additional groups of dependencies here (e.g. development
