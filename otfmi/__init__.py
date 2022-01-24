@@ -1,4 +1,4 @@
-__version__ = '0.14'
+__version__ = '0.15'
 
 from .otfmi import FMUFunction, OpenTURNSFMUFunction, FMUPointToFieldFunction, OpenTURNSFMUPointToFieldFunction
 from .function_exporter import FunctionExporter
