@@ -1,5 +1,7 @@
-wip - release 0.15
+2022-01-24 - release 0.15
 - Add FMUPointToFieldFunction
+- FMUFunction: Add final_time
+- new sphinx theme
 
 2021-09-15 - release 0.14
 - fix memory leak
