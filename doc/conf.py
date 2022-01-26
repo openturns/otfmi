@@ -79,7 +79,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'otfmi'
-copyright = u'2017-2021 EDF-Phimeca'
+copyright = u'2017-2022 EDF-Phimeca'
 author = u'Sylvain Girard'
 
 # List of patterns, relative to source directory, that match files and
