@@ -7,7 +7,7 @@ The epidemiological model describes epidemics which propagate through human cont
 * the Infected (who are currently sick),
 * the Removed (who are either dead or immune).
 
-The disease can only be propagated from Infected to Susceptibles. This happens at a rate called ``infection rate``(:math:`\beta`). An Infected becomes Removed after an infection duration (:math:`\gamma`) corresponding to the inverse of the ``healing_rate``.
+The disease can only be propagated from Infected to Susceptibles. This happens at a rate called ``infection rate`` (:math:`\beta`). An Infected becomes Removed after an infection duration (:math:`\gamma`) corresponding to the inverse of the ``healing_rate``.
 
 .. image:: ../_static/epid.png
    :height: 300px
