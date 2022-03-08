@@ -68,14 +68,11 @@ We can see that, before performing sensitivity analysis, we first have to set a 
    :alt: alternate text
    :align: center
 
-We consider the following laws for the input variables: - sun incidence
-angle: normal law :math:`\mathcal{N}(30, 3)`. It corresponds to a fixed
-time in the day (with the sun incidence angle varying slightly around
-its nominal value). - sun radiation: truncated normal law
-:math:`\mathcal{N}(70, 50)`. It corresponds to a standard sunlight,
-varying depending on the weather. - atmospheric temperature: normal law
-:math:`\mathcal{N}(300, 10)`. It corresponds to variations depending on
-the season.
+We consider the following laws for the input variables:
+
+* sun incidence angle: normal law :math:`\mathcal{N}(30, 3)`. It corresponds to a fixed time in the day (with the sun incidence angle varying slightly around its nominal value).
+* sun radiation: truncated normal law :math:`\mathcal{N}(70, 50)`. It corresponds to a standard sunlight, varying depending on the weather.
+* atmospheric temperature: normal law :math:`\mathcal{N}(300, 10)`. It corresponds to variations depending on the season.
 
 .. image:: /_static/demo_persalys/probabilistic_model.png
    :scale: 60 %
