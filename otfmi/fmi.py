@@ -325,10 +325,10 @@ def get_name_variable(model, **kwargs):
         Variable names
     """
 
-    try:
-        model.get_model_variables
-    except AttributeError:
-        model = load_fmu(model)
+    if not hasattr(model, 'get_model_variables'):
+        assert isinstance(model, str), "model should be an FMU model or a str"
+        path_fmu = model
+        model = load_fmu(path_fmu)
 
     return list(model.get_model_variables(**kwargs).keys())
 
