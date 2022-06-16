@@ -1,9 +1,3 @@
-# -*- coding: utf-8 -*-
-# @Author: Claire-Eleuthèriane Gerrer
-# @Date:   2021-10-25 09:17:56
-# @Last Modified by:   Claire-Eleuthèriane Gerrer
-# @Last Modified time: 2021-10-26 09:43:00
-
 """
 Explore the FMU
 ===============

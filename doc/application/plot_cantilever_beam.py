@@ -1,9 +1,3 @@
-# -*- coding: utf-8 -*-
-# @Author: Claire-Eleuthèriane Gerrer
-# @Date:   2021-07-08 14:08:28
-# @Last Modified by:   Claire-Eleuthèriane Gerrer
-# @Last Modified time: 2022-06-16 11:05:56
-
 """
 Estimate the probability of a threshold excedance
 =================================================
