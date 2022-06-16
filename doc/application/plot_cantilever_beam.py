@@ -2,7 +2,7 @@
 # @Author: Claire-Eleuthèriane Gerrer
 # @Date:   2021-07-08 14:08:28
 # @Last Modified by:   Claire-Eleuthèriane Gerrer
-# @Last Modified time: 2021-11-19 12:42:03
+# @Last Modified time: 2022-06-16 11:05:56
 
 """
 Estimate the probability of a threshold excedance
@@ -31,26 +31,13 @@ Estimate the probability of a threshold excedance
 # threshold ?**
 #
 #
-# The cantilever beam model, written in Modelica (see above), is exported under
-# the FMI standard 2.0 (Co-Simulation format) into *deviation.fmu*.
-# The FMU is available for :
-#
-# :download:`Linux 64 bits <../../otfmi/example/file/fmu/linux64/deviation.fmu>` (compiled with OpenModelica)
-#
-# :download:`Windows 64 bits <../../otfmi/example/file/fmu/win64/deviation.fmu>` (compiled with Dymola)
-#
-# -------
-# 
-# ⚠️ Following code requires the FMU to be stored in the same folder as
-# the code.
-#
-# --------
-#
 # We load the FMU as a FMUFunction (see the
 # :doc:`tutorial<../_generated/otfmi.FMUFunction>`):
 
 import otfmi
-path_fmu = "deviation.fmu"
+import otfmi.example.utility
+path_fmu = otfmi.example.utility.get_path_fmu("deviation")
+
 model_fmu = otfmi.FMUFunction(
  path_fmu, inputs_fmu=["E", "F", "L", "I"], outputs_fmu="y")
 
