@@ -1,10 +1,3 @@
-# -*- coding: utf-8 -*-
-# @Author: Claire-Eleuthèriane Gerrer
-# @Date:   2021-10-26 09:44:54
-# @Last Modified by:   Claire-Eleuthèriane Gerrer
-# @Last Modified time: 2021-11-30 15:19:19
-
-
 """
 Set FMU simulation parameters
 =============================

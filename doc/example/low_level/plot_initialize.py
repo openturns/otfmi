@@ -1,10 +1,3 @@
-# -*- coding: utf-8 -*-
-# @Author: Claire-Eleuthèriane Gerrer
-# @Date:   2021-10-25 09:54:21
-# @Last Modified by:   Claire-Eleuthèriane Gerrer
-# @Last Modified time: 2021-11-04 11:04:49
-
-
 """
 Initialize an FMU with non-default values
 =========================================
