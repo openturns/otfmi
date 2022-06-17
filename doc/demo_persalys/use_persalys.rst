@@ -20,7 +20,9 @@ The collector inputs (atmospheric temperature, sun radiation and sun incidence a
 
 This model is static, i.e. \ **its output does not depend on time**.
 
-:download:`Download the Modelica model <../fmus/Solar.mo>`
+* :download:`Download the Modelica model <./Solar.mo>`
+* :download:`Download the FMU (Windows 64) <./win64/Solar.fmu>`
+* :download:`Download the FMU (Linux 64) <./linux64/Solar.fmu>`
 
 .. image:: /_static/demo_persalys/SolarCollector.png
    :scale: 80 %
