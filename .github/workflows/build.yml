@@ -49,8 +49,9 @@ jobs:
           miniforge-version: latest
       - name: Build
         run: |
-          choco install openmodelica --version=1.17.0
-          $env:PATH += ";C:\Program Files\OpenModelica1.17.0-64bit\bin"
+          choco install openmodelica --version=1.19.0
+          $env:PATH += ";C:\Program Files\OpenModelica1.19.0-64bit\bin"
+          omc --version
           conda install -y pyfmi openturns pytest
           # conda-forge's scipy>=1.5.3 dlls conflict with openturns: from scipy.sparse.linalg import LinearOperator
           pip install scipy --force-reinstall --no-deps
