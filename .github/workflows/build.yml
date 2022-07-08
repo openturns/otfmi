@@ -49,7 +49,7 @@ jobs:
           miniforge-version: latest
       - name: Build
         run: |
-          choco install openmodelica --version=1.19.0
+          choco install openmodelica --version=1.19.0 --ignore-checksums
           $env:PATH += ";C:\Program Files\OpenModelica1.19.0-64bit\bin"
           omc --version
           conda install -y pyfmi openturns pytest
