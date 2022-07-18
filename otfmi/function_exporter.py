@@ -130,10 +130,8 @@ class FunctionExporter(object):
             c.write('      fprintf(fptr, "import openturns as ot\\nstudy = ot.Study()\\n");\n')
             c.write('      fprintf(fptr, "study.setStorageManager(ot.XMLStorageManager(r\\\"%s\\\"))\\n", xml_path);\n')
             c.write('      fprintf(fptr, "study.load()\\n");\n')
-            if field:
-                c.write('      fprintf(fptr, "function = ot.PointToFieldFunction()\\n");\n')
-            else:
-                c.write('      fprintf(fptr, "function = ot.Function()\\n");\n')
+            function_type = "PointToFieldFunction" if field else "Function"
+            c.write('      fprintf(fptr, "function = ot.' + function_type + '()\\n");\n')
             c.write('      fprintf(fptr, "study.fillObject(\\\"function\\\", function)\\n");\n')
             c.write('      fprintf(fptr, "x = []\\n");\n')
             c.write('      fprintf(fptr, "with open(r\\"'+os.path.join(self.workdir, "point.in").replace("\\", "\\\\")+'\\", \\"r\\") as f:\\n");\n')
@@ -172,16 +170,24 @@ class FunctionExporter(object):
         verbose : bool
             Verbose output (default=False).
         """
+
+        data = '''
+cmake_minimum_required (VERSION 3.2)
+set (CMAKE_BUILD_TYPE "Release" CACHE STRING "build type")
+project (wrapper C)
+if (POLICY CMP0091)
+  cmake_policy (SET CMP0091 NEW)
+endif()
+# openmodelica uses -Bstatic on Linux
+add_library (cwrapper STATIC wrapper.c)
+set_target_properties (cwrapper PROPERTIES POSITION_INDEPENDENT_CODE ON MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+set_target_properties (cwrapper PROPERTIES ARCHIVE_OUTPUT_DIRECTORY_RELEASE ${CMAKE_BINARY_DIR} LIBRARY_OUTPUT_DIRECTORY_RELEASE ${CMAKE_BINARY_DIR} RUNTIME_OUTPUT_DIRECTORY_RELEASE ${CMAKE_BINARY_DIR})
+if (MSVC)
+  target_compile_definitions(cwrapper PRIVATE _CRT_SECURE_NO_WARNINGS)
+endif()
+'''
         with open(os.path.join(self.workdir, 'CMakeLists.txt'), 'w') as cm:
-            cm.write('cmake_minimum_required (VERSION 3.2)\n')
-            cm.write('set (CMAKE_BUILD_TYPE "Release" CACHE STRING "build type")\n')
-            cm.write('project (wrapper C)\n')
-            cm.write('if (POLICY CMP0091)\n  cmake_policy (SET CMP0091 NEW)\nendif()\n')
-            # openmodelica uses -Bstatic on Linux
-            cm.write('add_library (cwrapper STATIC wrapper.c)\n')
-            cm.write('set_target_properties (cwrapper PROPERTIES POSITION_INDEPENDENT_CODE ON MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")\n')
-            cm.write('set_target_properties (cwrapper PROPERTIES ARCHIVE_OUTPUT_DIRECTORY_RELEASE ${CMAKE_BINARY_DIR} LIBRARY_OUTPUT_DIRECTORY_RELEASE ${CMAKE_BINARY_DIR} RUNTIME_OUTPUT_DIRECTORY_RELEASE ${CMAKE_BINARY_DIR})\n')
-            cm.write('if (MSVC)\n  target_compile_definitions(cwrapper PRIVATE _CRT_SECURE_NO_WARNINGS)\nendif()\n')
+            cm.write(data)
         cmake_args=['cmake', '.']
         if sys.platform.startswith('win'):
             cmake_args.insert(1, '-DCMAKE_GENERATOR_PLATFORM=Win32')
@@ -264,7 +270,10 @@ class FunctionExporter(object):
         gui : bool
             If True, define the input/output connectors.
             The model cannot be exported as FMU in command line if gui=True.
+        move : bool
+            Move the model from temporary folder to user folder
         """
+        link_dir = dirName if move else self.workdir
         with open(os.path.join(
                 self.workdir, '{}.mo'.format(className)), 'w') as mo:
             mo.write('model '+ className + '\n\n')
@@ -272,10 +281,7 @@ class FunctionExporter(object):
             mo.write('  input Real['+str(self.function_.getInputDimension())+'] x;\n')
             mo.write('  output Real['+str(self.function_.getOutputDimension())+'] y;\n')
             mo.write('  external "C" c_func('+str(self.function_.getInputDimension())+', x, '+str(self.function_.getOutputDimension())+', y);\n')
-            if move:
-                mo.write('  annotation(Library="cwrapper",                LibraryDirectory="' + path2uri(dirName)+'");\n')
-            else:
-                mo.write('  annotation(Library="cwrapper",                   LibraryDirectory="' + path2uri(self.workdir)+'");\n')
+            mo.write('  annotation(Library="cwrapper", LibraryDirectory="' + path2uri(link_dir)+'");\n')
             mo.write('end ExternalFunc;\n\n')
 
             if gui:
