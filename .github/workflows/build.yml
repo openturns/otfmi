@@ -8,7 +8,7 @@ jobs:
       - name: Build
         run: |
           docker pull openturns/archlinux-module
-          docker run -e MAKEFLAGS='-j2' -v `pwd`:/io openturns/archlinux-module /io/.ci_support/run_docker_linux.sh `id -u` `id -g`
+          docker run --rm -e MAKEFLAGS='-j2' -v `pwd`:/io openturns/archlinux-module /io/.ci_support/run_docker_linux.sh `id -u` `id -g`
       - name: Upload
         if: ${{ github.ref == 'refs/heads/master' }}
         run: |
@@ -34,7 +34,7 @@ jobs:
       - name: Build
         shell: bash -l {0}
         run: |
-          conda install -y pyfmi openturns pytest omcompiler
+          conda install -y pyfmi openturns pytest jinja2 omcompiler
           python setup.py install
           mo2fmu -h
           mo2fmu ./otfmi/example/file/deviation.mo ./otfmi/example/file/fmu/linux64/deviation.fmu
@@ -52,7 +52,7 @@ jobs:
           choco install openmodelica --version=1.19.0 --ignore-checksums
           $env:PATH += ";C:\Program Files\OpenModelica1.19.0-64bit\bin"
           omc --version
-          conda install -y pyfmi openturns pytest
+          conda install -y pyfmi openturns pytest jinja2
           # conda-forge's scipy>=1.5.3 dlls conflict with openturns: from scipy.sparse.linalg import LinearOperator
           pip install scipy --force-reinstall --no-deps
           python setup.py install
