@@ -1,3 +1,4 @@
+from .mo2fmu import mo2fmu
 import tempfile
 import openturns as ot
 import os
@@ -367,12 +368,10 @@ class FunctionExporter(object):
             os.makedirs(self.workdir)
         self.export_model(model_path, gui=False, verbose=verbose, move=False)
 
-        with open(os.path.join(self.workdir, 'mo2fmu.mos'), 'w') as mos:
-            mos.write(
-                'loadFile("{}.mo"); getErrorString();\n'.format(className))
-            mos.write('translateModelFMU(' + className + ', fmuType="' + fmuType + '"); getErrorString()\n')
-        subprocess.run(['omc', 'mo2fmu.mos'], capture_output=not verbose, cwd=self.workdir, check=True)
-        
+        path_mo = os.path.join(self.workdir, className + '.mo')
+        path_fmu = os.path.join(self.workdir, className + extension)
+        mo2fmu(path_mo, path_fmu=path_fmu, fmuType=fmuType, verbose=verbose)
+
         shutil.move(
             os.path.join(self.workdir, className + extension),
             os.path.join(dirName, className + extension))
