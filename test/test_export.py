@@ -7,19 +7,20 @@ import os
 import tempfile
 import sys
 import math as m
+import psutil
 import shutil
 import subprocess
+import time
 
 class TestExport(unittest.TestCase):
 
-    def test_export_fmu(self):
+    def test_export_fmu_vector(self):
         # export fmu
         f = ot.SymbolicFunction(['E', 'F', 'L', 'I'], ['(F*L^3)/(3.0*E*I)'])
         start = [3e7, 3e4, 250.0, 400.0]
 
         if sys.platform.startswith('win'):
             return
-
 
         temp_path = tempfile.mkdtemp()
         path_fmu = os.path.join(temp_path, 'Deviation.fmu')
@@ -37,31 +38,51 @@ class TestExport(unittest.TestCase):
         print(y)
         assert abs(y[0] - 13.1598) < 1e-4, "wrong value"
 
-        if 0:
-            # field function
-            mesh = ot.RegularGrid(0, 1, 100)
-            #g = ot.SymbolicFunction(['t', 'a', 'b'], ['a*sin(t)+b'])
-            #f = ot.VertexValuePointToFieldFunction(g, mesh)
-            def g(X):
-                a, b = X
-                Y = [[a*m.sin(t)+b] for t in range(100)]
-                return Y
-            f = ot.PythonPointToFieldFunction(2, mesh, 1, g)
-            start = [4.0, 5.0]
+        # bench speed
+        t0 = time.time()
+        process = psutil.Process(os.getpid())
+        size = 10
+        mem0 = process.memory_info().rss / 1000000
+        for i in range(size):
+            x = [3.1e7, 3.1e4+i, 255.0, 420.0]
+            y = model_fmu(x)
+            print(i, x, y, process.memory_info().rss / 1000000, flush=True)
+        t1 = time.time()
+        mem1 = process.memory_info().rss / 1000000
+        print("Speed=", size / (t1 - t0), "evals/s")
+        print("Memory=", mem1-mem0)
 
-            # export
-            fe = otfmi.FunctionExporter(f, start)
-            fe.export_fmu(path_fmu, fmuType='cs', verbose=True)
-            assert os.path.isfile(path_fmu), "fmu not created"
+        shutil.rmtree(temp_path)
 
-            # import
-            import pyfmi
-            model = pyfmi.load_fmu(path_fmu)
-            model.initialize()
-            res = model.simulate(options={'silent_mode': True})
-            print(model.get_model_variables().keys())
-            print(res['y0'])
 
+    def test_export_fmu_field(self):
+        def g(X):
+            a, b = X
+            Y = [[a*m.sin(t)+b] for t in range(100)]
+            return Y
+        mesh = ot.RegularGrid(0, 1, 100)
+        f = ot.PythonPointToFieldFunction(2, mesh, 1, g)
+        start = [4.0, 5.0]
+
+        if sys.platform.startswith('win'):
+            return
+
+        temp_path = tempfile.mkdtemp()
+        path_fmu = os.path.join(temp_path, 'Sin.fmu')
+
+        # export
+        fe = otfmi.FunctionExporter(f, start)
+        fe.export_fmu(path_fmu, fmuType='cs', verbose=True)
+        assert os.path.isfile(path_fmu), "fmu not created"
+
+        # import
+        import pyfmi
+        model = pyfmi.load_fmu(path_fmu)
+        model.initialize()
+        model.reset()
+        res = model.simulate(options={'silent_mode': True})
+        print(model.get_model_variables().keys())
+        print(res['y0'])
         shutil.rmtree(temp_path)
 
     def test_export_model(self):

@@ -17,3 +17,14 @@ set_target_properties (cwrapper2 PROPERTIES ARCHIVE_OUTPUT_DIRECTORY_RELEASE ${C
 if (MSVC)
   target_compile_definitions(cwrapper2 PRIVATE _CRT_SECURE_NO_WARNINGS)
 endif()
+
+
+find_package (PythonLibs 3.2)
+add_library (cwrapper3 SHARED wrapper3.c)
+target_include_directories(cwrapper3 PRIVATE ${PYTHON_INCLUDE_DIRS})
+target_link_libraries(cwrapper3 PRIVATE ${PYTHON_LIBRARIES})
+set_target_properties (cwrapper3 PROPERTIES POSITION_INDEPENDENT_CODE ON MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+set_target_properties (cwrapper3 PROPERTIES ARCHIVE_OUTPUT_DIRECTORY_RELEASE ${CMAKE_BINARY_DIR} LIBRARY_OUTPUT_DIRECTORY_RELEASE ${CMAKE_BINARY_DIR} RUNTIME_OUTPUT_DIRECTORY_RELEASE ${CMAKE_BINARY_DIR})
+if (MSVC)
+  target_compile_definitions(cwrapper3 PRIVATE _CRT_SECURE_NO_WARNINGS)
+endif()
