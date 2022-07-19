@@ -1,3 +1,5 @@
+from .mo2fmu import mo2fmu
+import jinja2
 import tempfile
 import openturns as ot
 import os
@@ -81,84 +83,116 @@ class FunctionExporter(object):
         field = hasattr(self.function_, 'getOutputMesh')
         flat_size = self.function_.getOutputDimension()
         if field:
-            n_pt = self.function_.getOutputMesh().getVerticesNumber()
-            flat_size *= n_pt
+            flat_size *= self.function_.getOutputMesh().getVerticesNumber()
 
+        tdata = '''
+#define _XOPEN_SOURCE 500
+#define  _POSIX_C_SOURCE 200809L
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/stat.h>
+#ifdef _WIN32
+#include <io.h>
+#include <direct.h>
+#define R_OK 4
+#define access _access
+#define mkdir(dir, mod) _mkdir(dir)
+#else
+#include <unistd.h>
+#endif
+unsigned char xml_data[] = { {{ xml_data_bin }} };
+void c_func(int nin, double x[], int nout, double y[]) {
+  FILE *fptr;
+  int rc;
+  int i;
+  static int count = 0;
+  static int hits = 0;
+  static int findex = 0;
+  int same_x;
+  static double prev_x[{{ input_dim }}];
+  static double prev_y[{{ flat_size }}];
+  same_x = count;
+  for (i = 0; i < nin; ++ i) {
+    if(x[i] != prev_x[i]) same_x = 0;
+  }
+  if (!same_x) {
+    /* reset the node index */
+    findex = 0;
+    /*printf("count=%d hits=%d\\n", count, hits);*/
+    char workdir[] = "{{ workdir }}";
+    if (access(workdir, R_OK) == -1)
+      mkdir(workdir, 0733);
+    fptr = fopen("{{ path_point_in }}", "w");
+    for (i = 0; i < nin; ++ i)
+      fprintf(fptr, "%lf\\n", x[i]);
+    fclose(fptr);
+    char xml_path[] = "{{ path_function_xml }}";
+    if (access(xml_path, R_OK) == -1) {
+      fptr = fopen(xml_path, "wb");
+      fwrite (xml_data, sizeof(char), sizeof(xml_data), fptr);
+      fclose(fptr);
+    }
+    char py_path[] = "{{ path_wrapper_py }}";
+    if (access(py_path, R_OK) == -1) {
+      fptr = fopen(py_path, "w");
+      fprintf(fptr, "import openturns as ot\\n");
+      fprintf(fptr, "study = ot.Study()\\n");
+      fprintf(fptr, "study.setStorageManager(ot.XMLStorageManager(r\\\"%s\\\"))\\n", xml_path);
+      fprintf(fptr, "study.load()\\n");
+      fprintf(fptr, "function = ot.{{ function_type }}()\\n");
+      fprintf(fptr, "study.fillObject(\\\"function\\\", function)\\n");
+      fprintf(fptr, "x = []\\n");
+      fprintf(fptr, "with open(r\\"{{ path_point_in }}\\", \\"r\\") as f:\\n");
+      fprintf(fptr, "    for line in f.readlines():\\n");
+      fprintf(fptr, "        x.append(float(line))\\n");
+      fprintf(fptr, "y = function(x)\\n");
+{% if field %}
+      fprintf(fptr, "y = y.asPoint()\\n");
+{% endif %}
+      fprintf(fptr, "with open(r\\"{{ path_point_out }}\\", \\"w\\") as f:\\n");
+      fprintf(fptr, "    for v in y:\\n");
+      fprintf(fptr, "        f.write(str(v)+\\"\\\\n\\")\\n");
+      fclose(fptr);
+    }
+    rc = system("python {{ path_wrapper_py }} > {{ path_error_log }} 2>&1");
+    if (rc != 0)
+      printf("otfmi: error running \\"python {{ path_wrapper_py }}\\" rc=%d\\n", rc);
+    fptr = fopen("{{ path_point_out }}", "r");
+    for (i = 0; i < {{ flat_size }}; ++ i)
+      rc = fscanf(fptr, "%lf", &y[i]);
+    fclose(fptr);
+
+    memcpy(prev_x, x, nin * sizeof(double));
+    memcpy(prev_y, y, {{ flat_size }} * sizeof(double));
+  }
+  else
+    ++ hits;
+    memcpy(y, prev_y + findex, nout * sizeof(double));
+{% if field %}
+  /* for the same x we must return at each call the value of the next node. TODO: interpolate wrt t? */
+  findex = (findex + 1) % {{ n_pt }};
+{% endif %}
+  ++ count;
+}
+
+'''
+
+        data = jinja2.Template(tdata).render({'xml_data_bin': ','.join(['0x{:02x}'.format(byte) for byte in xml_data]),
+                                             'input_dim': self.function_.getInputDimension(),
+                                             'flat_size': flat_size,
+                                             'workdir': self.workdir.replace("\\", "\\\\"),
+                                             'field': field,
+                                             'n_pt': self.function_.getOutputMesh().getVerticesNumber() if field else 0,
+                                             'function_type': "PointToFieldFunction" if field else "Function",
+                                             'path_point_in': os.path.join(self.workdir, "point.in").replace("\\", "\\\\"),
+                                             'path_point_out': os.path.join(self.workdir, "point.out").replace("\\", "\\\\"),
+                                             'path_wrapper_py': os.path.join(self.workdir, 'wrapper.py').replace("\\", "\\\\"),
+                                             'path_error_log': os.path.join(self.workdir, 'error.log').replace("\\", "\\\\"),
+                                             'path_function_xml': os.path.join(self.workdir, 'function.xml').replace("\\", "\\\\"),
+                                             })
         with open(os.path.join(self.workdir, 'wrapper.c'), 'w') as c:
-            c.write('#define _XOPEN_SOURCE 500\n')
-            c.write('#define  _POSIX_C_SOURCE 200809L\n')
-            c.write('#include <stdio.h>\n')
-            c.write('#include <stdlib.h>\n')
-            c.write('#include <string.h>\n')
-            c.write('#include <sys/stat.h>\n')
-            c.write('#ifdef _WIN32\n#include <io.h>\n#include <direct.h>\n#define R_OK 4\n#define access _access\n#else\n#include <unistd.h>\n#endif\n')
-            c.write('unsigned char xml_data[] = { ' + ','.join(['0x{:02x}'.format(byte) for byte in xml_data]) + '};\n')
-            c.write('void c_func(int nin, double x[], int nout, double y[])\n{\n')
-            c.write('  FILE *fptr;\n')
-            c.write('  int rc;\n')
-            c.write('  int i;\n')
-            c.write('  static int count = 0;\n')
-            c.write('  static int hits = 0;\n')
-            if field:
-                c.write('  static int findex = 0;\n')
-            #c.write('  printf("count=%d hits=%d\\n", count, hits);\n')
-            c.write('  int same_x;\n')
-            c.write('  static double prev_x['+str(self.function_.getInputDimension())+'];\n')
-            c.write('  static double prev_y['+str(flat_size)+'];\n')
-            c.write('  same_x = count;\n')
-            c.write('  for (i = 0; i < nin; ++ i) {\n')
-            c.write('    if(x[i] != prev_x[i]) same_x = 0;\n  }\n')
-            c.write('  if (!same_x) {\n')
-            if field:
-                c.write('    findex = 0;\n')
-            c.write('    memcpy(prev_x, x, nin * sizeof(double));\n')
-            c.write('    char workdir[] = "' + self.workdir.replace("\\", "\\\\") + '";\n')
-            c.write('    if (access(workdir, R_OK) == -1)\n#ifdef _WIN32\n      _mkdir(workdir);\n#else\n      mkdir(workdir, 0733);\n#endif\n')
-            c.write('    fptr = fopen("'+os.path.join(self.workdir, "point.in").replace("\\", "\\\\")+'", "w");\n')
-            c.write('    for (i = 0; i < nin; ++ i)\n')
-            c.write('      fprintf(fptr, "%lf\\n", x[i]);\n')
-            c.write('    fclose(fptr);\n')
-            c.write('    char xml_path[] = "'+os.path.join(self.workdir, 'function.xml').replace("\\", "\\\\")+'";\n')
-            c.write('    if (access(xml_path, R_OK) == -1) {\n')
-            c.write('      fptr = fopen(xml_path, "wb");\n')
-            c.write('      fwrite (xml_data, sizeof(char), sizeof(xml_data), fptr);\n')
-            c.write('      fclose(fptr); }\n')
-            c.write('    char py_path[] = "'+os.path.join(self.workdir, 'wrapper.py').replace("\\", "\\\\")+'";\n')
-            c.write('    if (access(py_path, R_OK) == -1) {\n')
-            c.write('      fptr = fopen(py_path, "w");\n')
-            c.write('      fprintf(fptr, "import openturns as ot\\nstudy = ot.Study()\\n");\n')
-            c.write('      fprintf(fptr, "study.setStorageManager(ot.XMLStorageManager(r\\\"%s\\\"))\\n", xml_path);\n')
-            c.write('      fprintf(fptr, "study.load()\\n");\n')
-            if field:
-                c.write('      fprintf(fptr, "function = ot.PointToFieldFunction()\\n");\n')
-            else:
-                c.write('      fprintf(fptr, "function = ot.Function()\\n");\n')
-            c.write('      fprintf(fptr, "study.fillObject(\\\"function\\\", function)\\n");\n')
-            c.write('      fprintf(fptr, "x = []\\n");\n')
-            c.write('      fprintf(fptr, "with open(r\\"'+os.path.join(self.workdir, "point.in").replace("\\", "\\\\")+'\\", \\"r\\") as f:\\n");\n')
-            c.write('      fprintf(fptr, "    for line in f.readlines():\\n");\n')
-            c.write('      fprintf(fptr, "        x.append(float(line))\\n");\n')
-            c.write('      fprintf(fptr, "y = function(x)\\n");\n')
-            if field:
-                c.write('      fprintf(fptr, "y = y.asPoint()\\n");\n')
-            c.write('      fprintf(fptr, "with open(r\\"'+os.path.join(self.workdir, 'point.out').replace("\\", "\\\\")+'\\", \\"w\\") as f:\\n");\n')
-            c.write('      fprintf(fptr, "    for v in y:\\n");\n')
-            c.write('      fprintf(fptr, "        f.write(str(v)+\\"\\\\n\\")\\n");\n')
-            c.write('      fclose(fptr); };\n')
-            c.write('    rc = system("python '+os.path.join(self.workdir, 'wrapper.py').replace("\\", "\\\\")+'> '+os.path.join(self.workdir, 'error.log').replace("\\", "\\\\")+' 2>&1");\n')
-            c.write('    if (rc != 0) printf("otfmi: error running \\"python '+os.path.join(self.workdir, 'wrapper.py').replace("\\", "\\\\")+ '\\" rc=%d\\n", rc);\n')
-            c.write('    fptr = fopen("'+os.path.join(self.workdir, 'point.out').replace("\\", "\\\\")+'", "r");\n')
-            c.write('    for (i = 0; i < ' + str(flat_size) + '; ++ i)\n')
-            c.write('      rc = fscanf(fptr, "%lf", &prev_y[i]);\n')
-            c.write('    fclose(fptr);\n')
-            c.write('  }\n')
-            c.write('  else ++ hits;\n')
-            if field:
-                c.write('  for (i = 0; i < nout; ++ i) y[i] = prev_y[i + (findex % ' + str(n_pt) + ')];\n')
-                c.write('  ++ findex;\n')
-            else:
-                c.write('  for (i = 0; i < nout; ++ i) y[i] = prev_y[i];\n')
-            c.write('  ++ count;\n}\n')
+            c.write(data)
 
     def _build_cwrapper(self, verbose):
         """
@@ -171,16 +205,24 @@ class FunctionExporter(object):
         verbose : bool
             Verbose output (default=False).
         """
+
+        data = '''
+cmake_minimum_required (VERSION 3.2)
+set (CMAKE_BUILD_TYPE "Release" CACHE STRING "build type")
+project (wrapper C)
+if (POLICY CMP0091)
+  cmake_policy (SET CMP0091 NEW)
+endif()
+# openmodelica uses -Bstatic on Linux
+add_library (cwrapper STATIC wrapper.c)
+set_target_properties (cwrapper PROPERTIES POSITION_INDEPENDENT_CODE ON MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+set_target_properties (cwrapper PROPERTIES ARCHIVE_OUTPUT_DIRECTORY_RELEASE ${CMAKE_BINARY_DIR} LIBRARY_OUTPUT_DIRECTORY_RELEASE ${CMAKE_BINARY_DIR} RUNTIME_OUTPUT_DIRECTORY_RELEASE ${CMAKE_BINARY_DIR})
+if (MSVC)
+  target_compile_definitions(cwrapper PRIVATE _CRT_SECURE_NO_WARNINGS)
+endif()
+'''
         with open(os.path.join(self.workdir, 'CMakeLists.txt'), 'w') as cm:
-            cm.write('cmake_minimum_required (VERSION 3.2)\n')
-            cm.write('set (CMAKE_BUILD_TYPE "Release" CACHE STRING "build type")\n')
-            cm.write('project (wrapper C)\n')
-            cm.write('if (POLICY CMP0091)\n  cmake_policy (SET CMP0091 NEW)\nendif()\n')
-            # openmodelica uses -Bstatic on Linux
-            cm.write('add_library (cwrapper STATIC wrapper.c)\n')
-            cm.write('set_target_properties (cwrapper PROPERTIES POSITION_INDEPENDENT_CODE ON MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")\n')
-            cm.write('set_target_properties (cwrapper PROPERTIES ARCHIVE_OUTPUT_DIRECTORY_RELEASE ${CMAKE_BINARY_DIR} LIBRARY_OUTPUT_DIRECTORY_RELEASE ${CMAKE_BINARY_DIR} RUNTIME_OUTPUT_DIRECTORY_RELEASE ${CMAKE_BINARY_DIR})\n')
-            cm.write('if (MSVC)\n  target_compile_definitions(cwrapper PRIVATE _CRT_SECURE_NO_WARNINGS)\nendif()\n')
+            cm.write(data)
         cmake_args=['cmake', '.']
         if sys.platform.startswith('win'):
             cmake_args.insert(1, '-DCMAKE_GENERATOR_PLATFORM=Win32')
@@ -263,34 +305,43 @@ class FunctionExporter(object):
         gui : bool
             If True, define the input/output connectors.
             The model cannot be exported as FMU in command line if gui=True.
+        move : bool
+            Move the model from temporary folder to user folder
         """
-        with open(os.path.join(
-                self.workdir, '{}.mo'.format(className)), 'w') as mo:
-            mo.write('model '+ className + '\n\n')
-            mo.write('function ExternalFunc\n')
-            mo.write('  input Real['+str(self.function_.getInputDimension())+'] x;\n')
-            mo.write('  output Real['+str(self.function_.getOutputDimension())+'] y;\n')
-            mo.write('  external "C" c_func('+str(self.function_.getInputDimension())+', x, '+str(self.function_.getOutputDimension())+', y);\n')
-            if move:
-                mo.write('  annotation(Library="cwrapper",                LibraryDirectory="' + path2uri(dirName)+'");\n')
-            else:
-                mo.write('  annotation(Library="cwrapper",                   LibraryDirectory="' + path2uri(self.workdir)+'");\n')
-            mo.write('end ExternalFunc;\n\n')
+        link_dir = dirName if move else self.workdir
+        tdata = '''
+model {{ className }}
 
-            if gui:
-                mo.write(self._set_connector())
-            else:
-                mo.write(self._set_input_output())
+function ExternalFunc
+input Real[{{ input_dim }}] x;
+output Real[{{ output_dim }}] y;
+external "C" c_func({{ input_dim }}, x, {{ output_dim }}, y);
+annotation(Library="cwrapper", LibraryDirectory="{{ link_dir }}");
+end ExternalFunc;
 
-            mo.write('protected\n')
-            mo.write('  Real output_array_zzz__['+str
-                (self.function_.getOutputDimension())+'] = ExternalFunc({'
-                +', '.join([re.sub(r'\W', '_', name) for name in
-                    self.function_.getInputDescription()])+'});\n');
-            mo.write('equation\n')
-            for output_name, i in zip(self.function_.getOutputDescription(), range(self.function_.getOutputDimension())):
-                mo.write('  ' + re.sub(r'\W', '_', output_name) + ' = output_array_zzz__[' + str(i + 1) + '];\n')
-            mo.write('end '+ className + ';\n')
+{{ io_vars }}
+
+protected
+  Real output_array_zzz__[{{ output_dim }}] = ExternalFunc({ {{ inputs }} });
+
+equation
+{%- for output in outputs %}
+  {{ output }} = output_array_zzz__[{{ loop.index }}];
+{%- endfor %}
+
+end {{ className }};
+
+'''
+        data = jinja2.Template(tdata).render({'className': className,
+                                             'input_dim': self.function_.getInputDimension(),
+                                             'output_dim': self.function_.getOutputDimension(),
+                                             'link_dir': path2uri(dirName) if move else path2uri(self.workdir),
+                                             'io_vars': self._set_connector() if gui else self._set_input_output(),
+                                             'inputs': ', '.join([re.sub(r'\W', '_', name) for name in self.function_.getInputDescription()]),
+                                             'outputs': [re.sub(r'\W', '_', name) for name in self.function_.getOutputDescription()],
+                                             })
+        with open(os.path.join(self.workdir, className + '.mo'), 'w') as mo:
+            mo.write(data)
 
     def export_model(self, model_path, gui=False, verbose=False,
             move=True):
@@ -326,7 +377,7 @@ class FunctionExporter(object):
         self._write_cwrapper()
         self._build_cwrapper(verbose)
         self._write_modelica_wrapper(className, dirName, gui, move)
-        
+
         if move:
             if sys.platform.startswith('win'):
                 libname = "cwrapper.lib"
@@ -367,12 +418,10 @@ class FunctionExporter(object):
             os.makedirs(self.workdir)
         self.export_model(model_path, gui=False, verbose=verbose, move=False)
 
-        with open(os.path.join(self.workdir, 'mo2fmu.mos'), 'w') as mos:
-            mos.write(
-                'loadFile("{}.mo"); getErrorString();\n'.format(className))
-            mos.write('translateModelFMU(' + className + ', fmuType="' + fmuType + '"); getErrorString()\n')
-        subprocess.run(['omc', 'mo2fmu.mos'], capture_output=not verbose, cwd=self.workdir, check=True)
-        
+        path_mo = os.path.join(self.workdir, className + '.mo')
+        path_fmu = os.path.join(self.workdir, className + extension)
+        mo2fmu(path_mo, path_fmu=path_fmu, fmuType=fmuType, verbose=verbose)
+
         shutil.move(
             os.path.join(self.workdir, className + extension),
             os.path.join(dirName, className + extension))
