@@ -83,8 +83,7 @@ class FunctionExporter(object):
         field = hasattr(self.function_, 'getOutputMesh')
         flat_size = self.function_.getOutputDimension()
         if field:
-            n_pt = self.function_.getOutputMesh().getVerticesNumber()
-            flat_size *= n_pt
+            flat_size *= self.function_.getOutputMesh().getVerticesNumber()
 
         tdata = '''
 #define _XOPEN_SOURCE 500
@@ -109,9 +108,7 @@ void c_func(int nin, double x[], int nout, double y[]) {
   int i;
   static int count = 0;
   static int hits = 0;
-{% if field %}
   static int findex = 0;
-{% endif %}
   int same_x;
   static double prev_x[{{ input_dim }}];
   static double prev_y[{{ flat_size }}];
@@ -120,11 +117,9 @@ void c_func(int nin, double x[], int nout, double y[]) {
     if(x[i] != prev_x[i]) same_x = 0;
   }
   if (!same_x) {
-{% if field %}
+    /* reset the node index */
     findex = 0;
-{% endif %}
     /*printf("count=%d hits=%d\\n", count, hits);*/
-    memcpy(prev_x, x, nin * sizeof(double));
     char workdir[] = "{{ workdir }}";
     if (access(workdir, R_OK) == -1)
       mkdir(workdir, 0733);
@@ -165,18 +160,18 @@ void c_func(int nin, double x[], int nout, double y[]) {
       printf("otfmi: error running \\"python {{ path_wrapper_py }}\\" rc=%d\\n", rc);
     fptr = fopen("{{ path_point_out }}", "r");
     for (i = 0; i < {{ flat_size }}; ++ i)
-      rc = fscanf(fptr, "%lf", &prev_y[i]);
+      rc = fscanf(fptr, "%lf", &y[i]);
     fclose(fptr);
+
+    memcpy(prev_x, x, nin * sizeof(double));
+    memcpy(prev_y, y, {{ flat_size }} * sizeof(double));
   }
   else
     ++ hits;
+    memcpy(y, prev_y + findex, nout * sizeof(double));
 {% if field %}
-  for (i = 0; i < nout; ++ i)
-    y[i] = prev_y[i + (findex % ' + str(n_pt) + ')];
-  ++ findex;
-{% else %}
-  for (i = 0; i < nout; ++ i)
-    y[i] = prev_y[i];
+  /* for the same x we must return at each call the value of the next node. TODO: interpolate wrt t? */
+  findex = (findex + 1) % {{ n_pt }};
 {% endif %}
   ++ count;
 }
@@ -188,6 +183,7 @@ void c_func(int nin, double x[], int nout, double y[]) {
                                              'flat_size': flat_size,
                                              'workdir': self.workdir.replace("\\", "\\\\"),
                                              'field': field,
+                                             'n_pt': self.function_.getOutputMesh().getVerticesNumber() if field else 0,
                                              'function_type': "PointToFieldFunction" if field else "Function",
                                              'path_point_in': os.path.join(self.workdir, "point.in").replace("\\", "\\\\"),
                                              'path_point_out': os.path.join(self.workdir, "point.out").replace("\\", "\\\\"),
