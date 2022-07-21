@@ -1,11 +1,12 @@
 import argparse
+import jinja2
 import os
 import tempfile
 import subprocess
 import shutil
 import sys
 
-def mo2fmu(path_mo, path_fmu='', fmuType="cs", version="2.0", libs=[], verbose=False):
+def mo2fmu(path_mo, path_fmu='', fmuType="cs", version="2.0", libs=[], platforms=['static'], verbose=False):
     """
     Export a model .mo to .fmu.
     
@@ -23,6 +24,8 @@ def mo2fmu(path_mo, path_fmu='', fmuType="cs", version="2.0", libs=[], verbose=F
         fmi version
     libs : list of str, default=[]
         List of required libraries passed to loadModel
+    platforms : list of str, default=[static]
+        List of target platforms
     verbose : bool, default=False
         Verbose output
     """
@@ -34,19 +37,37 @@ def mo2fmu(path_mo, path_fmu='', fmuType="cs", version="2.0", libs=[], verbose=F
         [str(x) for x in libs]
     except Exception:
         raise TypeError('libs must be a sequence of str')
+    try:
+        [str(x) for x in platforms]
+    except Exception:
+        raise TypeError('platforms must be a sequence of str')
 
     workdir = tempfile.mkdtemp()
     path_mos = os.path.join(workdir, 'mo2fmu.mos')
     # assume the model name is the file name
     model_name = os.path.splitext(os.path.basename(path_mo))[0]
+
+    tdata = '''
+{%- for lib in libs %}
+loadModel({{ lib }}); getErrorString();
+{%- endfor %}
+
+loadFile("{{ fileName }}"); getErrorString();
+buildModelFMU({{ className }}, version="{{ version }}", fmuType="{{ fmuType }}", platforms={{ platforms }}); getErrorString();
+'''
+
+    data = jinja2.Template(tdata).render({'libs': libs,
+                                          'fileName': os.path.abspath(path_mo).replace("\\", "\\\\"),
+                                          'className': model_name,
+                                          'version': version,
+                                          'fmuType': fmuType,
+                                          'platforms': '{\"'+'`",`"'.join([str(x) for x in platforms])+'\"}',
+                                          })
+
     with open(path_mos, 'w') as mos:
-        for lib in libs:
-             mos.write('loadModel(' + lib + '); getErrorString();\n')
-        mos.write('loadFile("' + os.path.abspath(path_mo).replace("\\", "\\\\") + '"); getErrorString();\n')
-        mos.write('translateModelFMU(' + model_name + ', version="' + version + '", fmuType="' + fmuType + '"); getErrorString();\n')
+        mos.write(data)
     if verbose:
-        with open(path_mos) as mos:
-            print(mos.read())
+        print(data)
     subprocess.run(['omc', 'mo2fmu.mos'], capture_output=not verbose, shell=sys.platform.startswith('win'), cwd=workdir, check=True)
     temp_fmu = os.path.join(workdir, model_name) + '.fmu'
     if path_fmu == '':
@@ -64,6 +85,7 @@ def main():
     parser.add_argument('path_fmu', nargs='?', type=str, help='Path to the destination FMU file', default=argparse.SUPPRESS)
     parser.add_argument('--fmuType', metavar='TYPE', type=str, help='model type me|cs|me_cs', default=argparse.SUPPRESS)
     parser.add_argument('--libs', metavar='LIBS', type=str, action="extend", nargs="+", help='List of required libraries passed to loadModel', default=argparse.SUPPRESS)
+    parser.add_argument('--platforms', metavar='PLATFORMS', type=str, action="extend", nargs="+", help='List of target platforms', default=argparse.SUPPRESS)
     parser.add_argument('-v', '--verbose', action='store_const', const=True, dest='verbose', default=argparse.SUPPRESS)
     args = parser.parse_args()
     mo2fmu(**vars(args))
