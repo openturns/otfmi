@@ -25,16 +25,20 @@ Initialize FMUPointToFieldFunction
 
 import otfmi.example.utility
 import otfmi
+import openturns as ot
+from os.path import abspath
+import openturns.viewer as viewer
+
 path_fmu = otfmi.example.utility.get_path_fmu("epid")
 
-# %% 
+# %%
 # The initialization script must be provided to `FMUPointToFieldFunction`
 # constructor. We thus create it now (using Python for clarity).
 
 # %%
 # .. note::
 #    The initialization script can be automatically created in Dymola.
- 
+
 temporary_file = "initialization.mos"
 with open(temporary_file, "w") as f:
     f.write("total_pop = 500;\n")
@@ -49,7 +53,6 @@ with open(temporary_file, "w") as f:
 # (which corresponds to a specific moment in the epidemic spreading).
 # We must create the time grid on which the model output will be interpolated.
 
-import openturns as ot
 mesh = ot.RegularGrid(0.0, 0.1, 20)
 meshSample = mesh.getVertices()
 print(meshSample)
@@ -60,8 +63,6 @@ print(meshSample)
 # ``healing_rate`` in the FMU. We can thus observe the evolution of ``infected``
 # depending on the ``infection_rate``.
 
-from os.path import abspath
-
 function = otfmi.FMUPointToFieldFunction(
     mesh,
     path_fmu,
@@ -69,7 +70,8 @@ function = otfmi.FMUPointToFieldFunction(
     outputs_fmu=["infected"],
     initialization_script=abspath("initialization.mos"),
     start_time=0.0,
-    final_time=5.0)
+    final_time=5.0,
+)
 
 # %%
 # ``total_pop`` and ``healing_rate`` values are defined in the initialization
@@ -84,16 +86,11 @@ outputProcessSample = function(inputSample)
 # %%
 # Visualize the time evolution of the ``infected`` over time, depending on the
 # `ìnfection_rate`` value:
-
-import openturns.viewer as viewer
 gridLayout = outputProcessSample.draw()
-graph = gridLayout.getGraph(0,0)
+graph = gridLayout.getGraph(0, 0)
 graph.setTitle("")
 graph.setXTitle("FMU simulation time (s)")
 graph.setYTitle("Number of infected")
-graph.setLegends(
-    ["{:.4f}".format(line[0]) for line in inputSample])
-view = viewer.View(graph, legend_kw={
-    "title": "infection rate",
-    "loc": "upper left"})
+graph.setLegends(["{:.4f}".format(line[0]) for line in inputSample])
+view = viewer.View(graph, legend_kw={"title": "infection rate", "loc": "upper left"})
 view.ShowAll()

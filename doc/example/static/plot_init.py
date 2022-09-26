@@ -22,20 +22,23 @@ Initialize FMUFunction
 # First, retrieve the path to the FMU *deviation.fmu*.
 # Recall the deviation model is static, i.e. its output does not evolve over
 # time.
-
+import openturns as ot
+from os.path import abspath
 import otfmi.example.utility
 import otfmi
+import openturns.viewer as viewer
+
 path_fmu = otfmi.example.utility.get_path_fmu("deviation")
 
 
-# %% 
+# %%
 # The initialization script must be provided to `FMUFunction` constructor.
 # We thus create it now (using Python for clarity).
 
 # %%
 # .. note::
 #    The initialization script can be automatically created in Dymola.
- 
+
 temporary_file = "initialization.mos"
 with open(temporary_file, "w") as f:
     f.write("L = 300;\n")
@@ -48,16 +51,14 @@ with open(temporary_file, "w") as f:
 # %%
 # We can now build the `FMUFunction`. In the example below, we use the
 # initialization script to fix the values of ``L`` and ``F`` in the FMU whereas
-# ``E`` and `Ì` are the function variables.
-
-import openturns as ot
-from os.path import abspath
+# ``E`` and ``I`` are the function variables.
 
 function = otfmi.FMUFunction(
     path_fmu,
     inputs_fmu=["E", "I"],
     outputs_fmu=["y"],
-    initialization_script=abspath("initialization.mos"))
+    initialization_script=abspath("initialization.mos"),
+)
 
 inputPoint = ot.Point([2e9, 7e7])
 outputPoint = function(inputPoint)
@@ -78,7 +79,8 @@ smallExampleFunction = otfmi.FMUFunction(
     path_fmu,
     inputs_fmu=["E", "F", "L", "I"],
     outputs_fmu=["y"],
-    initialization_script=abspath("initialization.mos"))
+    initialization_script=abspath("initialization.mos"),
+)
 
 inputPoint = ot.Point([2e9, 2e4, 800, 7e7])
 outputPoint = smallExampleFunction(inputPoint)
@@ -98,7 +100,6 @@ inputSample = dist.getSample(10)
 
 outputSample = function(inputSample)
 
-import openturns.viewer as viewer
 graph = ot.HistogramFactory().build(outputSample).drawPDF()
 view = viewer.View(graph)
 view.ShowAll()

@@ -12,24 +12,26 @@ import shutil
 import subprocess
 import time
 
-class TestExport(unittest.TestCase):
 
+class TestExport(unittest.TestCase):
     def test_export_fmu_vector(self):
         # export fmu
-        f = ot.SymbolicFunction(['E', 'F', 'L', 'I'], ['(F*L^3)/(3.0*E*I)'])
+        f = ot.SymbolicFunction(["E", "F", "L", "I"], ["(F*L^3)/(3.0*E*I)"])
         start = [3e7, 3e4, 250.0, 400.0]
 
-        if sys.platform.startswith('win'):
+        if sys.platform.startswith("win"):
             return
 
         temp_path = tempfile.mkdtemp()
-        path_fmu = os.path.join(temp_path, 'Deviation.fmu')
+        path_fmu = os.path.join(temp_path, "Deviation.fmu")
         fe = otfmi.FunctionExporter(f, start)
-        fe.export_fmu(path_fmu, fmuType='cs', verbose=True)
+        fe.export_fmu(path_fmu, fmuType="cs", verbose=True)
         assert os.path.isfile(path_fmu), "fmu not created"
 
         # reimport fmu
-        model_fmu = otfmi.FMUFunction(path_fmu, inputs_fmu=["E", "F", "L", "I"], outputs_fmu=["y0"])
+        model_fmu = otfmi.FMUFunction(
+            path_fmu, inputs_fmu=["E", "F", "L", "I"], outputs_fmu=["y0"]
+        )
         print(model_fmu)
 
         # call
@@ -44,55 +46,56 @@ class TestExport(unittest.TestCase):
         size = 10
         mem0 = process.memory_info().rss / 1000000
         for i in range(size):
-            x = [3.1e7, 3.1e4+i, 255.0, 420.0]
+            x = [3.1e7, 3.1e4 + i, 255.0, 420.0]
             y = model_fmu(x)
             print(i, x, y, process.memory_info().rss / 1000000, flush=True)
         t1 = time.time()
         mem1 = process.memory_info().rss / 1000000
         print("Speed=", size / (t1 - t0), "evals/s")
-        print("Memory=", mem1-mem0)
+        print("Memory=", mem1 - mem0)
 
         shutil.rmtree(temp_path)
-
 
     def test_export_fmu_field(self):
         def g(X):
             a, b = X
-            Y = [[a*m.sin(t)+b] for t in range(100)]
+            Y = [[a * m.sin(t) + b] for t in range(100)]
             return Y
+
         mesh = ot.RegularGrid(0, 1, 100)
         f = ot.PythonPointToFieldFunction(2, mesh, 1, g)
         start = [4.0, 5.0]
 
-        if sys.platform.startswith('win'):
+        if sys.platform.startswith("win"):
             return
 
         temp_path = tempfile.mkdtemp()
-        path_fmu = os.path.join(temp_path, 'Sin.fmu')
+        path_fmu = os.path.join(temp_path, "Sin.fmu")
 
         # export
         fe = otfmi.FunctionExporter(f, start)
-        fe.export_fmu(path_fmu, fmuType='cs', verbose=True)
+        fe.export_fmu(path_fmu, fmuType="cs", verbose=True)
         assert os.path.isfile(path_fmu), "fmu not created"
 
         # import
         import pyfmi
+
         model = pyfmi.load_fmu(path_fmu)
         model.initialize()
         model.reset()
-        res = model.simulate(options={'silent_mode': True})
+        res = model.simulate(options={"silent_mode": True})
         print(model.get_model_variables().keys())
-        print(res['y0'])
+        print(res["y0"])
         shutil.rmtree(temp_path)
 
     def test_export_model(self):
         # export model
-        f = ot.SymbolicFunction(['E', 'F', 'L', 'I'], ['(F*L^3)/(3.0*E*I)'])
+        f = ot.SymbolicFunction(["E", "F", "L", "I"], ["(F*L^3)/(3.0*E*I)"])
         start = [3e7, 3e4, 250.0, 400.0]
 
         temp_path = tempfile.mkdtemp()
         assert os.path.isdir(temp_path), "temp_path not created"
-        name_model = 'Deviation.mo'
+        name_model = "Deviation.mo"
         className, _ = os.path.splitext(name_model)
         path_model = os.path.join(temp_path, name_model)
         fe = otfmi.FunctionExporter(f, start)
@@ -103,18 +106,16 @@ class TestExport(unittest.TestCase):
         path_mos = os.path.join(temp_path, "simulate.mos")
         with open(path_mos, "w") as mos:
             mos.write('cd("{}");\n'.format(temp_path))
-            mos.write('loadModel(Modelica);\n')
-            mos.write('loadFile("{}"); getErrorString();\n'.format(
-                name_model))
-            mos.write('simulate ({}, stopTime=3.0);\n'.format(
-                className))
+            mos.write("loadModel(Modelica);\n")
+            mos.write('loadFile("{}"); getErrorString();\n'.format(name_model))
+            mos.write("simulate ({}, stopTime=3.0);\n".format(className))
 
-        subprocess.run(['omc', '{}'.format(path_mos)], capture_output=True, check=True)
+        subprocess.run(["omc", "{}".format(path_mos)], capture_output=True, check=True)
 
         shutil.rmtree(temp_path)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()
 
 # note : the GUI model wrapping the OT object is not checked in these tests as

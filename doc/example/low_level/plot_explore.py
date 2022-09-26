@@ -14,6 +14,7 @@ Explore the FMU
 # First, retrieve and load the FMU *deviation.fmu*.
 
 import otfmi.example.utility
+
 path_fmu = otfmi.example.utility.get_path_fmu("deviation")
 model = otfmi.fmi.load_fmu(path_fmu)
 
@@ -40,7 +41,7 @@ for name in list_name:
     print("{}: {}".format(name, typ))
 
 # %%
-# | The type `0` corresponds to `Real` (aka "float") variables. 
+# | The type `0` corresponds to `Real` (aka "float") variables.
 # | Let check the variables default start value in the FMU:
 
 dict_start_value = otfmi.fmi.get_start_value(model)

@@ -1,15 +1,15 @@
-# -*- coding: utf-8 -*-
 # Copyright 2016 EDF. This software was developed with the collaboration of
 # Phimeca Engineering (Sylvain Girard, girard@phimeca.com).
 """Utility functions for common FMU manipulations."""
-#§
+
 import pyfmi
 import numpy as np
 import os
 import tempfile
 import warnings
+import otfmi
 
-#§
+
 def load_fmu(path_fmu, kind=None, **kwargs):
     """Load and FMU.
 
@@ -29,7 +29,13 @@ def load_fmu(path_fmu, kind=None, **kwargs):
     """
 
     # pyfmi writes a log in current folder even with log_level=0
-    log_file_name = "" if os.access('.', os.W_OK) else os.path.join(tempfile.gettempdir(), os.path.basename(path_fmu) + '_log.txt')
+    log_file_name = (
+        ""
+        if os.access(".", os.W_OK)
+        else os.path.join(
+            tempfile.gettempdir(), os.path.basename(path_fmu) + "_log.txt"
+        )
+    )
 
     if kind is None:
         try:
@@ -40,8 +46,13 @@ def load_fmu(path_fmu, kind=None, **kwargs):
         return pyfmi.load_fmu(path_fmu, kind=kind, log_file_name=log_file_name)
 
 
-#§
-def simulate(model, initialization_script=None, initialization_parameters=None, reset=True, **kwargs):
+def simulate(
+    model,
+    initialization_script=None,
+    initialization_parameters=None,
+    reset=True,
+    **kwargs
+):
     """Simulate an FMU.
 
     Parameters
@@ -66,7 +77,7 @@ def simulate(model, initialization_script=None, initialization_parameters=None, 
             model.free_instance()
             model.instantiate()
         except AttributeError:
-            pass # Probably FMI version 1.
+            pass  # Probably FMI version 1.
     try:
         apply_initialization_script(model, initialization_script)
     except TypeError:
@@ -77,10 +88,10 @@ def simulate(model, initialization_script=None, initialization_parameters=None, 
 
     return model.simulate(**kwargs)
 
-#§
-def parse_kwargs_simulate(value_input=None, name_input=None,
-                          name_output=None,
-                          model=None, **kwargs):
+
+def parse_kwargs_simulate(
+    value_input=None, name_input=None, name_output=None, model=None, **kwargs
+):
     """Parse simulation keyword arguments and feed the
     simulate method of pyfmi's object.
 
@@ -98,11 +109,11 @@ def parse_kwargs_simulate(value_input=None, name_input=None,
     value_input_array = reshape_input(value_input, len(name_input))
     time, kwargs = guess_time(value_input_array, **kwargs)
 
-    kwargs.setdefault("options", kwargs.pop("dict_option", dict())) # alias.
+    kwargs.setdefault("options", kwargs.pop("dict_option", dict()))  # alias.
     kwargs["options"]["filter"] = name_output
 
     # only available for CS model
-    if 'FMUModelCS' in model.__class__.__name__:
+    if "FMUModelCS" in model.__class__.__name__:
         kwargs["options"]["silent_mode"] = True
 
     if len(time) > 1:
@@ -110,34 +121,51 @@ def parse_kwargs_simulate(value_input=None, name_input=None,
         kwargs.setdefault("final_time", time[-1])
 
     if value_input is not None:
-        fmix_input = pyfmi.fmi.FMI2_INPUT if model.get_version() == '2.0' else pyfmi.fmi.FMI_INPUT
+        fmix_input = (
+            pyfmi.fmi.FMI2_INPUT
+            if model.get_version() == "2.0"
+            else pyfmi.fmi.FMI_INPUT
+        )
 
         # remap desired variables to fmi inputs/parameters:
         causality = dict(zip(name_input, get_causality(model, name_input)))
         name_input_fmi = [var for var in name_input if causality[var] == fmix_input]
 
         # 1. PARAMETER variables must be set using model.set (initialization_parameters)
-        if model.get_version() == '2.0':
-            name_parameter_fmi = [var for var in name_input if causality[var] == pyfmi.fmi.FMI2_PARAMETER]
-            indices_parameter_fmi = [i for i in range(len(name_input)) if causality[name_input[i]] == pyfmi.fmi.FMI2_PARAMETER]
+        if model.get_version() == "2.0":
+            name_parameter_fmi = [
+                var for var in name_input if causality[var] == pyfmi.fmi.FMI2_PARAMETER
+            ]
+            indices_parameter_fmi = [
+                i
+                for i in range(len(name_input))
+                if causality[name_input[i]] == pyfmi.fmi.FMI2_PARAMETER
+            ]
             value_parameter_fmi = [value_input[k] for k in indices_parameter_fmi]
             if len(name_parameter_fmi) > 0:
-                kwargs["initialization_parameters"] = (name_parameter_fmi, value_parameter_fmi)
+                kwargs["initialization_parameters"] = (
+                    name_parameter_fmi,
+                    value_parameter_fmi,
+                )
 
         # 2. INPUT variables values are passed with model.simulate (input)
-        indices_input_fmi = [i for i in range(len(name_input)) if causality[name_input[i]] == fmix_input]
+        indices_input_fmi = [
+            i for i in range(len(name_input)) if causality[name_input[i]] == fmix_input
+        ]
         value_input_fmi = [value_input[k] for k in indices_input_fmi]
         value_input_fmi = reshape_input(value_input_fmi, len(name_input_fmi))
         if len(name_input_fmi) > 0:
             kwargs["input"] = (name_input_fmi, np.column_stack((time, value_input_fmi)))
 
     # pyfmi writes a result file in current folder
-    if not os.access('.', os.W_OK):
-        kwargs['options']['result_file_name'] = os.path.join(tempfile.gettempdir(), model.get_identifier() + '_result.mat')
+    if not os.access(".", os.W_OK):
+        kwargs["options"]["result_file_name"] = os.path.join(
+            tempfile.gettempdir(), model.get_identifier() + "_result.mat"
+        )
 
     return kwargs
 
-#§
+
 def strip_simulation(simulation, name_output, final=None):
     """Extract some final values or trajectories from a PyFMI result object.
 
@@ -164,13 +192,14 @@ def strip_simulation(simulation, name_output, final=None):
     elif final == "result":
         return simulation
     elif final == "trajectory":
-        return (simulation["time"],
-                np.column_stack([simulation[name] for name in name_output]))
+        return (
+            simulation["time"],
+            np.column_stack([simulation[name] for name in name_output]),
+        )
     else:
-        raise ValueError("Unexpected value for the 'final' parameter: '%s'." %
-                         final)
+        raise ValueError("Unexpected value for the 'final' parameter: '%s'." % final)
 
-#§
+
 def reshape_input(value_input, input_dimension):
     """Ensure appropriate number of dimensions for input data.
     Note: only the dimension is affected. The exact shape is not checked.
@@ -190,6 +219,7 @@ def reshape_input(value_input, input_dimension):
         return np.atleast_2d(value_input)
     else:
         return np.atleast_1d(value_input)
+
 
 def guess_time(value_input, **kwargs):
     """Guess the time vector from input data.
@@ -211,7 +241,7 @@ def guess_time(value_input, **kwargs):
         if value_input is None:
             return None, kwargs
 
-        timestep = kwargs.pop("timestep", 1.)
+        timestep = kwargs.pop("timestep", 1.0)
         try:
             # Is value_input a time-indexed pandas dataframe?
             time_index = list(value_input.values())[0].index
@@ -223,7 +253,6 @@ def guess_time(value_input, **kwargs):
     return time, kwargs
 
 
-#§
 def parse_initialization_line(line):
     """Parse one line of a Dymola initialization script.
 
@@ -241,11 +270,12 @@ def parse_initialization_line(line):
         value = float(value)
     except ValueError:
         try:
-            value = {"true":True, "false":False}[value.lower()]
+            value = {"true": True, "false": False}[value.lower()]
         except KeyError:
             message = "The value '%s' could not be interpreted." % value
             raise ValueError(message)
     return name, value
+
 
 def parse_initialization_script(path_script):
     """Parse a Dymola initialization script.
@@ -268,7 +298,8 @@ def parse_initialization_script(path_script):
             except ValueError:
                 warnings.warn(
                     "Following line could not be parsed:\n {}".format(line),
-                    SyntaxWarning)
+                    SyntaxWarning,
+                )
             else:
                 list_name.append(name)
                 list_value.append(value)
@@ -311,7 +342,7 @@ def apply_initialization_script(model, path_script):
     list_name, list_value = parse_initialization_script(path_script)
     apply_initialization_parameters(model, (list_name, list_value))
 
-#§
+
 def get_name_variable(model, **kwargs):
     """Get the list of variable names.
 
@@ -325,12 +356,13 @@ def get_name_variable(model, **kwargs):
         Variable names
     """
 
-    if not hasattr(model, 'get_model_variables'):
+    if not hasattr(model, "get_model_variables"):
         assert isinstance(model, str), "model should be an FMU model or a str"
         path_fmu = model
         model = load_fmu(path_fmu)
 
     return list(model.get_model_variables(**kwargs).keys())
+
 
 def get_causality(model, names=None):
     """Get the causality of the variables (input, output, or other).
@@ -377,7 +409,7 @@ def get_causality_str(model, name):
     ----------
     model : pyfmi.fmi.FMUModelXXX or str
         Pyfmi model object or path to an FMU.
-    
+
     name : str
         Variable name
 
@@ -387,10 +419,25 @@ def get_causality_str(model, name):
         Causality identifier
     """
 
-    causality1str = {pyfmi.fmi.FMI_INPUT: 'INPUT', pyfmi.fmi.FMI_OUTPUT: 'OUTPUT', pyfmi.fmi.FMI_INTERNAL: 'INTERNAL', pyfmi.fmi.FMI_NONE: 'NONE'}
-    causality2str = {pyfmi.fmi.FMI2_PARAMETER: 'PARAMETER', pyfmi.fmi.FMI2_CALCULATED_PARAMETER: 'CALCULATED_PARAMETER', pyfmi.fmi.FMI2_INPUT: 'INPUT', pyfmi.fmi.FMI2_OUTPUT: 'OUTPUT', pyfmi.fmi.FMI2_LOCAL: 'LOCAL', pyfmi.fmi.FMI2_INDEPENDENT: 'INDEPENDENT', pyfmi.fmi.FMI2_UNKNOWN: 'UNKNOWN'}
-    causalitystr = {'1.0': causality1str, '2.0': causality2str}
-    return causalitystr[model.get_version()].get(get_causality(model, [name])[0], 'UNKNOWN')
+    causality1str = {
+        pyfmi.fmi.FMI_INPUT: "INPUT",
+        pyfmi.fmi.FMI_OUTPUT: "OUTPUT",
+        pyfmi.fmi.FMI_INTERNAL: "INTERNAL",
+        pyfmi.fmi.FMI_NONE: "NONE",
+    }
+    causality2str = {
+        pyfmi.fmi.FMI2_PARAMETER: "PARAMETER",
+        pyfmi.fmi.FMI2_CALCULATED_PARAMETER: "CALCULATED_PARAMETER",
+        pyfmi.fmi.FMI2_INPUT: "INPUT",
+        pyfmi.fmi.FMI2_OUTPUT: "OUTPUT",
+        pyfmi.fmi.FMI2_LOCAL: "LOCAL",
+        pyfmi.fmi.FMI2_INDEPENDENT: "INDEPENDENT",
+        pyfmi.fmi.FMI2_UNKNOWN: "UNKNOWN",
+    }
+    causalitystr = {"1.0": causality1str, "2.0": causality2str}
+    return causalitystr[model.get_version()].get(
+        get_causality(model, [name])[0], "UNKNOWN"
+    )
 
 
 def get_variability(model):
@@ -414,11 +461,9 @@ def get_variability(model):
     except AttributeError:
         model = load_fmu(model)
 
-    return [model.get_variable_variability(name) for name in
-            get_name_variable(model)]
+    return [model.get_variable_variability(name) for name in get_name_variable(model)]
 
 
-#§
 def get_fixed_value(model):
     """Get the values of the variables with 'fixed' variability,
     ignoring aliases.
@@ -434,15 +479,15 @@ def get_fixed_value(model):
     except AttributeError:
         model = load_fmu(model)
 
-    list_name_variable = list(model.get_model_variables(include_alias=False,
-                                                   variability=1).keys())
+    list_name_variable = list(
+        model.get_model_variables(include_alias=False, variability=1).keys()
+    )
     try:
         model.setup_experiment()
         model.initialize()
     except pyfmi.fmi.FMUException:
         pass
-    return {name:model.get(name) for name in list_name_variable}
-
+    return {name: model.get(name) for name in list_name_variable}
 
 
 def get_start_value(model):
@@ -465,16 +510,18 @@ def get_start_value(model):
         model = load_fmu(model)
 
     list_name_variable = []
-    # type: Real==0, Int==1, Bool=2, String==3, Enumeration==4)
+    # Real=0, Int=1, Bool=2, String=3, Enumeration=4
     for typ in range(3):
-        lnvt = list(model.get_model_variables(type=typ, include_alias=False,
-                                                   only_start=True).keys())
+        lnvt = list(
+            model.get_model_variables(
+                type=typ, include_alias=False, only_start=True
+            ).keys()
+        )
         list_name_variable.extend(lnvt)
 
-    return {name:model.get_variable_start(name) for name in list_name_variable}
+    return {name: model.get_variable_start(name) for name in list_name_variable}
 
 
-#§
 def set_dict_value(model, dict_value):
     """Set values from a dictionary with variable names as keys.
 
@@ -493,7 +540,7 @@ def set_dict_value(model, dict_value):
 
     model.set(*list(zip(*list(dict_value.items()))))
 
-#§
+
 def format_trajectory(model, time, trajectory, time_interpolate=None):
     """Store trajectories in a dictionary, and possibly reinterpolate them.
 
@@ -512,17 +559,15 @@ def format_trajectory(model, time, trajectory, time_interpolate=None):
     list_output = model.getFMUOutputDescription()
 
     if time_interpolate is not None:
-        list_trajectory = [np.interp(time_interpolate, time, zz) for zz in
-                           trajectory.T]
+        list_trajectory = [np.interp(time_interpolate, time, zz) for zz in trajectory.T]
     else:
         list_trajectory = list(trajectory.T)
 
-    dict_trajectory = {key:value for key, value in
-                       zip(list_output, list_trajectory)}
+    dict_trajectory = {key: value for key, value in zip(list_output, list_trajectory)}
     return dict_trajectory
 
-#§
-#TODO: refactor format_sample_trajectory.
+
+# TODO: refactor format_sample_trajectory.
 def format_sample_trajectory(model, list_output, time_interpolate=None):
     """Store samples of trajectories in a dictionary, and possibly
     reinterpolate them.
@@ -540,13 +585,17 @@ def format_sample_trajectory(model, list_output, time_interpolate=None):
 
     list_dict_trajectory = []
     for time, trajectory in list_output:
-        list_dict_trajectory.append(format_trajectory(
-            model, time, trajectory, time_interpolate=time_interpolate))
+        list_dict_trajectory.append(
+            format_trajectory(
+                model, time, trajectory, time_interpolate=time_interpolate
+            )
+        )
 
     dict_trajectory_sample = dict()
     for name_output in model.getFMUOutputDescription():
         dict_trajectory_sample[name_output] = np.column_stack(
-            [dd[name_output] for dd in list_dict_trajectory])
+            [dd[name_output] for dd in list_dict_trajectory]
+        )
 
     if time_interpolate is None:
         list_time, _ = zip(*list_output)
@@ -556,10 +605,15 @@ def format_sample_trajectory(model, list_output, time_interpolate=None):
     return list_time, dict_trajectory_sample
 
 
-#§
-def simulate_trajectory(path_fmu, value_input, timestep,
-                        list_input=None, list_output=None,
-                        final_time=None, ncp=None):
+def simulate_trajectory(
+    path_fmu,
+    value_input,
+    timestep,
+    list_input=None,
+    list_output=None,
+    final_time=None,
+    ncp=None,
+):
     """Simulate a sample of trajectories with an FMU.
 
     Arguments:
@@ -583,34 +637,27 @@ def simulate_trajectory(path_fmu, value_input, timestep,
     except AttributeError:
         list_output = [list_output]
 
-    model = otfmi.OpenTURNSFMUFunction(path_fmu=path_fmu,
-                                       inputs_fmu=list_input,
-                                       outputs_fmu=list_output)
+    model = otfmi.OpenTURNSFMUFunction(
+        path_fmu=path_fmu, inputs_fmu=list_input, outputs_fmu=list_output
+    )
     model._OpenTURNSFMUFunction__final = "trajectory"
-    model._OpenTURNSFMUFunction__expect_trajectory = False # False is the default
+    model._OpenTURNSFMUFunction__expect_trajectory = False  # False is the default
 
     try:
         timestep.__iter__
     except AttributeError:
-        time_interpolate = np.linspace(0, final_time,
-                                       final_time / float(timestep))
+        time_interpolate = np.linspace(0, final_time, final_time / float(timestep))
     else:
         time_interpolate = timestep
         final_time = time_interpolate[-1]
-
 
     options = dict()
     if ncp is not None:
         options["ncp"] = ncp
 
-    out = model.simulate_sample(list_value_input=value_input,
-                                final_time=final_time,
-                                options=options)
-    list_time, dict_trajectory = format_sample_trajectory(
-        model, out, time_interpolate)
+    out = model.simulate_sample(
+        list_value_input=value_input, final_time=final_time, options=options
+    )
+    list_time, dict_trajectory = format_sample_trajectory(model, out, time_interpolate)
     time = list_time[0]
     return time, dict_trajectory
-
-
-
-#§

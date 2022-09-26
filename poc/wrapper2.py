@@ -6,4 +6,3 @@ model.reset()
 res = model.simulate(options={'silent_mode': True})
 print(model.get_model_variables().keys())
 print(res['y0'][-1])
-

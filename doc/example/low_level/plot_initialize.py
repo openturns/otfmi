@@ -11,13 +11,15 @@ Initialize an FMU with non-default values
 # %%
 # .. note::
 #    | A FMU *parameter* remains constant during simulation (a single value).
-#    | A FMU *input* evolves during simulation (time-dependent values).  
+#    | A FMU *input* evolves during simulation (time-dependent values).
 #    | See the `FMI Standard <http://shorturl.at/kpJR5>`_ for more details.
 
 # %%
 # First, retrieve and load the FMU *deviation.fmu*.
 #
 import otfmi.example.utility
+from os.path import abspath
+
 path_fmu = otfmi.example.utility.get_path_fmu("deviation")
 model = otfmi.fmi.load_fmu(path_fmu)
 
@@ -35,9 +37,7 @@ print(model.get_variable_start("F"))
 
 # %%
 # The beam length can be required directly in the ``simulate`` function:
-import numpy as np
-result = otfmi.fmi.simulate(model,
-    initialization_parameters=[("L", "F"), (300, 25000)])
+result = otfmi.fmi.simulate(model, initialization_parameters=[("L", "F"), (300, 25000)])
 
 # check parameters value and show output value
 print("L = %g" % result.final("L"))  # check parameter value
@@ -59,12 +59,12 @@ print("y = %g" % result.final("y"))  # print output value
 # - to save the value of all the variables of a model after simulation,
 # - to restart simulation from a given point.
 
-# %% First, write the initialization script. 
+# %% First, write the initialization script.
 # .. note::
 #    The initialization script can be automatically created in Dymola.
 
 # %%
-# For clarity, we write the initialization script using Python. 
+# For clarity, we write the initialization script using Python.
 temporary_file = "initialization.mos"
 with open(temporary_file, "w") as f:
     f.write("L = 300;\n")
@@ -73,9 +73,7 @@ with open(temporary_file, "w") as f:
 # %%
 # Otfmi ``simulate`` function launches FMU initialization, using the
 # designated script, then simulates the FMU.
-from os.path import abspath
-result = otfmi.fmi.simulate(
-    model, initialization_script=abspath(temporary_file))
+result = otfmi.fmi.simulate(model, initialization_script=abspath(temporary_file))
 
 # check parameters value and show output value
 print("L = %g" % result.final("L"))  # check parameter value

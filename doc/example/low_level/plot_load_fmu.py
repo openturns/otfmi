@@ -5,10 +5,12 @@ Load an FMU
 # %%
 # First, retrieve the path to the example FMU *deviation.fmu*.
 #
+import pyfmi
 import otfmi.example.utility
+
 path_fmu = otfmi.example.utility.get_path_fmu("deviation")
 
-# %% 
+# %%
 # Loading an FMU only requires the FMU name or path.
 
 model = otfmi.fmi.load_fmu(path_fmu)
@@ -21,7 +23,6 @@ model = otfmi.fmi.load_fmu(path_fmu)
 
 # %%
 # All options of `pyfmi.load_fmu` can be passed on to Otfmi:
-import pyfmi
 print(help(pyfmi.load_fmu))
 
 # %%
