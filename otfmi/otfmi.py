@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # Copyright 2016 EDF. This software was developed with the collaboration of
 # Phimeca Engineering (Sylvain Girard, girard@phimeca.com).
 """Provide a class for simulation and result handling of FMU.
@@ -8,17 +7,14 @@ It relies on the lower level OpenTURNSFMUFunction, which is similar to
 OpenTURNS' OpenTURNSPythonFunction.
 """
 
-#§
-
 import pyfmi
 import numpy as np
 import os
 import openturns as ot
-
 from . import fmi
 from . import fmu_pool
 
-#§
+
 class FMUFunction(ot.Function):
     """
     Define a Function from a FMU file.
@@ -51,7 +47,7 @@ class FMUFunction(ot.Function):
         The output variables value is collected at t=final_time and returned by
         FMUFunction.
 
-    kind : str, one of "ME" (model exchange) or "CS" 
+    kind : str, one of "ME" (model exchange) or "CS"
         (co-simulation)
         Select a kind of FMU if both are available.
         Note:
@@ -60,6 +56,7 @@ class FMUFunction(ot.Function):
         impose a solver not available in pyfmi.
 
     """
+
     # expect_trajectory : bool, if True, the call inputs are assumed to be
     # time dependent trajectories. Default is False
     # TODO: Not implemented yet. Currently the __call__ from
@@ -67,20 +64,35 @@ class FMUFunction(ot.Function):
     # Hence a sequence of vectors is expected but a single vector is
     # outputted.
 
-
-    def __new__(self, path_fmu=None, inputs_fmu=None, outputs_fmu=None,
-                inputs=None, outputs=None, n_cpus=None, kind=None,
-                initialization_script=None, final_time=None):
+    def __new__(
+        self,
+        path_fmu=None,
+        inputs_fmu=None,
+        outputs_fmu=None,
+        inputs=None,
+        outputs=None,
+        n_cpus=None,
+        kind=None,
+        initialization_script=None,
+        final_time=None,
+    ):
         lowlevel = OpenTURNSFMUFunction(
-            path_fmu=path_fmu, inputs_fmu=inputs_fmu, outputs_fmu=outputs_fmu,
-            inputs=inputs, n_cpus=n_cpus, outputs=outputs, kind=kind,
-            initialization_script=initialization_script, final_time=final_time)
+            path_fmu=path_fmu,
+            inputs_fmu=inputs_fmu,
+            outputs_fmu=outputs_fmu,
+            inputs=inputs,
+            n_cpus=n_cpus,
+            outputs=outputs,
+            kind=kind,
+            initialization_script=initialization_script,
+            final_time=final_time,
+        )
 
         highlevel = ot.Function(lowlevel)
         # highlevel._model = lowlevel.model
         return highlevel
 
-#§
+
 class OpenTURNSFMUFunction(ot.OpenTURNSPythonFunction):
     """
     Define a Function from a FMU file.
@@ -127,17 +139,28 @@ class OpenTURNSFMUFunction(ot.OpenTURNSPythonFunction):
 
     """
 
-    def __init__(self, path_fmu, inputs_fmu=None, outputs_fmu=None,
-                 inputs=None, outputs=None, n_cpus=None,
-                 initialization_script=None, kind=None,
-                 expect_trajectory=False, final_time=None, **kwargs):
+    def __init__(
+        self,
+        path_fmu,
+        inputs_fmu=None,
+        outputs_fmu=None,
+        inputs=None,
+        outputs=None,
+        n_cpus=None,
+        initialization_script=None,
+        kind=None,
+        expect_trajectory=False,
+        final_time=None,
+        **kwargs
+    ):
         self.load_fmu(path_fmu=path_fmu, kind=kind)
 
         self._set_inputs_fmu(inputs_fmu)
         self._set_outputs_fmu(outputs_fmu)
 
-        super(OpenTURNSFMUFunction, self).__init__(n=len(self.inputs_fmu),
-                                                   p=len(self.outputs_fmu))
+        super(OpenTURNSFMUFunction, self).__init__(
+            n=len(self.inputs_fmu), p=len(self.outputs_fmu)
+        )
         self._set_inputs(inputs)
         self._set_outputs(outputs)
         self._set_final_time(final_time)
@@ -163,7 +186,11 @@ class OpenTURNSFMUFunction(ot.OpenTURNSPythonFunction):
 
         if inputs_fmu is None:
             # choose all variables with variability INPUT
-            fmix_input = pyfmi.fmi.FMI2_INPUT if self.model.get_version() == '2.0' else pyfmi.fmi.FMI_INPUT
+            fmix_input = (
+                pyfmi.fmi.FMI2_INPUT
+                if self.model.get_version() == "2.0"
+                else pyfmi.fmi.FMI_INPUT
+            )
             inputs_fmu = [name for name in all_vars if causality[name] == fmix_input]
         else:
             difference = set(inputs_fmu).difference(all_vars)
@@ -171,9 +198,21 @@ class OpenTURNSFMUFunction(ot.OpenTURNSPythonFunction):
                 raise pyfmi.common.io.VariableNotFoundError(", ".join(difference))
 
             for name in inputs_fmu:
-                if (self.model.get_version() == '2.0' and not causality[name] in [pyfmi.fmi.FMI2_PARAMETER, pyfmi.fmi.FMI2_INPUT]) \
-                    or (self.model.get_version() == '1.0' and causality[name] != pyfmi.fmi.FMI_INPUT):
-                    raise ValueError('Variable "' + name + '" cannot be used as a function input (causality ' + fmi.get_causality_str(self.model, name) + ')')
+                if (
+                    self.model.get_version() == "2.0"
+                    and not causality[name]
+                    in [pyfmi.fmi.FMI2_PARAMETER, pyfmi.fmi.FMI2_INPUT]
+                ) or (
+                    self.model.get_version() == "1.0"
+                    and causality[name] != pyfmi.fmi.FMI_INPUT
+                ):
+                    raise ValueError(
+                        'Variable "'
+                        + name
+                        + '" cannot be used as a function input (causality '
+                        + fmi.get_causality_str(self.model, name)
+                        + ")"
+                    )
 
         self.inputs_fmu = inputs_fmu
 
@@ -190,7 +229,6 @@ class OpenTURNSFMUFunction(ot.OpenTURNSPythonFunction):
             inputs = self.inputs_fmu
         self.setInputDescription(inputs)
 
-
     def _set_outputs_fmu(self, outputs_fmu):
         """Set output variable names.
 
@@ -205,21 +243,38 @@ class OpenTURNSFMUFunction(ot.OpenTURNSPythonFunction):
 
         if outputs_fmu is None:
             # choose all variables with variability OUTPUT
-            fmix_output = pyfmi.fmi.FMI2_OUTPUT if self.model.get_version() == '2.0' else pyfmi.fmi.FMI_OUTPUT
+            fmix_output = (
+                pyfmi.fmi.FMI2_OUTPUT
+                if self.model.get_version() == "2.0"
+                else pyfmi.fmi.FMI_OUTPUT
+            )
             outputs_fmu = [name for name in all_vars if causality[name] == fmix_output]
             if len(outputs_fmu) == 0:
-                raise pyfmi.common.io.VariableNotFoundError("No variables marked as OUTPUT please specify outputs_fmu")
+                raise pyfmi.common.io.VariableNotFoundError(
+                    "No variables marked as OUTPUT please specify outputs_fmu"
+                )
         else:
             difference = set(outputs_fmu).difference(fmi.get_name_variable(self.model))
             if difference:
                 raise pyfmi.common.io.VariableNotFoundError(", ".join(difference))
 
             for name in outputs_fmu:
-                if (self.model.get_version() == '2.0' and not causality[name] in [pyfmi.fmi.FMI2_LOCAL, pyfmi.fmi.FMI2_OUTPUT]) \
-                    or (self.model.get_version() == '1.0' and causality[name] != pyfmi.fmi.FMI_OUTPUT):
-                    raise ValueError('Variable "' + name + '" cannot be used as a function output (causality ' + fmi.get_causality_str(self.model, name) + ')')
+                if (
+                    self.model.get_version() == "2.0"
+                    and not causality[name]
+                    in [pyfmi.fmi.FMI2_LOCAL, pyfmi.fmi.FMI2_OUTPUT]
+                ) or (
+                    self.model.get_version() == "1.0"
+                    and causality[name] != pyfmi.fmi.FMI_OUTPUT
+                ):
+                    raise ValueError(
+                        'Variable "'
+                        + name
+                        + '" cannot be used as a function output (causality '
+                        + fmi.get_causality_str(self.model, name)
+                        + ")"
+                    )
         self.outputs_fmu = outputs_fmu
-
 
     def _set_outputs(self, outputs=None):
         """Set output variable names.
@@ -273,7 +328,6 @@ class OpenTURNSFMUFunction(ot.OpenTURNSPythonFunction):
 
         return self.simulate(value_input=value_input, **kwargs)
 
-
     def _exec_sample(self, list_value_input, **kwargs):
         """Simulate the FMU multiple times.
 
@@ -307,7 +361,9 @@ class OpenTURNSFMUFunction(ot.OpenTURNSPythonFunction):
 
         """
 
-        self.model = fmi.load_fmu(path_fmu=os.path.expanduser(path_fmu), kind=kind, **kwargs)
+        self.model = fmi.load_fmu(
+            path_fmu=os.path.expanduser(path_fmu), kind=kind, **kwargs
+        )
 
     def getFMUInputDescription(self):
         """Get the list of input variable names."""
@@ -331,17 +387,17 @@ class OpenTURNSFMUFunction(ot.OpenTURNSPythonFunction):
         try:
             self.model.setup_experiment()
         except AttributeError:
-            pass # Probably FMI version 1.
+            pass  # Probably FMI version 1.
         try:
-            fmi.apply_initialization_script(self.model,
-                                            self.initialization_script)
+            fmi.apply_initialization_script(self.model, self.initialization_script)
         except TypeError:
-            pass # No initialization script.
+            pass  # No initialization script.
         try:
-             self.model.initialize()
+            self.model.initialize()
         except pyfmi.fmi.FMUException as ex:
-            raise pyfmi.fmi.FMUException(str(ex)+'\n'+'\n'.join([str(line) for line in self.model.get_log()]))
-
+            raise pyfmi.fmi.FMUException(
+                str(ex) + "\n" + "\n".join([str(line) for line in self.model.get_log()])
+            )
 
     def simulate(self, value_input=None, reset=True, **kwargs):
         """Simulate the fmu.
@@ -362,23 +418,26 @@ class OpenTURNSFMUFunction(ot.OpenTURNSPythonFunction):
 
         """
 
-
         kwargs.setdefault("initialization_script", self.initialization_script)
 
         kwargs_simulate = fmi.parse_kwargs_simulate(
-            value_input, name_input=self.getFMUInputDescription(),
+            value_input,
+            name_input=self.getFMUInputDescription(),
             name_output=self.getFMUOutputDescription(),
-            model=self.model, **kwargs)
+            model=self.model,
+            **kwargs
+        )
 
         if "final_time" in kwargs.keys():
             raise Warning("final_time must be set in the constructor.")
 
-        simulation = fmi.simulate(self.model, reset=reset,
-            final_time=self.final_time, **kwargs_simulate)
+        simulation = fmi.simulate(
+            self.model, reset=reset, final_time=self.final_time, **kwargs_simulate
+        )
 
-        return fmi.strip_simulation(simulation,
-                                    name_output=self.getOutputDescription(),
-                                    final=self.__final)
+        return fmi.strip_simulation(
+            simulation, name_output=self.getOutputDescription(), final=self.__final
+        )
 
     def simulate_sample(self, list_value_input, **kwargs):
         """Simulate the FMU multiple times.
@@ -399,22 +458,23 @@ class OpenTURNSFMUFunction(ot.OpenTURNSPythonFunction):
 
         kwargs.setdefault("initialization_script", self.initialization_script)
 
-        #TODO: re-factorize parsing of kwargs?
+        # TODO: re-factorize parsing of kwargs?
 
         list_kwargs = []
         for value_input in list_value_input:
             kwargs_simulate = fmi.parse_kwargs_simulate(
-                value_input, name_input=self.getFMUInputDescription(),
+                value_input,
+                name_input=self.getFMUInputDescription(),
                 name_output=self.getFMUOutputDescription(),
-                model=self.model, **kwargs)
+                model=self.model,
+                **kwargs
+            )
             list_kwargs.append(kwargs_simulate)
-
 
         # if n_cpus > 1: # TODO?
         pool = fmu_pool.FMUPool(self.model, n_process=n_cpus)
         return pool.run(list_kwargs, final=self.__final)
 
-#§
 
 class FMUPointToFieldFunction(ot.PointToFieldFunction):
     """
@@ -458,35 +518,64 @@ class FMUPointToFieldFunction(ot.PointToFieldFunction):
         The FMU simulation stop time.
 
     """
-    def __new__(self, mesh, path_fmu=None, inputs_fmu=None, outputs_fmu=None,
-                inputs=None, outputs=None, kind=None,
-                initialization_script=None, start_time=None, final_time=None):
-        lowlevel = OpenTURNSFMUPointToFieldFunction(mesh,
-            path_fmu=path_fmu, inputs_fmu=inputs_fmu, outputs_fmu=outputs_fmu,
-            inputs=inputs, outputs=outputs, kind=kind,
-            initialization_script=initialization_script, start_time=start_time,
-            final_time=final_time)
+
+    def __new__(
+        self,
+        mesh,
+        path_fmu=None,
+        inputs_fmu=None,
+        outputs_fmu=None,
+        inputs=None,
+        outputs=None,
+        kind=None,
+        initialization_script=None,
+        start_time=None,
+        final_time=None,
+    ):
+        lowlevel = OpenTURNSFMUPointToFieldFunction(
+            mesh,
+            path_fmu=path_fmu,
+            inputs_fmu=inputs_fmu,
+            outputs_fmu=outputs_fmu,
+            inputs=inputs,
+            outputs=outputs,
+            kind=kind,
+            initialization_script=initialization_script,
+            start_time=start_time,
+            final_time=final_time,
+        )
 
         highlevel = ot.PointToFieldFunction(lowlevel)
         # highlevel._model = lowlevel.model
         return highlevel
 
+
 class OpenTURNSFMUPointToFieldFunction(ot.OpenTURNSPythonPointToFieldFunction):
     """Define a PointToFieldFunction from a FMU file."""
 
-    def __init__(self, mesh, path_fmu, inputs_fmu=None, outputs_fmu=None,
-                 inputs=None, outputs=None,
-                 initialization_script=None, kind=None,
-                 expect_trajectory=False, start_time=None,
-                 final_time=None, **kwargs):
+    def __init__(
+        self,
+        mesh,
+        path_fmu,
+        inputs_fmu=None,
+        outputs_fmu=None,
+        inputs=None,
+        outputs=None,
+        initialization_script=None,
+        kind=None,
+        expect_trajectory=False,
+        start_time=None,
+        final_time=None,
+        **kwargs
+    ):
         self.load_fmu(path_fmu=path_fmu, kind=kind)
 
         self._set_inputs_fmu(inputs_fmu)
         self._set_outputs_fmu(outputs_fmu)
 
-        super(OpenTURNSFMUPointToFieldFunction, self).__init__(len
-            (self.inputs_fmu), mesh,
-                                                               len(self.outputs_fmu))
+        super(OpenTURNSFMUPointToFieldFunction, self).__init__(
+            len(self.inputs_fmu), mesh, len(self.outputs_fmu)
+        )
         self._set_inputs(inputs)
         self._set_outputs(outputs)
         self._set_final_time(final_time)
@@ -494,7 +583,7 @@ class OpenTURNSFMUPointToFieldFunction(ot.OpenTURNSPythonPointToFieldFunction):
         self._assert_mesh_pertinence()
 
         self.initialize(initialization_script)
-  
+
     def _set_inputs_fmu(self, inputs_fmu):
         """Set input variable names.
 
@@ -509,7 +598,11 @@ class OpenTURNSFMUPointToFieldFunction(ot.OpenTURNSPythonPointToFieldFunction):
 
         if inputs_fmu is None:
             # choose all variables with variability INPUT
-            fmix_input = pyfmi.fmi.FMI2_INPUT if self.model.get_version() == '2.0' else pyfmi.fmi.FMI_INPUT
+            fmix_input = (
+                pyfmi.fmi.FMI2_INPUT
+                if self.model.get_version() == "2.0"
+                else pyfmi.fmi.FMI_INPUT
+            )
             inputs_fmu = [name for name in all_vars if causality[name] == fmix_input]
         else:
             difference = set(inputs_fmu).difference(all_vars)
@@ -517,9 +610,21 @@ class OpenTURNSFMUPointToFieldFunction(ot.OpenTURNSPythonPointToFieldFunction):
                 raise pyfmi.common.io.VariableNotFoundError(", ".join(difference))
 
             for name in inputs_fmu:
-                if (self.model.get_version() == '2.0' and not causality[name] in [pyfmi.fmi.FMI2_PARAMETER, pyfmi.fmi.FMI2_INPUT]) \
-                    or (self.model.get_version() == '1.0' and causality[name] != pyfmi.fmi.FMI_INPUT):
-                    raise ValueError('Variable "' + name + '" cannot be used as a function input (causality ' + fmi.get_causality_str(self.model, name) + ')')
+                if (
+                    self.model.get_version() == "2.0"
+                    and not causality[name]
+                    in [pyfmi.fmi.FMI2_PARAMETER, pyfmi.fmi.FMI2_INPUT]
+                ) or (
+                    self.model.get_version() == "1.0"
+                    and causality[name] != pyfmi.fmi.FMI_INPUT
+                ):
+                    raise ValueError(
+                        'Variable "'
+                        + name
+                        + '" cannot be used as a function input (causality '
+                        + fmi.get_causality_str(self.model, name)
+                        + ")"
+                    )
 
         self.inputs_fmu = inputs_fmu
 
@@ -536,7 +641,6 @@ class OpenTURNSFMUPointToFieldFunction(ot.OpenTURNSPythonPointToFieldFunction):
             inputs = self.inputs_fmu
         self.setInputDescription(inputs)
 
-
     def _set_outputs_fmu(self, outputs_fmu):
         """Set output variable names.
 
@@ -551,21 +655,38 @@ class OpenTURNSFMUPointToFieldFunction(ot.OpenTURNSPythonPointToFieldFunction):
 
         if outputs_fmu is None:
             # choose all variables with variability OUTPUT
-            fmix_output = pyfmi.fmi.FMI2_OUTPUT if self.model.get_version() == '2.0' else pyfmi.fmi.FMI_OUTPUT
+            fmix_output = (
+                pyfmi.fmi.FMI2_OUTPUT
+                if self.model.get_version() == "2.0"
+                else pyfmi.fmi.FMI_OUTPUT
+            )
             outputs_fmu = [name for name in all_vars if causality[name] == fmix_output]
             if len(outputs_fmu) == 0:
-                raise pyfmi.common.io.VariableNotFoundError("No variables marked as OUTPUT please specify outputs_fmu")
+                raise pyfmi.common.io.VariableNotFoundError(
+                    "No variables marked as OUTPUT please specify outputs_fmu"
+                )
         else:
             difference = set(outputs_fmu).difference(fmi.get_name_variable(self.model))
             if difference:
                 raise pyfmi.common.io.VariableNotFoundError(", ".join(difference))
 
             for name in outputs_fmu:
-                if (self.model.get_version() == '2.0' and not causality[name] in [pyfmi.fmi.FMI2_LOCAL, pyfmi.fmi.FMI2_OUTPUT]) \
-                    or (self.model.get_version() == '1.0' and causality[name] != pyfmi.fmi.FMI_OUTPUT):
-                    raise ValueError('Variable "' + name + '" cannot be used as a function output (causality ' + fmi.get_causality_str(self.model, name) + ')')
+                if (
+                    self.model.get_version() == "2.0"
+                    and not causality[name]
+                    in [pyfmi.fmi.FMI2_LOCAL, pyfmi.fmi.FMI2_OUTPUT]
+                ) or (
+                    self.model.get_version() == "1.0"
+                    and causality[name] != pyfmi.fmi.FMI_OUTPUT
+                ):
+                    raise ValueError(
+                        'Variable "'
+                        + name
+                        + '" cannot be used as a function output (causality '
+                        + fmi.get_causality_str(self.model, name)
+                        + ")"
+                    )
         self.outputs_fmu = outputs_fmu
-
 
     def _set_outputs(self, outputs=None):
         """Set output variable names.
@@ -599,7 +720,7 @@ class OpenTURNSFMUPointToFieldFunction(ot.OpenTURNSPythonPointToFieldFunction):
         Parameters
         ----------
         start_time: float (must be >= 0)
-        
+
         """
         if start_time is not None:
             self.start_time = start_time
@@ -612,15 +733,18 @@ class OpenTURNSFMUPointToFieldFunction(ot.OpenTURNSPythonPointToFieldFunction):
         """
         mesh = self.getOutputMesh()
         mesh_min = mesh.getVertices().getMin()[0]
-        assert mesh_min >= self.start_time, """The mesh start time must be >= to FMU start time.\n
+        assert (
+            mesh_min >= self.start_time
+        ), """The mesh start time must be >= to FMU start time.\n
             To set the FMU start time, use the argument *start_time* in
             FMUPointToFieldFunction constructor."""
 
         mesh_max = mesh.getVertices().getMax()[0]
-        assert mesh_max <= self.final_time, """The mesh final time must be >= to FMU final time.\n
+        assert (
+            mesh_max <= self.final_time
+        ), """The mesh final time must be >= to FMU final time.\n
             To set the FMU final time, use the argument final_time in
             FMUPointToFieldFunction constructor."""
-
 
     def _exec(self, value_input, **kwargs):
         """Simulate the FMU for a given set of input values.
@@ -654,7 +778,9 @@ class OpenTURNSFMUPointToFieldFunction(ot.OpenTURNSPythonPointToFieldFunction):
 
         """
 
-        self.model = fmi.load_fmu(path_fmu=os.path.expanduser(path_fmu), kind=kind, **kwargs)
+        self.model = fmi.load_fmu(
+            path_fmu=os.path.expanduser(path_fmu), kind=kind, **kwargs
+        )
 
     def getFMUInputDescription(self):
         """Get the list of input variable names."""
@@ -678,16 +804,17 @@ class OpenTURNSFMUPointToFieldFunction(ot.OpenTURNSPythonPointToFieldFunction):
         try:
             self.model.setup_experiment()
         except AttributeError:
-            pass # Probably FMI version 1.
+            pass  # Probably FMI version 1.
         try:
-            fmi.apply_initialization_script(self.model,
-                                            self.initialization_script)
+            fmi.apply_initialization_script(self.model, self.initialization_script)
         except TypeError:
-            pass # No initialization script.
+            pass  # No initialization script.
         try:
-             self.model.initialize()
+            self.model.initialize()
         except pyfmi.fmi.FMUException as ex:
-            raise pyfmi.fmi.FMUException(str(ex)+'\n'+'\n'.join([str(line) for line in self.model.get_log()]))
+            raise pyfmi.fmi.FMUException(
+                str(ex) + "\n" + "\n".join([str(line) for line in self.model.get_log()])
+            )
 
     def simulate(self, value_input=None, reset=True, **kwargs):
         """Simulate the fmu.
@@ -708,28 +835,36 @@ class OpenTURNSFMUPointToFieldFunction(ot.OpenTURNSPythonPointToFieldFunction):
 
         """
 
-
         kwargs.setdefault("initialization_script", self.initialization_script)
 
         kwargs_simulate = fmi.parse_kwargs_simulate(
-            value_input, name_input=self.getFMUInputDescription(),
+            value_input,
+            name_input=self.getFMUInputDescription(),
             name_output=self.getFMUOutputDescription(),
-            model=self.model, **kwargs)
+            model=self.model,
+            **kwargs
+        )
 
         if "final_time" in kwargs.keys():
             raise Warning("final_time must be set in the constructor.")
         if "start_time" in kwargs.keys():
             raise Warning("start_time must be set in the constructor.")
 
-        simulation = fmi.simulate(self.model, 
+        simulation = fmi.simulate(
+            self.model,
             reset=reset,
             start_time=self.start_time,
-            final_time=self.final_time, 
-            **kwargs_simulate)
+            final_time=self.final_time,
+            **kwargs_simulate
+        )
 
-        time, values = fmi.strip_simulation(simulation,
-                                    name_output=self.getOutputDescription(),
-                                    final="trajectory")
-        local_mesh = ot.Mesh([[t] for t in time], [[i, i + 1] for i in range(len(time) - 1)])
-        interpolation = ot.P1LagrangeInterpolation(local_mesh, self.getOutputMesh(), self.getOutputDimension())
+        time, values = fmi.strip_simulation(
+            simulation, name_output=self.getOutputDescription(), final="trajectory"
+        )
+        local_mesh = ot.Mesh(
+            [[t] for t in time], [[i, i + 1] for i in range(len(time) - 1)]
+        )
+        interpolation = ot.P1LagrangeInterpolation(
+            local_mesh, self.getOutputMesh(), self.getOutputDimension()
+        )
         return interpolation(values)

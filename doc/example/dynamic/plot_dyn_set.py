@@ -21,6 +21,7 @@ Set FMU simulation parameters
 
 import otfmi.example.utility
 import openturns as ot
+
 path_fmu = otfmi.example.utility.get_path_fmu("epid")
 
 # %%
@@ -35,7 +36,8 @@ function = otfmi.FMUPointToFieldFunction(
     inputs_fmu=["infection_rate", "healing_rate"],
     outputs_fmu=["infected"],
     start_time=0.0,
-    final_time=2.0)
+    final_time=2.0,
+)
 
 inputPoint = ot.Point([0.007, 0.02])
 outputSample = function(inputPoint)
@@ -52,12 +54,12 @@ midlevel_function = otfmi.OpenTURNSFMUPointToFieldFunction(
     inputs_fmu=["infection_rate", "healing_rate"],
     outputs_fmu=["infected"],
     start_time=0.0,
-    final_time=2.0)
+    final_time=2.0,
+)
 
 outputPoint = midlevel_function.simulate(
-    inputPoint,
-    algorithm="FMICSAlg",
-    options={"silent_mode": True})
+    inputPoint, algorithm="FMICSAlg", options={"silent_mode": True}
+)
 
 # %%
 # For advanced users, the middle-level class ``OpenTURNSFMUFunction`` also gives
@@ -68,5 +70,5 @@ print(dir(pyfmi_model))
 
 # %%
 # .. note::
-#    Otfmi' classes ``FMUPointToFieldFunction`` and ``OpenTURNSFMUPointToFieldFunction`` 
+#    Otfmi' classes ``FMUPointToFieldFunction`` and ``OpenTURNSFMUPointToFieldFunction``
 #    are designed to highlight the most useful PyFMI's methods and simplify their use!

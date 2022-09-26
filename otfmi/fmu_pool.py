@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # Copyright 2016 EDF. This software was developed with the collaboration of
 # Phimeca Engineering (Sylvain Girard, girard@phimeca.com).
 """Provide multiprocessing of fmu simulations with pyfmi.
@@ -6,20 +5,18 @@ This is a rewrite of the fmu_pool submodule from EstimationPy by
 Marco Bonvini : https://github.com/lbl-srg/EstimationPy.
 """
 
-#§
 import multiprocessing
 
 from multiprocessing import Process, Queue
 from threading import Thread
 
 import operator
-import numpy as np
 
 from .fmi import simulate, strip_simulation
 
 from . import logger
 
-#§
+
 class FMUProcess(Process):
     """Process for running a single simulation of an FMU model.
 
@@ -45,27 +42,27 @@ class FMUProcess(Process):
 
     """
 
-    def __init__(self, model, queue, index, max_retry=10,
-                 initialization_script=None, **kwargs):
+    def __init__(
+        self, model, queue, index, max_retry=10, initialization_script=None, **kwargs
+    ):
         super().__init__()
         self.model = model
         self.max_retry = max_retry
         self.queue = queue
         self.index = index
-        self.name_output = kwargs.pop("name_output",
-                                      kwargs["options"]["filter"])
+        self.name_output = kwargs.pop("name_output", kwargs["options"]["filter"])
         self.initialization_script = initialization_script
 
         self.__final = kwargs.pop("final", None)
         if self.__final == "result":
-            raise RuntimeError("The 'final' parameter cannot be set to"
-                               " 'result' in FMUProcess.")
+            raise RuntimeError(
+                "The 'final' parameter cannot be set to" " 'result' in FMUProcess."
+            )
         self.__logger = kwargs.pop("logger", False)
         self.kwargs_simulate = kwargs
         # Handle results in memory. Using file can induce ambiguities.
         # If need be, AssimilationPy's fmu_pool may contain another solution.
-        self.kwargs_simulate.setdefault("options",
-                                        dict())["result_handling"] = "memory"
+        self.kwargs_simulate.setdefault("options", dict())["result_handling"] = "memory"
 
     def run(self):
         """Run simulation and store results in the queue."""
@@ -73,9 +70,9 @@ class FMUProcess(Process):
         for count_retry in range(self.max_retry):
             try:
                 simulation = simulate(self.model, **self.kwargs_simulate)
-                result = strip_simulation(simulation,
-                                          name_output=self.name_output,
-                                          final=self.__final)
+                result = strip_simulation(
+                    simulation, name_output=self.name_output, final=self.__final
+                )
             except Exception as e:
                 result = e
             else:
@@ -85,14 +82,12 @@ class FMUProcess(Process):
             # A warning is issued retrospectively.
 
             if self.__logger:
-                logger.log("Maximum number of retries reached. index=%d" %
-                           self.index )
-                logger.log("Input keyword arguments: index=%s" %
-                           self.kwargs_simulate)
+                logger.log("Maximum number of retries reached. index=%d" % self.index)
+                logger.log("Input keyword arguments: index=%s" % self.kwargs_simulate)
 
         self.queue.put([self.index, result])
 
-#§
+
 def threaded_function(queue, dict_result, n_result):
     """Read the values in the queue and moves them to a dictionary.
 
@@ -111,7 +106,6 @@ def threaded_function(queue, dict_result, n_result):
     # The function, and thus the thread, terminates when all the expected
     # results have been read.
 
-
     n = 0
     while n < n_result:
         if not queue.empty():
@@ -119,18 +113,18 @@ def threaded_function(queue, dict_result, n_result):
             dict_result[index] = result
             n += 1
 
-#§
+
 class FMUPool:
     """Manage a pool of processes that execute parallel simulation of an FMU
     model.
 
     """
+
     # Note:
     # The processes running the simulations, executed in parallel if multiple
     # processors are available, produce results that are stored in a queue. If
     # the queue reaches its limit the execution will be blocked until the
     # resources are freed.
-
 
     def __init__(self, model, n_process=None, **kwargs):
         """Constructor that initializes the pool of processes that runs the
@@ -150,7 +144,6 @@ class FMUPool:
 
         self.__logger = kwargs.pop("logger", False)
 
-
     def run(self, list_kwargs, **kwargs_default):
         """Run the simulation of the model with using parallel processes.
 
@@ -168,8 +161,7 @@ class FMUPool:
         for ii, kwargs in enumerate(list_kwargs):
             kwargs_updated = kwargs_default.copy()
             kwargs_updated.update(kwargs)
-            list_process.append(FMUProcess(self.model, queue, ii,
-                                           **kwargs_updated))
+            list_process.append(FMUProcess(self.model, queue, ii, **kwargs_updated))
         if self.__logger:
             logger.log("New run. n_simulation=%d" % n_simulation)
 
@@ -179,8 +171,9 @@ class FMUPool:
         # queue and put them into a dictionary. The Thread will remove
         # elements from the queue right after they have been produced, to
         # avoid to avoid reaching the size limit and block the processes.
-        thread = Thread(target=threaded_function,
-                        args=(queue, dict_result, n_simulation ))
+        thread = Thread(
+            target=threaded_function, args=(queue, dict_result, n_simulation)
+        )
         thread.daemon = True
         thread.start()
 
@@ -213,11 +206,11 @@ class FMUPool:
             if isinstance(value, Exception):
                 # Some simulations failed
                 if self.__logger:
-                    logger.log("Failed simulation with index %d (error: %s)" %
-                               (key, value))
+                    logger.log(
+                        "Failed simulation with index %d (error: %s)" % (key, value)
+                    )
                 raise value
         # Sorting by keys.
-        return list(zip(*sorted(list(dict_result.items()),
-                           key=operator.itemgetter(0))))[1]
-
-#§
+        return list(
+            zip(*sorted(list(dict_result.items()), key=operator.itemgetter(0)))
+        )[1]

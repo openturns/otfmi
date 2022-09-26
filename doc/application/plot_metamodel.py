@@ -7,7 +7,7 @@ Metamodel a FMU time-dependent output
 # population (for instance, Covid!). We have an epidemiologic model describing
 # the epidemic dynamics. More precisely, we focus on the evolution of the number
 # of people infected by the disease.
-# 
+#
 # .. image:: /_static/epid.png
 #    :width: 400px
 #    :height: 300px
@@ -18,7 +18,7 @@ Metamodel a FMU time-dependent output
 # --------
 #
 # See the epidemiological model :doc:`here<../fmus/epid>`.
-# 
+#
 # --------
 #
 #
@@ -48,10 +48,11 @@ Metamodel a FMU time-dependent output
 # uncertain input of the model is the ``ìnfection_rate``.
 
 import otfmi.example.utility
-path_fmu = otfmi.example.utility.get_path_fmu("epid")
-
 import openturns as ot
-mesh = ot.RegularGrid(0.0, 0.05, 20)  
+import openturns.viewer as viewer
+
+path_fmu = otfmi.example.utility.get_path_fmu("epid")
+mesh = ot.RegularGrid(0.0, 0.05, 20)
 meshSample = mesh.getVertices()
 
 function = otfmi.FMUPointToFieldFunction(
@@ -60,7 +61,8 @@ function = otfmi.FMUPointToFieldFunction(
     inputs_fmu=["infection_rate"],
     outputs_fmu=["infected"],
     start_time=0.0,
-    final_time=1.0)
+    final_time=1.0,
+)
 
 # %%
 # We create a Monte-Carlo design of experiment, on which we
@@ -71,33 +73,30 @@ inputLaw = ot.Uniform(0.001, 0.01)
 inputSample = inputLaw.getSample(30)
 outputFMUSample = function(inputSample)
 
-import openturns.viewer as viewer
-
 graph = outputFMUSample.draw().getGraph(0, 0)
 graph.setTitle("FMU simulations")
 graph.setXTitle("Time")
 graph.setYTitle("Number of infected")
 graph.setLegends(["{:.3f}".format(line[0]) for line in inputSample])
-view = viewer.View(graph,
-    legend_kw={"title": "infection rate",
-    "loc": "upper left"})
+view = viewer.View(graph, legend_kw={"title": "infection rate", "loc": "upper left"})
 view.ShowAll()
 
 # %%
 # We define a function to visualize the upcoming Karhunen-Loevem modes.
 
+
 def drawKL(scaledKL, KLev, mesh, title="Scaled KL modes"):
     graph_modes = scaledKL.drawMarginal()
     graph_modes.setTitle(title + " scaled KL modes")
-    graph_modes.setXTitle('$x$')
-    graph_modes.setYTitle(r'$\sqrt{\lambda_i}\phi_i$')
+    graph_modes.setXTitle("$x$")
+    graph_modes.setYTitle(r"$\sqrt{\lambda_i}\phi_i$")
     data_ev = [[i, KLev[i]] for i in range(scaledKL.getSize())]
     graph_ev = ot.Graph()
     graph_ev.add(ot.Curve(data_ev))
     graph_ev.add(ot.Cloud(data_ev))
     graph_ev.setTitle(title + " KL eigenvalues")
-    graph_ev.setXTitle('$k$')
-    graph_ev.setYTitle(r'$\lambda_i$')
+    graph_ev.setXTitle("$k$")
+    graph_ev.setYTitle(r"$\lambda_i$")
     graph_ev.setAxes(True)
     graph_ev.setGrid(True)
     graph_ev.setLogScale(2)
@@ -141,18 +140,18 @@ print("Karhunen-Loeve projection is dimension {}".format(n_mode))
 
 dim = inputSample.getDimension()  # only 1 input dimension
 basis = ot.ConstantBasisFactory(dim).build()
-covarianceModel = ot.SquaredExponential(dim)  
+covarianceModel = ot.SquaredExponential(dim)
 
 
-algo = ot.KrigingAlgorithm(
-    inputSample, projectionSample, covarianceModel, basis)
+algo = ot.KrigingAlgorithm(inputSample, projectionSample, covarianceModel, basis)
 algo.run()
 result = algo.getResult()
 metamodel = result.getMetaModel()
 
-# %% 
+# %%
 # We have created all pieces for a "PointToField" metamodel. Let put these
 # pieces together:
+
 
 def globalMetamodel(sample):
     emulatedCoefficients = metamodel(sample)
@@ -160,8 +159,9 @@ def globalMetamodel(sample):
     emulatedProcessSample = restoreFunction(emulatedCoefficients)
     return emulatedProcessSample
 
+
 # %%
-# 
+#
 # Validate the metamodel
 # ++++++++++++++++++++++
 
@@ -178,9 +178,9 @@ outputMetamodelTestSample = globalMetamodel(inputTestSample)
 
 gridLayout = ot.GridLayout(1, 2)
 
-graph1 = outputFMUTestSample.draw().getGraph(0,0)
+graph1 = outputFMUTestSample.draw().getGraph(0, 0)
 graph1.setTitle("FMU simulations")
-graph2 = outputMetamodelTestSample.draw().getGraph(0,0)
+graph2 = outputMetamodelTestSample.draw().getGraph(0, 0)
 graph2.setTitle("Metamodel")
 
 for graph in [graph1, graph2]:
@@ -190,9 +190,9 @@ for graph in [graph1, graph2]:
 
 gridLayout.setGraph(0, 0, graph1)
 gridLayout.setGraph(0, 1, graph2)
-view = viewer.View(gridLayout,
-    legend_kw={"title": "infection rate",
-    "loc": "upper left"})
+view = viewer.View(
+    gridLayout, legend_kw={"title": "infection rate", "loc": "upper left"}
+)
 view.ShowAll()
 
 # %%
@@ -214,7 +214,8 @@ projectFunction = ot.KarhunenLoeveProjection(resultKL)
 coefficientSample = projectFunction(outputFMUTestSample)
 
 validationKriging = ot.MetaModelValidation(
-    inputTestSample, coefficientSample, metamodel)
+    inputTestSample, coefficientSample, metamodel
+)
 Q2 = validationKriging.computePredictivityFactor()[0]
 print(Q2)
 
@@ -225,9 +226,9 @@ print(Q2)
 # assert the quality of the obtained metamodel.
 
 # %%
-# 
+#
 # ----------------------
-# 
+#
 # In this script, we have created and validated the ``globalMetamodel``. This
 # metamodel (computationnally faster than the FMU) can now be employed instead
 # of the FMU to perform:
@@ -235,5 +236,5 @@ print(Q2)
 # - `sensitivity analysis <http://shorturl.at/dDK24>`_,
 # - `uncertainty propagation <http://shorturl.at/quFIP>`_,
 # - `estimate a failure probability <http://shorturl.at/emLQY>`_,
-# 
+#
 # etc.

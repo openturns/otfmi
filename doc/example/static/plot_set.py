@@ -19,6 +19,7 @@ Set FMU simulation parameters
 
 import otfmi.example.utility
 import openturns as ot
+
 path_fmu = otfmi.example.utility.get_path_fmu("deviation")
 
 
@@ -29,10 +30,8 @@ path_fmu = otfmi.example.utility.get_path_fmu("deviation")
 # FMU requires time to converge.
 
 function = otfmi.FMUFunction(
-    path_fmu,
-    inputs_fmu=["E", "I"],
-    outputs_fmu=["y"],
-    final_time=50.)
+    path_fmu, inputs_fmu=["E", "I"], outputs_fmu=["y"], final_time=50.0
+)
 
 inputPoint = ot.Point([2e9, 7e7])
 outputPoint = function(inputPoint)
@@ -44,15 +43,12 @@ print(outputPoint)
 # running the simulation, and require simulation silent mode.
 
 midlevel_function = otfmi.OpenTURNSFMUFunction(
-    path_fmu,
-    inputs_fmu=["E", "I"],
-    outputs_fmu=["y"])
+    path_fmu, inputs_fmu=["E", "I"], outputs_fmu=["y"]
+)
 
 outputPoint = midlevel_function.simulate(
-    inputPoint,
-    start_time=10.,
-    algorithm="FMICSAlg",
-    options={"silent_mode": True})
+    inputPoint, start_time=10.0, algorithm="FMICSAlg", options={"silent_mode": True}
+)
 
 # %%
 # For advanced users, the middle-level class ``OpenTURNSFMUFunction`` also gives

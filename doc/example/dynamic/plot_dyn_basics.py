@@ -17,23 +17,26 @@ FMUPointToFieldFunction basics
 # First, retrieve the path to *epid.fmu*.
 # Recall the deviation model is dynamic, i.e. its output evolves over
 # time.
-
+import openturns as ot
 import otfmi.example.utility
+import matplotlib.pyplot as plt
+import openturns.viewer as viewer
+
+
 path_fmu = otfmi.example.utility.get_path_fmu("epid")
 
 # %%
 # Define the time grid for the FMU's output. The last value of the time grid,
 # here 10., will define the FMU stop time for simulation.
 
-import openturns as ot
-mesh = ot.RegularGrid(0.0, 0.1, 100)  
+mesh = ot.RegularGrid(0.0, 0.1, 100)
 meshSample = mesh.getVertices()
 print(meshSample)
 
 # %%
 # .. note::
-#    The FMU solver uses its own time grid for simulation. 
-#    The FMU output is then interpolated on the user-provided time grid. 
+#    The FMU solver uses its own time grid for simulation.
+#    The FMU output is then interpolated on the user-provided time grid.
 
 # %%
 # Wrap the FMU in an :py:class:`openturns.PointToFieldFunction` object:
@@ -44,7 +47,8 @@ function = otfmi.FMUPointToFieldFunction(
     inputs_fmu=["infection_rate"],
     outputs_fmu=["infected"],
     start_time=0.0,
-    final_time=10.0)
+    final_time=10.0,
+)
 print(type(function))
 
 # %%
@@ -60,7 +64,6 @@ print(type(function))
 inputPoint = ot.Point([0.007])
 outputSample = function(inputPoint)
 
-import matplotlib.pyplot as plt
 plt.xlabel("FMU simulation time (s)")
 plt.ylabel("Number of Infected")
 plt.plot(meshSample, outputSample)
@@ -70,20 +73,15 @@ plt.show()
 # Simulate the function on a input :py:class:`openturns.Sample` yields a set of
 # fields called :py:class:`openturns.ProcessSample`:
 
-inputSample = ot.Sample(
-    [[0.007],
-    [0.005],
-    [0.003]])
+inputSample = ot.Sample([[0.007], [0.005], [0.003]])
 outputProcessSample = function(inputSample)
 print(outputProcessSample)
 
 # %%
 # Visualize the time evolution of the ``infected`` over time, depending on the
 # `ìnfection_rate`` value:
-
-import openturns.viewer as viewer
 gridLayout = outputProcessSample.draw()
-graph = gridLayout.getGraph(0,0)
+graph = gridLayout.getGraph(0, 0)
 graph.setTitle("")
 graph.setXTitle("FMU simulation time (s)")
 graph.setYTitle("Number of infected")
