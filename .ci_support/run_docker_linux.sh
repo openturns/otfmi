@@ -2,8 +2,6 @@
 
 set -xe
 
-flake8 /io/ --max-line-length 130
-
 export SOURCE_DATE_EPOCH=1609455600
 pip install -r /io/doc/requirements.txt
 
