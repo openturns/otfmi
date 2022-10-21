@@ -141,6 +141,7 @@ print("Karhunen-Loeve projection is dimension {}".format(n_mode))
 dim = inputSample.getDimension()  # only 1 input dimension
 basis = ot.ConstantBasisFactory(dim).build()
 covarianceModel = ot.SquaredExponential(dim)
+covarianceModel = ot.TensorizedCovarianceModel([covarianceModel] * n_mode)
 
 
 algo = ot.KrigingAlgorithm(inputSample, projectionSample, covarianceModel, basis)
