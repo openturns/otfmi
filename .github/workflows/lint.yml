@@ -16,5 +16,5 @@ jobs:
         pip3 install flake8
     - name: Run linter 
       run: |
-        flake8 --max-line-length 130
+        flake8 --ignore=W503 --max-line-length 130
 
