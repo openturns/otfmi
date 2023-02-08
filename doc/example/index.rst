@@ -1,16 +1,18 @@
 Examples
 ========
 
-The mathematical methods applying to static or dynamic FMUs are pretty different. Hence `Otfmi <../index>`__ provides different wrappers for these two kinds of physical models.
+The mathematical methods applying to static or dynamic FMUs are pretty different.
+Hence `Otfmi <../index>`__ provides different wrappers for these two kinds of physical models.
 
 .. note::
-   | A *static* FMU yields one or several time-invariant output(s). 
+   | A *static* FMU yields one or several time-invariant output(s).
    | A *dynamic* FMU yields one or several output(s) that evolve over time; the FMU simulation time is important to set.
 
 Explore static FMUs
 -------------------
 
-All static examples rely on *deviation.fmu*. This mechanical model represents the deviation of a cantilever beam submitted to a load at its end.
+All static examples rely on *deviation.fmu*.
+This mechanical model represents the deviation of a cantilever beam submitted to a load at its end.
 
 .. image:: ../_static/beam.png
    :width: 132px
@@ -21,7 +23,7 @@ All static examples rely on *deviation.fmu*. This mechanical model represents th
 
 .. toctree::
    :maxdepth: 1
-   
+
    ../auto_example/static/plot_basics
    ../auto_example/static/plot_init
    ../auto_example/static/plot_set
@@ -67,7 +69,9 @@ From OpenTURNS to FMU
 .. warning::
    **This feature is experimental.**
 
-The focus of OTFMI module is to enable FMUs analysis using OpenTURNS. Once a computationnally heavy FMU is metamodeled, the modeler may want to employ the metamodel *instead of the FMU* in the simulation tool.
+The focus of OTFMI module is to enable FMUs analysis using OpenTURNS.
+Once a computationnally heavy FMU is metamodeled, the modeler may want to employ
+the metamodel *instead of the FMU* in the simulation tool.
 
 .. toctree::
    :maxdepth: 1
