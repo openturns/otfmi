@@ -1,13 +1,17 @@
 The epidemiological model
 =========================
 
-The epidemiological model describes epidemics which propagate through human contact. An isolated population is considered, whose total number is constant. The people are divided in three categories:
+The epidemiological model describes epidemics which propagate through human contact.
+An isolated population is considered, whose total number is constant.
+The people are divided in three categories:
 
 * the Susceptibles (who are not sick yet),
 * the Infected (who are currently sick),
 * the Removed (who are either dead or immune).
 
-The disease can only be propagated from Infected to Susceptibles. This happens at a rate called ``infection rate`` (:math:`\beta`). An Infected becomes Removed after an infection duration (:math:`\gamma`) corresponding to the inverse of the ``healing_rate``.
+The disease can only be propagated from Infected to Susceptibles.
+This happens at a rate called ``infection rate`` (:math:`\beta`).
+An Infected becomes Removed after an infection duration (:math:`\gamma`) corresponding to the inverse of the ``healing_rate``.
 
 .. image:: ../_static/epid.png
    :height: 300px
@@ -53,4 +57,5 @@ This model is implemented in Modelica language. The default simulation time is 5
        experiment(StartTime = 0, StopTime = 50, Tolerance = 1e-6, Interval = 0.1));
    end epid;
 
-We focus on the effect of the ``infection_rate`` and ``healing_rate`` on the evolution of the ``infected`` category. Hence **two input variables** and **one time-dependent output**.
+We focus on the effect of the ``infection_rate`` and ``healing_rate`` on the evolution of the ``infected`` category.
+Hence **two input variables** and **one time-dependent output**.

@@ -13,8 +13,9 @@ jobs:
     - name: Install
       run: |
         sudo apt-get install python3-pip
-        pip3 install flake8
+        pip3 install flake8 doc8
     - name: Run linter 
       run: |
         flake8 --ignore=W503 --max-line-length 130
+        doc8 doc/ --max-line-length=130
 

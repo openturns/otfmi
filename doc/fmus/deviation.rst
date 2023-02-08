@@ -12,7 +12,9 @@ case <http://openturns.github.io/openturns/master/usecases/use_case_cantilever_b
    :alt: alternate text
    :align: center
 
-We consider a cantilever beam defined by its Young’s modulus ``E``, its length ``L`` and its section modulus ``I``. One end of the cantilever beam is built in a wall and we apply a concentrated bending load ``F`` at the other end of the beam, resulting in a deviation ``Y``.
+We consider a cantilever beam defined by its Young’s modulus ``E``, its length ``L`` and its section modulus ``I``.
+One end of the cantilever beam is built in a wall and we apply a concentrated
+bending load ``F`` at the other end of the beam, resulting in a deviation ``Y``.
 
 The mechanical equation ruling the deviation writes:
 
