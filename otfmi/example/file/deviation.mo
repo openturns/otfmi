@@ -3,7 +3,7 @@ model deviation
   output Real y;
   input Real E (start=3.0e7);
   input Real F (start=3.0e4);
-  input Real L (start=258);
+  input Real L (start=250);
   input Real I (start=400);
 equation
   y=(F*L*L*L)/(3.0*E*I);
