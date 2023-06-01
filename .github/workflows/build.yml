@@ -34,6 +34,7 @@ jobs:
       - name: Build
         shell: bash -l {0}
         run: |
+          conda install -y constructor
           conda install -y pyfmi openturns pytest jinja2 omcompiler
           python setup.py install
           mo2fmu -h
