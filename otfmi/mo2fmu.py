@@ -115,6 +115,13 @@ def main():
         default=argparse.SUPPRESS,
     )
     parser.add_argument(
+        "--version",
+        metavar="VERSION",
+        type=str,
+        help="fmi version 1.0|2.0",
+        default=argparse.SUPPRESS,
+    )
+    parser.add_argument(
         "--libs",
         metavar="LIBS",
         type=str,
