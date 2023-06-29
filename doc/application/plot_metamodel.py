@@ -137,9 +137,10 @@ print("Karhunen-Loeve projection is dimension {}".format(n_mode))
 # We keep on following our road map, by metamodeling the projection
 # of the curves on the smaller-dimension space.
 # We metamodel the Karhunen-Loeve coefficients using ordinary Kriging.
-
 dim = inputSample.getDimension()  # only 1 input dimension
-basis = ot.ConstantBasisFactory(dim).build()
+univb = ot.ConstantBasisFactory(dim).build()  # univariate basis
+coll = [ot.AggregatedFunction([univb.build(i)] * n_mode) for i in range(univb.getSize())]
+basis = ot.Basis(coll)  # multivariate basis
 covarianceModel = ot.SquaredExponential(dim)
 covarianceModel = ot.TensorizedCovarianceModel([covarianceModel] * n_mode)
 
