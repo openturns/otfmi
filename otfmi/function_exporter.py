@@ -1,4 +1,5 @@
 from .mo2fmu import mo2fmu
+import glob
 import jinja2
 import tempfile
 import openturns as ot
@@ -59,7 +60,7 @@ class FunctionExporter(object):
         study.add("function", self.function_)
         study.save()
 
-    def _write_cwrapper(self):
+    def _write_cwrapper_process(self):
         """
         Write the C wrapper.
 
@@ -144,7 +145,7 @@ void c_func(int nin, double x[], int nout, double y[]) {
       fprintf(fptr, "        f.write(str(v)+\\"\\\\n\\")\\n");
       fclose(fptr);
     }
-    rc = system("python {{ path_wrapper_py }} > {{ path_error_log }} 2>&1");
+    rc = system("python3 {{ path_wrapper_py }} > {{ path_error_log }} 2>&1");
     if (rc != 0)
       printf("otfmi: error running \\"python {{ path_wrapper_py }}\\" rc=%d\\n", rc);
     fptr = fopen("{{ path_point_out }}", "r");
@@ -200,6 +201,228 @@ void c_func(int nin, double x[], int nout, double y[]) {
         with open(os.path.join(self.workdir, "wrapper.c"), "w") as c:
             c.write(data)
 
+        # write CMakeLists
+        data = """
+cmake_minimum_required (VERSION 3.13)
+set (CMAKE_BUILD_TYPE "Release" CACHE STRING "build type")
+project (wrapper C)
+if (POLICY CMP0091)
+  cmake_policy (SET CMP0091 NEW)
+endif()
+# openmodelica uses -Bstatic on Linux
+add_library (cwrapper STATIC wrapper.c)
+set_target_properties (cwrapper PROPERTIES POSITION_INDEPENDENT_CODE ON
+                                           ARCHIVE_OUTPUT_DIRECTORY_RELEASE ${CMAKE_BINARY_DIR}
+                                           LIBRARY_OUTPUT_DIRECTORY_RELEASE ${CMAKE_BINARY_DIR}
+                                           RUNTIME_OUTPUT_DIRECTORY_RELEASE ${CMAKE_BINARY_DIR}
+                                           MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+if (MSVC)
+  target_compile_definitions(cwrapper PRIVATE _CRT_SECURE_NO_WARNINGS)
+endif()
+"""
+        with open(os.path.join(self.workdir, "CMakeLists.txt"), "w") as cm:
+            cm.write(data)
+
+    def _write_cwrapper_capi(self):
+        """
+        Write the C wrapper with Python C API.
+
+        Parameters
+        ----------
+        """
+        with open(self._xml_path, "rb") as f:
+            xml_data = f.read()
+
+        field = hasattr(self.function_, "getOutputMesh")
+        flat_size = self.function_.getOutputDimension()
+        if field:
+            flat_size *= self.function_.getOutputMesh().getVerticesNumber()
+
+        tdata = """
+#define _XOPEN_SOURCE 500
+#define  _POSIX_C_SOURCE 200809L
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/stat.h>
+#ifdef _WIN32
+#include <io.h>
+#include <direct.h>
+#define R_OK 4
+#define access _access
+#define mkdir(dir, mod) _mkdir(dir)
+#else
+#include <unistd.h>
+#endif
+#include <Python.h>
+unsigned char xml_data[] = { {{ xml_data_bin }} };
+
+#ifdef _WIN32
+__declspec(dllexport)
+#endif
+void c_func(int nin, double x[], int nout, double y[])
+{
+  FILE *fptr;
+  static int count = 0;
+  PyObject *pName = NULL;
+  static PyObject *pFunc = NULL;
+  PyObject *pX = NULL;
+  PyObject *pY = NULL;
+  PyObject *pValue = NULL;
+  PyObject *pModule = NULL;
+  int i;
+  if (!pFunc)
+  {
+    char workdir[] = "{{ workdir }}";
+    if (access(workdir, R_OK) == -1)
+      mkdir(workdir, 0733);
+    char xml_path[] = "{{ path_function_xml }}";
+    if (access(xml_path, R_OK) == -1)
+    {
+      fptr = fopen(xml_path, "wb");
+      fwrite (xml_data, sizeof(char), sizeof(xml_data), fptr);
+      fclose(fptr);
+    }
+    char py_path[] = "{{ path_wrapper_py }}";
+    if (access(py_path, R_OK) == -1) {
+      fptr = fopen(py_path, "w");
+      fprintf(fptr, "import openturns as ot\\n");
+      fprintf(fptr, "study = ot.Study()\\n");
+      fprintf(fptr, "xml_path = r\\\"%s\\\"\\n", xml_path);
+      fprintf(fptr, "study.setStorageManager(ot.XMLStorageManager(xml_path))\\n");
+      fprintf(fptr, "study.load()\\n");
+      fprintf(fptr, "function = ot.{{ function_type }}()\\n");
+      fprintf(fptr, "study.fillObject(\\\"function\\\", function)\\n");
+      fprintf(fptr, "def wrap_evaluate_python(x):\\n");
+      fprintf(fptr, "    y = function(list(x))\\n");
+      //fprintf(fptr, "    print(x, y)\\n");
+{% if field %}
+      fprintf(fptr, "    y = y.asPoint()\\n");
+{% endif %}
+      fprintf(fptr, "    return y\\n");
+      fclose(fptr);
+    }
+    Py_Initialize();
+    if (PyErr_Occurred())
+    {
+       PyErr_Print();
+       return;
+    }
+    pName = PyUnicode_FromString(py_path);
+    if (PyErr_Occurred())
+    {
+       PyErr_Print();
+       return;
+    }
+    PyObject* sys = PyImport_ImportModule("sys");
+    PyObject* sys_path = PyObject_GetAttrString(sys, "path");
+    PyObject* folder_path = PyUnicode_FromString(workdir);
+    PyList_Append(sys_path, folder_path);
+    PyObject* wrapper_name = PyUnicode_FromString("wrapper");
+    pModule = PyImport_Import(wrapper_name);
+    if (PyErr_Occurred())
+    {
+       PyErr_Print();
+       return;
+    }
+    Py_DECREF(pName);
+
+    pFunc = PyObject_GetAttrString(pModule, "wrap_evaluate_python");
+    if (PyErr_Occurred())
+    {
+       PyErr_Print();
+       return;
+    }
+  }
+
+  //printf("-- pFunc=%x\\n", pFunc);
+  if (pFunc)
+  {
+    pX = PyTuple_New(nin);
+    for (i = 0; i < nin; ++i)
+    {
+      pValue = PyFloat_FromDouble(x[i]);
+      PyTuple_SetItem(pX, i, pValue);
+      //printf("-- x=%g\\n", x[i]); fflush(stdout);
+    }
+    pY = PyObject_CallOneArg(pFunc, pX);
+    if (PyErr_Occurred())
+    {
+       PyErr_Print();
+       return;
+    }
+    for (i = 0; i < nout; ++i)
+    {
+      // OT returns a Point
+      pValue = PySequence_GetItem(pY, i);
+      y[i] = PyFloat_AsDouble(pValue);
+      Py_DECREF(pValue);
+      //printf("-- y=%g\\n", y[i]); fflush(stdout);
+    }
+  }
+
+  ++ count;
+}
+"""
+        data = jinja2.Template(tdata).render(
+            {
+                "xml_data_bin": ",".join(
+                    ["0x{:02x}".format(byte) for byte in xml_data]
+                ),
+                "input_dim": self.function_.getInputDimension(),
+                "flat_size": flat_size,
+                "workdir": self.workdir.replace("\\", "\\\\"),
+                "field": field,
+                "n_pt": self.function_.getOutputMesh().getVerticesNumber()
+                if field
+                else 0,
+                "function_type": "PointToFieldFunction" if field else "Function",
+                "path_point_in": os.path.join(self.workdir, "point.in").replace(
+                    "\\", "\\\\"
+                ),
+                "path_point_out": os.path.join(self.workdir, "point.out").replace(
+                    "\\", "\\\\"
+                ),
+                "path_wrapper_py": os.path.join(self.workdir, "wrapper.py").replace(
+                    "\\", "\\\\"
+                ),
+                "path_error_log": os.path.join(self.workdir, "error.log").replace(
+                    "\\", "\\\\"
+                ),
+                "path_function_xml": os.path.join(self.workdir, "function.xml").replace(
+                    "\\", "\\\\"
+                ),
+            }
+        )
+        with open(os.path.join(self.workdir, "wrapper.c"), "w") as c:
+            c.write(data)
+
+        # write CMakeLists
+        data = """
+cmake_minimum_required (VERSION 3.13)
+set (CMAKE_BUILD_TYPE "Release" CACHE STRING "build type")
+project (wrapper C)
+if (POLICY CMP0091)
+  cmake_policy (SET CMP0091 NEW)
+endif()
+
+# link dynamically for Python
+add_library (cwrapper SHARED wrapper.c)
+
+find_package (Python 3.8 COMPONENTS Development REQUIRED)
+target_link_libraries(cwrapper PRIVATE Python::Python)
+
+set_target_properties (cwrapper PROPERTIES MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>"
+                                           ARCHIVE_OUTPUT_DIRECTORY_RELEASE ${CMAKE_BINARY_DIR}
+                                           LIBRARY_OUTPUT_DIRECTORY_RELEASE ${CMAKE_BINARY_DIR}
+                                           RUNTIME_OUTPUT_DIRECTORY_RELEASE ${CMAKE_BINARY_DIR})
+if (MSVC)
+  target_compile_definitions(cwrapper PRIVATE _CRT_SECURE_NO_WARNINGS)
+endif()
+"""
+        with open(os.path.join(self.workdir, "CMakeLists.txt"), "w") as cm:
+            cm.write(data)
+
     def _build_cwrapper(self, verbose):
         """
         Build C wrapper.
@@ -211,30 +434,11 @@ void c_func(int nin, double x[], int nout, double y[]) {
         verbose : bool
             Verbose output (default=False).
         """
-
-        data = """
-cmake_minimum_required (VERSION 3.2)
-set (CMAKE_BUILD_TYPE "Release" CACHE STRING "build type")
-project (wrapper C)
-if (POLICY CMP0091)
-  cmake_policy (SET CMP0091 NEW)
-endif()
-# openmodelica uses -Bstatic on Linux
-add_library (cwrapper STATIC wrapper.c)
-set_target_properties (cwrapper PROPERTIES POSITION_INDEPENDENT_CODE ON
-                                           MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
-set_target_properties (cwrapper PROPERTIES ARCHIVE_OUTPUT_DIRECTORY_RELEASE ${CMAKE_BINARY_DIR}
-                                           LIBRARY_OUTPUT_DIRECTORY_RELEASE ${CMAKE_BINARY_DIR}
-                                           RUNTIME_OUTPUT_DIRECTORY_RELEASE ${CMAKE_BINARY_DIR})
-if (MSVC)
-  target_compile_definitions(cwrapper PRIVATE _CRT_SECURE_NO_WARNINGS)
-endif()
-"""
-        with open(os.path.join(self.workdir, "CMakeLists.txt"), "w") as cm:
-            cm.write(data)
         cmake_args = ["cmake", "."]
         if sys.platform.startswith("win"):
-            cmake_args.insert(1, "-DCMAKE_GENERATOR_PLATFORM=Win32")
+            # bits = platform.architecture()[0]
+            # vsplat = {"64bit": "x64", "32bit": "x86"}[bits]
+            cmake_args.insert(1, "-DCMAKE_GENERATOR_PLATFORM=x64")
         subprocess.run(
             cmake_args, capture_output=not verbose, cwd=self.workdir, check=True
         )
@@ -394,16 +598,16 @@ end {{ className }};
         with open(os.path.join(self.workdir, className + ".mo"), "w") as mo:
             mo.write(data)
 
-    def export_model(self, model_path, gui=False, verbose=False, move=True):
+    def export_model(self, model_path, gui=False, verbose=False, binary=True, mode="process", move=True):
         """
-        Export to model file.
+        Export to model file (.mo).
 
         Requires CMake, a C compiler.
 
         Parameters
         ----------
         model_path : str
-            Path to the generated .model file.
+            Path to the generated .mo file.
             The model name is taken from the base name.
         gui : bool
             If True, define the input/output connectors.
@@ -412,6 +616,10 @@ end {{ className }};
                 In this case only, the model can be exported as FMU using OMC command line.
         verbose : bool
             Verbose output (default=False).
+        binary : bool
+            Whether to generate binaries or source (default=True)
+        mode : 'process' or 'capi'
+            Use either a Python process or the Python C API to evaluate the model.
         move : bool
             Move the model from temporary folder to user folder (default=True)
         """
@@ -423,20 +631,25 @@ end {{ className }};
         dirName = os.path.expanduser(os.path.dirname(model_path))
 
         self._export_xml()
-        self._write_cwrapper()
-        self._build_cwrapper(verbose)
+        if mode == "process":
+            self._write_cwrapper_process()
+        else:
+            self._write_cwrapper_capi()
+        if binary:
+            self._build_cwrapper(verbose)
         self._write_modelica_wrapper(className, dirName, gui, move)
 
         if move:
-            if sys.platform.startswith("win"):
-                libname = "cwrapper.lib"
+            list_file = [className + extension]
+            if binary:
+                # licwrapper.a/.so, cwrapper.lib/dll
+                list_file += glob.glob(os.path.join(self.workdir, "*cwrapper*"))
             else:
-                libname = "libcwrapper.a"
-            list_file = [libname, className + extension]
+                list_file += ["wrapper.c", "CMakeLists.txt"]
             for file in list_file:
-                shutil.move(
-                    os.path.join(self.workdir, file), os.path.join(dirName, file)
-                )
+                src = os.path.join(self.workdir, file)
+                dest = os.path.join(dirName, file)
+                shutil.move(src, dest)
             shutil.rmtree(self.workdir)
 
     def export_fmu(self, fmu_path, fmuType="me", verbose=False):
