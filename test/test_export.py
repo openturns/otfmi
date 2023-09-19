@@ -92,27 +92,30 @@ class TestExport(unittest.TestCase):
         # export model
         f = ot.SymbolicFunction(["E", "F", "L", "I"], ["(F*L^3)/(3.0*E*I)"])
         start = [3e7, 3e4, 250.0, 400.0]
-
-        temp_path = tempfile.mkdtemp()
-        assert os.path.isdir(temp_path), "temp_path not created"
         name_model = "Deviation.mo"
-        className, _ = os.path.splitext(name_model)
-        path_model = os.path.join(temp_path, name_model)
-        fe = otfmi.FunctionExporter(f, start)
-        fe.export_model(path_model, gui=False, verbose=False, move=True)
-        assert os.path.isfile(path_model), "model not created"
 
-        # write simulation mos
-        path_mos = os.path.join(temp_path, "simulate.mos")
-        with open(path_mos, "w") as mos:
-            mos.write('cd("{}");\n'.format(temp_path))
-            mos.write("loadModel(Modelica);\n")
-            mos.write('loadFile("{}"); getErrorString();\n'.format(name_model))
-            mos.write("simulate ({}, stopTime=3.0);\n".format(className))
+        for mode in ["process", "capi"]:
+            for binary in [True, False]:
+                temp_path = tempfile.mkdtemp()
+                assert os.path.isdir(temp_path), "temp_path not created"
+                className, _ = os.path.splitext(name_model)
+                path_model = os.path.join(temp_path, name_model)
+                fe = otfmi.FunctionExporter(f, start)
+                fe.export_model(path_model, gui=False, verbose=True, binary=binary, mode=mode)
+                assert os.path.isfile(path_model), "model not created"
 
-        subprocess.run(["omc", "{}".format(path_mos)], capture_output=True, check=True)
-
-        shutil.rmtree(temp_path)
+                if binary:
+                    # write simulation mos
+                    path_mos = os.path.join(temp_path, "simulate.mos")
+                    with open(path_mos, "w") as mos:
+                        mos.write('cd("{}");\n'.format(temp_path))
+                        mos.write('loadFile("{}"); getErrorString();\n'.format(name_model))
+                        mos.write("simulate ({}, stopTime=3.0);\n".format(className))
+                    subprocess.run(["omc", "{}".format(path_mos)], capture_output=True, check=True)
+                else:
+                    assert os.path.isfile(os.path.join(temp_path, "wrapper.c")), "wrapper source not created"
+                    assert os.path.isfile(os.path.join(temp_path, "CMakeLists.txt")), "cmakelists not created"
+                shutil.rmtree(temp_path)
 
 
 if __name__ == "__main__":
