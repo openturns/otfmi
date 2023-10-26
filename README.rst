@@ -23,11 +23,9 @@ Installation
 
 The preferred installation procedure uses Conda. 
 
-To install Conda, see `here <http://openturns.github.io/openturns/master/install.html#conda>`_.  
-Once Conda is available, use the following commands to install OTFMI::
+First install OpenTURNS in conda, according to the instructions `here <http://openturns.github.io/openturns/master/install.html#conda>`_.
+Once OpenTURNS is installed, use the following commands to install OTFMI::
 
-    conda config --add channels conda-forge
-    conda config --set channel_priority strict
     conda install -y otfmi 
 
 
