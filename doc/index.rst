@@ -83,7 +83,7 @@ Terminology
 **input, parameter, or input variable?**
 
 The FMI standard and OpenTURNS meet a (minor) conflict in the definition of *inputs*.
-In the `FMI standard <https://fmi-standard.org/docs/3.0-dev/#definition-of-model-variables>`__
+In the `FMI standard <https://fmi-standard.org/docs/3.0.1/#ModelVariables>`__
 (see table 18):
 
 * a FMU *parameter* remains constant during simulation (a single value).
