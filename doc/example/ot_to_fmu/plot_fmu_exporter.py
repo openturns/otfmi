@@ -48,7 +48,8 @@ fmuExporter.export_fmu(fmu_path, fmuType="me")
 
 # %%
 # .. note::
-#   The export requires `CMake <https://cmake.org/>`_, a C compiler, and the OpenModelica compiler
+#   The export requires `CMake <https://cmake.org/>`_ build system, a C compiler (Visual Studio or 
+#   GCC for instance), and the OpenModelica compiler
 #   `OMC <https://www.openmodelica.org/?id=51:open-modelica-compiler-omccecatid=10:main-category>`_.
 
 # %%
