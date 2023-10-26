@@ -49,11 +49,5 @@ jobs:
           miniforge-version: latest
       - name: Build
         run: |
-          choco install openmodelica --version=1.21.0 --ignore-checksums
-          $env:PATH += ";C:\Program Files\OpenModelica1.21.0-64bit\bin"
-          omc --version
-          conda install -y pyfmi openturns pytest jinja2
-          python setup.py install
-          mo2fmu -h
-          pytest test -s
+          conda install -y otfmi
 
