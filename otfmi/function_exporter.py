@@ -60,7 +60,7 @@ class FunctionExporter(object):
         study.add("function", self.function_)
         study.save()
 
-    def _write_cwrapper_process(self):
+    def _write_cwrapper_pyprocess(self):
         """
         Write the C wrapper.
 
@@ -223,7 +223,7 @@ endif()
         with open(os.path.join(self.workdir, "CMakeLists.txt"), "w") as cm:
             cm.write(data)
 
-    def _write_cwrapper_capi(self):
+    def _write_cwrapper_cpython(self):
         """
         Write the C wrapper with Python C API.
 
@@ -423,6 +423,97 @@ endif()
         with open(os.path.join(self.workdir, "CMakeLists.txt"), "w") as cm:
             cm.write(data)
 
+    def _write_cwrapper_cxx(self):
+        """
+        Write the C wrapper using OT C++ API.
+
+        Parameters
+        ----------
+        """
+        with open(self._xml_path, "rb") as f:
+            xml_data = f.read()
+
+        tdata = """
+#include <openturns/OT.hxx>
+#include <openturns/XMLStorageManager.hxx>
+#include <fstream>
+using namespace OT;
+
+const char xml_data[] = { {{ xml_data_bin }} };
+Function function;
+
+extern "C" {
+
+#ifdef _WIN32
+__declspec(dllexport)
+#endif
+void c_func(int nin, double x[], int nout, double y[])
+{
+  if (!function.getEvaluation().getImplementation()->isActualImplementation())
+  {
+    Study study;
+    const String fileName = Path::BuildTemporaryFileName("function.xml");
+    std::ofstream xmlFile(fileName, std::ios::out | std::ios::binary);
+    if (xmlFile.good())
+    {
+      xmlFile.write (xml_data, sizeof(xml_data));
+      xmlFile.close();
+    }
+    study.setStorageManager(XMLStorageManager(fileName));
+    study.load();
+    study.fillObject("function", function);
+    if (function.getInputDimension() != nin)
+      std::cerr << "Invalid input dimension";
+    if (function.getOutputDimension() != nout)
+      std::cerr << "Invalid output dimension";
+    Os::Remove(fileName);
+  }
+  Point inP(nin);
+  std::copy(x, x + nin, inP.begin());
+  const Point outP(function(inP));
+  std::copy(outP.begin(), outP.end(), y);
+}
+
+} // extern "C"
+"""
+
+        data = jinja2.Template(tdata).render(
+            {
+                "xml_data_bin": ",".join(
+                    ["0x{:02x}".format(byte) for byte in xml_data]
+                ),
+            }
+        )
+        with open(os.path.join(self.workdir, "wrapper.cxx"), "w") as cxx:
+            cxx.write(data)
+
+        # write CMakeLists
+        data = """
+cmake_minimum_required (VERSION 3.13)
+set (CMAKE_BUILD_TYPE "Release" CACHE STRING "build type")
+project (wrapper CXX)
+if (POLICY CMP0091)
+  cmake_policy (SET CMP0091 NEW)
+endif()
+
+add_library (cwrapper SHARED wrapper.cxx)
+
+find_package (OpenTURNS REQUIRED)
+message (STATUS "Found OpenTURNS: ${OPENTURNS_ROOT_DIR} (${OPENTURNS_VERSION_STRING})")
+target_link_libraries (cwrapper PRIVATE ${OPENTURNS_LIBRARY})
+
+set_target_properties (cwrapper PROPERTIES MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>"
+                                           ARCHIVE_OUTPUT_DIRECTORY_RELEASE ${CMAKE_BINARY_DIR}
+                                           LIBRARY_OUTPUT_DIRECTORY_RELEASE ${CMAKE_BINARY_DIR}
+                                           RUNTIME_OUTPUT_DIRECTORY_RELEASE ${CMAKE_BINARY_DIR})
+
+if (MSVC)
+  target_compile_definitions(cwrapper PRIVATE _CRT_SECURE_NO_WARNINGS)
+endif()
+"""
+        with open(os.path.join(self.workdir, "CMakeLists.txt"), "w") as cm:
+            cm.write(data)
+
     def _build_cwrapper(self, verbose):
         """
         Build C wrapper.
@@ -598,11 +689,11 @@ end {{ className }};
         with open(os.path.join(self.workdir, className + ".mo"), "w") as mo:
             mo.write(data)
 
-    def export_model(self, model_path, gui=False, verbose=False, binary=True, mode="process", move=True):
+    def export_model(self, model_path, gui=False, verbose=False, binary=True, mode="pyprocess", move=True):
         """
         Export to model file (.mo).
 
-        Requires CMake, a C compiler.
+        Requires CMake, a C/C++ compiler.
 
         Parameters
         ----------
@@ -618,8 +709,8 @@ end {{ className }};
             Verbose output (default=False).
         binary : bool
             Whether to generate binaries or source (default=True)
-        mode : 'process' or 'capi'
-            Use either a Python process or the Python C API to evaluate the model.
+        mode : 'pyprocess', 'cpython' or 'cxx'
+            Use either a Python process, the Python C API to evaluate the model or the OpenTURNS C++ API.
         move : bool
             Move the model from temporary folder to user folder (default=True)
         """
@@ -631,10 +722,16 @@ end {{ className }};
         dirName = os.path.expanduser(os.path.dirname(model_path))
 
         self._export_xml()
-        if mode == "process":
-            self._write_cwrapper_process()
+        c_ext = ".c"
+        if mode == "pyprocess":
+            self._write_cwrapper_pyprocess()
+        elif mode == "cpython":
+            self._write_cwrapper_cpython()
+        elif mode == "cxx":
+            c_ext = ".cxx"
+            self._write_cwrapper_cxx()
         else:
-            self._write_cwrapper_capi()
+            raise ValueError(f"Invalid mode: {mode}")
         if binary:
             self._build_cwrapper(verbose)
         self._write_modelica_wrapper(className, dirName, gui, move)
@@ -645,7 +742,7 @@ end {{ className }};
                 # licwrapper.a/.so, cwrapper.lib/dll
                 list_file += glob.glob(os.path.join(self.workdir, "*cwrapper*"))
             else:
-                list_file += ["wrapper.c", "CMakeLists.txt"]
+                list_file += ["wrapper" + c_ext, "CMakeLists.txt"]
             for file in list_file:
                 src = os.path.join(self.workdir, file)
                 dest = os.path.join(dirName, file)
