@@ -7,7 +7,7 @@ pip install -r /io/doc/requirements.txt --break-system-packages
 
 cp -r /io/* /tmp
 cd /tmp
-python setup.py install --user
+pip install . --user --break-system-packages
 ~/.local/bin/mo2fmu -h
 ~/.local/bin/mo2fmu ./otfmi/example/file/deviation.mo ./otfmi/example/file/fmu/linux64/deviation.fmu
 pytest test -s
