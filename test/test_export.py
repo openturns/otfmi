@@ -93,7 +93,7 @@ def test_export_fmu_field():
 @pytest.mark.parametrize("binary", [True, False])
 def test_export_model(mode, binary):
 
-    # OT lib in conda is not compatible with MSVC
+    # OT lib in conda is not compatible with MSVC (compiled with MinGW)
     if sys.platform.startswith("win") and mode == "cxx":
         return
 
