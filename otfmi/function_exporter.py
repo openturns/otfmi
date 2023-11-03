@@ -749,7 +749,7 @@ end {{ className }};
                 shutil.move(src, dest)
             shutil.rmtree(self.workdir)
 
-    def export_fmu(self, fmu_path, fmuType="me", verbose=False):
+    def export_fmu(self, fmu_path, fmuType="me", mode="pyprocess", verbose=False):
         """
         Export the Modelica model as FMU.
 
@@ -764,6 +764,8 @@ end {{ className }};
         fmuType : str
             model type, either me (model exchange), cs (co-simulation),
             me_cs (both model exchange and co-simulation)
+        mode : str
+            either pyprocess or pythonfmu (requires the module)
         verbose : bool
             Verbose output (default=False).
         """
@@ -773,17 +775,62 @@ end {{ className }};
         # name starting with lower case causes connection issues in OMEdit
         assert extension == ".fmu", "Please give a FMU name as argument :)"
         dirName = os.path.expanduser(os.path.dirname(fmu_path))
-        model_path = fmu_path.replace("fmu", "mo")
         if not os.path.exists(self.workdir):
             os.makedirs(self.workdir)
-        self.export_model(model_path, gui=False, verbose=verbose, move=False)
+        if mode == "pyprocess":
+            model_path = fmu_path.replace("fmu", "mo")
 
-        path_mo = os.path.join(self.workdir, className + ".mo")
-        path_fmu = os.path.join(self.workdir, className + extension)
-        mo2fmu(path_mo, path_fmu=path_fmu, fmuType=fmuType, verbose=verbose)
+            self.export_model(model_path, gui=False, verbose=verbose, move=False)
 
-        shutil.move(
-            os.path.join(self.workdir, className + extension),
-            os.path.join(dirName, className + extension),
-        )
+            path_mo = os.path.join(self.workdir, className + ".mo")
+            path_fmu = os.path.join(self.workdir, className + extension)
+            mo2fmu(path_mo, path_fmu=path_fmu, fmuType=fmuType, verbose=verbose)
+
+            shutil.move(
+                os.path.join(self.workdir, className + extension),
+                os.path.join(dirName, className + extension),
+            )
+
+        elif mode == "pythonfmu":
+            try:
+                from pythonfmu import FmuBuilder
+            except ImportError:
+                raise ImportError("pythonfmu must be installed to use this mode")
+
+            tdata = """
+import openturns as ot
+from pythonfmu.fmi2slave import Fmi2Slave, Fmi2Causality, Real
+
+
+class FunctionSlave(Fmi2Slave):
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        study = ot.Study()
+        fname = "{{ xml_path }}"
+        study.setStorageManager(ot.XMLStorageManager(fname))
+        study.load()
+        self.__function = ot.Function()
+        study.fillObject("function", self.__function)
+        study.close()
+
+        for var in self.__function.getInputDescription():
+            setattr(self, var, 0.0)
+            self.register_variable(Real(var, causality=Fmi2Causality.input))
+        for var in self.__function.getOutputDescription():
+            setattr(self, var, 0.0)
+            self.register_variable(Real(var, causality=Fmi2Causality.output))
+
+    def do_step(self, current_time, step_size):
+        inP = [getattr(self, var) for var in self.__function.getInputDescription()]
+        outP = self.__function(inP)
+        for i, var in enumerate(self.__function.getOutputDescription()):
+            setattr(self, var, outP[i])
+        return True
+"""
+            data = jinja2.Template(tdata).render({"xml_path": self._xml_path})
+            slave_file = os.path.join(self.workdir, className + ".py")
+            with open(slave_file, "w") as fslave:
+                fslave.write(data)
+            FmuBuilder.build_FMU(slave_file)
         shutil.rmtree(self.workdir)

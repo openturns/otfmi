@@ -34,7 +34,7 @@ jobs:
       - name: Build
         shell: bash -l {0}
         run: |
-          conda install -y pyfmi openturns pytest jinja2 omcompiler
+          conda install -y pyfmi openturns pytest jinja2 fmpy-base pythonfmu omcompiler
           pip install .
           mo2fmu -h
           mo2fmu ./otfmi/example/file/deviation.mo ./otfmi/example/file/fmu/linux64/deviation.fmu
@@ -52,7 +52,7 @@ jobs:
           choco install openmodelica --version=1.21.0 --ignore-checksums
           $env:PATH += ";C:\Program Files\OpenModelica1.21.0-64bit\bin"
           omc --version
-          conda install -y pyfmi openturns pytest jinja2
+          conda install -y pyfmi openturns pytest jinja2 fmpy-base pythonfmu
           pip install .
           mo2fmu -h
           pytest test -s
