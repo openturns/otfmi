@@ -11,20 +11,6 @@ import dill
 
 dill.settings["recurse"] = True
 
-# py<37 has no capture_output keyword (py<3 has no subprocess.run at all)
-if sys.version_info < (3, 7):
-
-    def subprocess_run(args, capture_output=False, shell=False, cwd=None, check=False):
-        # stdout = subprocess.PIPE if capture_output else None
-        proc = subprocess.Popen(args, shell=shell, cwd=cwd)
-        outs, errs = proc.communicate()
-        rc = proc.poll()
-        if check and rc != 0:
-            raise RuntimeError("process exited with code " + str(rc))
-        return rc == 0
-
-    subprocess.run = subprocess_run
-
 
 def path2uri(path):
     try:
