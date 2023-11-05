@@ -8,16 +8,9 @@ estimated by straightforward Monte Carlo sampling.
 """
 
 import otfmi
-from pyfmi.fmi import FMUException
+import otfmi.example.utility
 import sys
-import os
-import platform
 import openturns as ot
-
-key_platform = (platform.system(), platform.architecture()[0])
-# Call to either 'platform.system' or 'platform.architecture' *after*
-# importing pyfmi causes a segfault.
-dict_platform = {("Linux", "64bit"): "linux64", ("Windows", "64bit"): "win64"}
 
 # Define the input distribution
 E = ot.Beta(0.93, 3.2, 2.8e7, 4.8e7)
@@ -69,26 +62,10 @@ def deviationFunction(x):
 
 model_py = ot.PythonFunction(4, 1, deviationFunction)
 
-path_here = os.path.dirname(os.path.abspath(__file__))
-try:
-    directory_platform = dict_platform[key_platform]
-    path_fmu = os.path.join(
-        path_here, "file", "fmu", directory_platform, "deviation.fmu"
-    )
-    model_fmu = otfmi.FMUFunction(
-        path_fmu, inputs_fmu=["E", "F", "L", "I"], outputs_fmu=["y"]
-    )
-except KeyError:
-    raise RuntimeError(
-        "Tests are not available on your platform" " (%s)." % "-".join(key_platform)
-    )
-    sys.exit()
-except FMUException:
-    raise FMUException(
-        "The test FMU 'deviation.fmu' is not"
-        " available on your platform (%s)." % "-".join(key_platform)
-    )
-    sys.exit()
+path_fmu = otfmi.example.utility.get_path_fmu("deviation")
+model_fmu = otfmi.FMUFunction(
+    path_fmu, inputs_fmu=["E", "F", "L", "I"], outputs_fmu=["y"]
+)
 
 
 def create_monte_carlo(model, inputRandomVector, coefficient_variation):
@@ -206,8 +183,6 @@ def run_demo(seed=23091926, coefficient_variation=0.20):
 
 
 if __name__ == "__main__":
-    import sys
-
     try:
         coefficient_variation = float(sys.argv[1])
     except IndexError:

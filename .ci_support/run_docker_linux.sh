@@ -9,7 +9,7 @@ cp -r /io/* /tmp
 cd /tmp
 pip install . --user --break-system-packages
 ~/.local/bin/mo2fmu -h
-~/.local/bin/mo2fmu ./otfmi/example/file/deviation.mo ./otfmi/example/file/fmu/linux64/deviation.fmu
+~/.local/bin/mo2fmu ./otfmi/example/file/deviation.mo ./otfmi/example/file/fmu/linux-x86_64/deviation.fmu
 pytest test -s
 cd doc && make html BUILDDIR=~/.local/share/otfmi/doc
 

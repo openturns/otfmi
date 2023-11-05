@@ -3,20 +3,11 @@
 # Phimeca Engineering (Sylvain Girard, girard@phimeca.com).
 """Run multiple FMU simulations in parallel."""
 
-
-import platform
 import openturns as ot
 import otfmi
-from pyfmi.fmi import FMUException
+import otfmi.example
 import sys
-import os
 import time
-
-
-key_platform = (platform.system(), platform.architecture()[0])
-# Call to either 'platform.system' or 'platform.architecture' *after*
-# importing pyfmi causes a segfault.
-dict_platform = {("Linux", "64bit"): "linux64", ("Windows", "64bit"): "win64"}
 
 # Define the input distribution
 E = ot.Beta(0.93, 3.2, 28000000.0, 48000000.0)
@@ -32,8 +23,6 @@ inputDistribution.setDescription(("E", "F", "L", "I"))
 # Create the input random vector
 inputRandomVector = ot.RandomVector(inputDistribution)
 
-path_here = os.path.dirname(os.path.abspath(__file__))
-
 
 def instantiate_highlevel(n_cpus=2):
     """Instantiate an FMUFunction and set number of cores to use.
@@ -43,50 +32,18 @@ def instantiate_highlevel(n_cpus=2):
     n_cpus : Integer, number of cores to use for multiprocessing.
 
     """
-    try:
-        directory_platform = dict_platform[key_platform]
-        path_fmu = os.path.join(
-            path_here, "file", "fmu", directory_platform, "deviation.fmu"
-        )
-        return otfmi.FMUFunction(
-            path_fmu, inputs_fmu=["E", "F", "L", "I"], outputs_fmu="y", n_cpus=n_cpus
-        )
-    except KeyError:
-        raise RuntimeError(
-            "Examples are not available on your platform"
-            " (%s)." % "-".join(key_platform)
-        )
-        sys.exit()
-    except FMUException:
-        raise FMUException(
-            "The example FMU 'deviation.fmu' is not"
-            " available on your platform (%s)." % "-".join(key_platform)
-        )
-        sys.exit()
+    path_fmu = otfmi.example.get_fmu_path("deviation.fmu")
+    return otfmi.FMUFunction(
+        path_fmu, inputs_fmu=["E", "F", "L", "I"], outputs_fmu="y", n_cpus=n_cpus
+    )
 
 
 def instantiate_lowlevel():
     """Instantiate an OpenTURNSFMUFunction."""
-    try:
-        directory_platform = dict_platform[key_platform]
-        path_fmu = os.path.join(
-            path_here, "file", "fmu", directory_platform, "deviation.fmu"
-        )
-        return otfmi.OpenTURNSFMUFunction(
-            path_fmu, inputs_fmu=["E", "F", "L", "I"], outputs_fmu="y"
-        )
-    except KeyError:
-        raise RuntimeError(
-            "Examples are not available on your platform"
-            " (%s)." % "-".join(key_platform)
-        )
-        sys.exit()
-    except FMUException:
-        raise FMUException(
-            "The example FMU 'deviation.fmu' is not"
-            " available on your platform (%s)." % "-".join(key_platform)
-        )
-        sys.exit()
+    path_fmu = otfmi.example.get_fmu_path("deviation.fmu")
+    return otfmi.OpenTURNSFMUFunction(
+        path_fmu, inputs_fmu=["E", "F", "L", "I"], outputs_fmu="y"
+    )
 
 
 def ask_n_cpus():
