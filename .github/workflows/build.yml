@@ -37,7 +37,7 @@ jobs:
           conda install -y pyfmi openturns pytest jinja2 fmpy-base pythonfmu omcompiler
           pip install .
           mo2fmu -h
-          mo2fmu ./otfmi/example/file/deviation.mo ./otfmi/example/file/fmu/linux64/deviation.fmu
+          mo2fmu ./otfmi/example/file/deviation.mo ./otfmi/example/file/fmu/linux-x86_64/deviation.fmu
           pytest test -s
 
   conda-windows:

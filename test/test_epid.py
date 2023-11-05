@@ -1,18 +1,11 @@
 #!/usr/bin/env python
 
-import platform
 import unittest
 import otfmi
 import otfmi.example.deviation
-from pyfmi.fmi import FMUException
-import os
-import math as m
+import otfmi.example.utility
 import pyfmi
 
-key_platform = (platform.system(), platform.architecture()[0])
-# Call to either 'platform.system' or 'platform.architecture' *after*
-# importing pyfmi causes a segfault.
-dict_platform = {("Linux", "64bit"): "linux64", ("Windows", "64bit"): "win64"}
 input_value = [0.007, 0.02]
 
 
@@ -37,27 +30,12 @@ def simulate_with_pyfmi(path_fmu, final_time=None):
 class TestEpid(unittest.TestCase):
     def setUp(self):
         """Load FMU and setup pure python reference."""
-
-        fmu_name = "epid.fmu"
-        path_example = os.path.dirname(os.path.abspath(otfmi.example.__file__))
-        try:
-            directory_platform = dict_platform[key_platform]
-            self.path_fmu = os.path.join(
-                path_example, "file", "fmu", directory_platform, fmu_name
-            )
-            self.model_fmu = otfmi.FMUFunction(
-                self.path_fmu,
-                inputs_fmu=["infection_rate", "healing_rate"],
-                outputs_fmu=["infected"],
-            )
-        except KeyError:
-            raise RuntimeError(
-                "Tests are not available on your platform (%s)." % key_platform
-            )
-        except FMUException:
-            raise FMUException(
-                "The test FMU is not available on your platform (%s)." % key_platform
-            )
+        self.path_fmu = otfmi.example.utility.get_path_fmu("epid")
+        self.model_fmu = otfmi.FMUFunction(
+            self.path_fmu,
+            inputs_fmu=["infection_rate", "healing_rate"],
+            outputs_fmu=["infected"],
+        )
 
     def test_empty(self):
         """Check module import and setup."""
@@ -66,7 +44,7 @@ class TestEpid(unittest.TestCase):
     def test_final_value(self):
         """Check reproducibility of the final value."""
         y = self.model_fmu(input_value)
-        assert m.fabs(y[0] - 265.68) < 1e-2, "wrong value"
+        assert abs(y[0] - 265.68) < 1e-2, "wrong value"
 
     def test_fmufunction_interpolation(self):
         """Check that FMUFunction returns a point corresponding to Pyfmi's

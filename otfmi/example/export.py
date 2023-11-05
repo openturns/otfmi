@@ -2,13 +2,14 @@
 
 import openturns as ot
 import otfmi
+import otfmi.example.utility
 
 # create function
 f = ot.SymbolicFunction(["E", "F", "L", "I"], ["(F*L^3)/(3.0*E*I)"])
 start = [3e7, 3e4, 250.0, 400.0]
 
 # export fmu
-path_fmu = "/tmp/deviation.fmu"
+path_fmu = otfmi.example.utility.get_path_fmu("deviation")
 fe = otfmi.FunctionExporter(f, start)
 fe.export(path_fmu)
 

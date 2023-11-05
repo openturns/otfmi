@@ -1,32 +1,14 @@
 """Testing basic features with PyFMI only."""
 
-import platform
 import unittest
-import otfmi.example
+import otfmi.example.utility
 import pyfmi
-import os
-
-
-# Identifying the platform
-key_platform = (platform.system(), platform.architecture()[0])
-# Call to either 'platform.system' or 'platform.architecture' *after*
-# importing pyfmi causes a segfault.
-dict_platform = {("Linux", "64bit"): "linux64", ("Windows", "64bit"): "win64"}
 
 
 class TestPyfmi(unittest.TestCase):
     def setUp(self):
         """Load example FMU."""
-        path_example = os.path.dirname(os.path.abspath(otfmi.example.__file__))
-        try:
-            directory_platform = dict_platform[key_platform]
-            self.path_fmu = os.path.join(
-                path_example, "file", "fmu", directory_platform, "deviation.fmu"
-            )
-        except KeyError:
-            raise RuntimeError(
-                "Tests are not available on your platform" " (%s)." % key_platform
-            )
+        self.path_fmu = otfmi.example.utility.get_path_fmu("deviation")
 
     def test_empty(self):
         """Check module import and setup."""
