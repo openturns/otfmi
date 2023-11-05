@@ -2,39 +2,14 @@
 # Phimeca Engineering (Sylvain Girard, girard@phimeca.com).
 """Utility functions for the examples."""
 
-import platform
 import os
-import sys
-
-dict_platform = {("Linux", "64bit"): "linux64", ("Windows", "64bit"): "win64"}
-
-
-def get_directory_platform():
-    """Get the directory name corresponding to current platform.
-    It can be for instance a component of a path to example data files.
-    """
-    key_platform = (platform.system(), platform.architecture()[0])
-    return dict_platform[key_platform]
+import sysconfig
 
 
 def get_path_fmu(name):
-    """Get the path to an example FMU.
-
-    Parameters
-    ----------
-    name : String, one of "deviation", "epid"
-
-    """
-
-    path_here = os.path.dirname(os.path.abspath(__file__))
-
-    try:
-        directory_platform = get_directory_platform()
-        return os.path.join(
-            path_here, "file", "fmu", directory_platform, "%s.fmu" % name
-        )
-    except KeyError:
-        raise RuntimeError(
-            "Examples are not available on your platform"
-        )
-        sys.exit()
+    path_example = os.path.dirname(os.path.abspath(__file__))
+    platform = sysconfig.get_platform()
+    path_fmu = os.path.join(path_example, "file", "fmu", platform, f"{name}.fmu")
+    if not os.path.exists(path_fmu):
+        raise RuntimeError(f"Example {name} is not available on your platform ({platform})")
+    return path_fmu

@@ -1,18 +1,11 @@
 #!/usr/bin/env python
 
-import platform
 import unittest
 import openturns as ot
 import otfmi
 import otfmi.example.deviation
-from pyfmi.fmi import FMUException
-import os
 import pyfmi
 
-key_platform = (platform.system(), platform.architecture()[0])
-# Call to either 'platform.system' or 'platform.architecture' *after*
-# importing pyfmi causes a segfault.
-dict_platform = {("Linux", "64bit"): "linux64", ("Windows", "64bit"): "win64"}
 input_value = [0.007, 0.02]
 
 
@@ -36,22 +29,7 @@ class TestEpid(unittest.TestCase):
     def setUp(self):
         """Load FMU and setup pure python reference."""
 
-        fmu_name = "epid.fmu"
-        path_example = os.path.dirname(os.path.abspath(otfmi.example.__file__))
-        try:
-            directory_platform = dict_platform[key_platform]
-            self.path_fmu = os.path.join(
-                path_example, "file", "fmu", directory_platform, fmu_name
-            )
-        except KeyError:
-            raise RuntimeError(
-                "Tests are not available on your platform (%s)." % key_platform
-            )
-        except FMUException:
-            raise FMUException(
-                "The test FMU is not available on your platform (%s)." % key_platform
-            )
-
+        self.path_fmu = otfmi.example.utility.get_path_fmu("epid")
         self.mesh = ot.RegularGrid(2.0, 0.5, 50)
 
     def test_start_time_coherence(self):
