@@ -2,8 +2,6 @@ import fmpy
 import openturns.testing as ott
 import otfmi
 import otfmi.example.utility
-import pytest
-import sysconfig
 
 
 def test_fmpy():

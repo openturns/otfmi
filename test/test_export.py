@@ -13,7 +13,8 @@ import time
 import pytest
 
 
-def test_export_fmu_vector():
+@pytest.mark.parametrize("mode", ["pyprocess", "pythonfmu"])
+def test_export_fmu_vector(mode):
     # export fmu
     f = ot.SymbolicFunction(["E", "F", "L", "I"], ["(F*L^3)/(3.0*E*I)"])
     start = [3e7, 3e4, 250.0, 400.0]
@@ -24,39 +25,51 @@ def test_export_fmu_vector():
     temp_path = tempfile.mkdtemp()
     path_fmu = os.path.join(temp_path, "Deviation.fmu")
     fe = otfmi.FunctionExporter(f, start)
-    fe.export_fmu(path_fmu, fmuType="cs", verbose=True)
+    fe.export_fmu(path_fmu, fmuType="cs", mode=mode, verbose=True)
     assert os.path.isfile(path_fmu), "fmu not created"
 
-    # reimport fmu
-    model_fmu = otfmi.FMUFunction(
-        path_fmu, inputs_fmu=["E", "F", "L", "I"], outputs_fmu=["y0"]
-    )
-    print(model_fmu)
+    # simulate with OMSimulator
+    have_omsimulator = True
+    try:
+        subprocess.run(["OMSimulator", "--help"], capture_output=True)
+    except FileNotFoundError:
+        have_omsimulator = False
+    if have_omsimulator:
+        subprocess.run(["OMSimulator", path_fmu], capture_output=True, check=True)
 
-    # call
-    x = [3.1e7, 3.1e4, 255.0, 420.0]
-    y = model_fmu(x)
-    print(y)
-    assert abs(y[0] - 13.1598) < 1e-4, "wrong value"
+    if mode == "pyprocess":
+        # reimport fmu
+        model_fmu = otfmi.FMUFunction(
+            path_fmu, inputs_fmu=["E", "F", "L", "I"], outputs_fmu=["y0"]
+        )
+        print(model_fmu)
 
-    # bench speed
-    t0 = time.time()
-    process = psutil.Process(os.getpid())
-    size = 10
-    mem0 = process.memory_info().rss / 1000000
-    for i in range(size):
-        x = [3.1e7, 3.1e4 + i, 255.0, 420.0]
+        # call
+        x = [3.1e7, 3.1e4, 255.0, 420.0]
         y = model_fmu(x)
-        print(i, x, y, process.memory_info().rss / 1000000, flush=True)
-    t1 = time.time()
-    mem1 = process.memory_info().rss / 1000000
-    print("Speed=", size / (t1 - t0), "evals/s")
-    print("Memory=", mem1 - mem0)
+        print(y)
+        assert abs(y[0] - 13.1598) < 1e-4, "wrong value"
+
+        # bench speed
+        t0 = time.time()
+        process = psutil.Process(os.getpid())
+        size = 10
+        mem0 = process.memory_info().rss / 1000000
+        for i in range(size):
+            x = [3.1e7, 3.1e4 + i, 255.0, 420.0]
+            y = model_fmu(x)
+            print(i, x, y, process.memory_info().rss / 1000000, flush=True)
+        t1 = time.time()
+        mem1 = process.memory_info().rss / 1000000
+        print("Speed=", size / (t1 - t0), "evals/s")
+        print("Memory=", mem1 - mem0)
 
     shutil.rmtree(temp_path)
 
 
-def test_export_fmu_field():
+@pytest.mark.skipif(sys.platform.startswith("win"), reason="N/A")
+@pytest.mark.parametrize("mode", ["pyprocess"])
+def test_export_fmu_field(mode):
     def g(X):
         a, b = X
         Y = [[a * m.sin(t) + b] for t in range(100)]
@@ -66,20 +79,25 @@ def test_export_fmu_field():
     f = ot.PythonPointToFieldFunction(2, mesh, 1, g)
     start = [4.0, 5.0]
 
-    if sys.platform.startswith("win"):
-        return
-
     temp_path = tempfile.mkdtemp()
     path_fmu = os.path.join(temp_path, "Sin.fmu")
 
     # export
     fe = otfmi.FunctionExporter(f, start)
-    fe.export_fmu(path_fmu, fmuType="cs", verbose=True)
+    fe.export_fmu(path_fmu, fmuType="cs", mode=mode, verbose=True)
     assert os.path.isfile(path_fmu), "fmu not created"
 
-    # import
-    import pyfmi
+    # simulate with OMSimulator
+    have_omsimulator = True
+    try:
+        subprocess.run(["OMSimulator", "--help"], capture_output=True)
+    except FileNotFoundError:
+        have_omsimulator = False
+    if have_omsimulator:
+        subprocess.run(["OMSimulator", path_fmu], capture_output=True, check=True)
 
+    # simulate with pyfmi
+    import pyfmi
     model = pyfmi.load_fmu(path_fmu)
     model.initialize()
     model.reset()
@@ -114,10 +132,10 @@ def test_export_model(mode, binary):
         # write simulation mos
         path_mos = os.path.join(temp_path, "simulate.mos")
         with open(path_mos, "w") as mos:
-            mos.write('cd("{}");\n'.format(temp_path))
-            mos.write('loadFile("{}"); getErrorString();\n'.format(name_model))
-            mos.write("simulate ({}, stopTime=3.0);\n".format(className))
-        subprocess.run(["omc", "{}".format(path_mos)], capture_output=True, check=True)
+            mos.write(f'cd("{temp_path}");\n')
+            mos.write(f'loadFile("{name_model}"); getErrorString();\n')
+            mos.write(f"simulate ({className}, stopTime=3.0);\n")
+        subprocess.run(["omc", f"{path_mos}"], capture_output=True, check=True)
     else:
         c_ext = ".cxx" if mode == "cxx" else ".c"
         assert os.path.isfile(os.path.join(temp_path, "wrapper" + c_ext)), "wrapper source not created"
