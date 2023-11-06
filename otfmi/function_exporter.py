@@ -29,7 +29,7 @@ class FunctionExporter(object):
 
     Parameters
     ----------
-    function : :py:class:`openturns.Function`
+    function : :py:class:`openturns.Function` or :py:class:`openturns.PointToFieldFunction`
         Function to export.
     start : sequence of float
         Initial input values.
@@ -37,6 +37,7 @@ class FunctionExporter(object):
 
     def __init__(self, function, start=None):
         assert hasattr(function, "getInputDimension"), "not an openturns function"
+        assert not hasattr(function, "getInputMesh"), "not a vector->vector|field function"
         self.function_ = function
         if start is not None:
             try:
@@ -44,7 +45,7 @@ class FunctionExporter(object):
             except Exception:
                 raise TypeError("start must be a sequence of float")
             assert len(start) == function.getInputDimension(), "wrong input dimension"
-        self.start_ = start
+        self._start = start
         self.workdir = tempfile.mkdtemp()
         self._xml_path = os.path.join(self.workdir, "function.xml")
 
@@ -548,7 +549,7 @@ endif()
         ----------
         """
         string = ""
-        if self.start_ is None:
+        if self._start is None:
             for input_name in self.function_.getInputDescription():
                 string = (
                     string + "  input Real " + re.sub(r"\W", "_", input_name) + " ;\n"
@@ -557,7 +558,7 @@ endif()
             for (
                 input_name,
                 input_value,
-            ) in zip(self.function_.getInputDescription(), self.start_):
+            ) in zip(self.function_.getInputDescription(), self._start):
                 string = (
                     string
                     + "  input Real "
@@ -792,6 +793,7 @@ end {{ className }};
             )
 
         elif mode == "pythonfmu":
+            self._export_xml()
             try:
                 from pythonfmu import FmuBuilder
             except ImportError:
@@ -802,7 +804,7 @@ import openturns as ot
 from pythonfmu.fmi2slave import Fmi2Slave, Fmi2Causality, Real
 
 
-class FunctionSlave(Fmi2Slave):
+class {{ className }}(Fmi2Slave):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -810,27 +812,38 @@ class FunctionSlave(Fmi2Slave):
         fname = "{{ xml_path }}"
         study.setStorageManager(ot.XMLStorageManager(fname))
         study.load()
-        self.__function = ot.Function()
-        study.fillObject("function", self.__function)
-        study.close()
+        self._function = ot.Function()
+        study.fillObject("function", self._function)
 
-        for var in self.__function.getInputDescription():
-            setattr(self, var, 0.0)
+        start = {{ start }}
+        for i, var in enumerate(self._function.getInputDescription()):
+            setattr(self, var, start[i])
             self.register_variable(Real(var, causality=Fmi2Causality.input))
-        for var in self.__function.getOutputDescription():
+
+        for var in self._function.getOutputDescription():
             setattr(self, var, 0.0)
             self.register_variable(Real(var, causality=Fmi2Causality.output))
 
     def do_step(self, current_time, step_size):
-        inP = [getattr(self, var) for var in self.__function.getInputDescription()]
-        outP = self.__function(inP)
-        for i, var in enumerate(self.__function.getOutputDescription()):
+        inP = [getattr(self, var) for var in self._function.getInputDescription()]
+        if hasattr(self._function, 'getOutputMesh'):
+            field = self._function(inP)
+            localMesh = ot.Mesh([[current_time]])
+            mesh = self._function.getOutputMesh()
+            outdim = self._function.getOutputDimension()
+            interpolation = ot.P1LagrangeInterpolation(localMesh, mesh, outdim)
+            outP = interpolation(inP)
+        else:
+            outP = self._function(inP)
+        for i, var in enumerate(self._function.getOutputDescription()):
             setattr(self, var, outP[i])
         return True
 """
-            data = jinja2.Template(tdata).render({"xml_path": self._xml_path})
+            data = jinja2.Template(tdata).render({"className": className,
+                                                  "xml_path": self._xml_path,
+                                                  "start": self._start})
             slave_file = os.path.join(self.workdir, className + ".py")
             with open(slave_file, "w") as fslave:
                 fslave.write(data)
-            FmuBuilder.build_FMU(slave_file)
+            FmuBuilder.build_FMU(slave_file, dest=os.path.dirname(fmu_path))
         shutil.rmtree(self.workdir)
