@@ -65,6 +65,7 @@ setup(
     install_requires=['numpy',
                       'pyfmi>=2.6',
                       'dill',
+                      'pythonfmu',
                       'jinja2'],
 
     # List additional groups of dependencies here (e.g. development

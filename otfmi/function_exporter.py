@@ -9,6 +9,7 @@ import subprocess
 import shutil
 import sys
 import dill
+from pythonfmu import FmuBuilder
 
 dill.settings["recurse"] = True
 
@@ -794,11 +795,6 @@ end {{ className }};
 
         elif mode == "pythonfmu":
             self._export_xml()
-            try:
-                from pythonfmu import FmuBuilder
-            except ImportError:
-                raise ImportError("pythonfmu must be installed to use this mode")
-
             tdata = """
 import openturns as ot
 from pythonfmu.fmi2slave import Fmi2Slave, Fmi2Causality, Real
