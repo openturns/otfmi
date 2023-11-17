@@ -767,7 +767,7 @@ end {{ className }};
             model type, either me (model exchange), cs (co-simulation),
             me_cs (both model exchange and co-simulation)
         mode : str
-            either pyprocess or pythonfmu (requires the module)
+            either pyprocess or pythonfmu
         verbose : bool
             Verbose output (default=False).
         """
@@ -808,7 +808,7 @@ class {{ className }}(Fmi2Slave):
         fname = "{{ xml_path }}"
         study.setStorageManager(ot.XMLStorageManager(fname))
         study.load()
-        self._function = ot.Function()
+        self._function = ot.PointToFieldFunction() if {{ field }} else ot.Function()
         study.fillObject("function", self._function)
 
         start = {{ start }}
@@ -822,21 +822,22 @@ class {{ className }}(Fmi2Slave):
 
     def do_step(self, current_time, step_size):
         inP = [getattr(self, var) for var in self._function.getInputDescription()]
-        if hasattr(self._function, 'getOutputMesh'):
+        if {{ field }}:
             field = self._function(inP)
-            localMesh = ot.Mesh([[current_time]])
             mesh = self._function.getOutputMesh()
-            outdim = self._function.getOutputDimension()
-            interpolation = ot.P1LagrangeInterpolation(localMesh, mesh, outdim)
-            outP = interpolation(inP)
+            timeGrid = mesh.getVertices().asPoint()
+            interpolation = ot.PiecewiseLinearEvaluation(timeGrid, field)
+            outP = interpolation([current_time])
         else:
             outP = self._function(inP)
         for i, var in enumerate(self._function.getOutputDescription()):
             setattr(self, var, outP[i])
         return True
 """
+            field = hasattr(self.function_, "getOutputMesh")
             data = jinja2.Template(tdata).render({"className": className,
                                                   "xml_path": self._xml_path,
+                                                  "field": field,
                                                   "start": self._start})
             slave_file = os.path.join(self.workdir, className + ".py")
             with open(slave_file, "w") as fslave:
