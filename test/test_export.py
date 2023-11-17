@@ -5,7 +5,6 @@ import otfmi
 import os
 import tempfile
 import sys
-import math as m
 import psutil
 import shutil
 import subprocess
@@ -68,24 +67,39 @@ def test_export_fmu_vector(mode):
 
 
 @pytest.mark.skipif(sys.platform.startswith("win"), reason="N/A")
-@pytest.mark.parametrize("mode", ["pyprocess"])
+@pytest.mark.parametrize("mode", ["pyprocess", "pythonfmu"])
 def test_export_fmu_field(mode):
-    def g(X):
-        a, b = X
-        Y = [[a * m.sin(t) + b] for t in range(100)]
-        return Y
 
-    mesh = ot.RegularGrid(0, 1, 100)
-    f = ot.PythonPointToFieldFunction(2, mesh, 1, g)
-    start = [4.0, 5.0]
+    N = 100
+    start = 0.0
+    step = 1.570796 / N
+    mesh = ot.RegularGrid(start, step, N)
+    g = ot.SymbolicFunction(["t", "a", "b"], ["a*sin(t)+b"])
+    f = ot.VertexValuePointToFieldFunction(g, mesh)
+    x0 = [4.0, 5.0]
 
     temp_path = tempfile.mkdtemp()
     path_fmu = os.path.join(temp_path, "Sin.fmu")
 
     # export
-    fe = otfmi.FunctionExporter(f, start)
+    fe = otfmi.FunctionExporter(f, x0)
     fe.export_fmu(path_fmu, fmuType="cs", mode=mode, verbose=True)
-    assert os.path.isfile(path_fmu), "fmu not created"
+    assert os.path.isfile(path_fmu), f"fmu not created in {path_fmu}"
+
+    if mode == "pyprocess":
+        # reimport fmu
+        model_fmu = otfmi.FMUPointToFieldFunction(
+            mesh, path_fmu,
+            inputs_fmu=["x0", "x1"], outputs_fmu=["y0"],
+            final_time=101,
+        )
+        print(model_fmu)
+
+        # call
+        x = [4.2, 5.1]
+        y = model_fmu(x)[0]
+        print(f"reimported field value={y}")
+        assert abs(y[0] - 5.23193) < 1e-4, "wrong value"
 
     # simulate with OMSimulator
     have_omsimulator = True
@@ -96,14 +110,6 @@ def test_export_fmu_field(mode):
     if have_omsimulator:
         subprocess.run(["OMSimulator", path_fmu], capture_output=True, check=True)
 
-    # simulate with pyfmi
-    import pyfmi
-    model = pyfmi.load_fmu(path_fmu)
-    model.initialize()
-    model.reset()
-    res = model.simulate(options={"silent_mode": True})
-    print(model.get_model_variables().keys())
-    print(res["y0"])
     shutil.rmtree(temp_path)
 
 
@@ -126,7 +132,7 @@ def test_export_model(mode, binary):
     path_model = os.path.join(temp_path, name_model)
     fe = otfmi.FunctionExporter(f, start)
     fe.export_model(path_model, gui=False, verbose=True, binary=binary, mode=mode)
-    assert os.path.isfile(path_model), "model not created"
+    assert os.path.isfile(path_model), f"model not created in file {path_model}"
 
     if binary:
         # write simulation mos
