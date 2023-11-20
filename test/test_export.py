@@ -67,8 +67,7 @@ def test_export_fmu_vector(mode):
 
 
 @pytest.mark.skipif(sys.platform.startswith("win"), reason="N/A")
-@pytest.mark.parametrize("mode", ["pyprocess", "pythonfmu"])
-def test_export_fmu_field(mode):
+def test_export_fmu_field():
 
     N = 100
     start = 0.0
@@ -83,23 +82,8 @@ def test_export_fmu_field(mode):
 
     # export
     fe = otfmi.FunctionExporter(f, x0)
-    fe.export_fmu(path_fmu, fmuType="cs", mode=mode, verbose=True)
+    fe.export_fmu(path_fmu, fmuType="cs", mode="pythonfmu", verbose=True)
     assert os.path.isfile(path_fmu), f"fmu not created in {path_fmu}"
-
-    if mode == "pyprocess":
-        # reimport fmu
-        model_fmu = otfmi.FMUPointToFieldFunction(
-            mesh, path_fmu,
-            inputs_fmu=["x0", "x1"], outputs_fmu=["y0"],
-            final_time=101,
-        )
-        print(model_fmu)
-
-        # call
-        x = [4.2, 5.1]
-        y = model_fmu(x)[0]
-        print(f"reimported field value={y}")
-        assert abs(y[0] - 5.23193) < 1e-4, "wrong value"
 
     # simulate with OMSimulator
     have_omsimulator = True

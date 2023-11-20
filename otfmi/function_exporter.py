@@ -10,18 +10,9 @@ import shutil
 import sys
 import dill
 from pythonfmu import FmuBuilder
+import pathlib
 
 dill.settings["recurse"] = True
-
-
-def path2uri(path):
-    try:
-        # python >=3.4, or using backport
-        import pathlib
-
-        return pathlib.Path(path).as_uri()
-    except ImportError:
-        return "file://" + path.replace("\\", "/").replace("C:/", "/C:/")
 
 
 class FunctionExporter(object):
@@ -32,6 +23,7 @@ class FunctionExporter(object):
     ----------
     function : :py:class:`openturns.Function` or :py:class:`openturns.PointToFieldFunction`
         Function to export.
+        Field functions (temporal models) can only be exported in fmu format via pythonfmu mode.
     start : sequence of float
         Initial input values.
     """
@@ -39,7 +31,9 @@ class FunctionExporter(object):
     def __init__(self, function, start=None):
         assert hasattr(function, "getInputDimension"), "not an openturns function"
         assert not hasattr(function, "getInputMesh"), "not a vector->vector|field function"
-        self.function_ = function
+        if hasattr(function, "getInputMesh") and function.getInputMesh().getDimension() != 1:
+            raise TypeError("Can only export field functions with mesh dimension=1 (temporal)")
+        self._function = function
         if start is not None:
             try:
                 [float(x) for x in start]
@@ -47,8 +41,8 @@ class FunctionExporter(object):
                 raise TypeError("start must be a sequence of float")
             assert len(start) == function.getInputDimension(), "wrong input dimension"
         self._start = start
-        self.workdir = tempfile.mkdtemp()
-        self._xml_path = os.path.join(self.workdir, "function.xml")
+        self._workdir = tempfile.mkdtemp()
+        self._xml_path = os.path.join(self._workdir, "function.xml")
 
     def _export_xml(self):
         """
@@ -59,7 +53,7 @@ class FunctionExporter(object):
         """
         study = ot.Study()
         study.setStorageManager(ot.XMLStorageManager(self._xml_path))
-        study.add("function", self.function_)
+        study.add("function", self._function)
         study.save()
 
     def _write_cwrapper_pyprocess(self):
@@ -69,14 +63,6 @@ class FunctionExporter(object):
         Parameters
         ----------
         """
-        with open(self._xml_path, "rb") as f:
-            xml_data = f.read()
-
-        field = hasattr(self.function_, "getOutputMesh")
-        flat_size = self.function_.getOutputDimension()
-        if field:
-            flat_size *= self.function_.getOutputMesh().getVerticesNumber()
-
         tdata = """
 #define _XOPEN_SOURCE 500
 #define  _POSIX_C_SOURCE 200809L
@@ -100,17 +86,14 @@ void c_func(int nin, double x[], int nout, double y[]) {
   int i;
   static int count = 0;
   static int hits = 0;
-  static int findex = 0;
   int same_x;
   static double prev_x[{{ input_dim }}];
-  static double prev_y[{{ flat_size }}];
+  static double prev_y[{{ output_dim }}];
   same_x = count;
   for (i = 0; i < nin; ++ i) {
     if(x[i] != prev_x[i]) same_x = 0;
   }
   if (!same_x) {
-    /* reset the node index */
-    findex = 0;
     /*printf("count=%d hits=%d\\n", count, hits);*/
     char workdir[] = "{{ workdir }}";
     if (access(workdir, R_OK) == -1)
@@ -132,16 +115,13 @@ void c_func(int nin, double x[], int nout, double y[]) {
       fprintf(fptr, "study = ot.Study()\\n");
       fprintf(fptr, "study.setStorageManager(ot.XMLStorageManager(r\\\"%s\\\"))\\n", xml_path);
       fprintf(fptr, "study.load()\\n");
-      fprintf(fptr, "function = ot.{{ function_type }}()\\n");
+      fprintf(fptr, "function = ot.Function()\\n");
       fprintf(fptr, "study.fillObject(\\\"function\\\", function)\\n");
       fprintf(fptr, "x = []\\n");
       fprintf(fptr, "with open(r\\"{{ path_point_in }}\\", \\"r\\") as f:\\n");
       fprintf(fptr, "    for line in f.readlines():\\n");
       fprintf(fptr, "        x.append(float(line))\\n");
       fprintf(fptr, "y = function(x)\\n");
-{% if field %}
-      fprintf(fptr, "y = y.asPoint()\\n");
-{% endif %}
       fprintf(fptr, "with open(r\\"{{ path_point_out }}\\", \\"w\\") as f:\\n");
       fprintf(fptr, "    for v in y:\\n");
       fprintf(fptr, "        f.write(str(v)+\\"\\\\n\\")\\n");
@@ -151,56 +131,50 @@ void c_func(int nin, double x[], int nout, double y[]) {
     if (rc != 0)
       printf("otfmi: error running \\"python {{ path_wrapper_py }}\\" rc=%d\\n", rc);
     fptr = fopen("{{ path_point_out }}", "r");
-    for (i = 0; i < {{ flat_size }}; ++ i)
+    for (i = 0; i < nout; ++ i)
       rc = fscanf(fptr, "%lf", &y[i]);
     fclose(fptr);
 
     memcpy(prev_x, x, nin * sizeof(double));
-    memcpy(prev_y, y, {{ flat_size }} * sizeof(double));
+    memcpy(prev_y, y, nout * sizeof(double));
   }
   else
     ++ hits;
-    memcpy(y, prev_y + findex, nout * sizeof(double));
-{% if field %}
-  /* for the same x we must return at each call the value of the next node. TODO: interpolate wrt t? */
-  findex = (findex + 1) % {{ n_pt }};
-{% endif %}
+    memcpy(y, prev_y, nout * sizeof(double));
   ++ count;
 }
 
 """
+
+        with open(self._xml_path, "rb") as f:
+            xml_data = f.read()
 
         data = jinja2.Template(tdata).render(
             {
                 "xml_data_bin": ",".join(
                     ["0x{:02x}".format(byte) for byte in xml_data]
                 ),
-                "input_dim": self.function_.getInputDimension(),
-                "flat_size": flat_size,
-                "workdir": self.workdir.replace("\\", "\\\\"),
-                "field": field,
-                "n_pt": self.function_.getOutputMesh().getVerticesNumber()
-                if field
-                else 0,
-                "function_type": "PointToFieldFunction" if field else "Function",
-                "path_point_in": os.path.join(self.workdir, "point.in").replace(
+                "input_dim": self._function.getInputDimension(),
+                "output_dim": self._function.getOutputDimension(),
+                "workdir": self._workdir.replace("\\", "\\\\"),
+                "path_point_in": os.path.join(self._workdir, "point.in").replace(
                     "\\", "\\\\"
                 ),
-                "path_point_out": os.path.join(self.workdir, "point.out").replace(
+                "path_point_out": os.path.join(self._workdir, "point.out").replace(
                     "\\", "\\\\"
                 ),
-                "path_wrapper_py": os.path.join(self.workdir, "wrapper.py").replace(
+                "path_wrapper_py": os.path.join(self._workdir, "wrapper.py").replace(
                     "\\", "\\\\"
                 ),
-                "path_error_log": os.path.join(self.workdir, "error.log").replace(
+                "path_error_log": os.path.join(self._workdir, "error.log").replace(
                     "\\", "\\\\"
                 ),
-                "path_function_xml": os.path.join(self.workdir, "function.xml").replace(
+                "path_function_xml": os.path.join(self._workdir, "function.xml").replace(
                     "\\", "\\\\"
                 ),
             }
         )
-        with open(os.path.join(self.workdir, "wrapper.c"), "w") as c:
+        with open(os.path.join(self._workdir, "wrapper.c"), "w") as c:
             c.write(data)
 
         # write CMakeLists
@@ -222,7 +196,7 @@ if (MSVC)
   target_compile_definitions(cwrapper PRIVATE _CRT_SECURE_NO_WARNINGS)
 endif()
 """
-        with open(os.path.join(self.workdir, "CMakeLists.txt"), "w") as cm:
+        with open(os.path.join(self._workdir, "CMakeLists.txt"), "w") as cm:
             cm.write(data)
 
     def _write_cwrapper_cpython(self):
@@ -232,13 +206,6 @@ endif()
         Parameters
         ----------
         """
-        with open(self._xml_path, "rb") as f:
-            xml_data = f.read()
-
-        field = hasattr(self.function_, "getOutputMesh")
-        flat_size = self.function_.getOutputDimension()
-        if field:
-            flat_size *= self.function_.getOutputMesh().getVerticesNumber()
 
         tdata = """
 #define _XOPEN_SOURCE 500
@@ -293,14 +260,11 @@ void c_func(int nin, double x[], int nout, double y[])
       fprintf(fptr, "xml_path = r\\\"%s\\\"\\n", xml_path);
       fprintf(fptr, "study.setStorageManager(ot.XMLStorageManager(xml_path))\\n");
       fprintf(fptr, "study.load()\\n");
-      fprintf(fptr, "function = ot.{{ function_type }}()\\n");
+      fprintf(fptr, "function = ot.Function()\\n");
       fprintf(fptr, "study.fillObject(\\\"function\\\", function)\\n");
       fprintf(fptr, "def wrap_evaluate_python(x):\\n");
       fprintf(fptr, "    y = function(list(x))\\n");
       //fprintf(fptr, "    print(x, y)\\n");
-{% if field %}
-      fprintf(fptr, "    y = y.asPoint()\\n");
-{% endif %}
       fprintf(fptr, "    return y\\n");
       fclose(fptr);
     }
@@ -340,8 +304,8 @@ void c_func(int nin, double x[], int nout, double y[])
   //printf("-- pFunc=%x\\n", pFunc);
   if (pFunc)
   {
-    pX = PyTuple_New(nin);
-    for (i = 0; i < nin; ++i)
+    pX = PyTuple_New({{ input_dim }});
+    for (i = 0; i < {{ input_dim }}; ++i)
     {
       pValue = PyFloat_FromDouble(x[i]);
       PyTuple_SetItem(pX, i, pValue);
@@ -353,7 +317,7 @@ void c_func(int nin, double x[], int nout, double y[])
        PyErr_Print();
        return;
     }
-    for (i = 0; i < nout; ++i)
+    for (i = 0; i < {{ output_dim }}; ++i)
     {
       // OT returns a Point
       pValue = PySequence_GetItem(pY, i);
@@ -366,37 +330,35 @@ void c_func(int nin, double x[], int nout, double y[])
   ++ count;
 }
 """
+        with open(self._xml_path, "rb") as f:
+            xml_data = f.read()
+
         data = jinja2.Template(tdata).render(
             {
                 "xml_data_bin": ",".join(
                     ["0x{:02x}".format(byte) for byte in xml_data]
                 ),
-                "input_dim": self.function_.getInputDimension(),
-                "flat_size": flat_size,
-                "workdir": self.workdir.replace("\\", "\\\\"),
-                "field": field,
-                "n_pt": self.function_.getOutputMesh().getVerticesNumber()
-                if field
-                else 0,
-                "function_type": "PointToFieldFunction" if field else "Function",
-                "path_point_in": os.path.join(self.workdir, "point.in").replace(
+                "input_dim": self._function.getInputDimension(),
+                "output_dim": self._function.getOutputDimension(),
+                "workdir": self._workdir.replace("\\", "\\\\"),
+                "path_point_in": os.path.join(self._workdir, "point.in").replace(
                     "\\", "\\\\"
                 ),
-                "path_point_out": os.path.join(self.workdir, "point.out").replace(
+                "path_point_out": os.path.join(self._workdir, "point.out").replace(
                     "\\", "\\\\"
                 ),
-                "path_wrapper_py": os.path.join(self.workdir, "wrapper.py").replace(
+                "path_wrapper_py": os.path.join(self._workdir, "wrapper.py").replace(
                     "\\", "\\\\"
                 ),
-                "path_error_log": os.path.join(self.workdir, "error.log").replace(
+                "path_error_log": os.path.join(self._workdir, "error.log").replace(
                     "\\", "\\\\"
                 ),
-                "path_function_xml": os.path.join(self.workdir, "function.xml").replace(
+                "path_function_xml": os.path.join(self._workdir, "function.xml").replace(
                     "\\", "\\\\"
                 ),
             }
         )
-        with open(os.path.join(self.workdir, "wrapper.c"), "w") as c:
+        with open(os.path.join(self._workdir, "wrapper.c"), "w") as c:
             c.write(data)
 
         # write CMakeLists
@@ -422,7 +384,7 @@ if (MSVC)
   target_compile_definitions(cwrapper PRIVATE _CRT_SECURE_NO_WARNINGS)
 endif()
 """
-        with open(os.path.join(self.workdir, "CMakeLists.txt"), "w") as cm:
+        with open(os.path.join(self._workdir, "CMakeLists.txt"), "w") as cm:
             cm.write(data)
 
     def _write_cwrapper_cxx(self):
@@ -486,7 +448,7 @@ void c_func(int nin, double x[], int nout, double y[])
                 ),
             }
         )
-        with open(os.path.join(self.workdir, "wrapper.cxx"), "w") as cxx:
+        with open(os.path.join(self._workdir, "wrapper.cxx"), "w") as cxx:
             cxx.write(data)
 
         # write CMakeLists
@@ -513,7 +475,7 @@ if (MSVC)
   target_compile_definitions(cwrapper PRIVATE _CRT_SECURE_NO_WARNINGS)
 endif()
 """
-        with open(os.path.join(self.workdir, "CMakeLists.txt"), "w") as cm:
+        with open(os.path.join(self._workdir, "CMakeLists.txt"), "w") as cm:
             cm.write(data)
 
     def _build_cwrapper(self, verbose):
@@ -533,12 +495,12 @@ endif()
             # vsplat = {"64bit": "x64", "32bit": "x86"}[bits]
             cmake_args.insert(1, "-DCMAKE_GENERATOR_PLATFORM=x64")
         subprocess.run(
-            cmake_args, capture_output=not verbose, cwd=self.workdir, check=True
+            cmake_args, capture_output=not verbose, cwd=self._workdir, check=True
         )
         subprocess.run(
             ["cmake", "--build", ".", "--config", "Release"],
             capture_output=not verbose,
-            cwd=self.workdir,
+            cwd=self._workdir,
             check=True,
         )
 
@@ -551,7 +513,7 @@ endif()
         """
         string = ""
         if self._start is None:
-            for input_name in self.function_.getInputDescription():
+            for input_name in self._function.getInputDescription():
                 string = (
                     string + "  input Real " + re.sub(r"\W", "_", input_name) + " ;\n"
                 )
@@ -559,7 +521,7 @@ endif()
             for (
                 input_name,
                 input_value,
-            ) in zip(self.function_.getInputDescription(), self._start):
+            ) in zip(self._function.getInputDescription(), self._start):
                 string = (
                     string
                     + "  input Real "
@@ -568,7 +530,7 @@ endif()
                     + str(input_value)
                     + ");\n"
                 )
-        for output_name in self.function_.getOutputDescription():
+        for output_name in self._function.getOutputDescription():
             string = string + "  output Real " + re.sub(r"\W", "_", output_name) + ";\n"
         return string
 
@@ -582,21 +544,21 @@ endif()
         list_input_position = sorted(
             [
                 (ii + 1) // 2 * 20 * (-1) ** ii
-                for ii in range(len(self.function_.getInputDescription()))
+                for ii in range(len(self._function.getInputDescription()))
             ],
             reverse=True,
         )
         list_output_position = sorted(
             [
                 (ii + 1) // 2 * 20 * (-1) ** ii
-                for ii in range(len(self.function_.getOutputDescription()))
+                for ii in range(len(self._function.getOutputDescription()))
             ],
             reverse=True,
         )
 
         string = ""
-        for ii in range(len(self.function_.getInputDescription())):
-            input_name = self.function_.getInputDescription()[ii]
+        for ii in range(len(self._function.getInputDescription())):
+            input_name = self._function.getInputDescription()[ii]
             underscore_input_name = re.sub(r"\W", "_", input_name)
             y_origin = list_input_position[ii]
             string = (
@@ -611,8 +573,8 @@ endif()
                 )
             )
 
-        for ii in range(len(self.function_.getOutputDescription())):
-            output_name = self.function_.getOutputDescription()[ii]
+        for ii in range(len(self._function.getOutputDescription())):
+            output_name = self._function.getOutputDescription()[ii]
             underscore_output_name = re.sub(r"\W", "_", output_name)
             y_origin = list_output_position[ii]
             string = (
@@ -644,7 +606,7 @@ endif()
         move : bool
             Move the model from temporary folder to user folder
         """
-        link_dir = dirName if move else self.workdir
+        link_dir = dirName if move else self._workdir
         _ = link_dir
         tdata = """
 model {{ className }}
@@ -669,26 +631,30 @@ equation
 end {{ className }};
 
 """
+
+        def path2uri(path):
+            return pathlib.Path(path).as_uri()
+
         data = jinja2.Template(tdata).render(
             {
                 "className": className,
-                "input_dim": self.function_.getInputDimension(),
-                "output_dim": self.function_.getOutputDimension(),
-                "link_dir": path2uri(dirName) if move else path2uri(self.workdir),
+                "input_dim": self._function.getInputDimension(),
+                "output_dim": self._function.getOutputDimension(),
+                "link_dir": path2uri(dirName) if move else path2uri(self._workdir),
                 "io_vars": self._set_connector() if gui else self._set_input_output(),
                 "inputs": ", ".join(
                     [
                         re.sub(r"\W", "_", name)
-                        for name in self.function_.getInputDescription()
+                        for name in self._function.getInputDescription()
                     ]
                 ),
                 "outputs": [
                     re.sub(r"\W", "_", name)
-                    for name in self.function_.getOutputDescription()
+                    for name in self._function.getOutputDescription()
                 ],
             }
         )
-        with open(os.path.join(self.workdir, className + ".mo"), "w") as mo:
+        with open(os.path.join(self._workdir, className + ".mo"), "w") as mo:
             mo.write(data)
 
     def export_model(self, model_path, gui=False, verbose=False, binary=True, mode="pyprocess", move=True):
@@ -696,6 +662,7 @@ end {{ className }};
         Export to model file (.mo).
 
         Requires CMake, a C/C++ compiler.
+        Unlike export_fmu, field functions (temporal models) cannot be exported.
 
         Parameters
         ----------
@@ -742,14 +709,14 @@ end {{ className }};
             list_file = [className + extension]
             if binary:
                 # licwrapper.a/.so, cwrapper.lib/dll
-                list_file += glob.glob(os.path.join(self.workdir, "*cwrapper*"))
+                list_file += glob.glob(os.path.join(self._workdir, "*cwrapper*"))
             else:
                 list_file += ["wrapper" + c_ext, "CMakeLists.txt"]
             for file in list_file:
-                src = os.path.join(self.workdir, file)
+                src = os.path.join(self._workdir, file)
                 dest = os.path.join(dirName, file)
                 shutil.move(src, dest)
-            shutil.rmtree(self.workdir)
+            shutil.rmtree(self._workdir)
 
     def export_fmu(self, fmu_path, fmuType="me", mode="pyprocess", verbose=False):
         """
@@ -768,6 +735,7 @@ end {{ className }};
             me_cs (both model exchange and co-simulation)
         mode : str
             either pyprocess or pythonfmu
+            Only pythonfmu mode is allowed for temporal models
         verbose : bool
             Verbose output (default=False).
         """
@@ -777,19 +745,22 @@ end {{ className }};
         # name starting with lower case causes connection issues in OMEdit
         assert extension == ".fmu", "Please give a FMU name as argument :)"
         dirName = os.path.expanduser(os.path.dirname(fmu_path))
-        if not os.path.exists(self.workdir):
-            os.makedirs(self.workdir)
+        if not os.path.exists(self._workdir):
+            os.makedirs(self._workdir)
         if mode == "pyprocess":
+            if hasattr(self._function, "getOutputMesh"):
+                raise TypeError("Can only export vectorial functions in pyprocess mode")
+
             model_path = fmu_path.replace("fmu", "mo")
 
             self.export_model(model_path, gui=False, verbose=verbose, move=False)
 
-            path_mo = os.path.join(self.workdir, className + ".mo")
-            path_fmu = os.path.join(self.workdir, className + extension)
+            path_mo = os.path.join(self._workdir, className + ".mo")
+            path_fmu = os.path.join(self._workdir, className + extension)
             mo2fmu(path_mo, path_fmu=path_fmu, fmuType=fmuType, verbose=verbose)
 
             shutil.move(
-                os.path.join(self.workdir, className + extension),
+                os.path.join(self._workdir, className + extension),
                 os.path.join(dirName, className + extension),
             )
 
@@ -834,13 +805,13 @@ class {{ className }}(Fmi2Slave):
             setattr(self, var, outP[i])
         return True
 """
-            field = hasattr(self.function_, "getOutputMesh")
+            field = hasattr(self._function, "getOutputMesh")
             data = jinja2.Template(tdata).render({"className": className,
                                                   "xml_path": self._xml_path,
                                                   "field": field,
                                                   "start": self._start})
-            slave_file = os.path.join(self.workdir, className + ".py")
+            slave_file = os.path.join(self._workdir, className + ".py")
             with open(slave_file, "w") as fslave:
                 fslave.write(data)
             FmuBuilder.build_FMU(slave_file, dest=os.path.dirname(fmu_path))
-        shutil.rmtree(self.workdir)
+        shutil.rmtree(self._workdir)
