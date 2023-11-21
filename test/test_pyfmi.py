@@ -1,35 +1,29 @@
 """Testing basic features with PyFMI only."""
 
-import unittest
 import otfmi.example.utility
 import pyfmi
+import pytest
 
 
-class TestPyfmi(unittest.TestCase):
-    def setUp(self):
-        """Load example FMU."""
-        self.path_fmu = otfmi.example.utility.get_path_fmu("deviation")
-
-    def test_empty(self):
-        """Check module import and setup."""
-        pass
-
-    def test_load_fmu(self):
-        """Load an fmu."""
-        pyfmi.load_fmu(self.path_fmu)
-
-    def test_simulate(self):
-        """Simulate an fmu."""
-        model = pyfmi.load_fmu(self.path_fmu)
-        model.simulate(options={"silent_mode": True})
-
-    def test_reset(self):
-        """Reset an fmu."""
-        model = pyfmi.load_fmu(self.path_fmu)
-        model.simulate(options={"silent_mode": True})
-        model.reset()
-        model.simulate(options={"silent_mode": True})
+@pytest.fixture
+def model():
+    """Load an fmu."""
+    path_fmu = otfmi.example.utility.get_path_fmu("deviation")
+    model = pyfmi.load_fmu(path_fmu)
+    return model
 
 
-if __name__ == "__main__":
-    unittest.main()
+def test_pyfmi_load(model):
+    pass
+
+
+def test_pyfmi_simulate(model):
+    """Simulate an fmu."""
+    model.simulate(options={"silent_mode": True})
+
+
+def test_pyfmi_reset(model):
+    """Reset an fmu."""
+    model.simulate(options={"silent_mode": True})
+    model.reset()
+    model.simulate(options={"silent_mode": True})
