@@ -1,12 +1,14 @@
 #!/usr/bin/env python
 
 import otfmi
-import unittest
 import os
+import pytest
 import tempfile
 import shutil
 
 
+@pytest.mark.parametrize("varType", ["input", "parameter"])
+@pytest.mark.parametrize("fmuType", ["cs", "me"])
 def variable_tcase(varType, fmuType):
 
     temp_path = tempfile.mkdtemp()
@@ -38,21 +40,3 @@ def variable_tcase(varType, fmuType):
     print(y)
     assert abs(y[0] - 24.0) < 1e-4, "wrong value"
     shutil.rmtree(temp_path)
-
-
-class TestExport(unittest.TestCase):
-    def test_input_cs(self):
-        variable_tcase("input", "cs")
-
-    def test_parameter_cs(self):
-        variable_tcase("parameter", "cs")
-
-    def test_input_me(self):
-        variable_tcase("input", "me")
-
-    def test_parameter_me(self):
-        variable_tcase("parameter", "me")
-
-
-if __name__ == "__main__":
-    unittest.main()
