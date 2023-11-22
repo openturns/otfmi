@@ -679,12 +679,17 @@ end {{ className }};
             Verbose output (default=False).
         binary : bool
             Whether to generate binaries or source (default=True)
-        mode : 'pyprocess', 'cpython' or 'cxx'
-            Use either a Python process, the Python C API to evaluate the model or the OpenTURNS C++ API.
-            If cxx mode is selected the OpenTURNS development headers and libraries need
-            to be installed (not just the Python module that is installed by pip for example).
+        mode : str, either 'pyprocess', 'cpython' or 'cxx'
+            - pyprocess: the function is run via a Python process by file I/O;
+              slow but should work almost everywhere.
+            - cpython: the function is run via the Python C API; quite fast (no file I/O)
+              but requires Python development headers/libs
+            - cxx: the function is directly evaluated trough the OpenTURNS C++ API;
+              even faster but requires the OpenTURNS development headers and libraries
+              (not just the Python module that would be installed by pip for example).
         move : bool
             Move the model from temporary folder to user folder (default=True)
+            For internal use.
         """
 
         assert isinstance(model_path, str), "model_path must be str"

@@ -7,9 +7,6 @@ Export a function as Modelica model
 # ``otfmi.FunctionExporter`` enables to export OpenTURNS functions as Modelica model.
 # The main interest is to use OpenTURNS metamodels in a simulation environment.
 #
-# .. warning::
-#    **This functionality is experimental**.
-#
 # Currently, the inclusion of a metamodel in
 # `OpenModelica GUI <https://openmodelica.org/?id=78:omconnectioneditoromedit&catid=10:main-category>`_
 #  has been performed once (see
@@ -29,7 +26,7 @@ from os.path import join
 
 
 func = ot.SymbolicFunction("x", "exp(x)")
-inputPoint = ot.Point([2])
+inputPoint = [2.0]
 print(func(inputPoint))
 
 # %%
@@ -47,7 +44,7 @@ modelExporter = otfmi.FunctionExporter(func)
 modelExporter.export_model(model_path, gui=True)
 
 # %%
-# Simple as it looks, this function actually does the following :
+# Simple as it looks, this function actually does the following:
 #
 # - write a C-wrapper for the OpenTURNS function,
 # - write a Modelica model calling the C-wrapper as `External <shorturl.at/fhCU2>`_ function.
@@ -107,3 +104,5 @@ modelExporter.export_model(model_path, gui=True)
 #    ⚠️ Compared to native Modelica functions, the included OpenTURNS function is
 #    slow. In this case, 11 seconds of simulation were required for 50 time
 #    steps (i.e. 50 function calls).
+#
+# Note that faster export modes are available with the "mode" keyword, depending on your setup.

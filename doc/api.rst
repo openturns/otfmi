@@ -69,10 +69,10 @@ The submodule **otfmi.fmi** gathers a set of useful functions, employed by the (
    fmi.get_start_value
    fmi.set_dict_value
 
-From OpenTURNS to FMU
+From OpenTURNS to FMI
 ---------------------
 
-Otfmi can also embed an OpenTURNS function in a Modelica model and/or FMU.
+OTFMI can also export an OpenTURNS function in a Modelica source model (.mo) or Functional Mock-up Unit (.fmu).
 
 .. autosummary::
    :toctree: _generated/

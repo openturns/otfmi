@@ -7,9 +7,6 @@ Export a function as FMU
 # ``otfmi.FunctionExporter`` enables to export OpenTURNS functions as FMUs. The
 # main interest of this class is to use OpenTURNS metamodels in a simulation environment.
 #
-# .. warning::
-#    **This functionality is experimental**.
-#
 # Currently, the inclusion of a metamodel in
 # `OpenModelica GUI <https://openmodelica.org/?id=78:omconnectioneditoromedit&catid=10:main-category>`_
 # has been performed once (see
@@ -23,15 +20,15 @@ Export a function as FMU
 #
 # First, we create the OpenTURNS function to export as FMU.
 # This example being solely a demonstrator, we consider a very simple
-# exponentiel function.
+# exponential function.
 
 import openturns as ot
 import otfmi
 import tempfile
 from os.path import join
 
-func = ot.SymbolicFunction("x", "exp(x)")
-inputPoint = ot.Point([2])
+func = ot.SymbolicFunction(["x"], ["exp(x)"])
+inputPoint = [2.0]
 print(func(inputPoint))
 
 # %%
@@ -41,9 +38,10 @@ fmu_path = join(tempfile.mkdtemp(), "myExponential.fmu")
 print(fmu_path)
 
 # %%
-# We export the OpenTURNS function as a Model Exchange FMU. Another export
-# possiblity is the CoSimulation FMU (embeds a solver).
-
+# We export the OpenTURNS function as a Model Exchange FMU.
+# The counterpart is to export as CoSimulation FMU (embeds a solver).
+# Another option would be to export the function via pythonfmu (see the "mode" keyword)
+# allowing export of temporal functions (not a concern here for our function).
 fmuExporter.export_fmu(fmu_path, fmuType="me")
 
 # %%
