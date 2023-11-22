@@ -23,7 +23,8 @@ class FunctionExporter(object):
     ----------
     function : :py:class:`openturns.Function` or :py:class:`openturns.PointToFieldFunction`
         Function to export.
-        Field functions (temporal models) can only be exported in fmu format via pythonfmu mode.
+        Temporal functions (PointToFieldFunction with mesh dimension=1) can only be exported
+        in fmu format via "pythonfmu" mode.
     start : sequence of float
         Initial input values.
     """
@@ -31,7 +32,7 @@ class FunctionExporter(object):
     def __init__(self, function, start=None):
         assert hasattr(function, "getInputDimension"), "not an openturns function"
         assert not hasattr(function, "getInputMesh"), "not a vector->vector|field function"
-        if hasattr(function, "getInputMesh") and function.getInputMesh().getDimension() != 1:
+        if hasattr(function, "getOutputMesh") and function.getOutputMesh().getDimension() != 1:
             raise TypeError("Can only export field functions with mesh dimension=1 (temporal)")
         self._function = function
         if start is not None:
@@ -680,6 +681,8 @@ end {{ className }};
             Whether to generate binaries or source (default=True)
         mode : 'pyprocess', 'cpython' or 'cxx'
             Use either a Python process, the Python C API to evaluate the model or the OpenTURNS C++ API.
+            If cxx mode is selected the OpenTURNS development headers and libraries need
+            to be installed (not just the Python module that is installed by pip for example).
         move : bool
             Move the model from temporary folder to user folder (default=True)
         """
@@ -735,7 +738,8 @@ end {{ className }};
             me_cs (both model exchange and co-simulation)
         mode : str
             either pyprocess or pythonfmu
-            Only pythonfmu mode is allowed for temporal models
+            Only pythonfmu mode is allowed for temporal models (PointToFieldFunction)
+            Note that pythonfmu mode yields pyfmi/otfmi incompatible fmus
         verbose : bool
             Verbose output (default=False).
         """

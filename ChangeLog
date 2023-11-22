@@ -1,3 +1,7 @@
+2023-11-23 - release 0.16
+- Allow FunctionExporter to export .mo in subprocess/cpython/cxx modes (Function only)
+- Allow export to .fmu via pythonfmu (allows to export both Function and PointToFieldFunction but not pyfmi/otfmi compatible)
+
 2022-01-24 - release 0.15
 - Add FMUPointToFieldFunction
 - FMUFunction: Add final_time
