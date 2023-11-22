@@ -63,7 +63,7 @@ Common low-level functions
    ../auto_example/low_level/plot_simulate
    ../auto_example/low_level/plot_initialize
 
-From OpenTURNS to FMU
+From OpenTURNS to FMI
 ---------------------
 
 .. warning::

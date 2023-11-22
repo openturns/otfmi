@@ -1,9 +1,7 @@
 import sys
 import os
 import subprocess
-from distutils.version import LooseVersion
-import sphinx
-# import sphinx_gallery
+
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
@@ -43,10 +41,7 @@ sphinx_gallery_conf = {
 }
 
 
-if LooseVersion(sphinx.__version__) >= "1.8":
-    autodoc_default_options = {"members": None, "inherited-members": None}
-else:
-    autodoc_default_flags = ["members", "inherited-members"]
+autodoc_default_options = {"members": None, "inherited-members": None}
 
 intersphinx_mapping = {
     "openturns": ("http://openturns.github.io/openturns/latest", None)
@@ -56,30 +51,18 @@ autosummary_generate = True
 numpydoc_show_class_members = True
 numpydoc_class_members_toctree = False
 
-try:
-    import sphinx.ext.imgmath
-
-    extensions.append("sphinx.ext.imgmath")
-    imgmath_latex_preamble = r"\usepackage{{{0}math_notations}}".format(
-        os.path.dirname(__file__) + os.sep
+extensions.append("sphinx.ext.imgmath")
+imgmath_latex_preamble = r"\usepackage{{{0}math_notations}}".format(
+    os.path.dirname(__file__) + os.sep
+)
+imgmath_use_preview = True
+if (
+    subprocess.call(
+        "dvisvgm -V", shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE
     )
-    imgmath_use_preview = True
-    if (
-        subprocess.call(
-            "dvisvgm -V", shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE
-        )
-        == 0
-    ):
-        imgmath_image_format = "svg"
-except ImportError:
-    extensions.append("sphinx.ext.pngmath")
-    pngmath_latex_preamble = r"\usepackage{{{0}math_notations}}".format(
-        os.path.dirname(__file__) + os.sep
-    )
-    # The next option is used for smart-alignment of math images on the text.
-    # It only works when the preview-latex package is installed.
-    # See http://sphinx-doc.org/latest/ext/math.html#confval-pngmath_use_preview
-    pngmath_use_preview = True
+    == 0
+):
+    imgmath_image_format = "svg"
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]
