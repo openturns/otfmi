@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import fmpy
 import glob
 import openturns as ot
 import otfmi
@@ -64,6 +65,13 @@ def test_export_fmu_vector(mode, fmuType):
         mem1 = process.memory_info().rss / 1000000
         print("Speed=", size / (t1 - t0), "evals/s")
         print("Memory=", mem1 - mem0)
+
+    elif mode == "pythonfmu":
+        summary = fmpy.dump(path_fmu)
+        print(summary)
+        start_values = {"E": 6.70455e+10, "F": 300, "L": 2.55, "I": 1.45385e-07}
+        result = fmpy.simulate_fmu(path_fmu, start_values=start_values)
+        print(result)
 
     shutil.rmtree(temp_path)
 
