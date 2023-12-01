@@ -687,10 +687,10 @@ end {{ className }};
             - cxx: the function is directly evaluated trough the OpenTURNS C++ API;
               even faster but requires the OpenTURNS development headers and libraries
               (not just the Python module that would be installed by pip for example).
-        move : bool
-            Move the model from temporary folder to user folder (default=True)
-            For internal use.
         """
+
+        # "move" argument moves the the model from temporary folder to user folder (default=True)
+        # not documented on purpose (private)
 
         assert isinstance(model_path, str), "model_path must be str"
         rawClassName, extension = os.path.splitext(os.path.basename(model_path))
@@ -791,9 +791,8 @@ class {{ className }}(Fmi2Slave):
         self._function = ot.PointToFieldFunction() if {{ field }} else ot.Function()
         study.fillObject("function", self._function)
 
-        start = {{ start }}
         for i, var in enumerate(self._function.getInputDescription()):
-            setattr(self, var, start[i])
+            setattr(self, var, 0.0)
             self.register_variable(Real(var, causality=Fmi2Causality.input))
 
         for var in self._function.getOutputDescription():
@@ -817,8 +816,7 @@ class {{ className }}(Fmi2Slave):
             field = hasattr(self._function, "getOutputMesh")
             data = jinja2.Template(tdata).render({"className": className,
                                                   "xml_path": self._xml_path,
-                                                  "field": field,
-                                                  "start": self._start})
+                                                  "field": field})
             slave_file = os.path.join(self._workdir, className + ".py")
             with open(slave_file, "w") as fslave:
                 fslave.write(data)
