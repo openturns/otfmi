@@ -717,7 +717,8 @@ end {{ className }};
             list_file = [className + extension]
             if binary:
                 # licwrapper.a/.so, cwrapper.lib/dll
-                list_file += glob.glob(os.path.join(self._workdir, "*cwrapper*"))
+                libfiles = glob.glob(os.path.join(self._workdir, "*cwrapper*"))
+                list_file += [os.path.basename(x) for x in libfiles]
             else:
                 list_file += ["wrapper" + c_ext, "CMakeLists.txt"]
             for file in list_file:
