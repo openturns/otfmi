@@ -13,7 +13,8 @@ import pytest
 
 
 @pytest.mark.parametrize("mode", ["pyprocess", "pythonfmu"])
-def test_export_fmu_vector(mode):
+@pytest.mark.parametrize("fmuType", ["cs", "me"])
+def test_export_fmu_vector(mode, fmuType):
     # export fmu
     f = ot.SymbolicFunction(["E", "F", "L", "I"], ["(F*L^3)/(3.0*E*I)"])
     start = [3e7, 3e4, 250.0, 400.0]
@@ -24,7 +25,7 @@ def test_export_fmu_vector(mode):
     temp_path = tempfile.mkdtemp()
     path_fmu = os.path.join(temp_path, "Deviation.fmu")
     fe = otfmi.FunctionExporter(f, start)
-    fe.export_fmu(path_fmu, fmuType="cs", mode=mode, verbose=True)
+    fe.export_fmu(path_fmu, fmuType=fmuType, mode=mode, verbose=True)
     assert os.path.isfile(path_fmu), "fmu not created"
 
     # simulate with OMSimulator
@@ -67,7 +68,8 @@ def test_export_fmu_vector(mode):
 
 
 @pytest.mark.skipif(sys.platform.startswith("win"), reason="N/A")
-def test_export_fmu_field():
+@pytest.mark.parametrize("fmuType", ["cs", "me"])
+def test_export_fmu_field(fmuType):
 
     N = 100
     start = 0.0
@@ -82,7 +84,7 @@ def test_export_fmu_field():
 
     # export
     fe = otfmi.FunctionExporter(f, x0)
-    fe.export_fmu(path_fmu, fmuType="cs", mode="pythonfmu", verbose=True)
+    fe.export_fmu(path_fmu, fmuType=fmuType, mode="pythonfmu", verbose=True)
     assert os.path.isfile(path_fmu), f"fmu not created in {path_fmu}"
 
     # simulate with OMSimulator
