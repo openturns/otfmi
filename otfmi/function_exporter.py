@@ -1,4 +1,6 @@
 from .mo2fmu import mo2fmu
+import binascii
+import dill
 import glob
 import jinja2
 import tempfile
@@ -8,7 +10,6 @@ import re
 import subprocess
 import shutil
 import sys
-import dill
 from pythonfmu import FmuBuilder
 import pathlib
 
@@ -779,18 +780,28 @@ end {{ className }};
             tdata = """
 import openturns as ot
 from pythonfmu.fmi2slave import Fmi2Slave, Fmi2Causality, Real
+import shutil
+import tempfile
+import os
+import binascii
 
+b64_data = {{ b64_data }}
 
 class {{ className }}(Fmi2Slave):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         study = ot.Study()
-        fname = "{{ xml_path }}"
+        workdir = tempfile.mkdtemp()
+        fname = os.path.join(workdir, "function.xml")
+        xml_data = binascii.a2b_base64(b64_data)
+        with open(fname, "wb") as f:
+            f.write(xml_data)
         study.setStorageManager(ot.XMLStorageManager(fname))
         study.load()
         self._function = ot.PointToFieldFunction() if {{ field }} else ot.Function()
         study.fillObject("function", self._function)
+        shutil.rmtree(workdir)
 
         for i, var in enumerate(self._function.getInputDescription()):
             setattr(self, var, 0.0)
@@ -815,8 +826,11 @@ class {{ className }}(Fmi2Slave):
         return True
 """
             field = hasattr(self._function, "getOutputMesh")
+            with open(self._xml_path, "rb") as f:
+                xml_data = f.read()
+            b64_data = binascii.b2a_base64(xml_data)
             data = jinja2.Template(tdata).render({"className": className,
-                                                  "xml_path": self._xml_path,
+                                                  "b64_data": b64_data,
                                                   "field": field})
             slave_file = os.path.join(self._workdir, className + ".py")
             with open(slave_file, "w") as fslave:
