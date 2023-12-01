@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import glob
 import openturns as ot
 import otfmi
 import os
@@ -121,6 +122,9 @@ def test_export_model(mode, binary):
     assert os.path.isfile(path_model), f"model not created in file {path_model}"
 
     if binary:
+        libfiles = glob.glob(os.path.join(temp_path, "*cwrapper*"))
+        assert len(libfiles) > 0, "lib file not created"
+
         # write simulation mos
         path_mos = os.path.join(temp_path, "simulate.mos")
         with open(path_mos, "w") as mos:
@@ -131,7 +135,7 @@ def test_export_model(mode, binary):
     else:
         c_ext = ".cxx" if mode == "cxx" else ".c"
         assert os.path.isfile(os.path.join(temp_path, "wrapper" + c_ext)), "wrapper source not created"
-        assert os.path.isfile(os.path.join(temp_path, "CMakeLists.txt")), "cmakelists not created"
+        assert os.path.isfile(os.path.join(temp_path, "CMakeLists.txt")), "CMakeLists not created"
     shutil.rmtree(temp_path)
 
 
