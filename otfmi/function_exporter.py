@@ -484,7 +484,7 @@ endif()
         """
         Build C wrapper.
 
-        Requires CMake, a C compiler.
+        Requires CMake, a C/C++ compiler.
 
         Parameters
         ----------
@@ -496,6 +496,15 @@ endif()
             # bits = platform.architecture()[0]
             # vsplat = {"64bit": "x64", "32bit": "x86"}[bits]
             cmake_args.insert(1, "-DCMAKE_GENERATOR_PLATFORM=x64")
+
+        # find OpenTURNS cmake config relative from python dir (for cxx mode)
+        ot_libdir = ot.__file__
+        for _ in range(4):
+            ot_libdir = os.path.dirname(ot_libdir)
+        ot_cmake_dir = os.path.join(ot_libdir, "cmake", "openturns")
+        if os.path.exists(os.path.join(ot_cmake_dir, "OpenTURNSConfig.cmake")):
+            cmake_args.insert(1, f"-DOpenTURNS_DIR={ot_cmake_dir}")
+
         subprocess.run(
             cmake_args, capture_output=not verbose, cwd=self._workdir, check=True
         )
