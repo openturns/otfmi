@@ -799,7 +799,11 @@ class {{ className }}(Fmi2Slave):
             f.write(xml_data)
         study.setStorageManager(ot.XMLStorageManager(fname))
         study.load()
-        self._function = ot.PointToFieldFunction() if {{ field }} else ot.Function()
+{% if isField %}
+        self._function = ot.PointToFieldFunction()
+{% else %}
+        self._function = ot.Function()
+ {% endif %}
         study.fillObject("function", self._function)
         shutil.rmtree(workdir)
 
@@ -813,25 +817,26 @@ class {{ className }}(Fmi2Slave):
 
     def do_step(self, current_time, step_size):
         inP = [getattr(self, var) for var in self._function.getInputDescription()]
-        if {{ field }}:
-            field = self._function(inP)
-            mesh = self._function.getOutputMesh()
-            timeGrid = mesh.getVertices().asPoint()
-            interpolation = ot.PiecewiseLinearEvaluation(timeGrid, field)
-            outP = interpolation([current_time])
-        else:
-            outP = self._function(inP)
+{% if isField %}
+        field = self._function(inP)
+        mesh = self._function.getOutputMesh()
+        timeGrid = mesh.getVertices().asPoint()
+        interpolation = ot.PiecewiseLinearEvaluation(timeGrid, field)
+        outP = interpolation([current_time])
+{% else %}
+        outP = self._function(inP)
+{% endif %}
         for i, var in enumerate(self._function.getOutputDescription()):
             setattr(self, var, outP[i])
         return True
 """
-            field = hasattr(self._function, "getOutputMesh")
+            isField = hasattr(self._function, "getOutputMesh")
             with open(self._xml_path, "rb") as f:
                 xml_data = f.read()
             b64_data = binascii.b2a_base64(xml_data)
             data = jinja2.Template(tdata).render({"className": className,
                                                   "b64_data": b64_data,
-                                                  "field": field})
+                                                  "isField": isField})
             slave_file = os.path.join(self._workdir, className + ".py")
             with open(slave_file, "w") as fslave:
                 fslave.write(data)
