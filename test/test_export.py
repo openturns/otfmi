@@ -96,6 +96,12 @@ def test_export_fmu_field(fmuType):
     fe.export_fmu(path_fmu, fmuType=fmuType, mode="pythonfmu", verbose=True)
     assert os.path.isfile(path_fmu), f"fmu not created in {path_fmu}"
 
+    summary = fmpy.dump(path_fmu)
+    print(summary)
+    start_values = {"x0": 4.0, "x1": 5.0}
+    result = fmpy.simulate_fmu(path_fmu, start_values=start_values)
+    print(result)
+
     # simulate with OMSimulator
     have_omsimulator = True
     try:
