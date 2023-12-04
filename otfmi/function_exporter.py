@@ -794,7 +794,7 @@ import tempfile
 import os
 import binascii
 
-b64_data = {{ b64_data }}
+xml_b64 = {{ xml_b64 }}
 
 class {{ className }}(Fmi2Slave):
 
@@ -803,16 +803,16 @@ class {{ className }}(Fmi2Slave):
         study = ot.Study()
         workdir = tempfile.mkdtemp()
         fname = os.path.join(workdir, "function.xml")
-        xml_data = binascii.a2b_base64(b64_data)
+        xml_data = binascii.a2b_base64(xml_b64)
         with open(fname, "wb") as f:
             f.write(xml_data)
         study.setStorageManager(ot.XMLStorageManager(fname))
         study.load()
-{% if isField %}
+{% if is_field_f %}
         self._function = ot.PointToFieldFunction()
 {% else %}
         self._function = ot.Function()
- {% endif %}
+{% endif %}
         study.fillObject("function", self._function)
         shutil.rmtree(workdir)
 
@@ -826,26 +826,28 @@ class {{ className }}(Fmi2Slave):
 
     def do_step(self, current_time, step_size):
         inP = [getattr(self, var) for var in self._function.getInputDescription()]
-{% if isField %}
-        field = self._function(inP)
+        try:
+            f_output = self._function(inP)
+        except Exception as exc:
+            print(f"{{ className }}: {exc}")
+            return False
+{% if is_field_f %}
         mesh = self._function.getOutputMesh()
         timeGrid = mesh.getVertices().asPoint()
-        interpolation = ot.PiecewiseLinearEvaluation(timeGrid, field)
-        outP = interpolation([current_time])
-{% else %}
-        outP = self._function(inP)
+        interpolation = ot.PiecewiseLinearEvaluation(timeGrid, f_output)
+        f_output = interpolation([current_time])
 {% endif %}
         for i, var in enumerate(self._function.getOutputDescription()):
-            setattr(self, var, outP[i])
+            setattr(self, var, f_output[i])
         return True
 """
-            isField = hasattr(self._function, "getOutputMesh")
+            is_field_f = hasattr(self._function, "getOutputMesh")
             with open(self._xml_path, "rb") as f:
                 xml_data = f.read()
-            b64_data = binascii.b2a_base64(xml_data)
+            xml_b64 = binascii.b2a_base64(xml_data)
             data = jinja2.Template(tdata).render({"className": className,
-                                                  "b64_data": b64_data,
-                                                  "isField": isField})
+                                                  "xml_b64": xml_b64,
+                                                  "is_field_f": is_field_f})
             slave_file = os.path.join(self._workdir, className + ".py")
             with open(slave_file, "w") as fslave:
                 fslave.write(data)
