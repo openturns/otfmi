@@ -23,7 +23,7 @@ Installation
 
 The preferred installation procedure uses Conda. 
 
-First install OpenTURNS in conda, according to the instructions `here <http://openturns.github.io/openturns/master/install.html#conda>`_.
+First install OpenTURNS in conda, according to the `instructions <http://openturns.github.io/openturns/master/install.html#conda>`_.
 Once OpenTURNS is installed, use the following commands to install OTFMI::
 
     conda install -y otfmi 
