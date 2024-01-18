@@ -755,7 +755,7 @@ end {{ className }};
         mode : str
             either pyprocess or pythonfmu
             Only pythonfmu mode is allowed for temporal models (PointToFieldFunction)
-            Note that pythonfmu mode yields pyfmi/otfmi incompatible fmus
+            Note that pythonfmu mode yields cosimulation-only, pyfmi/otfmi incompatible fmus
         verbose : bool
             Verbose output (default=False).
         """
