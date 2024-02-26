@@ -98,7 +98,8 @@ def test_export_fmu_field(fmuType):
 
     summary = fmpy.dump(path_fmu)
     print(summary)
-    start_values = {"x0": 4.0, "x1": 5.0}
+    var1, var2 = f.getInputDescription()
+    start_values = {var1: 4.0, var2: 5.0}
     result = fmpy.simulate_fmu(path_fmu, start_values=start_values)
     print(result)
 
