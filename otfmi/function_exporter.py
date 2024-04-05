@@ -65,7 +65,7 @@ class FunctionExporter(object):
         Parameters
         ----------
         """
-        tdata = """
+        tdata = r"""
 #define _XOPEN_SOURCE 500
 #define  _POSIX_C_SOURCE 200809L
 #include <stdio.h>
@@ -96,13 +96,13 @@ void c_func(int nin, double x[], int nout, double y[]) {
     if(x[i] != prev_x[i]) same_x = 0;
   }
   if (!same_x) {
-    /*printf("count=%d hits=%d\\n", count, hits);*/
+    /*printf("count=%d hits=%d\n", count, hits);*/
     char workdir[] = "{{ workdir }}";
     if (access(workdir, R_OK) == -1)
       mkdir(workdir, 0733);
     fptr = fopen("{{ path_point_in }}", "w");
     for (i = 0; i < nin; ++ i)
-      fprintf(fptr, "%lf\\n", x[i]);
+      fprintf(fptr, "%lf\n", x[i]);
     fclose(fptr);
     char xml_path[] = "{{ path_function_xml }}";
     if (access(xml_path, R_OK) == -1) {
@@ -113,25 +113,25 @@ void c_func(int nin, double x[], int nout, double y[]) {
     char py_path[] = "{{ path_wrapper_py }}";
     if (access(py_path, R_OK) == -1) {
       fptr = fopen(py_path, "w");
-      fprintf(fptr, "import openturns as ot\\n");
-      fprintf(fptr, "study = ot.Study()\\n");
-      fprintf(fptr, "study.setStorageManager(ot.XMLStorageManager(r\\\"%s\\\"))\\n", xml_path);
-      fprintf(fptr, "study.load()\\n");
-      fprintf(fptr, "function = ot.Function()\\n");
-      fprintf(fptr, "study.fillObject(\\\"function\\\", function)\\n");
-      fprintf(fptr, "x = []\\n");
-      fprintf(fptr, "with open(r\\"{{ path_point_in }}\\", \\"r\\") as f:\\n");
-      fprintf(fptr, "    for line in f.readlines():\\n");
-      fprintf(fptr, "        x.append(float(line))\\n");
-      fprintf(fptr, "y = function(x)\\n");
-      fprintf(fptr, "with open(r\\"{{ path_point_out }}\\", \\"w\\") as f:\\n");
-      fprintf(fptr, "    for v in y:\\n");
-      fprintf(fptr, "        f.write(str(v)+\\"\\\\n\\")\\n");
+      fprintf(fptr, "import openturns as ot\n");
+      fprintf(fptr, "study = ot.Study()\n");
+      fprintf(fptr, "study.setStorageManager(ot.XMLStorageManager(r\"%s\"))\n", xml_path);
+      fprintf(fptr, "study.load()\n");
+      fprintf(fptr, "function = ot.Function()\n");
+      fprintf(fptr, "study.fillObject(\"function\", function)\n");
+      fprintf(fptr, "x = []\n");
+      fprintf(fptr, "with open(r\"{{ path_point_in }}\", \"r\") as f:\n");
+      fprintf(fptr, "    for line in f.readlines():\n");
+      fprintf(fptr, "        x.append(float(line))\n");
+      fprintf(fptr, "y = function(x)\n");
+      fprintf(fptr, "with open(r\"{{ path_point_out }}\", \"w\") as f:\n");
+      fprintf(fptr, "    for v in y:\n");
+      fprintf(fptr, "        f.write(str(v)+\"\\n\")\n");
       fclose(fptr);
     }
     rc = system("python3 {{ path_wrapper_py }} > {{ path_error_log }} 2>&1");
     if (rc != 0)
-      printf("otfmi: error running \\"python {{ path_wrapper_py }}\\" rc=%d\\n", rc);
+      printf("otfmi: error running \"python {{ path_wrapper_py }}\" rc=%d\n", rc);
     fptr = fopen("{{ path_point_out }}", "r");
     for (i = 0; i < nout; ++ i)
       rc = fscanf(fptr, "%lf", &y[i]);
@@ -159,21 +159,11 @@ void c_func(int nin, double x[], int nout, double y[]) {
                 "input_dim": self._function.getInputDimension(),
                 "output_dim": self._function.getOutputDimension(),
                 "workdir": self._workdir.replace("\\", "\\\\"),
-                "path_point_in": os.path.join(self._workdir, "point.in").replace(
-                    "\\", "\\\\"
-                ),
-                "path_point_out": os.path.join(self._workdir, "point.out").replace(
-                    "\\", "\\\\"
-                ),
-                "path_wrapper_py": os.path.join(self._workdir, "wrapper.py").replace(
-                    "\\", "\\\\"
-                ),
-                "path_error_log": os.path.join(self._workdir, "error.log").replace(
-                    "\\", "\\\\"
-                ),
-                "path_function_xml": os.path.join(self._workdir, "function.xml").replace(
-                    "\\", "\\\\"
-                ),
+                "path_point_in": os.path.join(self._workdir, "point.in"),
+                "path_point_out": os.path.join(self._workdir, "point.out"),
+                "path_wrapper_py": os.path.join(self._workdir, "wrapper.py"),
+                "path_error_log": os.path.join(self._workdir, "error.log"),
+                "path_function_xml": os.path.join(self._workdir, "function.xml"),
             }
         )
         with open(os.path.join(self._workdir, "wrapper.c"), "w") as c:
@@ -209,7 +199,7 @@ endif()
         ----------
         """
 
-        tdata = """
+        tdata = r"""
 #define _XOPEN_SOURCE 500
 #define  _POSIX_C_SOURCE 200809L
 #include <stdio.h>
@@ -257,17 +247,17 @@ void c_func(int nin, double x[], int nout, double y[])
     char py_path[] = "{{ path_wrapper_py }}";
     if (access(py_path, R_OK) == -1) {
       fptr = fopen(py_path, "w");
-      fprintf(fptr, "import openturns as ot\\n");
-      fprintf(fptr, "study = ot.Study()\\n");
-      fprintf(fptr, "xml_path = r\\\"%s\\\"\\n", xml_path);
-      fprintf(fptr, "study.setStorageManager(ot.XMLStorageManager(xml_path))\\n");
-      fprintf(fptr, "study.load()\\n");
-      fprintf(fptr, "function = ot.Function()\\n");
-      fprintf(fptr, "study.fillObject(\\\"function\\\", function)\\n");
-      fprintf(fptr, "def wrap_evaluate_python(x):\\n");
-      fprintf(fptr, "    y = function(list(x))\\n");
-      //fprintf(fptr, "    print(x, y)\\n");
-      fprintf(fptr, "    return y\\n");
+      fprintf(fptr, "import openturns as ot\n");
+      fprintf(fptr, "study = ot.Study()\n");
+      fprintf(fptr, "xml_path = r\"%s\"\n", xml_path);
+      fprintf(fptr, "study.setStorageManager(ot.XMLStorageManager(xml_path))\n");
+      fprintf(fptr, "study.load()\n");
+      fprintf(fptr, "function = ot.Function()\n");
+      fprintf(fptr, "study.fillObject(\"function\", function)\n");
+      fprintf(fptr, "def wrap_evaluate_python(x):\n");
+      fprintf(fptr, "    y = function(list(x))\n");
+      //fprintf(fptr, "    print(x, y)\n");
+      fprintf(fptr, "    return y\n");
       fclose(fptr);
     }
     Py_Initialize();
@@ -303,7 +293,7 @@ void c_func(int nin, double x[], int nout, double y[])
     }
   }
 
-  //printf("-- pFunc=%x\\n", pFunc);
+  //printf("-- pFunc=%x\n", pFunc);
   if (pFunc)
   {
     pX = PyTuple_New({{ input_dim }});
@@ -311,7 +301,7 @@ void c_func(int nin, double x[], int nout, double y[])
     {
       pValue = PyFloat_FromDouble(x[i]);
       PyTuple_SetItem(pX, i, pValue);
-      //printf("-- x=%g\\n", x[i]); fflush(stdout);
+      //printf("-- x=%g\n", x[i]); fflush(stdout);
     }
     pY = PyObject_CallOneArg(pFunc, pX);
     if (PyErr_Occurred())
@@ -325,7 +315,7 @@ void c_func(int nin, double x[], int nout, double y[])
       pValue = PySequence_GetItem(pY, i);
       y[i] = PyFloat_AsDouble(pValue);
       Py_DECREF(pValue);
-      //printf("-- y=%g\\n", y[i]); fflush(stdout);
+      //printf("-- y=%g\n", y[i]); fflush(stdout);
     }
   }
 
@@ -342,29 +332,19 @@ void c_func(int nin, double x[], int nout, double y[])
                 ),
                 "input_dim": self._function.getInputDimension(),
                 "output_dim": self._function.getOutputDimension(),
-                "workdir": self._workdir.replace("\\", "\\\\"),
-                "path_point_in": os.path.join(self._workdir, "point.in").replace(
-                    "\\", "\\\\"
-                ),
-                "path_point_out": os.path.join(self._workdir, "point.out").replace(
-                    "\\", "\\\\"
-                ),
-                "path_wrapper_py": os.path.join(self._workdir, "wrapper.py").replace(
-                    "\\", "\\\\"
-                ),
-                "path_error_log": os.path.join(self._workdir, "error.log").replace(
-                    "\\", "\\\\"
-                ),
-                "path_function_xml": os.path.join(self._workdir, "function.xml").replace(
-                    "\\", "\\\\"
-                ),
+                "workdir": self._workdir,
+                "path_point_in": os.path.join(self._workdir, "point.in"),
+                "path_point_out": os.path.join(self._workdir, "point.out"),
+                "path_wrapper_py": os.path.join(self._workdir, "wrapper.py"),
+                "path_error_log": os.path.join(self._workdir, "error.log"),
+                "path_function_xml": os.path.join(self._workdir, "function.xml"),
             }
         )
         with open(os.path.join(self._workdir, "wrapper.c"), "w") as c:
             c.write(data)
 
         # write CMakeLists
-        data = """
+        data = r"""
 cmake_minimum_required (VERSION 3.13)
 set (CMAKE_BUILD_TYPE "Release" CACHE STRING "build type")
 project (wrapper C)
@@ -399,7 +379,7 @@ endif()
         with open(self._xml_path, "rb") as f:
             xml_data = f.read()
 
-        tdata = """
+        tdata = r"""
 #include <openturns/OT.hxx>
 #include <openturns/XMLStorageManager.hxx>
 #include <fstream>
@@ -454,7 +434,7 @@ void c_func(int nin, double x[], int nout, double y[])
             cxx.write(data)
 
         # write CMakeLists
-        data = """
+        data = r"""
 cmake_minimum_required (VERSION 3.13)
 set (CMAKE_BUILD_TYPE "Release" CACHE STRING "build type")
 project (wrapper CXX)
@@ -619,7 +599,7 @@ endif()
         """
         link_dir = dirName if move else self._workdir
         _ = link_dir
-        tdata = """
+        tdata = r"""
 model {{ className }}
 
 function ExternalFunc
@@ -786,7 +766,7 @@ end {{ className }};
 
         elif mode == "pythonfmu":
             self._export_xml()
-            tdata = """
+            tdata = r"""
 import openturns as ot
 from pythonfmu.fmi2slave import Fmi2Slave, Fmi2Causality, Real
 import shutil
