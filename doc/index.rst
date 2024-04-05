@@ -43,7 +43,17 @@ The core features of `Otfmi <https://github.com/openturns/otfmi>`__ are:
    :maxdepth: 1
    :glob:
 
-   application/index
+   application/application
+
+.. toctree::
+   :maxdepth: 1
+
+   fmus/index
+
+.. toctree::
+   :maxdepth: 1
+
+   demo_persalys/use_persalys.rst
 
 --------------
 

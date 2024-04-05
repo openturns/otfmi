@@ -54,8 +54,8 @@ print("y = %g" % result.final("y"))  # print output value
 # ----------------------------
 
 # %%
-# | Initialization scripts can gather a large number of initial values.
-# | The use of initialization scripts (*.mos* files) is common in Dymola :
+# Initialization scripts can gather a large number of initial values.
+# The use of initialization scripts (*.mos* files) is common in Dymola:
 # - to save the value of all the variables of a model after simulation,
 # - to restart simulation from a given point.
 

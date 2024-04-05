@@ -1,5 +1,5 @@
-Analyse the sensitivities with Persalys
-=======================================
+Sensitivity analysis with Persalys
+==================================
 
 .. image:: ../_static/logo_persalys.png
      :align: left
