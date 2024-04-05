@@ -9,7 +9,7 @@ Export a function as Modelica model
 #
 # Currently, the inclusion of a metamodel in
 # `OpenModelica GUI <https://openmodelica.org/?id=78:omconnectioneditoromedit&catid=10:main-category>`_
-#  has been performed once (see
+# has been performed once (see
 # `this paper <https://www.researchgate.net/publication/354810878_Analysis_and_reduction_of_models_using_Persalys>`_).
 #
 # ------------

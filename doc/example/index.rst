@@ -24,9 +24,7 @@ This mechanical model represents the deviation of a cantilever beam submitted to
 .. toctree::
    :maxdepth: 1
 
-   ../auto_example/static/plot_basics
-   ../auto_example/static/plot_init
-   ../auto_example/static/plot_set
+   ../auto_example/static/index.rst
 
 Explore dynamic FMUs
 --------------------
@@ -42,9 +40,7 @@ All dynamic examples rely on *epid.fmu*. This epidemiologic model represents the
 .. toctree::
    :maxdepth: 1
 
-   ../auto_example/dynamic/plot_dyn_basics
-   ../auto_example/dynamic/plot_dyn_init
-   ../auto_example/dynamic/plot_dyn_set
+   ../auto_example/dynamic/index.rst
 
 Common low-level functions
 --------------------------
@@ -58,10 +54,7 @@ Common low-level functions
 .. toctree::
    :maxdepth: 1
 
-   ../auto_example/low_level/plot_load_fmu
-   ../auto_example/low_level/plot_explore
-   ../auto_example/low_level/plot_simulate
-   ../auto_example/low_level/plot_initialize
+   ../auto_example/low_level/index.rst
 
 From OpenTURNS to FMI
 ---------------------
@@ -76,5 +69,4 @@ the metamodel *instead of the FMU* in the simulation tool.
 .. toctree::
    :maxdepth: 1
 
-   ../auto_example/ot_to_fmu/plot_fmu_exporter
-   ../auto_example/ot_to_fmu/plot_model_exporter
+   ../auto_example/ot_to_fmu/index.rst
