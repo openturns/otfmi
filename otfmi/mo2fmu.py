@@ -51,6 +51,12 @@ def mo2fmu(
     except Exception:
         raise TypeError("platforms must be a sequence of str")
 
+    # check omc can be run
+    try:
+        subprocess.run(["omc", "--version"], check=True)
+    except subprocess.CalledProcessError:
+        raise RuntimeError("could not run the omc OpenModelica compiler command line executable")
+
     workdir = tempfile.mkdtemp()
     path_mos = os.path.join(workdir, "mo2fmu.mos")
     # assume the model name is the file name
@@ -88,6 +94,8 @@ buildModelFMU({{ className }}, version="{{ version }}", fmuType="{{ fmuType }}",
         check=True,
     )
     temp_fmu = os.path.join(workdir, model_name) + ".fmu"
+    if not os.path.exists(temp_fmu):
+        raise RuntimeError(f"omc failed to generate the FMU file {temp_fmu}")
     if path_fmu == "":
         path_fmu = os.path.join(os.getcwd(), model_name) + ".fmu"
     shutil.move(temp_fmu, path_fmu)
