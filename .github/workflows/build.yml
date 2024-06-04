@@ -38,6 +38,7 @@ jobs:
           pip install .
           mo2fmu -h
           mo2fmu ./otfmi/example/file/deviation.mo ./otfmi/example/file/fmu/linux-x86_64/deviation.fmu
+          pythonfmu build --file ./otfmi/example/file/DeviationSlave.py --dest ./otfmi/example/file/fmu/linux-x86_64
           pytest test -s
 
   conda-windows:
