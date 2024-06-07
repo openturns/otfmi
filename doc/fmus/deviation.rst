@@ -33,7 +33,7 @@ This model is implemented in Modelica language:
      input Real L (start=250);
      input Real I (start=400);
    equation
-     y=(F*L**3)/(3.0*E*I);
+     y=(F*L^3)/(3.0*E*I);
    end deviation;
 
 .. note::

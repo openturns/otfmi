@@ -21,7 +21,7 @@ model = otfmi.fmi.load_fmu(path_fmu)
 # .. note::
 #   | *model* is a PyFMI object, loaded with Otfmi’s overlay.
 #   | As such, ``model.simulate()`` is a pure PyFMI method.
-#   | Use ``òtfmi.fmi.simulate(model)`` to benefit from Otfmi’s overlay.
+#   | Use ``otfmi.fmi.simulate(model)`` to benefit from Otfmi’s overlay.
 
 
 # %%
@@ -56,6 +56,6 @@ plt.plot(inputSample, outputSample)
 plt.show()
 
 # %%
-# | The interest of the higher-level functions TODO are:
+# | The interest of the higher-level functions are:
 # | - avoid the *for* loop on the points of the design of experiment,
 # | - automatic formatting of the simulation outputs.
