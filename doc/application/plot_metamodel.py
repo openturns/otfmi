@@ -231,12 +231,12 @@ print(Q2)
 #
 # ----------------------
 #
-# In this script, we have created and validated the ``globalMetamodel``. This
-# metamodel (computationnally faster than the FMU) can now be employed instead
-# of the FMU to perform:
+# The ``globalMetamodel`` (computationnally faster than the FMU) created with
+# the above script can now be used as a computationnally much cheaper
+# substitute to the FMU for
 #
-# - `sensitivity analysis <http://shorturl.at/dDK24>`_,
-# - `uncertainty propagation <http://shorturl.at/quFIP>`_,
-# - `estimate a failure probability <http://shorturl.at/emLQY>`_,
+# - `sensitivity analysis <https://openturns.github.io/openturns/latest/auto_reliability_sensitivity/index.html#sensitivity-analysis>`_,
+# - `parameter inference <https://openturns.github.io/openturns/latest/auto_calibration/index.html#bayesian-calibration>,`_
+# - `estimate a failure probability <https://openturns.github.io/openturns/latest/auto_reliability_sensitivity/index.html#reliability>`_,
 #
 # etc.
