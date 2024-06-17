@@ -53,7 +53,7 @@ E = ot.Beta(0.93, 3.2, 2.8e7, 4.8e7)
 F = ot.LogNormal()
 F.setParameter(ot.LogNormalMuSigma()([30.0e3, 9e3, 15.0e3]))
 L = ot.Uniform(250.0, 260.0)
-I = ot.Beta(2.5, 4.0, 310.0, 450.0)
+II = ot.Beta(2.5, 4.0, 310.0, 450.0)
 
 # %%
 # According to the laws of mechanics, when the length L increases, the moment
@@ -86,7 +86,7 @@ mycopula = ot.NormalCopula(R)
 
 # %%
 # And we endly create the composed input probability distribution.
-inputDistribution = ot.ComposedDistribution([E, F, L, I], mycopula)
+inputDistribution = ot.ComposedDistribution([E, F, L, II], mycopula)
 inputDistribution.setDescription(model_fmu.getInputDescription())
 
 # %%
