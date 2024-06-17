@@ -236,7 +236,7 @@ print(Q2)
 # substitute to the FMU for
 #
 # - `sensitivity analysis <https://openturns.github.io/openturns/latest/auto_reliability_sensitivity/index.html#sensitivity-analysis>`_,
-# - `parameter inference <https://openturns.github.io/openturns/latest/auto_calibration/index.html#bayesian-calibration>,`_
+# - `parameter inference <https://openturns.github.io/openturns/latest/auto_calibration/index.html#bayesian-calibration>`_,
 # - `estimate a failure probability <https://openturns.github.io/openturns/latest/auto_reliability_sensitivity/index.html#reliability>`_,
 #
 # etc.
