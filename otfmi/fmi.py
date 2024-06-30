@@ -99,22 +99,32 @@ def parse_kwargs_simulate(
     ----------
     value_input : Vector or array-like with time steps as rows.
 
-    name_input : Sequence of string, input names.
+    name_input : Sequence of string
+        input names.
 
-    name_output : Sequence of string, output names.
+    name_output : Sequence of string
+        output names
 
-    model : fmu model.
+    model : pyfmi.FMUModel*
+        fmu model.
     """
 
     value_input_array = reshape_input(value_input, len(name_input))
     time, kwargs = guess_time(value_input_array, **kwargs)
 
-    kwargs.setdefault("options", kwargs.pop("dict_option", dict()))  # alias.
-    kwargs["options"]["filter"] = name_output
+    options = kwargs.pop("dict_option", dict())
+
+    # store only interest variables
+    options.setdefault("filter", name_output)
+
+    # store results in memory instead of binary file, cleaner and a bit faster
+    options.setdefault("result_handling", "memory")
 
     # only available for CS model
     if "FMUModelCS" in model.__class__.__name__:
-        kwargs["options"]["silent_mode"] = True
+        options.setdefault("silent_mode", True)
+
+    kwargs["options"] = options
 
     if len(time) > 1:
         kwargs.setdefault("start_time", time[0])
@@ -156,12 +166,6 @@ def parse_kwargs_simulate(
         value_input_fmi = reshape_input(value_input_fmi, len(name_input_fmi))
         if len(name_input_fmi) > 0:
             kwargs["input"] = (name_input_fmi, np.column_stack((time, value_input_fmi)))
-
-    # pyfmi writes a result file in current folder
-    if not os.access(".", os.W_OK):
-        kwargs["options"]["result_file_name"] = os.path.join(
-            tempfile.gettempdir(), model.get_identifier() + "_result.mat"
-        )
 
     return kwargs
 
