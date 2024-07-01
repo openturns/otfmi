@@ -2,10 +2,9 @@
 # Phimeca Engineering (Sylvain Girard, girard@phimeca.com).
 """Utility functions for common FMU manipulations."""
 
+import io
 import pyfmi
 import numpy as np
-import os
-import tempfile
 import warnings
 import otfmi
 
@@ -28,22 +27,16 @@ def load_fmu(path_fmu, kind=None, **kwargs):
 
     """
 
-    # pyfmi writes a log in current folder even with log_level=0
-    log_file_name = (
-        ""
-        if os.access(".", os.W_OK)
-        else os.path.join(
-            tempfile.gettempdir(), os.path.basename(path_fmu) + "_log.txt"
-        )
-    )
+    # pyfmi writes a log file in current folder even with log_level=0
+    kwargs.setdefault("log_file_name", io.StringIO())
 
     if kind is None:
         try:
-            return pyfmi.load_fmu(path_fmu, kind="CS", log_file_name=log_file_name)
+            return pyfmi.load_fmu(path_fmu, kind="CS", **kwargs)
         except pyfmi.fmi.FMUException:
-            return pyfmi.load_fmu(path_fmu, kind="auto", log_file_name=log_file_name)
+            return pyfmi.load_fmu(path_fmu, kind="auto", **kwargs)
     else:
-        return pyfmi.load_fmu(path_fmu, kind=kind, log_file_name=log_file_name)
+        return pyfmi.load_fmu(path_fmu, kind=kind, **kwargs)
 
 
 def simulate(
