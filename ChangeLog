@@ -1,3 +1,6 @@
+wip - release 0.16.4
+- Dont write result file to disk
+
 2024-05-13 - release 0.16.3
 - Check omc presence
 - Fix packages list
