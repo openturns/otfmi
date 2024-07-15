@@ -23,8 +23,12 @@ def log(text, record_time=True, path_log=path_log):
 
     if record_time:
         text = "[%s] %s" % (current_time(), text)
-    with open(path_log, "a") as f:
-        f.write(text + "\n")
+
+    try:
+        with open(path_log, "a") as f:
+            f.write(text + "\n")
+    except Exception:
+        pass
 
 
 def current_time():
