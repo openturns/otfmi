@@ -60,9 +60,6 @@ class FMUProcess(Process):
             )
         self.__logger = kwargs.pop("logger", False)
         self.kwargs_simulate = kwargs
-        # Handle results in memory. Using file can induce ambiguities.
-        # If need be, AssimilationPy's fmu_pool may contain another solution.
-        self.kwargs_simulate.setdefault("options", dict())["result_handling"] = "memory"
 
     def run(self):
         """Run simulation and store results in the queue."""
