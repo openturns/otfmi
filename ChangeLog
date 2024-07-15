@@ -1,3 +1,6 @@
+2024-07-15 - release 0.16.5
+- Catch FMUPool log failure
+
 2024-07-01 - release 0.16.4
 - Dont write result file to disk
 
