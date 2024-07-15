@@ -339,7 +339,6 @@ class OpenTURNSFMUFunction(ot.OpenTURNSPythonFunction):
         the underlying PyFMI model object.
 
         """
-
         return self.simulate_sample(list_value_input, **kwargs)
 
     def load_fmu(self, path_fmu, kind=None, **kwargs):
@@ -451,10 +450,9 @@ class OpenTURNSFMUFunction(ot.OpenTURNSPythonFunction):
 
         """
 
-        if self.n_cpus is None:
-            n_cpus = 1
-        else:
-            n_cpus = self.n_cpus
+        n_cpus = 1 if self.n_cpus is None else self.n_cpus
+        if n_cpus == 1:
+            return [self.simulate(point, **kwargs) for point in list_value_input]
 
         kwargs.setdefault("initialization_script", self.initialization_script)
 
@@ -471,7 +469,6 @@ class OpenTURNSFMUFunction(ot.OpenTURNSPythonFunction):
             )
             list_kwargs.append(kwargs_simulate)
 
-        # if n_cpus > 1: # TODO?
         pool = fmu_pool.FMUPool(self.model, n_process=n_cpus)
         return pool.run(list_kwargs, final=self.__final)
 
