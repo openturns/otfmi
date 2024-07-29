@@ -660,20 +660,21 @@ end {{ className }};
         model_path : str
             Path to the generated .mo file.
             The model name is taken from the base name.
-        gui : bool
+        gui : bool, optional
             If True, define the input/output connectors.
                 In this case, given start values ARE NOT TAKEN INTO ACCOUNT.
             If False, input and outputs are defined in Modelica code.
                 In this case only, the model can be exported as FMU using OMC command line.
-        verbose : bool
+        verbose : bool, optional
             Verbose output (default=False).
-        binary : bool
+        binary : bool, optional
             Whether to generate binaries or source (default=True)
-        mode : str, either 'pyprocess', 'cpython' or 'cxx'
-            - pyprocess: the function is run via a Python process by file I/O;
+        mode : str, optional, either 'pyprocess', 'cpython' or 'cxx'
+            - pyprocess (default): the function is run via a Python process by file I/O;
               slow but should work almost everywhere.
+              The Python environment is required to run the resulting FMU (eg run OMEdit from the conda env).
             - cpython: the function is run via the Python C API; quite fast (no file I/O)
-              but requires Python development headers/libs
+              but requires Python development headers and libs.
             - cxx: the function is directly evaluated trough the OpenTURNS C++ API;
               even faster but requires the OpenTURNS development headers and libraries
               (not just the Python module that would be installed by pip for example).
