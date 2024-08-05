@@ -159,11 +159,11 @@ void c_func(int nin, double x[], int nout, double y[]) {
                 "input_dim": self._function.getInputDimension(),
                 "output_dim": self._function.getOutputDimension(),
                 "workdir": self._workdir.replace("\\", "\\\\"),
-                "path_point_in": os.path.join(self._workdir, "point.in"),
-                "path_point_out": os.path.join(self._workdir, "point.out"),
-                "path_wrapper_py": os.path.join(self._workdir, "wrapper.py"),
-                "path_error_log": os.path.join(self._workdir, "error.log"),
-                "path_function_xml": os.path.join(self._workdir, "function.xml"),
+                "path_point_in": os.path.join(self._workdir, "point.in").replace("\\", "\\\\"),
+                "path_point_out": os.path.join(self._workdir, "point.out").replace("\\", "\\\\"),
+                "path_wrapper_py": os.path.join(self._workdir, "wrapper.py").replace("\\", "\\\\"),
+                "path_error_log": os.path.join(self._workdir, "error.log").replace("\\", "\\\\"),
+                "path_function_xml": os.path.join(self._workdir, "function.xml").replace("\\", "\\\\"),
             }
         )
         with open(os.path.join(self._workdir, "wrapper.c"), "w") as c:
@@ -332,12 +332,12 @@ void c_func(int nin, double x[], int nout, double y[])
                 ),
                 "input_dim": self._function.getInputDimension(),
                 "output_dim": self._function.getOutputDimension(),
-                "workdir": self._workdir,
-                "path_point_in": os.path.join(self._workdir, "point.in"),
-                "path_point_out": os.path.join(self._workdir, "point.out"),
-                "path_wrapper_py": os.path.join(self._workdir, "wrapper.py"),
-                "path_error_log": os.path.join(self._workdir, "error.log"),
-                "path_function_xml": os.path.join(self._workdir, "function.xml"),
+                "workdir": self._workdir.replace("\\", "\\\\"),
+                "path_point_in": os.path.join(self._workdir, "point.in").replace("\\", "\\\\"),
+                "path_point_out": os.path.join(self._workdir, "point.out").replace("\\", "\\\\"),
+                "path_wrapper_py": os.path.join(self._workdir, "wrapper.py").replace("\\", "\\\\"),
+                "path_error_log": os.path.join(self._workdir, "error.log").replace("\\", "\\\\"),
+                "path_function_xml": os.path.join(self._workdir, "function.xml").replace("\\", "\\\\"),
             }
         )
         with open(os.path.join(self._workdir, "wrapper.c"), "w") as c:
