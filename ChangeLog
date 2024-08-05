@@ -1,3 +1,6 @@
+wip - release 0.16.6
+- Fix verbose mode
+
 2024-07-15 - release 0.16.5
 - Catch FMUPool log failure
 
