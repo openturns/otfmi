@@ -485,15 +485,28 @@ endif()
         if os.path.exists(os.path.join(ot_cmake_dir, "OpenTURNSConfig.cmake")):
             cmake_args.insert(1, f"-DOpenTURNS_DIR={ot_cmake_dir}")
 
-        subprocess.run(
-            cmake_args, capture_output=not verbose, cwd=self._workdir, check=True
-        )
-        subprocess.run(
-            ["cmake", "--build", ".", "--config", "Release"],
-            capture_output=not verbose,
-            cwd=self._workdir,
-            check=True,
-        )
+        try:
+            cp = subprocess.run(
+                cmake_args, capture_output=True, cwd=self._workdir, check=True
+            )
+            if verbose:
+                print(cp.stdout.decode(), file=sys.stderr)
+        except subprocess.CalledProcessError as cpe:
+            print("Error occurred during cmake config:", cpe.stdout + cpe.stderr, file=sys.stderr)
+            raise cpe
+
+        try:
+            cp = subprocess.run(
+                ["cmake", "--build", ".", "--config", "Release"],
+                capture_output=True,
+                cwd=self._workdir,
+                check=True,
+            )
+            if verbose:
+                print(cp.stdout.decode(), file=sys.stderr)
+        except subprocess.CalledProcessError as cpe:
+            print("Error occurred during cmake build:", cpe.stdout + cpe.stderr, file=sys.stderr)
+            raise cpe
 
     def _set_input_output(self):
         """
