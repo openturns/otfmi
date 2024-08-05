@@ -53,9 +53,12 @@ def mo2fmu(
 
     # check omc can be run
     try:
-        subprocess.run(["omc", "--version"], check=True)
-    except subprocess.CalledProcessError:
-        raise RuntimeError("could not run the omc OpenModelica compiler command line executable")
+        cp = subprocess.run(["omc", "--version"], check=True, capture_output=True)
+        if verbose:
+            print("omc version:", cp.stdout.decode(), file=sys.stderr)
+    except subprocess.CalledProcessError as cpe:
+        print("Error occured detecting the OpenModelica compiler omc:", cpe.stdout + cpe.stderr, file=sys.stderr)
+        raise cpe
 
     workdir = tempfile.mkdtemp()
     path_mos = os.path.join(workdir, "mo2fmu.mos")
@@ -85,14 +88,20 @@ buildModelFMU({{ className }}, version="{{ version }}", fmuType="{{ fmuType }}",
     with open(path_mos, "w") as mos:
         mos.write(data)
     if verbose:
-        print(data)
-    subprocess.run(
-        ["omc", "mo2fmu.mos"],
-        capture_output=not verbose,
-        shell=sys.platform.startswith("win"),
-        cwd=workdir,
-        check=True,
-    )
+        print(data, file=sys.stderr)
+    try:
+        cp = subprocess.run(
+            ["omc", "mo2fmu.mos"],
+            capture_output=True,
+            shell=sys.platform.startswith("win"),
+            cwd=workdir,
+            check=True,
+        )
+        if verbose:
+            print(cp.stdout.decode(), file=sys.stderr)
+    except subprocess.CalledProcessError as cpe:
+        print("Error occurred running the OpenModelica compiler omc:", cpe.stdout + cpe.stderr, file=sys.stderr)
+        raise cpe
     temp_fmu = os.path.join(workdir, model_name) + ".fmu"
     if not os.path.exists(temp_fmu):
         raise RuntimeError(f"omc failed to generate the FMU file {temp_fmu}")
