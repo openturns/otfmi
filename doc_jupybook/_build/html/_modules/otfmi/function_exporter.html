@@ -1,0 +1,1278 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>otfmi.function_exporter &#8212; otfmi</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/proof.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.4cbf315f70debaebd550c87a6162cf0f.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../../_static/sphinx-thebe.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/otfmi/function_exporter';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../_static/logo.png" class="logo__image only-light" alt="otfmi - Home"/>
+    <script>document.write(`<img src="../../_static/logo.png" class="logo__image only-dark" alt="otfmi - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../../index.html">
+                    Otfmi documentation
+                </a>
+            </li>
+        </ul>
+        <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Installation</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../api_doc/api_documentation.html">API documentation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../api_doc/_generated/otfmi.FMUFunction.html">otfmi.FMUFunction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api_doc/_generated/otfmi.OpenTURNSFMUFunction.html">otfmi.OpenTURNSFMUFunction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api_doc/_generated/otfmi.FMUPointToFieldFunction.html">otfmi.FMUPointToFieldFunction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api_doc/_generated/otfmi.OpenTURNSFMUPointToFieldFunction.html">otfmi.OpenTURNSFMUPointToFieldFunction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api_doc/_generated/otfmi.FunctionExporter.html">otfmi.FunctionExporter</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../api_doc/static_analysis.html">Static analysis</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api_doc/_generated/otfmi.FMUFunction.html">otfmi.FMUFunction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api_doc/_generated/otfmi.OpenTURNSFMUFunction.html">otfmi.OpenTURNSFMUFunction</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../api_doc/dynamic_analysis.html">Dynamic analysis</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api_doc/_generated/otfmi.FMUPointToFieldFunction.html">otfmi.FMUPointToFieldFunction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api_doc/_generated/otfmi.OpenTURNSFMUPointToFieldFunction.html">otfmi.OpenTURNSFMUPointToFieldFunction</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../api_doc/common_low_level_functions.html">Common low-level functions</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api_doc/_generated/otfmi.fmi.load_fmu.html">otfmi.fmi.load_fmu</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api_doc/_generated/otfmi.fmi.simulate.html">otfmi.fmi.simulate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api_doc/_generated/otfmi.fmi.parse_kwargs_simulate.html">otfmi.fmi.parse_kwargs_simulate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api_doc/_generated/otfmi.fmi.apply_initialization_script.html">otfmi.fmi.apply_initialization_script</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api_doc/_generated/otfmi.fmi.get_name_variable.html">otfmi.fmi.get_name_variable</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api_doc/_generated/otfmi.fmi.get_causality_str.html">otfmi.fmi.get_causality_str</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api_doc/_generated/otfmi.fmi.get_variability.html">otfmi.fmi.get_variability</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api_doc/_generated/otfmi.fmi.get_fixed_value.html">otfmi.fmi.get_fixed_value</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api_doc/_generated/otfmi.fmi.get_start_value.html">otfmi.fmi.get_start_value</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api_doc/_generated/otfmi.fmi.set_dict_value.html">otfmi.fmi.set_dict_value</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../api_doc/from_openturns_to_fmi.html">From OpenTURNS to FMI</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api_doc/_generated/otfmi.FunctionExporter.html">otfmi.FunctionExporter</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../../markdown.html">Markdown Files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks.html">Content with notebooks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../markdown-notebooks.html">Notebooks with MyST Markdown</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../mymarkdownfile.html">My sample title</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2F_modules/otfmi/function_exporter.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1></h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for otfmi.function_exporter</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">.mo2fmu</span> <span class="kn">import</span> <span class="n">mo2fmu</span>
+<span class="kn">import</span> <span class="nn">binascii</span>
+<span class="kn">import</span> <span class="nn">dill</span>
+<span class="kn">import</span> <span class="nn">glob</span>
+<span class="kn">import</span> <span class="nn">jinja2</span>
+<span class="kn">import</span> <span class="nn">tempfile</span>
+<span class="kn">import</span> <span class="nn">openturns</span> <span class="k">as</span> <span class="nn">ot</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">subprocess</span>
+<span class="kn">import</span> <span class="nn">shutil</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">pythonfmu</span> <span class="kn">import</span> <span class="n">FmuBuilder</span>
+<span class="kn">import</span> <span class="nn">pathlib</span>
+
+<span class="n">dill</span><span class="o">.</span><span class="n">settings</span><span class="p">[</span><span class="s2">&quot;recurse&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+
+
+<div class="viewcode-block" id="FunctionExporter"><a class="viewcode-back" href="../../api_doc/_generated/otfmi.FunctionExporter.html#otfmi.FunctionExporter">[docs]</a><span class="k">class</span> <span class="nc">FunctionExporter</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Fonction export.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    function : :py:class:`openturns.Function` or :py:class:`openturns.PointToFieldFunction`</span>
+<span class="sd">        Function to export.</span>
+<span class="sd">        Temporal functions (PointToFieldFunction with mesh dimension=1) can only be exported</span>
+<span class="sd">        in fmu format via &quot;pythonfmu&quot; mode.</span>
+<span class="sd">    start : sequence of float</span>
+<span class="sd">        Initial input values.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">function</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">assert</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">function</span><span class="p">,</span> <span class="s2">&quot;getInputDimension&quot;</span><span class="p">),</span> <span class="s2">&quot;not an openturns function&quot;</span>
+        <span class="k">assert</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">function</span><span class="p">,</span> <span class="s2">&quot;getInputMesh&quot;</span><span class="p">),</span> <span class="s2">&quot;not a vector-&gt;vector|field function&quot;</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">function</span><span class="p">,</span> <span class="s2">&quot;getOutputMesh&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">function</span><span class="o">.</span><span class="n">getOutputMesh</span><span class="p">()</span><span class="o">.</span><span class="n">getDimension</span><span class="p">()</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Can only export field functions with mesh dimension=1 (temporal)&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_function</span> <span class="o">=</span> <span class="n">function</span>
+        <span class="k">if</span> <span class="n">start</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">start</span><span class="p">]</span>
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;start must be a sequence of float&quot;</span><span class="p">)</span>
+            <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">start</span><span class="p">)</span> <span class="o">==</span> <span class="n">function</span><span class="o">.</span><span class="n">getInputDimension</span><span class="p">(),</span> <span class="s2">&quot;wrong input dimension&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_start</span> <span class="o">=</span> <span class="n">start</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_workdir</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">mkdtemp</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_xml_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_workdir</span><span class="p">,</span> <span class="s2">&quot;function.xml&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_export_xml</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Export the OpenTurns function as xml.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">study</span> <span class="o">=</span> <span class="n">ot</span><span class="o">.</span><span class="n">Study</span><span class="p">()</span>
+        <span class="n">study</span><span class="o">.</span><span class="n">setStorageManager</span><span class="p">(</span><span class="n">ot</span><span class="o">.</span><span class="n">XMLStorageManager</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_xml_path</span><span class="p">))</span>
+        <span class="n">study</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;function&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_function</span><span class="p">)</span>
+        <span class="n">study</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_write_cwrapper_pyprocess</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Write the C wrapper.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">tdata</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">#define _XOPEN_SOURCE 500</span>
+<span class="s2">#define  _POSIX_C_SOURCE 200809L</span>
+<span class="s2">#include &lt;stdio.h&gt;</span>
+<span class="s2">#include &lt;stdlib.h&gt;</span>
+<span class="s2">#include &lt;string.h&gt;</span>
+<span class="s2">#include &lt;sys/stat.h&gt;</span>
+<span class="s2">#ifdef _WIN32</span>
+<span class="s2">#include &lt;io.h&gt;</span>
+<span class="s2">#include &lt;direct.h&gt;</span>
+<span class="s2">#define R_OK 4</span>
+<span class="s2">#define access _access</span>
+<span class="s2">#define mkdir(dir, mod) _mkdir(dir)</span>
+<span class="s2">#else</span>
+<span class="s2">#include &lt;unistd.h&gt;</span>
+<span class="s2">#endif</span>
+<span class="s2">unsigned char xml_data[] = { {{ xml_data_bin }} };</span>
+<span class="s2">void c_func(int nin, double x[], int nout, double y[]) {</span>
+<span class="s2">  FILE *fptr;</span>
+<span class="s2">  int rc;</span>
+<span class="s2">  int i;</span>
+<span class="s2">  static int count = 0;</span>
+<span class="s2">  static int hits = 0;</span>
+<span class="s2">  int same_x;</span>
+<span class="s2">  static double prev_x[{{ input_dim }}];</span>
+<span class="s2">  static double prev_y[{{ output_dim }}];</span>
+<span class="s2">  same_x = count;</span>
+<span class="s2">  for (i = 0; i &lt; nin; ++ i) {</span>
+<span class="s2">    if(x[i] != prev_x[i]) same_x = 0;</span>
+<span class="s2">  }</span>
+<span class="s2">  if (!same_x) {</span>
+<span class="s2">    /*printf(&quot;count=</span><span class="si">%d</span><span class="s2"> hits=</span><span class="si">%d</span><span class="s2">\n&quot;, count, hits);*/</span>
+<span class="s2">    char workdir[] = &quot;{{ workdir }}&quot;;</span>
+<span class="s2">    if (access(workdir, R_OK) == -1)</span>
+<span class="s2">      mkdir(workdir, 0733);</span>
+<span class="s2">    fptr = fopen(&quot;{{ path_point_in }}&quot;, &quot;w&quot;);</span>
+<span class="s2">    for (i = 0; i &lt; nin; ++ i)</span>
+<span class="s2">      fprintf(fptr, &quot;</span><span class="si">%lf</span><span class="s2">\n&quot;, x[i]);</span>
+<span class="s2">    fclose(fptr);</span>
+<span class="s2">    char xml_path[] = &quot;{{ path_function_xml }}&quot;;</span>
+<span class="s2">    if (access(xml_path, R_OK) == -1) {</span>
+<span class="s2">      fptr = fopen(xml_path, &quot;wb&quot;);</span>
+<span class="s2">      fwrite (xml_data, sizeof(char), sizeof(xml_data), fptr);</span>
+<span class="s2">      fclose(fptr);</span>
+<span class="s2">    }</span>
+<span class="s2">    char py_path[] = &quot;{{ path_wrapper_py }}&quot;;</span>
+<span class="s2">    if (access(py_path, R_OK) == -1) {</span>
+<span class="s2">      fptr = fopen(py_path, &quot;w&quot;);</span>
+<span class="s2">      fprintf(fptr, &quot;import openturns as ot\n&quot;);</span>
+<span class="s2">      fprintf(fptr, &quot;study = ot.Study()\n&quot;);</span>
+<span class="s2">      fprintf(fptr, &quot;study.setStorageManager(ot.XMLStorageManager(r\&quot;</span><span class="si">%s</span><span class="s2">\&quot;))\n&quot;, xml_path);</span>
+<span class="s2">      fprintf(fptr, &quot;study.load()\n&quot;);</span>
+<span class="s2">      fprintf(fptr, &quot;function = ot.Function()\n&quot;);</span>
+<span class="s2">      fprintf(fptr, &quot;study.fillObject(\&quot;function\&quot;, function)\n&quot;);</span>
+<span class="s2">      fprintf(fptr, &quot;x = []\n&quot;);</span>
+<span class="s2">      fprintf(fptr, &quot;with open(r\&quot;{{ path_point_in }}\&quot;, \&quot;r\&quot;) as f:\n&quot;);</span>
+<span class="s2">      fprintf(fptr, &quot;    for line in f.readlines():\n&quot;);</span>
+<span class="s2">      fprintf(fptr, &quot;        x.append(float(line))\n&quot;);</span>
+<span class="s2">      fprintf(fptr, &quot;y = function(x)\n&quot;);</span>
+<span class="s2">      fprintf(fptr, &quot;with open(r\&quot;{{ path_point_out }}\&quot;, \&quot;w\&quot;) as f:\n&quot;);</span>
+<span class="s2">      fprintf(fptr, &quot;    for v in y:\n&quot;);</span>
+<span class="s2">      fprintf(fptr, &quot;        f.write(str(v)+\&quot;\\n\&quot;)\n&quot;);</span>
+<span class="s2">      fclose(fptr);</span>
+<span class="s2">    }</span>
+<span class="s2">    rc = system(&quot;python3 {{ path_wrapper_py }} &gt; {{ path_error_log }} 2&gt;&amp;1&quot;);</span>
+<span class="s2">    if (rc != 0)</span>
+<span class="s2">      printf(&quot;otfmi: error running \&quot;python {{ path_wrapper_py }}\&quot; rc=</span><span class="si">%d</span><span class="s2">\n&quot;, rc);</span>
+<span class="s2">    fptr = fopen(&quot;{{ path_point_out }}&quot;, &quot;r&quot;);</span>
+<span class="s2">    for (i = 0; i &lt; nout; ++ i)</span>
+<span class="s2">      rc = fscanf(fptr, &quot;</span><span class="si">%lf</span><span class="s2">&quot;, &amp;y[i]);</span>
+<span class="s2">    fclose(fptr);</span>
+
+<span class="s2">    memcpy(prev_x, x, nin * sizeof(double));</span>
+<span class="s2">    memcpy(prev_y, y, nout * sizeof(double));</span>
+<span class="s2">  }</span>
+<span class="s2">  else</span>
+<span class="s2">    ++ hits;</span>
+<span class="s2">    memcpy(y, prev_y, nout * sizeof(double));</span>
+<span class="s2">  ++ count;</span>
+<span class="s2">}</span>
+
+<span class="s2">&quot;&quot;&quot;</span>
+
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_xml_path</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">xml_data</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+
+        <span class="n">data</span> <span class="o">=</span> <span class="n">jinja2</span><span class="o">.</span><span class="n">Template</span><span class="p">(</span><span class="n">tdata</span><span class="p">)</span><span class="o">.</span><span class="n">render</span><span class="p">(</span>
+            <span class="p">{</span>
+                <span class="s2">&quot;xml_data_bin&quot;</span><span class="p">:</span> <span class="s2">&quot;,&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                    <span class="p">[</span><span class="s2">&quot;0x</span><span class="si">{:02x}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">byte</span><span class="p">)</span> <span class="k">for</span> <span class="n">byte</span> <span class="ow">in</span> <span class="n">xml_data</span><span class="p">]</span>
+                <span class="p">),</span>
+                <span class="s2">&quot;input_dim&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_function</span><span class="o">.</span><span class="n">getInputDimension</span><span class="p">(),</span>
+                <span class="s2">&quot;output_dim&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_function</span><span class="o">.</span><span class="n">getOutputDimension</span><span class="p">(),</span>
+                <span class="s2">&quot;workdir&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_workdir</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\\\\</span><span class="s2">&quot;</span><span class="p">),</span>
+                <span class="s2">&quot;path_point_in&quot;</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_workdir</span><span class="p">,</span> <span class="s2">&quot;point.in&quot;</span><span class="p">),</span>
+                <span class="s2">&quot;path_point_out&quot;</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_workdir</span><span class="p">,</span> <span class="s2">&quot;point.out&quot;</span><span class="p">),</span>
+                <span class="s2">&quot;path_wrapper_py&quot;</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_workdir</span><span class="p">,</span> <span class="s2">&quot;wrapper.py&quot;</span><span class="p">),</span>
+                <span class="s2">&quot;path_error_log&quot;</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_workdir</span><span class="p">,</span> <span class="s2">&quot;error.log&quot;</span><span class="p">),</span>
+                <span class="s2">&quot;path_function_xml&quot;</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_workdir</span><span class="p">,</span> <span class="s2">&quot;function.xml&quot;</span><span class="p">),</span>
+            <span class="p">}</span>
+        <span class="p">)</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_workdir</span><span class="p">,</span> <span class="s2">&quot;wrapper.c&quot;</span><span class="p">),</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">c</span><span class="p">:</span>
+            <span class="n">c</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+        <span class="c1"># write CMakeLists</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">cmake_minimum_required (VERSION 3.13)</span>
+<span class="s2">set (CMAKE_BUILD_TYPE &quot;Release&quot; CACHE STRING &quot;build type&quot;)</span>
+<span class="s2">project (wrapper C)</span>
+<span class="s2">if (POLICY CMP0091)</span>
+<span class="s2">  cmake_policy (SET CMP0091 NEW)</span>
+<span class="s2">endif()</span>
+<span class="s2"># openmodelica uses -Bstatic on Linux</span>
+<span class="s2">add_library (cwrapper STATIC wrapper.c)</span>
+<span class="s2">set_target_properties (cwrapper PROPERTIES POSITION_INDEPENDENT_CODE ON</span>
+<span class="s2">                                           ARCHIVE_OUTPUT_DIRECTORY_RELEASE $</span><span class="si">{CMAKE_BINARY_DIR}</span>
+<span class="s2">                                           LIBRARY_OUTPUT_DIRECTORY_RELEASE $</span><span class="si">{CMAKE_BINARY_DIR}</span>
+<span class="s2">                                           RUNTIME_OUTPUT_DIRECTORY_RELEASE $</span><span class="si">{CMAKE_BINARY_DIR}</span>
+<span class="s2">                                           MSVC_RUNTIME_LIBRARY &quot;MultiThreaded$&lt;$&lt;CONFIG:Debug&gt;:Debug&gt;&quot;)</span>
+<span class="s2">if (MSVC)</span>
+<span class="s2">  target_compile_definitions(cwrapper PRIVATE _CRT_SECURE_NO_WARNINGS)</span>
+<span class="s2">endif()</span>
+<span class="s2">&quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_workdir</span><span class="p">,</span> <span class="s2">&quot;CMakeLists.txt&quot;</span><span class="p">),</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">cm</span><span class="p">:</span>
+            <span class="n">cm</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_write_cwrapper_cpython</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Write the C wrapper with Python C API.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">tdata</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">#define _XOPEN_SOURCE 500</span>
+<span class="s2">#define  _POSIX_C_SOURCE 200809L</span>
+<span class="s2">#include &lt;stdio.h&gt;</span>
+<span class="s2">#include &lt;stdlib.h&gt;</span>
+<span class="s2">#include &lt;string.h&gt;</span>
+<span class="s2">#include &lt;sys/stat.h&gt;</span>
+<span class="s2">#ifdef _WIN32</span>
+<span class="s2">#include &lt;io.h&gt;</span>
+<span class="s2">#include &lt;direct.h&gt;</span>
+<span class="s2">#define R_OK 4</span>
+<span class="s2">#define access _access</span>
+<span class="s2">#define mkdir(dir, mod) _mkdir(dir)</span>
+<span class="s2">#else</span>
+<span class="s2">#include &lt;unistd.h&gt;</span>
+<span class="s2">#endif</span>
+<span class="s2">#include &lt;Python.h&gt;</span>
+<span class="s2">unsigned char xml_data[] = { {{ xml_data_bin }} };</span>
+
+<span class="s2">#ifdef _WIN32</span>
+<span class="s2">__declspec(dllexport)</span>
+<span class="s2">#endif</span>
+<span class="s2">void c_func(int nin, double x[], int nout, double y[])</span>
+<span class="s2">{</span>
+<span class="s2">  FILE *fptr;</span>
+<span class="s2">  static int count = 0;</span>
+<span class="s2">  PyObject *pName = NULL;</span>
+<span class="s2">  static PyObject *pFunc = NULL;</span>
+<span class="s2">  PyObject *pX = NULL;</span>
+<span class="s2">  PyObject *pY = NULL;</span>
+<span class="s2">  PyObject *pValue = NULL;</span>
+<span class="s2">  PyObject *pModule = NULL;</span>
+<span class="s2">  int i;</span>
+<span class="s2">  if (!pFunc)</span>
+<span class="s2">  {</span>
+<span class="s2">    char workdir[] = &quot;{{ workdir }}&quot;;</span>
+<span class="s2">    if (access(workdir, R_OK) == -1)</span>
+<span class="s2">      mkdir(workdir, 0733);</span>
+<span class="s2">    char xml_path[] = &quot;{{ path_function_xml }}&quot;;</span>
+<span class="s2">    if (access(xml_path, R_OK) == -1)</span>
+<span class="s2">    {</span>
+<span class="s2">      fptr = fopen(xml_path, &quot;wb&quot;);</span>
+<span class="s2">      fwrite (xml_data, sizeof(char), sizeof(xml_data), fptr);</span>
+<span class="s2">      fclose(fptr);</span>
+<span class="s2">    }</span>
+<span class="s2">    char py_path[] = &quot;{{ path_wrapper_py }}&quot;;</span>
+<span class="s2">    if (access(py_path, R_OK) == -1) {</span>
+<span class="s2">      fptr = fopen(py_path, &quot;w&quot;);</span>
+<span class="s2">      fprintf(fptr, &quot;import openturns as ot\n&quot;);</span>
+<span class="s2">      fprintf(fptr, &quot;study = ot.Study()\n&quot;);</span>
+<span class="s2">      fprintf(fptr, &quot;xml_path = r\&quot;</span><span class="si">%s</span><span class="s2">\&quot;\n&quot;, xml_path);</span>
+<span class="s2">      fprintf(fptr, &quot;study.setStorageManager(ot.XMLStorageManager(xml_path))\n&quot;);</span>
+<span class="s2">      fprintf(fptr, &quot;study.load()\n&quot;);</span>
+<span class="s2">      fprintf(fptr, &quot;function = ot.Function()\n&quot;);</span>
+<span class="s2">      fprintf(fptr, &quot;study.fillObject(\&quot;function\&quot;, function)\n&quot;);</span>
+<span class="s2">      fprintf(fptr, &quot;def wrap_evaluate_python(x):\n&quot;);</span>
+<span class="s2">      fprintf(fptr, &quot;    y = function(list(x))\n&quot;);</span>
+<span class="s2">      //fprintf(fptr, &quot;    print(x, y)\n&quot;);</span>
+<span class="s2">      fprintf(fptr, &quot;    return y\n&quot;);</span>
+<span class="s2">      fclose(fptr);</span>
+<span class="s2">    }</span>
+<span class="s2">    Py_Initialize();</span>
+<span class="s2">    if (PyErr_Occurred())</span>
+<span class="s2">    {</span>
+<span class="s2">       PyErr_Print();</span>
+<span class="s2">       return;</span>
+<span class="s2">    }</span>
+<span class="s2">    pName = PyUnicode_FromString(py_path);</span>
+<span class="s2">    if (PyErr_Occurred())</span>
+<span class="s2">    {</span>
+<span class="s2">       PyErr_Print();</span>
+<span class="s2">       return;</span>
+<span class="s2">    }</span>
+<span class="s2">    PyObject* sys = PyImport_ImportModule(&quot;sys&quot;);</span>
+<span class="s2">    PyObject* sys_path = PyObject_GetAttrString(sys, &quot;path&quot;);</span>
+<span class="s2">    PyObject* folder_path = PyUnicode_FromString(workdir);</span>
+<span class="s2">    PyList_Append(sys_path, folder_path);</span>
+<span class="s2">    PyObject* wrapper_name = PyUnicode_FromString(&quot;wrapper&quot;);</span>
+<span class="s2">    pModule = PyImport_Import(wrapper_name);</span>
+<span class="s2">    if (PyErr_Occurred())</span>
+<span class="s2">    {</span>
+<span class="s2">       PyErr_Print();</span>
+<span class="s2">       return;</span>
+<span class="s2">    }</span>
+<span class="s2">    Py_DECREF(pName);</span>
+
+<span class="s2">    pFunc = PyObject_GetAttrString(pModule, &quot;wrap_evaluate_python&quot;);</span>
+<span class="s2">    if (PyErr_Occurred())</span>
+<span class="s2">    {</span>
+<span class="s2">       PyErr_Print();</span>
+<span class="s2">       return;</span>
+<span class="s2">    }</span>
+<span class="s2">  }</span>
+
+<span class="s2">  //printf(&quot;-- pFunc=</span><span class="si">%x</span><span class="s2">\n&quot;, pFunc);</span>
+<span class="s2">  if (pFunc)</span>
+<span class="s2">  {</span>
+<span class="s2">    pX = PyTuple_New({{ input_dim }});</span>
+<span class="s2">    for (i = 0; i &lt; {{ input_dim }}; ++i)</span>
+<span class="s2">    {</span>
+<span class="s2">      pValue = PyFloat_FromDouble(x[i]);</span>
+<span class="s2">      PyTuple_SetItem(pX, i, pValue);</span>
+<span class="s2">      //printf(&quot;-- x=</span><span class="si">%g</span><span class="s2">\n&quot;, x[i]); fflush(stdout);</span>
+<span class="s2">    }</span>
+<span class="s2">    pY = PyObject_CallOneArg(pFunc, pX);</span>
+<span class="s2">    if (PyErr_Occurred())</span>
+<span class="s2">    {</span>
+<span class="s2">       PyErr_Print();</span>
+<span class="s2">       return;</span>
+<span class="s2">    }</span>
+<span class="s2">    for (i = 0; i &lt; {{ output_dim }}; ++i)</span>
+<span class="s2">    {</span>
+<span class="s2">      // OT returns a Point</span>
+<span class="s2">      pValue = PySequence_GetItem(pY, i);</span>
+<span class="s2">      y[i] = PyFloat_AsDouble(pValue);</span>
+<span class="s2">      Py_DECREF(pValue);</span>
+<span class="s2">      //printf(&quot;-- y=</span><span class="si">%g</span><span class="s2">\n&quot;, y[i]); fflush(stdout);</span>
+<span class="s2">    }</span>
+<span class="s2">  }</span>
+
+<span class="s2">  ++ count;</span>
+<span class="s2">}</span>
+<span class="s2">&quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_xml_path</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">xml_data</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+
+        <span class="n">data</span> <span class="o">=</span> <span class="n">jinja2</span><span class="o">.</span><span class="n">Template</span><span class="p">(</span><span class="n">tdata</span><span class="p">)</span><span class="o">.</span><span class="n">render</span><span class="p">(</span>
+            <span class="p">{</span>
+                <span class="s2">&quot;xml_data_bin&quot;</span><span class="p">:</span> <span class="s2">&quot;,&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                    <span class="p">[</span><span class="s2">&quot;0x</span><span class="si">{:02x}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">byte</span><span class="p">)</span> <span class="k">for</span> <span class="n">byte</span> <span class="ow">in</span> <span class="n">xml_data</span><span class="p">]</span>
+                <span class="p">),</span>
+                <span class="s2">&quot;input_dim&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_function</span><span class="o">.</span><span class="n">getInputDimension</span><span class="p">(),</span>
+                <span class="s2">&quot;output_dim&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_function</span><span class="o">.</span><span class="n">getOutputDimension</span><span class="p">(),</span>
+                <span class="s2">&quot;workdir&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_workdir</span><span class="p">,</span>
+                <span class="s2">&quot;path_point_in&quot;</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_workdir</span><span class="p">,</span> <span class="s2">&quot;point.in&quot;</span><span class="p">),</span>
+                <span class="s2">&quot;path_point_out&quot;</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_workdir</span><span class="p">,</span> <span class="s2">&quot;point.out&quot;</span><span class="p">),</span>
+                <span class="s2">&quot;path_wrapper_py&quot;</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_workdir</span><span class="p">,</span> <span class="s2">&quot;wrapper.py&quot;</span><span class="p">),</span>
+                <span class="s2">&quot;path_error_log&quot;</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_workdir</span><span class="p">,</span> <span class="s2">&quot;error.log&quot;</span><span class="p">),</span>
+                <span class="s2">&quot;path_function_xml&quot;</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_workdir</span><span class="p">,</span> <span class="s2">&quot;function.xml&quot;</span><span class="p">),</span>
+            <span class="p">}</span>
+        <span class="p">)</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_workdir</span><span class="p">,</span> <span class="s2">&quot;wrapper.c&quot;</span><span class="p">),</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">c</span><span class="p">:</span>
+            <span class="n">c</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+        <span class="c1"># write CMakeLists</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">cmake_minimum_required (VERSION 3.13)</span>
+<span class="s2">set (CMAKE_BUILD_TYPE &quot;Release&quot; CACHE STRING &quot;build type&quot;)</span>
+<span class="s2">project (wrapper C)</span>
+<span class="s2">if (POLICY CMP0091)</span>
+<span class="s2">  cmake_policy (SET CMP0091 NEW)</span>
+<span class="s2">endif()</span>
+
+<span class="s2"># link dynamically for Python</span>
+<span class="s2">add_library (cwrapper SHARED wrapper.c)</span>
+
+<span class="s2">find_package (Python 3.8 COMPONENTS Development REQUIRED)</span>
+<span class="s2">target_link_libraries(cwrapper PRIVATE Python::Python)</span>
+
+<span class="s2">set_target_properties (cwrapper PROPERTIES MSVC_RUNTIME_LIBRARY &quot;MultiThreaded$&lt;$&lt;CONFIG:Debug&gt;:Debug&gt;&quot;</span>
+<span class="s2">                                           ARCHIVE_OUTPUT_DIRECTORY_RELEASE $</span><span class="si">{CMAKE_BINARY_DIR}</span>
+<span class="s2">                                           LIBRARY_OUTPUT_DIRECTORY_RELEASE $</span><span class="si">{CMAKE_BINARY_DIR}</span>
+<span class="s2">                                           RUNTIME_OUTPUT_DIRECTORY_RELEASE $</span><span class="si">{CMAKE_BINARY_DIR}</span><span class="s2">)</span>
+<span class="s2">if (MSVC)</span>
+<span class="s2">  target_compile_definitions(cwrapper PRIVATE _CRT_SECURE_NO_WARNINGS)</span>
+<span class="s2">endif()</span>
+<span class="s2">&quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_workdir</span><span class="p">,</span> <span class="s2">&quot;CMakeLists.txt&quot;</span><span class="p">),</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">cm</span><span class="p">:</span>
+            <span class="n">cm</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_write_cwrapper_cxx</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Write the C wrapper using OT C++ API.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_xml_path</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">xml_data</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+
+        <span class="n">tdata</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">#include &lt;openturns/OT.hxx&gt;</span>
+<span class="s2">#include &lt;openturns/XMLStorageManager.hxx&gt;</span>
+<span class="s2">#include &lt;fstream&gt;</span>
+<span class="s2">using namespace OT;</span>
+
+<span class="s2">const char xml_data[] = { {{ xml_data_bin }} };</span>
+<span class="s2">Function function;</span>
+
+<span class="s2">extern &quot;C&quot; {</span>
+
+<span class="s2">#ifdef _WIN32</span>
+<span class="s2">__declspec(dllexport)</span>
+<span class="s2">#endif</span>
+<span class="s2">void c_func(int nin, double x[], int nout, double y[])</span>
+<span class="s2">{</span>
+<span class="s2">  if (!function.getEvaluation().getImplementation()-&gt;isActualImplementation())</span>
+<span class="s2">  {</span>
+<span class="s2">    Study study;</span>
+<span class="s2">    const String fileName = Path::BuildTemporaryFileName(&quot;function.xml&quot;);</span>
+<span class="s2">    std::ofstream xmlFile(fileName, std::ios::out | std::ios::binary);</span>
+<span class="s2">    if (xmlFile.good())</span>
+<span class="s2">    {</span>
+<span class="s2">      xmlFile.write (xml_data, sizeof(xml_data));</span>
+<span class="s2">      xmlFile.close();</span>
+<span class="s2">    }</span>
+<span class="s2">    study.setStorageManager(XMLStorageManager(fileName));</span>
+<span class="s2">    study.load();</span>
+<span class="s2">    study.fillObject(&quot;function&quot;, function);</span>
+<span class="s2">    if (function.getInputDimension() != nin)</span>
+<span class="s2">      std::cerr &lt;&lt; &quot;Invalid input dimension&quot;;</span>
+<span class="s2">    if (function.getOutputDimension() != nout)</span>
+<span class="s2">      std::cerr &lt;&lt; &quot;Invalid output dimension&quot;;</span>
+<span class="s2">    Os::Remove(fileName);</span>
+<span class="s2">  }</span>
+<span class="s2">  Point inP(nin);</span>
+<span class="s2">  std::copy(x, x + nin, inP.begin());</span>
+<span class="s2">  const Point outP(function(inP));</span>
+<span class="s2">  std::copy(outP.begin(), outP.end(), y);</span>
+<span class="s2">}</span>
+
+<span class="s2">} // extern &quot;C&quot;</span>
+<span class="s2">&quot;&quot;&quot;</span>
+
+        <span class="n">data</span> <span class="o">=</span> <span class="n">jinja2</span><span class="o">.</span><span class="n">Template</span><span class="p">(</span><span class="n">tdata</span><span class="p">)</span><span class="o">.</span><span class="n">render</span><span class="p">(</span>
+            <span class="p">{</span>
+                <span class="s2">&quot;xml_data_bin&quot;</span><span class="p">:</span> <span class="s2">&quot;,&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                    <span class="p">[</span><span class="s2">&quot;0x</span><span class="si">{:02x}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">byte</span><span class="p">)</span> <span class="k">for</span> <span class="n">byte</span> <span class="ow">in</span> <span class="n">xml_data</span><span class="p">]</span>
+                <span class="p">),</span>
+            <span class="p">}</span>
+        <span class="p">)</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_workdir</span><span class="p">,</span> <span class="s2">&quot;wrapper.cxx&quot;</span><span class="p">),</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">cxx</span><span class="p">:</span>
+            <span class="n">cxx</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+        <span class="c1"># write CMakeLists</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">cmake_minimum_required (VERSION 3.13)</span>
+<span class="s2">set (CMAKE_BUILD_TYPE &quot;Release&quot; CACHE STRING &quot;build type&quot;)</span>
+<span class="s2">project (wrapper CXX)</span>
+<span class="s2">if (POLICY CMP0091)</span>
+<span class="s2">  cmake_policy (SET CMP0091 NEW)</span>
+<span class="s2">endif()</span>
+
+<span class="s2">add_library (cwrapper SHARED wrapper.cxx)</span>
+
+<span class="s2">find_package (OpenTURNS REQUIRED)</span>
+<span class="s2">message (STATUS &quot;Found OpenTURNS: $</span><span class="si">{OPENTURNS_ROOT_DIR}</span><span class="s2"> ($</span><span class="si">{OPENTURNS_VERSION_STRING}</span><span class="s2">)&quot;)</span>
+<span class="s2">target_link_libraries (cwrapper PRIVATE $</span><span class="si">{OPENTURNS_LIBRARY}</span><span class="s2">)</span>
+
+<span class="s2">set_target_properties (cwrapper PROPERTIES MSVC_RUNTIME_LIBRARY &quot;MultiThreaded$&lt;$&lt;CONFIG:Debug&gt;:Debug&gt;&quot;</span>
+<span class="s2">                                           ARCHIVE_OUTPUT_DIRECTORY_RELEASE $</span><span class="si">{CMAKE_BINARY_DIR}</span>
+<span class="s2">                                           LIBRARY_OUTPUT_DIRECTORY_RELEASE $</span><span class="si">{CMAKE_BINARY_DIR}</span>
+<span class="s2">                                           RUNTIME_OUTPUT_DIRECTORY_RELEASE $</span><span class="si">{CMAKE_BINARY_DIR}</span><span class="s2">)</span>
+
+<span class="s2">if (MSVC)</span>
+<span class="s2">  target_compile_definitions(cwrapper PRIVATE _CRT_SECURE_NO_WARNINGS)</span>
+<span class="s2">endif()</span>
+<span class="s2">&quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_workdir</span><span class="p">,</span> <span class="s2">&quot;CMakeLists.txt&quot;</span><span class="p">),</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">cm</span><span class="p">:</span>
+            <span class="n">cm</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_build_cwrapper</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">verbose</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Build C wrapper.</span>
+
+<span class="sd">        Requires CMake, a C/C++ compiler.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        verbose : bool</span>
+<span class="sd">            Verbose output (default=False).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">cmake_args</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;cmake&quot;</span><span class="p">,</span> <span class="s2">&quot;.&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;win&quot;</span><span class="p">):</span>
+            <span class="c1"># bits = platform.architecture()[0]</span>
+            <span class="c1"># vsplat = {&quot;64bit&quot;: &quot;x64&quot;, &quot;32bit&quot;: &quot;x86&quot;}[bits]</span>
+            <span class="n">cmake_args</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;-DCMAKE_GENERATOR_PLATFORM=x64&quot;</span><span class="p">)</span>
+
+        <span class="c1"># find OpenTURNS cmake config relative from python dir (for cxx mode)</span>
+        <span class="n">ot_libdir</span> <span class="o">=</span> <span class="n">ot</span><span class="o">.</span><span class="vm">__file__</span>
+        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">):</span>
+            <span class="n">ot_libdir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">ot_libdir</span><span class="p">)</span>
+        <span class="n">ot_cmake_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ot_libdir</span><span class="p">,</span> <span class="s2">&quot;cmake&quot;</span><span class="p">,</span> <span class="s2">&quot;openturns&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ot_cmake_dir</span><span class="p">,</span> <span class="s2">&quot;OpenTURNSConfig.cmake&quot;</span><span class="p">)):</span>
+            <span class="n">cmake_args</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;-DOpenTURNS_DIR=</span><span class="si">{</span><span class="n">ot_cmake_dir</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+            <span class="n">cmake_args</span><span class="p">,</span> <span class="n">capture_output</span><span class="o">=</span><span class="ow">not</span> <span class="n">verbose</span><span class="p">,</span> <span class="n">cwd</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_workdir</span><span class="p">,</span> <span class="n">check</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span>
+        <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+            <span class="p">[</span><span class="s2">&quot;cmake&quot;</span><span class="p">,</span> <span class="s2">&quot;--build&quot;</span><span class="p">,</span> <span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="s2">&quot;--config&quot;</span><span class="p">,</span> <span class="s2">&quot;Release&quot;</span><span class="p">],</span>
+            <span class="n">capture_output</span><span class="o">=</span><span class="ow">not</span> <span class="n">verbose</span><span class="p">,</span>
+            <span class="n">cwd</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_workdir</span><span class="p">,</span>
+            <span class="n">check</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_set_input_output</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Define the inputs and outputs in Modelica language..</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">string</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_start</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">input_name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_function</span><span class="o">.</span><span class="n">getInputDescription</span><span class="p">():</span>
+                <span class="n">string</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="n">string</span> <span class="o">+</span> <span class="s2">&quot;  input Real &quot;</span> <span class="o">+</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\W&quot;</span><span class="p">,</span> <span class="s2">&quot;_&quot;</span><span class="p">,</span> <span class="n">input_name</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; ;</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">for</span> <span class="p">(</span>
+                <span class="n">input_name</span><span class="p">,</span>
+                <span class="n">input_value</span><span class="p">,</span>
+            <span class="p">)</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_function</span><span class="o">.</span><span class="n">getInputDescription</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">_start</span><span class="p">):</span>
+                <span class="n">string</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="n">string</span>
+                    <span class="o">+</span> <span class="s2">&quot;  input Real &quot;</span>
+                    <span class="o">+</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\W&quot;</span><span class="p">,</span> <span class="s2">&quot;_&quot;</span><span class="p">,</span> <span class="n">input_name</span><span class="p">)</span>
+                    <span class="o">+</span> <span class="s2">&quot;(start=&quot;</span>
+                    <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">input_value</span><span class="p">)</span>
+                    <span class="o">+</span> <span class="s2">&quot;);</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="p">)</span>
+        <span class="k">for</span> <span class="n">output_name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_function</span><span class="o">.</span><span class="n">getOutputDescription</span><span class="p">():</span>
+            <span class="n">string</span> <span class="o">=</span> <span class="n">string</span> <span class="o">+</span> <span class="s2">&quot;  output Real &quot;</span> <span class="o">+</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\W&quot;</span><span class="p">,</span> <span class="s2">&quot;_&quot;</span><span class="p">,</span> <span class="n">output_name</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;;</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="k">return</span> <span class="n">string</span>
+
+    <span class="k">def</span> <span class="nf">_set_connector</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Define the inputs and outputs as OMEdit connectors.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">list_input_position</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span>
+            <span class="p">[</span>
+                <span class="p">(</span><span class="n">ii</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">//</span> <span class="mi">2</span> <span class="o">*</span> <span class="mi">20</span> <span class="o">*</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">**</span> <span class="n">ii</span>
+                <span class="k">for</span> <span class="n">ii</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_function</span><span class="o">.</span><span class="n">getInputDescription</span><span class="p">()))</span>
+            <span class="p">],</span>
+            <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">list_output_position</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span>
+            <span class="p">[</span>
+                <span class="p">(</span><span class="n">ii</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">//</span> <span class="mi">2</span> <span class="o">*</span> <span class="mi">20</span> <span class="o">*</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">**</span> <span class="n">ii</span>
+                <span class="k">for</span> <span class="n">ii</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_function</span><span class="o">.</span><span class="n">getOutputDescription</span><span class="p">()))</span>
+            <span class="p">],</span>
+            <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="n">string</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">ii</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_function</span><span class="o">.</span><span class="n">getInputDescription</span><span class="p">())):</span>
+            <span class="n">input_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_function</span><span class="o">.</span><span class="n">getInputDescription</span><span class="p">()[</span><span class="n">ii</span><span class="p">]</span>
+            <span class="n">underscore_input_name</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\W&quot;</span><span class="p">,</span> <span class="s2">&quot;_&quot;</span><span class="p">,</span> <span class="n">input_name</span><span class="p">)</span>
+            <span class="n">y_origin</span> <span class="o">=</span> <span class="n">list_input_position</span><span class="p">[</span><span class="n">ii</span><span class="p">]</span>
+            <span class="n">string</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">string</span>
+                <span class="o">+</span> <span class="s2">&quot;&quot;&quot;  Modelica.Blocks.Interfaces.RealInput </span><span class="si">{}</span><span class="se">\n</span>
+<span class="s2">                annotation(Placement(visible = true,</span><span class="se">\n</span>
+<span class="s2">                transformation(origin={{-106, </span><span class="si">{}</span><span class="s2">}}, extent={{{{-20, -20}}</span>
+<span class="s2">                , {{20, 20}}}}),</span><span class="se">\n</span>
+<span class="s2">                iconTransformation(origin={{-106, </span><span class="si">{}</span><span class="s2">}}, extent={{{{-10,</span>
+<span class="s2">                -10}}, {{10, 10}}}})));</span><span class="se">\n</span><span class="s2">&quot;&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="n">underscore_input_name</span><span class="p">,</span> <span class="n">y_origin</span><span class="p">,</span> <span class="n">y_origin</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">ii</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_function</span><span class="o">.</span><span class="n">getOutputDescription</span><span class="p">())):</span>
+            <span class="n">output_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_function</span><span class="o">.</span><span class="n">getOutputDescription</span><span class="p">()[</span><span class="n">ii</span><span class="p">]</span>
+            <span class="n">underscore_output_name</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\W&quot;</span><span class="p">,</span> <span class="s2">&quot;_&quot;</span><span class="p">,</span> <span class="n">output_name</span><span class="p">)</span>
+            <span class="n">y_origin</span> <span class="o">=</span> <span class="n">list_output_position</span><span class="p">[</span><span class="n">ii</span><span class="p">]</span>
+            <span class="n">string</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">string</span>
+                <span class="o">+</span> <span class="s2">&quot;&quot;&quot;  Modelica.Blocks.Interfaces.RealOutput </span><span class="si">{}</span><span class="se">\n</span>
+<span class="s2">                annotation(Placement(visible = true, transformation(</span>
+<span class="s2">                origin={{106, </span><span class="si">{}</span><span class="s2">}}, extent = {{{{-20, -20}}, {{20,</span>
+<span class="s2">                20}}}}),</span><span class="se">\n</span>
+<span class="s2">                iconTransformation(origin={{106, </span><span class="si">{}</span><span class="s2">}}, extent={{{{-10,</span>
+<span class="s2">                -10}}, {{10, 10}}}})));</span><span class="se">\n</span><span class="s2">&quot;&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="n">underscore_output_name</span><span class="p">,</span> <span class="n">y_origin</span><span class="p">,</span> <span class="n">y_origin</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="n">string</span>
+
+    <span class="k">def</span> <span class="nf">_write_modelica_wrapper</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">className</span><span class="p">,</span> <span class="n">dirName</span><span class="p">,</span> <span class="n">gui</span><span class="p">,</span> <span class="n">move</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Write the Modelica model importing Cfunction.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        className : str</span>
+<span class="sd">            The model prefix, used as name for the file and the model itself.</span>
+<span class="sd">        dirName : str</span>
+<span class="sd">            Name of the folder required by the user</span>
+<span class="sd">        gui : bool</span>
+<span class="sd">            If True, define the input/output connectors.</span>
+<span class="sd">            The model cannot be exported as FMU in command line if gui=True.</span>
+<span class="sd">        move : bool</span>
+<span class="sd">            Move the model from temporary folder to user folder</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">link_dir</span> <span class="o">=</span> <span class="n">dirName</span> <span class="k">if</span> <span class="n">move</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">_workdir</span>
+        <span class="n">_</span> <span class="o">=</span> <span class="n">link_dir</span>
+        <span class="n">tdata</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">model {{ className }}</span>
+
+<span class="s2">function ExternalFunc</span>
+<span class="s2">input Real[{{ input_dim }}] x;</span>
+<span class="s2">output Real[{{ output_dim }}] y;</span>
+<span class="s2">external &quot;C&quot; c_func({{ input_dim }}, x, {{ output_dim }}, y);</span>
+<span class="s2">annotation(Library=&quot;cwrapper&quot;, LibraryDirectory=&quot;{{ link_dir }}&quot;);</span>
+<span class="s2">end ExternalFunc;</span>
+
+<span class="s2">{{ io_vars }}</span>
+
+<span class="s2">protected</span>
+<span class="s2">  Real output_array_zzz__[{{ output_dim }}] = ExternalFunc({ {{ inputs }} });</span>
+
+<span class="s2">equation</span>
+<span class="s2">{</span><span class="si">%- f</span><span class="s2">or output in outputs %}</span>
+<span class="s2">  {{ output }} = output_array_zzz__[{{ loop.index }}];</span>
+<span class="s2">{</span><span class="si">%- e</span><span class="s2">ndfor %}</span>
+
+<span class="s2">end {{ className }};</span>
+
+<span class="s2">&quot;&quot;&quot;</span>
+
+        <span class="k">def</span> <span class="nf">path2uri</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span><span class="o">.</span><span class="n">as_uri</span><span class="p">()</span>
+
+        <span class="n">data</span> <span class="o">=</span> <span class="n">jinja2</span><span class="o">.</span><span class="n">Template</span><span class="p">(</span><span class="n">tdata</span><span class="p">)</span><span class="o">.</span><span class="n">render</span><span class="p">(</span>
+            <span class="p">{</span>
+                <span class="s2">&quot;className&quot;</span><span class="p">:</span> <span class="n">className</span><span class="p">,</span>
+                <span class="s2">&quot;input_dim&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_function</span><span class="o">.</span><span class="n">getInputDimension</span><span class="p">(),</span>
+                <span class="s2">&quot;output_dim&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_function</span><span class="o">.</span><span class="n">getOutputDimension</span><span class="p">(),</span>
+                <span class="s2">&quot;link_dir&quot;</span><span class="p">:</span> <span class="n">path2uri</span><span class="p">(</span><span class="n">dirName</span><span class="p">)</span> <span class="k">if</span> <span class="n">move</span> <span class="k">else</span> <span class="n">path2uri</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_workdir</span><span class="p">),</span>
+                <span class="s2">&quot;io_vars&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_connector</span><span class="p">()</span> <span class="k">if</span> <span class="n">gui</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_input_output</span><span class="p">(),</span>
+                <span class="s2">&quot;inputs&quot;</span><span class="p">:</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                    <span class="p">[</span>
+                        <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\W&quot;</span><span class="p">,</span> <span class="s2">&quot;_&quot;</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+                        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_function</span><span class="o">.</span><span class="n">getInputDescription</span><span class="p">()</span>
+                    <span class="p">]</span>
+                <span class="p">),</span>
+                <span class="s2">&quot;outputs&quot;</span><span class="p">:</span> <span class="p">[</span>
+                    <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\W&quot;</span><span class="p">,</span> <span class="s2">&quot;_&quot;</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+                    <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_function</span><span class="o">.</span><span class="n">getOutputDescription</span><span class="p">()</span>
+                <span class="p">],</span>
+            <span class="p">}</span>
+        <span class="p">)</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_workdir</span><span class="p">,</span> <span class="n">className</span> <span class="o">+</span> <span class="s2">&quot;.mo&quot;</span><span class="p">),</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">mo</span><span class="p">:</span>
+            <span class="n">mo</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">export_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model_path</span><span class="p">,</span> <span class="n">gui</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">binary</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;pyprocess&quot;</span><span class="p">,</span> <span class="n">move</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Export to model file (.mo).</span>
+
+<span class="sd">        Requires CMake, a C/C++ compiler.</span>
+<span class="sd">        Unlike export_fmu, field functions (temporal models) cannot be exported.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        model_path : str</span>
+<span class="sd">            Path to the generated .mo file.</span>
+<span class="sd">            The model name is taken from the base name.</span>
+<span class="sd">        gui : bool</span>
+<span class="sd">            If True, define the input/output connectors.</span>
+<span class="sd">                In this case, given start values ARE NOT TAKEN INTO ACCOUNT.</span>
+<span class="sd">            If False, input and outputs are defined in Modelica code.</span>
+<span class="sd">                In this case only, the model can be exported as FMU using OMC command line.</span>
+<span class="sd">        verbose : bool</span>
+<span class="sd">            Verbose output (default=False).</span>
+<span class="sd">        binary : bool</span>
+<span class="sd">            Whether to generate binaries or source (default=True)</span>
+<span class="sd">        mode : str, either &#39;pyprocess&#39;, &#39;cpython&#39; or &#39;cxx&#39;</span>
+<span class="sd">            - pyprocess: the function is run via a Python process by file I/O;</span>
+<span class="sd">              slow but should work almost everywhere.</span>
+<span class="sd">            - cpython: the function is run via the Python C API; quite fast (no file I/O)</span>
+<span class="sd">              but requires Python development headers/libs</span>
+<span class="sd">            - cxx: the function is directly evaluated trough the OpenTURNS C++ API;</span>
+<span class="sd">              even faster but requires the OpenTURNS development headers and libraries</span>
+<span class="sd">              (not just the Python module that would be installed by pip for example).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># &quot;move&quot; argument moves the the model from temporary folder to user folder (default=True)</span>
+        <span class="c1"># not documented on purpose (private)</span>
+
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model_path</span><span class="p">,</span> <span class="nb">str</span><span class="p">),</span> <span class="s2">&quot;model_path must be str&quot;</span>
+        <span class="n">rawClassName</span><span class="p">,</span> <span class="n">extension</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">model_path</span><span class="p">))</span>
+        <span class="n">className</span> <span class="o">=</span> <span class="n">rawClassName</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">+</span> <span class="n">rawClassName</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+        <span class="k">assert</span> <span class="n">extension</span> <span class="o">==</span> <span class="s2">&quot;.mo&quot;</span><span class="p">,</span> <span class="s2">&quot;Invalid model&quot;</span>
+        <span class="n">dirName</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">model_path</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_export_xml</span><span class="p">()</span>
+        <span class="n">c_ext</span> <span class="o">=</span> <span class="s2">&quot;.c&quot;</span>
+        <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;pyprocess&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_write_cwrapper_pyprocess</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;cpython&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_write_cwrapper_cpython</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;cxx&quot;</span><span class="p">:</span>
+            <span class="n">c_ext</span> <span class="o">=</span> <span class="s2">&quot;.cxx&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_write_cwrapper_cxx</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid mode: </span><span class="si">{</span><span class="n">mode</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">binary</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_build_cwrapper</span><span class="p">(</span><span class="n">verbose</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_write_modelica_wrapper</span><span class="p">(</span><span class="n">className</span><span class="p">,</span> <span class="n">dirName</span><span class="p">,</span> <span class="n">gui</span><span class="p">,</span> <span class="n">move</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">move</span><span class="p">:</span>
+            <span class="n">list_file</span> <span class="o">=</span> <span class="p">[</span><span class="n">className</span> <span class="o">+</span> <span class="n">extension</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">binary</span><span class="p">:</span>
+                <span class="c1"># licwrapper.a/.so, cwrapper.lib/dll</span>
+                <span class="n">libfiles</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_workdir</span><span class="p">,</span> <span class="s2">&quot;*cwrapper*&quot;</span><span class="p">))</span>
+                <span class="n">list_file</span> <span class="o">+=</span> <span class="p">[</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">libfiles</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">list_file</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;wrapper&quot;</span> <span class="o">+</span> <span class="n">c_ext</span><span class="p">,</span> <span class="s2">&quot;CMakeLists.txt&quot;</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">list_file</span><span class="p">:</span>
+                <span class="n">src</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_workdir</span><span class="p">,</span> <span class="n">file</span><span class="p">)</span>
+                <span class="n">dest</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dirName</span><span class="p">,</span> <span class="n">file</span><span class="p">)</span>
+                <span class="n">shutil</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">dest</span><span class="p">)</span>
+            <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_workdir</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">export_fmu</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fmu_path</span><span class="p">,</span> <span class="n">fmuType</span><span class="o">=</span><span class="s2">&quot;me&quot;</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;pyprocess&quot;</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Export the Modelica model as FMU.</span>
+
+<span class="sd">        Requires CMake, a C compiler and omc the OpenModelica compiler.</span>
+<span class="sd">        If the model does not already exist, or if the existing model uses</span>
+<span class="sd">        OMEdit connectors, the model is (re)created.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        fmu_path : str</span>
+<span class="sd">            Path to the generated .fmu file.</span>
+<span class="sd">        fmuType : str</span>
+<span class="sd">            model type, either me (model exchange), cs (co-simulation),</span>
+<span class="sd">            me_cs (both model exchange and co-simulation)</span>
+<span class="sd">        mode : str</span>
+<span class="sd">            either pyprocess or pythonfmu</span>
+<span class="sd">            Only pythonfmu mode is allowed for temporal models (PointToFieldFunction)</span>
+<span class="sd">            Note that pythonfmu mode yields cosimulation-only, pyfmi/otfmi incompatible fmus</span>
+<span class="sd">        verbose : bool</span>
+<span class="sd">            Verbose output (default=False).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">rawClassName</span><span class="p">,</span> <span class="n">extension</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">fmu_path</span><span class="p">))</span>
+        <span class="n">className</span> <span class="o">=</span> <span class="n">rawClassName</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">+</span> <span class="n">rawClassName</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+        <span class="c1"># name starting with lower case causes connection issues in OMEdit</span>
+        <span class="k">assert</span> <span class="n">extension</span> <span class="o">==</span> <span class="s2">&quot;.fmu&quot;</span><span class="p">,</span> <span class="s2">&quot;Please give a FMU name as argument :)&quot;</span>
+        <span class="n">dirName</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">fmu_path</span><span class="p">))</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_workdir</span><span class="p">):</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_workdir</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;pyprocess&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_function</span><span class="p">,</span> <span class="s2">&quot;getOutputMesh&quot;</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Can only export vectorial functions in pyprocess mode&quot;</span><span class="p">)</span>
+
+            <span class="n">model_path</span> <span class="o">=</span> <span class="n">fmu_path</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;fmu&quot;</span><span class="p">,</span> <span class="s2">&quot;mo&quot;</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">export_model</span><span class="p">(</span><span class="n">model_path</span><span class="p">,</span> <span class="n">gui</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">,</span> <span class="n">move</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+            <span class="n">path_mo</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_workdir</span><span class="p">,</span> <span class="n">className</span> <span class="o">+</span> <span class="s2">&quot;.mo&quot;</span><span class="p">)</span>
+            <span class="n">path_fmu</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_workdir</span><span class="p">,</span> <span class="n">className</span> <span class="o">+</span> <span class="n">extension</span><span class="p">)</span>
+            <span class="n">mo2fmu</span><span class="p">(</span><span class="n">path_mo</span><span class="p">,</span> <span class="n">path_fmu</span><span class="o">=</span><span class="n">path_fmu</span><span class="p">,</span> <span class="n">fmuType</span><span class="o">=</span><span class="n">fmuType</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
+
+            <span class="n">shutil</span><span class="o">.</span><span class="n">move</span><span class="p">(</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_workdir</span><span class="p">,</span> <span class="n">className</span> <span class="o">+</span> <span class="n">extension</span><span class="p">),</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dirName</span><span class="p">,</span> <span class="n">className</span> <span class="o">+</span> <span class="n">extension</span><span class="p">),</span>
+            <span class="p">)</span>
+
+        <span class="k">elif</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;pythonfmu&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_export_xml</span><span class="p">()</span>
+            <span class="n">tdata</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">import openturns as ot</span>
+<span class="s2">from pythonfmu.fmi2slave import Fmi2Slave, Fmi2Causality, Real</span>
+<span class="s2">import shutil</span>
+<span class="s2">import tempfile</span>
+<span class="s2">import os</span>
+<span class="s2">import binascii</span>
+
+<span class="s2">xml_b64 = {{ xml_b64 }}</span>
+
+<span class="s2">class {{ className }}(Fmi2Slave):</span>
+
+<span class="s2">    def __init__(self, **kwargs):</span>
+<span class="s2">        super().__init__(**kwargs)</span>
+<span class="s2">        study = ot.Study()</span>
+<span class="s2">        workdir = tempfile.mkdtemp()</span>
+<span class="s2">        fname = os.path.join(workdir, &quot;function.xml&quot;)</span>
+<span class="s2">        xml_data = binascii.a2b_base64(xml_b64)</span>
+<span class="s2">        with open(fname, &quot;wb&quot;) as f:</span>
+<span class="s2">            f.write(xml_data)</span>
+<span class="s2">        study.setStorageManager(ot.XMLStorageManager(fname))</span>
+<span class="s2">        study.load()</span>
+<span class="s2">{</span><span class="si">% i</span><span class="s2">f is_field_f %}</span>
+<span class="s2">        self._function = ot.PointToFieldFunction()</span>
+<span class="s2">{</span><span class="si">% e</span><span class="s2">lse %}</span>
+<span class="s2">        self._function = ot.Function()</span>
+<span class="s2">{</span><span class="si">% e</span><span class="s2">ndif %}</span>
+<span class="s2">        study.fillObject(&quot;function&quot;, self._function)</span>
+<span class="s2">        shutil.rmtree(workdir)</span>
+
+<span class="s2">        for i, var in enumerate(self._function.getInputDescription()):</span>
+<span class="s2">            setattr(self, var, 0.0)</span>
+<span class="s2">            self.register_variable(Real(var, causality=Fmi2Causality.input))</span>
+
+<span class="s2">        for var in self._function.getOutputDescription():</span>
+<span class="s2">            setattr(self, var, 0.0)</span>
+<span class="s2">            self.register_variable(Real(var, causality=Fmi2Causality.output))</span>
+
+<span class="s2">    def do_step(self, current_time, step_size):</span>
+<span class="s2">        inP = [getattr(self, var) for var in self._function.getInputDescription()]</span>
+<span class="s2">        try:</span>
+<span class="s2">            f_output = self._function(inP)</span>
+<span class="s2">        except Exception as exc:</span>
+<span class="s2">            print(f&quot;{{ className }}: </span><span class="si">{exc}</span><span class="s2">&quot;)</span>
+<span class="s2">            return False</span>
+<span class="s2">{</span><span class="si">% i</span><span class="s2">f is_field_f %}</span>
+<span class="s2">        mesh = self._function.getOutputMesh()</span>
+<span class="s2">        timeGrid = mesh.getVertices().asPoint()</span>
+<span class="s2">        interpolation = ot.PiecewiseLinearEvaluation(timeGrid, f_output)</span>
+<span class="s2">        f_output = interpolation([current_time])</span>
+<span class="s2">{</span><span class="si">% e</span><span class="s2">ndif %}</span>
+<span class="s2">        for i, var in enumerate(self._function.getOutputDescription()):</span>
+<span class="s2">            setattr(self, var, f_output[i])</span>
+<span class="s2">        return True</span>
+<span class="s2">&quot;&quot;&quot;</span>
+            <span class="n">is_field_f</span> <span class="o">=</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_function</span><span class="p">,</span> <span class="s2">&quot;getOutputMesh&quot;</span><span class="p">)</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_xml_path</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                <span class="n">xml_data</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+            <span class="n">xml_b64</span> <span class="o">=</span> <span class="n">binascii</span><span class="o">.</span><span class="n">b2a_base64</span><span class="p">(</span><span class="n">xml_data</span><span class="p">)</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">jinja2</span><span class="o">.</span><span class="n">Template</span><span class="p">(</span><span class="n">tdata</span><span class="p">)</span><span class="o">.</span><span class="n">render</span><span class="p">({</span><span class="s2">&quot;className&quot;</span><span class="p">:</span> <span class="n">className</span><span class="p">,</span>
+                                                  <span class="s2">&quot;xml_b64&quot;</span><span class="p">:</span> <span class="n">xml_b64</span><span class="p">,</span>
+                                                  <span class="s2">&quot;is_field_f&quot;</span><span class="p">:</span> <span class="n">is_field_f</span><span class="p">})</span>
+            <span class="n">slave_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_workdir</span><span class="p">,</span> <span class="n">className</span> <span class="o">+</span> <span class="s2">&quot;.py&quot;</span><span class="p">)</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">slave_file</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fslave</span><span class="p">:</span>
+                <span class="n">fslave</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+            <span class="n">FmuBuilder</span><span class="o">.</span><span class="n">build_FMU</span><span class="p">(</span><span class="n">slave_file</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">fmu_path</span><span class="p">))</span>
+        <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_workdir</span><span class="p">)</span></div>
+</pre></div>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Sylvain Girard, Valentin Pibernus
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

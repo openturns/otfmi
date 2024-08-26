@@ -1,0 +1,999 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>FMUPointToFieldFunction basics &#8212; otfmi</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/proof.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.4cbf315f70debaebd550c87a6162cf0f.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../../_static/sphinx-thebe.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'auto_example/dynamic/plot_dyn_basics';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../_static/logo.png" class="logo__image only-light" alt="otfmi - Home"/>
+    <script>document.write(`<img src="../../_static/logo.png" class="logo__image only-dark" alt="otfmi - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../../index.html">
+                    Otfmi documentation
+                </a>
+            </li>
+        </ul>
+        <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Installation</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../api_doc/api_documentation.html">API documentation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../api_doc/static_analysis.html">Static analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api_doc/dynamic_analysis.html">Dynamic analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api_doc/from_openturns_to_fmi.html">From OpenTURNS to FMI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api_doc/common_low_level_functions.html">Common low-level functions</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../application/application.html">Applications</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../auto_application/plot_cantilever_beam.html">Estimate the probability of a threshold excedance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../auto_application/plot_metamodel.html">Metamodel a FMU time-dependent output</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../sample_fmu_files/index.html">Sample FMU files</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../sample_fmu_files/deviation.html">The cantilever beam model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../sample_fmu_files/epid.html">The epidemiological model</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../../exemple/index.html">Sensitivity analysis with Persalys</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2Fauto_example/dynamic/plot_dyn_basics.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../_sources/auto_example/dynamic/plot_dyn_basics.rst" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.rst</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>FMUPointToFieldFunction basics</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <div class="sphx-glr-download-link-note admonition note">
+<p class="admonition-title">Note</p>
+<p><a class="reference internal" href="#sphx-glr-download-auto-example-dynamic-plot-dyn-basics-py"><span class="std std-ref">Go to the end</span></a>
+to download the full example code.</p>
+</div>
+<section class="sphx-glr-example-title" id="fmupointtofieldfunction-basics">
+<span id="sphx-glr-auto-example-dynamic-plot-dyn-basics-py"></span><h1>FMUPointToFieldFunction basics<a class="headerlink" href="#fmupointtofieldfunction-basics" title="Permalink to this heading">#</a></h1>
+<p><code class="docutils literal notranslate"><span class="pre">otfmi.FMUPointToFieldFunction</span></code> wraps the FMU into an
+<code class="xref py py-class docutils literal notranslate"><span class="pre">openturns.PointToFieldFunction</span></code> object.
+This kind of function accepts <code class="xref py py-class docutils literal notranslate"><span class="pre">openturns.Point</span></code> or
+<code class="xref py py-class docutils literal notranslate"><span class="pre">openturns.Sample</span></code> as inputs, and outputs a
+<code class="xref py py-class docutils literal notranslate"><span class="pre">openturns.Sample</span></code> or a set of <code class="xref py py-class docutils literal notranslate"><span class="pre">openturns.Field</span></code>.</p>
+<hr class="docutils" />
+<p>First, retrieve the path to <em>epid.fmu</em>.
+Recall the deviation model is dynamic, i.e. its output evolves over
+time.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">openturns</span> <span class="k">as</span> <span class="nn">ot</span>
+<span class="kn">import</span> <span class="nn">otfmi.example.utility</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">openturns.viewer</span> <span class="k">as</span> <span class="nn">viewer</span>
+
+
+<span class="n">path_fmu</span> <span class="o">=</span> <span class="n">otfmi</span><span class="o">.</span><span class="n">example</span><span class="o">.</span><span class="n">utility</span><span class="o">.</span><span class="n">get_path_fmu</span><span class="p">(</span><span class="s2">&quot;epid&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Define the time grid for the FMU’s output. The last value of the time grid,
+here 10., will define the FMU stop time for simulation.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">mesh</span> <span class="o">=</span> <span class="n">ot</span><span class="o">.</span><span class="n">RegularGrid</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+<span class="n">meshSample</span> <span class="o">=</span> <span class="n">mesh</span><span class="o">.</span><span class="n">getVertices</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">meshSample</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>     [ t   ]
+ 0 : [ 0   ]
+ 1 : [ 0.1 ]
+ 2 : [ 0.2 ]
+ 3 : [ 0.3 ]
+ 4 : [ 0.4 ]
+ 5 : [ 0.5 ]
+ 6 : [ 0.6 ]
+ 7 : [ 0.7 ]
+ 8 : [ 0.8 ]
+ 9 : [ 0.9 ]
+10 : [ 1   ]
+11 : [ 1.1 ]
+12 : [ 1.2 ]
+13 : [ 1.3 ]
+14 : [ 1.4 ]
+15 : [ 1.5 ]
+16 : [ 1.6 ]
+17 : [ 1.7 ]
+18 : [ 1.8 ]
+19 : [ 1.9 ]
+20 : [ 2   ]
+21 : [ 2.1 ]
+22 : [ 2.2 ]
+23 : [ 2.3 ]
+24 : [ 2.4 ]
+25 : [ 2.5 ]
+26 : [ 2.6 ]
+27 : [ 2.7 ]
+28 : [ 2.8 ]
+29 : [ 2.9 ]
+30 : [ 3   ]
+31 : [ 3.1 ]
+32 : [ 3.2 ]
+33 : [ 3.3 ]
+34 : [ 3.4 ]
+35 : [ 3.5 ]
+36 : [ 3.6 ]
+37 : [ 3.7 ]
+38 : [ 3.8 ]
+39 : [ 3.9 ]
+40 : [ 4   ]
+41 : [ 4.1 ]
+42 : [ 4.2 ]
+43 : [ 4.3 ]
+44 : [ 4.4 ]
+45 : [ 4.5 ]
+46 : [ 4.6 ]
+47 : [ 4.7 ]
+48 : [ 4.8 ]
+49 : [ 4.9 ]
+50 : [ 5   ]
+51 : [ 5.1 ]
+52 : [ 5.2 ]
+53 : [ 5.3 ]
+54 : [ 5.4 ]
+55 : [ 5.5 ]
+56 : [ 5.6 ]
+57 : [ 5.7 ]
+58 : [ 5.8 ]
+59 : [ 5.9 ]
+60 : [ 6   ]
+61 : [ 6.1 ]
+62 : [ 6.2 ]
+63 : [ 6.3 ]
+64 : [ 6.4 ]
+65 : [ 6.5 ]
+66 : [ 6.6 ]
+67 : [ 6.7 ]
+68 : [ 6.8 ]
+69 : [ 6.9 ]
+70 : [ 7   ]
+71 : [ 7.1 ]
+72 : [ 7.2 ]
+73 : [ 7.3 ]
+74 : [ 7.4 ]
+75 : [ 7.5 ]
+76 : [ 7.6 ]
+77 : [ 7.7 ]
+78 : [ 7.8 ]
+79 : [ 7.9 ]
+80 : [ 8   ]
+81 : [ 8.1 ]
+82 : [ 8.2 ]
+83 : [ 8.3 ]
+84 : [ 8.4 ]
+85 : [ 8.5 ]
+86 : [ 8.6 ]
+87 : [ 8.7 ]
+88 : [ 8.8 ]
+89 : [ 8.9 ]
+90 : [ 9   ]
+91 : [ 9.1 ]
+92 : [ 9.2 ]
+93 : [ 9.3 ]
+94 : [ 9.4 ]
+95 : [ 9.5 ]
+96 : [ 9.6 ]
+97 : [ 9.7 ]
+98 : [ 9.8 ]
+99 : [ 9.9 ]
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The FMU solver uses its own time grid for simulation.
+The FMU output is then interpolated on the user-provided time grid.</p>
+</div>
+<p>Wrap the FMU in an <code class="xref py py-class docutils literal notranslate"><span class="pre">openturns.PointToFieldFunction</span></code> object:</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">function</span> <span class="o">=</span> <span class="n">otfmi</span><span class="o">.</span><span class="n">FMUPointToFieldFunction</span><span class="p">(</span>
+    <span class="n">mesh</span><span class="p">,</span>
+    <span class="n">path_fmu</span><span class="p">,</span>
+    <span class="n">inputs_fmu</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;infection_rate&quot;</span><span class="p">],</span>
+    <span class="n">outputs_fmu</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;infected&quot;</span><span class="p">],</span>
+    <span class="n">start_time</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+    <span class="n">final_time</span><span class="o">=</span><span class="mf">10.0</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">function</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;class &#39;openturns.func.PointToFieldFunction&#39;&gt;
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The start and final times must define an interval comprising the mesh.
+Setting manually the start and final times is recommended to avoid
+uncontrolled simulation duration.</p>
+</div>
+<p>Simulate the function on an input <code class="xref py py-class docutils literal notranslate"><span class="pre">openturns.Point</span></code> yields an output
+<code class="xref py py-class docutils literal notranslate"><span class="pre">openturns.Sample</span></code>, corresponding to the output evolution over time:</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">inputPoint</span> <span class="o">=</span> <span class="n">ot</span><span class="o">.</span><span class="n">Point</span><span class="p">([</span><span class="mf">0.007</span><span class="p">])</span>
+<span class="n">outputSample</span> <span class="o">=</span> <span class="n">function</span><span class="p">(</span><span class="n">inputPoint</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;FMU simulation time (s)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Number of Infected&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">meshSample</span><span class="p">,</span> <span class="n">outputSample</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Simulate the function on a input <code class="xref py py-class docutils literal notranslate"><span class="pre">openturns.Sample</span></code> yields a set of
+fields called <code class="xref py py-class docutils literal notranslate"><span class="pre">openturns.ProcessSample</span></code>:</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">inputSample</span> <span class="o">=</span> <span class="n">ot</span><span class="o">.</span><span class="n">Sample</span><span class="p">([[</span><span class="mf">0.007</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.005</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.003</span><span class="p">]])</span>
+<span class="n">outputProcessSample</span> <span class="o">=</span> <span class="n">function</span><span class="p">(</span><span class="n">inputSample</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">outputProcessSample</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>[field 0:
+     [ t         infected  ]
+ 0 : [   0         1       ]
+ 1 : [   0.1       1.59178 ]
+ 2 : [   0.2       2.53261 ]
+ 3 : [   0.3       4.02656 ]
+ 4 : [   0.4       6.39434 ]
+ 5 : [   0.5      10.1358  ]
+ 6 : [   0.6      16.02    ]
+ 7 : [   0.7      25.2052  ]
+ 8 : [   0.8      39.377   ]
+ 9 : [   0.9      60.852   ]
+10 : [   1        92.5148  ]
+11 : [   1.1     137.344   ]
+12 : [   1.2     197.251   ]
+13 : [   1.3     271.29    ]
+14 : [   1.4     354.226   ]
+15 : [   1.5     437.182   ]
+16 : [   1.6     510.947   ]
+17 : [   1.7     569.713   ]
+18 : [   1.8     612.363   ]
+19 : [   1.9     641.111   ]
+20 : [   2       659.398   ]
+21 : [   2.1     670.465   ]
+22 : [   2.2     676.81    ]
+23 : [   2.3     680.17    ]
+24 : [   2.4     681.681   ]
+25 : [   2.5     682.06    ]
+26 : [   2.6     681.752   ]
+27 : [   2.7     681.028   ]
+28 : [   2.8     680.053   ]
+29 : [   2.9     678.928   ]
+30 : [   3       677.712   ]
+31 : [   3.1     676.444   ]
+32 : [   3.2     675.144   ]
+33 : [   3.3     673.827   ]
+34 : [   3.4     672.499   ]
+35 : [   3.5     671.167   ]
+36 : [   3.6     669.833   ]
+37 : [   3.7     668.499   ]
+38 : [   3.8     667.165   ]
+39 : [   3.9     665.834   ]
+40 : [   4       664.504   ]
+41 : [   4.1     663.177   ]
+42 : [   4.2     661.852   ]
+43 : [   4.3     660.53    ]
+44 : [   4.4     659.21    ]
+45 : [   4.5     657.892   ]
+46 : [   4.6     656.578   ]
+47 : [   4.7     655.266   ]
+48 : [   4.8     653.956   ]
+49 : [   4.9     652.649   ]
+50 : [   5       651.345   ]
+51 : [   5.1     650.043   ]
+52 : [   5.2     648.744   ]
+53 : [   5.3     647.448   ]
+54 : [   5.4     646.154   ]
+55 : [   5.5     644.863   ]
+56 : [   5.6     643.574   ]
+57 : [   5.7     642.288   ]
+58 : [   5.8     641.004   ]
+59 : [   5.9     639.723   ]
+60 : [   6       638.445   ]
+61 : [   6.1     637.169   ]
+62 : [   6.2     635.896   ]
+63 : [   6.3     634.625   ]
+64 : [   6.4     633.357   ]
+65 : [   6.5     632.091   ]
+66 : [   6.6     630.828   ]
+67 : [   6.7     629.567   ]
+68 : [   6.8     628.309   ]
+69 : [   6.9     627.054   ]
+70 : [   7       625.801   ]
+71 : [   7.1     624.55    ]
+72 : [   7.2     623.302   ]
+73 : [   7.3     622.056   ]
+74 : [   7.4     620.813   ]
+75 : [   7.5     619.572   ]
+76 : [   7.6     618.334   ]
+77 : [   7.7     617.099   ]
+78 : [   7.8     615.865   ]
+79 : [   7.9     614.635   ]
+80 : [   8       613.406   ]
+81 : [   8.1     612.181   ]
+82 : [   8.2     610.957   ]
+83 : [   8.3     609.736   ]
+84 : [   8.4     608.518   ]
+85 : [   8.5     607.302   ]
+86 : [   8.6     606.088   ]
+87 : [   8.7     604.877   ]
+88 : [   8.8     603.668   ]
+89 : [   8.9     602.462   ]
+90 : [   9       601.258   ]
+91 : [   9.1     600.056   ]
+92 : [   9.2     598.857   ]
+93 : [   9.3     597.66    ]
+94 : [   9.4     596.466   ]
+95 : [   9.5     595.274   ]
+96 : [   9.6     594.084   ]
+97 : [   9.7     592.897   ]
+98 : [   9.8     591.712   ]
+99 : [   9.9     590.53    ]
+field 1:
+     [ t         infected  ]
+ 0 : [   0         1       ]
+ 1 : [   0.1       1.39918 ]
+ 2 : [   0.2       1.95728 ]
+ 3 : [   0.3       2.73717 ]
+ 4 : [   0.4       3.82621 ]
+ 5 : [   0.5       5.34539 ]
+ 6 : [   0.6       7.46164 ]
+ 7 : [   0.7      10.4038  ]
+ 8 : [   0.8      14.4832  ]
+ 9 : [   0.9      20.1179  ]
+10 : [   1        27.8602  ]
+11 : [   1.1      38.4222  ]
+12 : [   1.2      52.6901  ]
+13 : [   1.3      71.709   ]
+14 : [   1.4      96.6143  ]
+15 : [   1.5     128.474   ]
+16 : [   1.6     168.023   ]
+17 : [   1.7     215.305   ]
+18 : [   1.8     269.325   ]
+19 : [   1.9     327.883   ]
+20 : [   2       387.789   ]
+21 : [   2.1     445.478   ]
+22 : [   2.2     497.811   ]
+23 : [   2.3     542.704   ]
+24 : [   2.4     579.341   ]
+25 : [   2.5     607.985   ]
+26 : [   2.6     629.58    ]
+27 : [   2.7     645.36    ]
+28 : [   2.8     656.568   ]
+29 : [   2.9     664.301   ]
+30 : [   3       669.46    ]
+31 : [   3.1     672.742   ]
+32 : [   3.2     674.674   ]
+33 : [   3.3     675.642   ]
+34 : [   3.4     675.926   ]
+35 : [   3.5     675.727   ]
+36 : [   3.6     675.188   ]
+37 : [   3.7     674.41    ]
+38 : [   3.8     673.465   ]
+39 : [   3.9     672.403   ]
+40 : [   4       671.259   ]
+41 : [   4.1     670.059   ]
+42 : [   4.2     668.819   ]
+43 : [   4.3     667.553   ]
+44 : [   4.4     666.269   ]
+45 : [   4.5     664.972   ]
+46 : [   4.6     663.668   ]
+47 : [   4.7     662.359   ]
+48 : [   4.8     661.048   ]
+49 : [   4.9     659.736   ]
+50 : [   5       658.424   ]
+51 : [   5.1     657.112   ]
+52 : [   5.2     655.802   ]
+53 : [   5.3     654.494   ]
+54 : [   5.4     653.188   ]
+55 : [   5.5     651.883   ]
+56 : [   5.6     650.582   ]
+57 : [   5.7     649.282   ]
+58 : [   5.8     647.985   ]
+59 : [   5.9     646.69    ]
+60 : [   6       645.398   ]
+61 : [   6.1     644.109   ]
+62 : [   6.2     642.821   ]
+63 : [   6.3     641.537   ]
+64 : [   6.4     640.255   ]
+65 : [   6.5     638.975   ]
+66 : [   6.6     637.699   ]
+67 : [   6.7     636.424   ]
+68 : [   6.8     635.152   ]
+69 : [   6.9     633.883   ]
+70 : [   7       632.616   ]
+71 : [   7.1     631.352   ]
+72 : [   7.2     630.09    ]
+73 : [   7.3     628.831   ]
+74 : [   7.4     627.575   ]
+75 : [   7.5     626.32    ]
+76 : [   7.6     625.069   ]
+77 : [   7.7     623.82    ]
+78 : [   7.8     622.573   ]
+79 : [   7.9     621.329   ]
+80 : [   8       620.087   ]
+81 : [   8.1     618.848   ]
+82 : [   8.2     617.611   ]
+83 : [   8.3     616.377   ]
+84 : [   8.4     615.145   ]
+85 : [   8.5     613.916   ]
+86 : [   8.6     612.689   ]
+87 : [   8.7     611.465   ]
+88 : [   8.8     610.243   ]
+89 : [   8.9     609.023   ]
+90 : [   9       607.806   ]
+91 : [   9.1     606.592   ]
+92 : [   9.2     605.379   ]
+93 : [   9.3     604.17    ]
+94 : [   9.4     602.962   ]
+95 : [   9.5     601.757   ]
+96 : [   9.6     600.555   ]
+97 : [   9.7     599.355   ]
+98 : [   9.8     598.157   ]
+99 : [   9.9     596.961   ]
+field 2:
+     [ t         infected  ]
+ 0 : [   0         1       ]
+ 1 : [   0.1       1.22566 ]
+ 2 : [   0.2       1.50213 ]
+ 3 : [   0.3       1.8408  ]
+ 4 : [   0.4       2.25559 ]
+ 5 : [   0.5       2.76348 ]
+ 6 : [   0.6       3.38519 ]
+ 7 : [   0.7       4.14596 ]
+ 8 : [   0.8       5.07648 ]
+ 9 : [   0.9       6.21401 ]
+10 : [   1         7.60371 ]
+11 : [   1.1       9.30013 ]
+12 : [   1.2      11.3689  ]
+13 : [   1.3      13.8889  ]
+14 : [   1.4      16.9539  ]
+15 : [   1.5      20.6753  ]
+16 : [   1.6      25.1841  ]
+17 : [   1.7      30.6325  ]
+18 : [   1.8      37.196   ]
+19 : [   1.9      45.0727  ]
+20 : [   2        54.4827  ]
+21 : [   2.1      65.6632  ]
+22 : [   2.2      78.862   ]
+23 : [   2.3      94.3244  ]
+24 : [   2.4     112.277   ]
+25 : [   2.5     132.903   ]
+26 : [   2.6     156.317   ]
+27 : [   2.7     182.534   ]
+28 : [   2.8     211.439   ]
+29 : [   2.9     242.765   ]
+30 : [   3       276.088   ]
+31 : [   3.1     310.833   ]
+32 : [   3.2     346.304   ]
+33 : [   3.3     381.741   ]
+34 : [   3.4     416.375   ]
+35 : [   3.5     449.497   ]
+36 : [   3.6     480.512   ]
+37 : [   3.7     508.975   ]
+38 : [   3.8     534.606   ]
+39 : [   3.9     557.284   ]
+40 : [   4       577.029   ]
+41 : [   4.1     593.965   ]
+42 : [   4.2     608.294   ]
+43 : [   4.3     620.263   ]
+44 : [   4.4     630.138   ]
+45 : [   4.5     638.185   ]
+46 : [   4.6     644.659   ]
+47 : [   4.7     649.795   ]
+48 : [   4.8     653.803   ]
+49 : [   4.9     656.865   ]
+50 : [   5       659.142   ]
+51 : [   5.1     660.767   ]
+52 : [   5.2     661.856   ]
+53 : [   5.3     662.503   ]
+54 : [   5.4     662.789   ]
+55 : [   5.5     662.78    ]
+56 : [   5.6     662.528   ]
+57 : [   5.7     662.08    ]
+58 : [   5.8     661.471   ]
+59 : [   5.9     660.732   ]
+60 : [   6       659.887   ]
+61 : [   6.1     658.956   ]
+62 : [   6.2     657.956   ]
+63 : [   6.3     656.9     ]
+64 : [   6.4     655.798   ]
+65 : [   6.5     654.66    ]
+66 : [   6.6     653.492   ]
+67 : [   6.7     652.301   ]
+68 : [   6.8     651.092   ]
+69 : [   6.9     649.868   ]
+70 : [   7       648.632   ]
+71 : [   7.1     647.387   ]
+72 : [   7.2     646.136   ]
+73 : [   7.3     644.879   ]
+74 : [   7.4     643.618   ]
+75 : [   7.5     642.355   ]
+76 : [   7.6     641.091   ]
+77 : [   7.7     639.825   ]
+78 : [   7.8     638.559   ]
+79 : [   7.9     637.294   ]
+80 : [   8       636.029   ]
+81 : [   8.1     634.765   ]
+82 : [   8.2     633.502   ]
+83 : [   8.3     632.241   ]
+84 : [   8.4     630.981   ]
+85 : [   8.5     629.724   ]
+86 : [   8.6     628.468   ]
+87 : [   8.7     627.214   ]
+88 : [   8.8     625.963   ]
+89 : [   8.9     624.713   ]
+90 : [   9       623.466   ]
+91 : [   9.1     622.221   ]
+92 : [   9.2     620.978   ]
+93 : [   9.3     619.738   ]
+94 : [   9.4     618.5     ]
+95 : [   9.5     617.265   ]
+96 : [   9.6     616.032   ]
+97 : [   9.7     614.801   ]
+98 : [   9.8     613.572   ]
+99 : [   9.9     612.346   ]]
+</pre></div>
+</div>
+<p>Visualize the time evolution of the <code class="docutils literal notranslate"><span class="pre">infected</span></code> over time, depending on the
+<cite>ìnfection_rate`</cite> value:</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">gridLayout</span> <span class="o">=</span> <span class="n">outputProcessSample</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
+<span class="n">graph</span> <span class="o">=</span> <span class="n">gridLayout</span><span class="o">.</span><span class="n">getGraph</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="n">graph</span><span class="o">.</span><span class="n">setTitle</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+<span class="n">graph</span><span class="o">.</span><span class="n">setXTitle</span><span class="p">(</span><span class="s2">&quot;FMU simulation time (s)&quot;</span><span class="p">)</span>
+<span class="n">graph</span><span class="o">.</span><span class="n">setYTitle</span><span class="p">(</span><span class="s2">&quot;Number of infected&quot;</span><span class="p">)</span>
+<span class="n">graph</span><span class="o">.</span><span class="n">setLegends</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">inputSample</span><span class="p">])</span>
+<span class="n">view</span> <span class="o">=</span> <span class="n">viewer</span><span class="o">.</span><span class="n">View</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">legend_kw</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;infection rate&quot;</span><span class="p">})</span>
+<span class="n">view</span><span class="o">.</span><span class="n">ShowAll</span><span class="p">()</span>
+</pre></div>
+</div>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.199 seconds)</p>
+<div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-example-dynamic-plot-dyn-basics-py">
+<div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/4afad551e74d88a1c4a618a3ee33e7d8/plot_dyn_basics.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_dyn_basics.ipynb</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-python docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/b6584cf68f03eccb6e70903979aee528/plot_dyn_basics.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_dyn_basics.py</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-zip docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/51a9ad74d31db70485fc58f9917c37af/plot_dyn_basics.zip"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">zipped:</span> <span class="pre">plot_dyn_basics.zip</span></code></a></p>
+</div>
+</div>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./auto_example/dynamic"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Sylvain Girard, Valentin Pibernus
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

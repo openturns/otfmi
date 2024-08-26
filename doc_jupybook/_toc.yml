@@ -1,0 +1,46 @@
+# Table of contents
+# Learn more at https://jupyterbook.org/customize/toc.html
+
+format: jb-book
+root: index
+options:
+  maxdepth: 1
+chapters:
+- file: install
+- file: api_doc/api_documentation
+  sections:
+  - file: api_doc/static_analysis
+  - file: api_doc/dynamic_analysis
+  - file: api_doc/from_openturns_to_fmi
+  - file: api_doc/common_low_level_functions
+- file: exemple/index
+  sections:
+  - file: exemple/static/index
+    sections:
+    - file: exemple/static/plot_basics
+    - file: exemple/static/plot_set
+    - file: exemple/static/plot_init
+  - file: exemple/dynamic/index
+    sections:
+    - file: exemple/dynamic/plot_dyn_set
+    - file: exemple/dynamic/plot_dyn_basics
+    - file: exemple/dynamic/plot_dyn_init
+  - file: exemple/ot_to_fmu/index
+    sections:
+    - file: exemple/ot_to_fmu/plot_fmu_exporter
+    - file: exemple/ot_to_fmu/plot_model_exporter
+  - file: exemple/low_level/index
+    sections:
+    - file: exemple/low_level/plot_load_fmu
+    - file: exemple/low_level/plot_explore
+    - file: exemple/low_level/plot_simulate
+    - file: exemple/low_level/plot_initialize
+- file: application/index
+  sections:
+    - file: application/plot_cantilever_beam
+    - file: application/plot_metamodel_epid
+- file: sample_fmu_files/index
+  sections:
+  - file: sample_fmu_files/deviation
+  - file: sample_fmu_files/epid
+- file: sensi_persalys/index
