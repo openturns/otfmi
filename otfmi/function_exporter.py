@@ -845,5 +845,10 @@ class {{ className }}(Fmi2Slave):
             slave_file = os.path.join(self._workdir, className + ".py")
             with open(slave_file, "w") as fslave:
                 fslave.write(data)
+
+            # xref https://github.com/NTNU-IHB/PythonFMU/issues/129
+            if not FmuBuilder.has_binary():
+                raise RuntimeError("pythonfmu.FmuBuilder binary is missing, check the pythonfmu installation")
+
             FmuBuilder.build_FMU(slave_file, dest=os.path.dirname(fmu_path))
         shutil.rmtree(self._workdir)
