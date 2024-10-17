@@ -730,16 +730,17 @@ class OpenTURNSFMUPointToFieldFunction(ot.OpenTURNSPythonPointToFieldFunction):
         """
         mesh = self.getOutputMesh()
         mesh_min = mesh.getVertices().getMin()[0]
+        mesh_max = mesh.getVertices().getMax()[0]
+        tol = (mesh_max - mesh_min) * 1e-6
         assert (
-            mesh_min >= self.start_time
+            mesh_min + tol >= self.start_time
         ), """The mesh start time must be >= to FMU start time.\n
             To set the FMU start time, use the argument *start_time* in
             FMUPointToFieldFunction constructor."""
 
-        mesh_max = mesh.getVertices().getMax()[0]
         assert (
-            mesh_max <= self.final_time
-        ), """The mesh final time must be >= to FMU final time.\n
+            mesh_max <= self.final_time + tol
+        ), """The mesh final time must be <= to FMU final time.\n
             To set the FMU final time, use the argument final_time in
             FMUPointToFieldFunction constructor."""
 
