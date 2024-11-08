@@ -53,7 +53,6 @@ import openturns.viewer as viewer
 
 path_fmu = otfmi.example.utility.get_path_fmu("epid")
 mesh = ot.RegularGrid(0.0, 0.05, 20)
-meshSample = mesh.getVertices()
 
 function = otfmi.FMUPointToFieldFunction(
     mesh,
