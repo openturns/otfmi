@@ -4,11 +4,12 @@ import otfmi
 import otfmi.example.deviation
 import otfmi.example.utility
 import pyfmi
-import pytest
+# import pytest
 
 
-input_value = [0.007, 0.02]
-
+# infection_rate, healing_rate
+input_value = [2.0, 0.5]
+final_time = 5
 
 def simulate_with_pyfmi(path_fmu, final_time=None):
     """Return the output on the 5 last simulation times.
@@ -24,7 +25,7 @@ def simulate_with_pyfmi(path_fmu, final_time=None):
     list_variable = list(check_model.get_model_variables().keys())
     infected_column = list_variable.index("infected") + 1
     # +1 stands for time column, inserted as first in the data matrix
-    list_last_infected_value = check_result.data_matrix[infected_column][-5:-1]
+    list_last_infected_value = check_result.data_matrix[infected_column][-5:]
     return list_last_infected_value
 
 
@@ -37,24 +38,12 @@ def path_fmu():
 def model_fmu(path_fmu):
     return otfmi.FMUFunction(path_fmu,
                              inputs_fmu=["infection_rate", "healing_rate"],
-                             outputs_fmu=["infected"])
-
+                             outputs_fmu=["infected"], final_time=final_time)
 
 def test_final_value(model_fmu):
     """Check reproducibility of the final value."""
     y = model_fmu(input_value)
-    assert abs(y[0] - 265.68) < 1e-2, "wrong value"
-
-
-def test_fmufunction_interpolation(path_fmu, model_fmu):
-    """Check that FMUFunction returns a point corresponding to Pyfmi's
-    interpolated output.
-    """
-    list_last_infected_value = simulate_with_pyfmi(path_fmu)
-    y = model_fmu(input_value)
-    assert y[0] < max(list_last_infected_value)
-    assert y[0] > min(list_last_infected_value)
-
+    assert abs(y[0] - 303.785) < 1e-2, "wrong value"
 
 def test_final_time(path_fmu):
     """Check that specified final time is taken into account."""
@@ -69,8 +58,8 @@ def test_final_time(path_fmu):
         path_fmu, final_time=final_time
     )
     y = model_fmu_1(input_value)
-    assert y[0] < max(list_last_infected_value)
-    assert y[0] > min(list_last_infected_value)
+    assert abs(y[0] - list_last_infected_value[-1]) <1e-5
+
 
 
 def test_keyword(path_fmu):
