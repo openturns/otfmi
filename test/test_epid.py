@@ -4,7 +4,7 @@ import otfmi
 import otfmi.example.deviation
 import otfmi.example.utility
 import pyfmi
-# import pytest
+import pytest
 
 
 # infection_rate, healing_rate
