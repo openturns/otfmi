@@ -69,7 +69,7 @@ function = otfmi.FMUPointToFieldFunction(
 # simulate the FMU.
 # The simulation inputs and outputs will be used to train the metamodel.
 
-inputLaw = ot.Uniform(0.001, 0.01)
+inputLaw = ot.Uniform(1.5, 2.5)
 inputSample = inputLaw.getSample(30)
 outputFMUSample = function(inputSample)
 
@@ -205,7 +205,7 @@ graph = validationKL.computeResidualMean().draw()
 ot.Show(graph)
 
 # %%
-# As the epidemiological model considers a population size of 700, the residual
+# As the epidemiological model considers a population size of 763, the residual
 # mean error on the field is acceptable.
 
 # %%

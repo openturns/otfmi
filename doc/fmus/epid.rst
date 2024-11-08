@@ -25,8 +25,8 @@ time writes:
 .. math::
 
    \begin{aligned}
-   \frac{\partial S}{\partial t}(t) &= - \beta S(t) I(t) \\
-   \frac{\partial I}{\partial t}(t) &= \beta S(t) I(t) - \gamma I(t) \\
+   \frac{\partial S}{\partial t}(t) &= - \frac{\beta}{N} S(t) I(t) \\
+   \frac{\partial I}{\partial t}(t) &= \frac{\beta}{N} S(t) I(t) - \gamma I(t) \\
    \frac{\partial R}{\partial t}(t) &= \gamma I(t)
    \end{aligned}
 
@@ -36,25 +36,27 @@ This model is implemented in Modelica language. The default simulation time is 5
 
    model epid
 
-   parameter Real total_pop = 700;
+   parameter Real total_pop = 763;
+   parameter Real infection_rate = 2.0;
+   parameter Real healing_rate = 0.5;
+   
    Real infected;
    Real susceptible;
    Real removed;
-   parameter Real infection_rate = 0.007;
-   parameter Real healing_rate = 0.02;
-
+   
    initial equation
    infected = 1;
    removed = 0;
    total_pop = infected + susceptible + removed;
-
+   
    equation
-   der(susceptible) = - infection_rate*infected*susceptible;
-   der(infected) = infection_rate*infected*susceptible - healing_rate*infected;
-   der(removed) = healing_rate*infected;
-
+   der(susceptible) = - infection_rate * infected * susceptible / total_pop;
+   der(infected) = infection_rate * infected * susceptible / total_pop -
+                   healing_rate * infected;
+   der(removed) = healing_rate * infected;
+   
    annotation(
-       experiment(StartTime = 0, StopTime = 50, Tolerance = 1e-6, Interval = 0.1));
+       experiment(StartTime = 0.0, StopTime = 200.0, Tolerance = 1e-6, Interval = 0.1));
    end epid;
 
 We focus on the effect of the ``infection_rate`` and ``healing_rate`` on the evolution of the ``infected`` category.
