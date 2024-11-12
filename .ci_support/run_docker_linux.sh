@@ -3,7 +3,7 @@
 set -xe
 
 export SOURCE_DATE_EPOCH=1609455600
-pip install -r /io/doc/requirements.txt --break-system-packages
+aurman -S python-sphinx-renku-theme python-sphinx_rtd_theme --noconfirm --noedit
 
 cp -r /io/* /tmp
 cd /tmp

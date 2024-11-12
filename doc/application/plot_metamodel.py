@@ -214,11 +214,10 @@ ot.Show(graph)
 
 projectFunction = ot.KarhunenLoeveProjection(resultKL)
 coefficientSample = projectFunction(outputFMUTestSample)
+predictions = metamodel(inputTestSample)
 
-validationKriging = ot.MetaModelValidation(
-    inputTestSample, coefficientSample, metamodel
-)
-Q2 = validationKriging.computePredictivityFactor()[0]
+validation = ot.MetaModelValidation(coefficientSample, predictions)
+Q2 = validation.computeR2Score()[0]
 print(Q2)
 
 # %%
