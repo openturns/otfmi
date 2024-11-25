@@ -31,6 +31,7 @@ jobs:
       - uses: conda-incubator/setup-miniconda@v3
         with:
           miniforge-version: latest
+          conda-remove-defaults: "true"
       - name: Build
         shell: bash -l {0}
         run: |
@@ -48,6 +49,7 @@ jobs:
       - uses: conda-incubator/setup-miniconda@v3
         with:
           miniforge-version: latest
+          conda-remove-defaults: "true"
       - name: Build
         run: |
           choco install openmodelica --version=1.22.2 --ignore-checksums
