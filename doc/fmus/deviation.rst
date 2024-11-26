@@ -6,9 +6,7 @@ board created by a child diver. It is a widely-use `OpenTURNS use
 case <http://openturns.github.io/openturns/master/usecases/use_case_cantilever_beam.html>`__.
 
 .. image:: ../_static/beam.png
-   :width: 160px
-   :height: 156px
-   :scale: 100 %
+   :scale: 25 %
    :alt: alternate text
    :align: center
 

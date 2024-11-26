@@ -15,9 +15,7 @@ All static examples rely on *deviation.fmu*.
 This mechanical model represents the deviation of a cantilever beam submitted to a load at its end.
 
 .. image:: ../_static/beam.png
-   :width: 132px
-   :height: 126px
-   :scale: 100 %
+   :scale: 25 %
    :alt: alternate text
    :align: center
 
@@ -32,8 +30,7 @@ Explore dynamic FMUs
 All dynamic examples rely on *epid.fmu*. This epidemiologic model represents the spreading of an epidemic through a population.
 
 .. image:: ../_static/epid.png
-   :height: 150px
-   :width: 300px
+   :scale: 80 %
    :alt: alternate text
    :align: center
 
