@@ -28,7 +28,7 @@ print(type(function))
 # Simulate the FMU on a point:
 inputPoint = ot.Point([3.0e7, 30000, 200, 400])
 outputPoint = function(inputPoint)
-print("y = {}".format(outputPoint))
+print(f"y = {outputPoint}")
 
 # %%
 # Simulate the FMU on a sample:

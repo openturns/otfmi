@@ -7,7 +7,7 @@ aurman -S python-sphinx-renku-theme python-sphinx_rtd_theme --noconfirm --noedit
 
 cp -r /io/* /tmp
 cd /tmp
-pip install . --user --break-system-packages
+pip install . --user --break-system-packages --no-deps
 ~/.local/bin/mo2fmu -h
 ~/.local/bin/mo2fmu ./otfmi/example/file/deviation.mo ./otfmi/example/file/fmu/linux-x86_64/deviation.fmu
 pythonfmu build --file ./otfmi/example/file/DeviationSlave.py --dest ./otfmi/example/file/fmu/linux-x86_64

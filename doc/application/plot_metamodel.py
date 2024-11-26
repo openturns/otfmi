@@ -47,7 +47,7 @@ Metamodel a FMU time-dependent output
 
 import otfmi.example.utility
 import openturns as ot
-import openturns.viewer as viewer
+import openturns.viewer as otv
 
 path_fmu = otfmi.example.utility.get_path_fmu("epid")
 mesh = ot.RegularGrid(0.0, 0.05, 20)
@@ -75,12 +75,11 @@ graph = outputFMUSample.draw().getGraph(0, 0)
 graph.setTitle("FMU simulations")
 graph.setXTitle("Time")
 graph.setYTitle("Number of infected")
-graph.setLegends(["{:.3f}".format(line[0]) for line in inputSample])
-view = viewer.View(graph, legend_kw={"title": "infection rate", "loc": "upper left"})
-view.ShowAll()
+graph.setLegends([f"{line[0]:.3f}" for line in inputSample[:15]] + ["_"] * 15)
+view = otv.View(graph, legend_kw={"title": "infection rate", "loc": "upper left"})
 
 # %%
-# We define a function to visualize the upcoming Karhunen-Loevem modes.
+# We define a function to visualize the upcoming Karhunen-Loeve modes.
 
 
 def drawKL(scaledKL, KLev, mesh, title="Scaled KL modes"):
@@ -121,15 +120,14 @@ resultKL = algoKL.getResult()
 phi_Y = resultKL.getScaledModesAsProcessSample()
 lambda_Y = resultKL.getEigenvalues()
 graph_modes_Y, graph_ev_Y = drawKL(phi_Y, lambda_Y, mesh, "Y")
-view = viewer.View(graph_modes_Y)
-view.ShowAll()
+view = otv.View(graph_modes_Y)
 
 # %%
 # Now that Karhunen-Loeve algorithm is trained, we can project them
 # in the smaller-dimension space:
 projectionSample = resultKL.project(outputFMUSample)
 n_mode = projectionSample.getDimension()
-print("Karhunen-Loeve projection is dimension {}".format(n_mode))
+print(f"Karhunen-Loeve projection in dimension {n_mode}")
 
 # %%
 # We keep on following our road map, by metamodeling the projection
@@ -186,20 +184,20 @@ graph2.setTitle("Metamodel")
 for graph in [graph1, graph2]:
     graph.setXTitle("Time")
     graph.setYTitle("Number of infected")
-    graph.setLegends(["{:.3f}".format(line[0]) for line in inputSample])
+    graph.setLegends([f"{line[0]:.3f}" for line in inputSample[:10]])
 
 gridLayout.setGraph(0, 0, graph1)
 gridLayout.setGraph(0, 1, graph2)
-view = viewer.View(
+view = otv.View(
     gridLayout, legend_kw={"title": "infection rate", "loc": "upper left"}
 )
-view.ShowAll()
 
 # %%
 # We validate the pertinence of Karhunen-Loeve decomposition:
 
 validationKL = ot.KarhunenLoeveValidation(outputFMUTestSample, resultKL)
 graph = validationKL.computeResidualMean().draw()
+graph.setYTitle("infected residual mean")
 ot.Show(graph)
 
 # %%
@@ -237,3 +235,6 @@ print(Q2)
 # - `estimate a failure probability <openturns.github.io/openturns/latest/auto_reliability_sensitivity/index.html#reliability>`_,
 #
 # etc.
+
+# %%
+otv.View.ShowAll()
