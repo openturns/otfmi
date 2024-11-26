@@ -14,8 +14,7 @@ This happens at a rate called ``infection rate`` (:math:`\beta`).
 An Infected becomes Removed after an infection duration (:math:`\gamma`) corresponding to the inverse of the ``healing_rate``.
 
 .. image:: ../_static/epid.png
-   :height: 300px
-   :width: 450px
+   :scale: 80 %
    :alt: alternate text
    :align: center
 

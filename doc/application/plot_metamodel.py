@@ -9,9 +9,7 @@ Metamodel a FMU time-dependent output
 # of people infected by the disease.
 #
 # .. image:: /_static/epid.png
-#    :width: 400px
-#    :height: 300px
-#    :scale: 100 %
+#    :scale: 80 %
 #    :alt: alternate text
 #    :align: center
 #

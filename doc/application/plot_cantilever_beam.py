@@ -8,9 +8,7 @@ Estimate the probability of a threshold excedance
 # Young's modulus (E), length (L) and section modulus (I) are uncertain.
 #
 # .. image:: /_static/beam.png
-#    :width: 132px
-#    :height: 126px
-#    :scale: 100 %
+#    :scale: 25 %
 #    :alt: alternate text
 #    :align: center
 #

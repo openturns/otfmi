@@ -72,8 +72,6 @@ fmuExporter.export_fmu(fmu_path, fmuType="me")
 # (*Modelica.Blocks.Sources.Sine*) and to an output block (*Modelica.Blocks.Interfaces.RealOutput*):
 #
 # .. image:: /_static/TestMyExponentialFMU.png
-#    :width: 132px
-#    :height: 126px
 #    :scale: 100 %
 #    :alt: alternate text
 #    :align: center
@@ -82,9 +80,7 @@ fmuExporter.export_fmu(fmu_path, fmuType="me")
 # output corresponds to the exponential of the sine signal.
 #
 # .. image:: /_static/show_output.png
-#    :width: 132px
-#    :height: 126px
-#    :scale: 100 %
+#    :scale: 80 %
 #    :alt: alternate text
 #    :align: center
 #

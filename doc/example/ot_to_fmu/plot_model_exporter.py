@@ -61,9 +61,7 @@ modelExporter.export_model(model_path, gui=True)
 # We import this model in OpenModelica GUI. We can check the Modelica code:
 #
 # .. image:: /_static/modelica_gui_code.png
-#    :width: 264px
-#    :height: 252px
-#    :scale: 100 %
+#    :scale: 80 %
 #    :alt: alternate text
 #    :align: center
 #
@@ -73,9 +71,7 @@ modelExporter.export_model(model_path, gui=True)
 # We can also check the connectors position:
 #
 # .. image:: /_static/modelica_gui_interface.png
-#    :width: 264px
-#    :height: 252px
-#    :scale: 100 %
+#    :scale: 60 %
 #    :alt: alternate text
 #    :align: center
 #
@@ -84,8 +80,6 @@ modelExporter.export_model(model_path, gui=True)
 # (*Modelica.Blocks.Interfaces.RealOutput*):
 #
 # .. image:: /_static/TestMyExponential.png
-#    :width: 264px
-#    :height: 252px
 #    :scale: 100 %
 #    :alt: alternate text
 #    :align: center
@@ -94,9 +88,7 @@ modelExporter.export_model(model_path, gui=True)
 # output corresponds to the exponential of the sine signal.
 #
 # .. image:: /_static/show_output.png
-#    :width: 264px
-#    :height: 252px
-#    :scale: 100 %
+#    :scale: 80 %
 #    :alt: alternate text
 #    :align: center
 #
