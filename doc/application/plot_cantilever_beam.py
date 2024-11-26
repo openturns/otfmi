@@ -29,7 +29,7 @@ Estimate the probability of a threshold excedance
 import openturns as ot
 import otfmi
 import otfmi.example.utility
-from openturns.viewer import View
+import openturns.viewer as otv
 
 path_fmu = otfmi.example.utility.get_path_fmu("deviation")
 
@@ -41,7 +41,7 @@ model_fmu = otfmi.FMUFunction(
 # We test the function wrapping the deviation model on a point:
 point = ot.Point([3e7, 2e4, 255, 350])
 model_evaluation = model_fmu(point)
-print("Running the FMU: deviation = {}".format(model_evaluation))
+print(f"Running the FMU: deviation = {model_evaluation}")
 
 
 # %%
@@ -112,15 +112,18 @@ algo.run()
 # Draw the distribution of threshold excedance probability:
 monte_carlo_result = algo.getResult()
 probabilityDistribution = monte_carlo_result.getProbabilityDistribution()
-graph = View(probabilityDistribution.drawPDF())
+graph = otv.View(probabilityDistribution.drawPDF())
 
 # %%
 # Get the probability with which the beam deviation exceeds 30 cm:
 
 probability = monte_carlo_result.getProbabilityEstimate()
-print("Threshold excedance probability: {}".format(probability))
+print(f"Threshold excedance probability: {probability}")
 
 # %%
 # Given the uncertainties on the load applied and the beam mechanical
 # parameters, the beam bending has a probability of 0.01 to exceed 30 cm.
 # Is this probability low or not ? It depends on your context 🙂
+
+# %%
+otv.View.ShowAll()

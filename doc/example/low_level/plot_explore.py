@@ -30,7 +30,7 @@ print(list_name)
 
 for name in list_name:
     causality = otfmi.fmi.get_causality_str(model, name)
-    print("{}: {}".format(name, causality))
+    print(f"{name}: {causality}")
 
 # %%
 # | Yet the variables type is not known: real, integer, boolean, string?
@@ -38,7 +38,7 @@ for name in list_name:
 
 for name in list_name:
     typ = model.get_variable_data_type(name)
-    print("{}: {}".format(name, typ))
+    print(f"{name}: {typ}")
 
 # %%
 # | The type `0` corresponds to `Real` (aka "float") variables.
