@@ -383,6 +383,8 @@ endif()
 #include <openturns/OT.hxx>
 #include <openturns/XMLStorageManager.hxx>
 #include <fstream>
+#include <filesystem>
+
 using namespace OT;
 
 const char xml_data[] = { {{ xml_data_bin }} };
@@ -398,7 +400,7 @@ void c_func(int nin, double x[], int nout, double y[])
   if (!function.getEvaluation().getImplementation()->isActualImplementation())
   {
     Study study;
-    const String fileName = Path::BuildTemporaryFileName("function.xml");
+    const String fileName = (std::filesystem::temp_directory_path() / "function.xml").string();
     std::ofstream xmlFile(fileName, std::ios::out | std::ios::binary);
     if (xmlFile.good())
     {
