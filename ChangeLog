@@ -1,5 +1,7 @@
-wip - release 0.16.6
+2024-11-25 - release 0.16.6
+- Fix mesh interpolation with tolerance
 - Fix verbose mode
+- OT 1.24 compatibility for export module
 
 2024-07-15 - release 0.16.5
 - Catch FMUPool log failure
