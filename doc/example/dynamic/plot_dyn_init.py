@@ -42,7 +42,7 @@ path_fmu = otfmi.example.utility.get_path_fmu("epid")
 temporary_file = "initialization.mos"
 with open(temporary_file, "w") as f:
     f.write("total_pop = 500;\n")
-    f.write("healing_rate = 0.02;\n")
+    f.write("healing_rate = 0.5;\n")
 
 # %%
 # If no initial value is provided for an input / parameter, it is set to its
@@ -79,8 +79,8 @@ function = otfmi.FMUPointToFieldFunction(
 # function input variable ``infection_rate`` to propagate its uncertainty
 # through the model:
 
-lawInfected = ot.Normal(0.01, 0.003)
-inputSample = lawInfected.getSample(10)
+law_infection_rate = ot.Normal(2.0, 0.25)
+inputSample = law_infection_rate.getSample(10)
 outputProcessSample = function(inputSample)
 
 # %%

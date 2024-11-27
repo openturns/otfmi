@@ -29,7 +29,7 @@ path_fmu = otfmi.example.utility.get_path_fmu("epid")
 # Define the time grid for the FMU's output. The last value of the time grid,
 # here 10., will define the FMU stop time for simulation.
 
-mesh = ot.RegularGrid(0.0, 0.1, 100)
+mesh = ot.RegularGrid(0.0, 0.1, 2000)
 meshSample = mesh.getVertices()
 print(meshSample)
 
@@ -47,7 +47,7 @@ function = otfmi.FMUPointToFieldFunction(
     inputs_fmu=["infection_rate"],
     outputs_fmu=["infected"],
     start_time=0.0,
-    final_time=10.0,
+    final_time=200.0,
 )
 print(type(function))
 
@@ -61,7 +61,7 @@ print(type(function))
 # Simulate the function on an input :py:class:`openturns.Point` yields an output
 # :py:class:`openturns.Sample`, corresponding to the output evolution over time:
 
-inputPoint = ot.Point([0.007])
+inputPoint = ot.Point([2.0])
 outputSample = function(inputPoint)
 
 plt.xlabel("FMU simulation time (s)")
@@ -73,7 +73,7 @@ plt.show()
 # Simulate the function on a input :py:class:`openturns.Sample` yields a set of
 # fields called :py:class:`openturns.ProcessSample`:
 
-inputSample = ot.Sample([[0.007], [0.005], [0.003]])
+inputSample = ot.Sample([[2.0], [2.25], [2.5]])
 outputProcessSample = function(inputSample)
 print(outputProcessSample)
 

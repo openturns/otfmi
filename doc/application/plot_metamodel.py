@@ -51,7 +51,6 @@ import openturns.viewer as otv
 
 path_fmu = otfmi.example.utility.get_path_fmu("epid")
 mesh = ot.RegularGrid(0.0, 0.05, 20)
-meshSample = mesh.getVertices()
 
 function = otfmi.FMUPointToFieldFunction(
     mesh,
@@ -67,7 +66,7 @@ function = otfmi.FMUPointToFieldFunction(
 # simulate the FMU.
 # The simulation inputs and outputs will be used to train the metamodel.
 
-inputLaw = ot.Uniform(0.001, 0.01)
+inputLaw = ot.Uniform(1.5, 2.5)
 inputSample = inputLaw.getSample(30)
 outputFMUSample = function(inputSample)
 
@@ -201,7 +200,7 @@ graph.setYTitle("infected residual mean")
 ot.Show(graph)
 
 # %%
-# As the epidemiological model considers a population size of 700, the residual
+# As the epidemiological model considers a population size of 763, the residual
 # mean error on the field is acceptable.
 
 # %%
