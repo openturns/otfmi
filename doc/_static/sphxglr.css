@@ -1,0 +1,6 @@
+/* hide intersphinx links from code cells
+ * xref https://sphinx-gallery.github.io/stable/configuration.html#stylizing-code-links-using-css */
+a[class^="sphx-glr-backref-module-"] {
+    text-decoration: none;
+    color: inherit;
+}
