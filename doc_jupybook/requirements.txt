@@ -1,0 +1,9 @@
+sphinxcontrib-bibtex
+renku-sphinx-theme
+sphinx>=5,<7
+sphinx-gallery
+numpydoc
+matplotlib
+jupyter-book
+matplotlib
+numpy
