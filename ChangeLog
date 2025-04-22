@@ -1,3 +1,6 @@
+2025 - release 0.17 (wip)
+- Breaking change: mesh argument is now optional in FMUPointToFieldFunction
+
 2024-11-25 - release 0.16.6
 - Fix mesh interpolation with tolerance
 - Fix verbose mode

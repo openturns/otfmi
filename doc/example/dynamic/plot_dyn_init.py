@@ -64,8 +64,8 @@ print(meshSample)
 # depending on the ``infection_rate``.
 
 function = otfmi.FMUPointToFieldFunction(
-    mesh,
     path_fmu,
+    mesh,
     inputs_fmu=["infection_rate"],
     outputs_fmu=["infected"],
     initialization_script=abspath("initialization.mos"),

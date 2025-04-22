@@ -479,10 +479,11 @@ class FMUPointToFieldFunction(ot.PointToFieldFunction):
 
     Parameters
     ----------
-    mesh : :class:`openturns.Mesh`
-        Time grid, has to be included in the start/end time defined in the FMU
-
     path_fmu : str, path to the FMU file.
+
+    mesh : :class:`openturns.Mesh`
+        Time grid, has to be included in the start/end time defined in the FMU.
+        By default it takes into account the start/end time and default step defined the FMU.
 
     inputs_fmu : Sequence of str, default=None
         Names of the variable from the fmu to be used as input variables.
@@ -518,8 +519,8 @@ class FMUPointToFieldFunction(ot.PointToFieldFunction):
 
     def __new__(
         self,
-        mesh,
-        path_fmu=None,
+        path_fmu,
+        mesh=None,
         inputs_fmu=None,
         outputs_fmu=None,
         inputs=None,
@@ -530,8 +531,8 @@ class FMUPointToFieldFunction(ot.PointToFieldFunction):
         final_time=None,
     ):
         lowlevel = OpenTURNSFMUPointToFieldFunction(
-            mesh,
             path_fmu=path_fmu,
+            mesh=mesh,
             inputs_fmu=inputs_fmu,
             outputs_fmu=outputs_fmu,
             inputs=inputs,
@@ -552,8 +553,8 @@ class OpenTURNSFMUPointToFieldFunction(ot.OpenTURNSPythonPointToFieldFunction):
 
     def __init__(
         self,
-        mesh,
         path_fmu,
+        mesh=None,
         inputs_fmu=None,
         outputs_fmu=None,
         inputs=None,
@@ -567,6 +568,19 @@ class OpenTURNSFMUPointToFieldFunction(ot.OpenTURNSPythonPointToFieldFunction):
     ):
         self.load_fmu(path_fmu=path_fmu, kind=kind)
 
+        if mesh is None:
+            tmin = self.model.get_default_experiment_start_time()
+            tmax = self.model.get_default_experiment_stop_time()
+            if start_time is not None:
+                tmin = max(tmin, start_time)
+            if final_time is not None:
+                tmax = min(tmax, final_time)
+            step = self.model.get_default_experiment_step()
+            n = int((tmax - tmin) / step)
+            mesh = ot.IntervalMesher([n]).build(ot.Interval(tmin, tmax))
+        else:
+            assert isinstance(mesh, ot.Mesh), "Expected mesh of type ot.Mesh"
+
         self._set_inputs_fmu(inputs_fmu)
         self._set_outputs_fmu(outputs_fmu)
 
@@ -577,7 +591,7 @@ class OpenTURNSFMUPointToFieldFunction(ot.OpenTURNSPythonPointToFieldFunction):
         self._set_outputs(outputs)
         self._set_final_time(final_time)
         self._set_start_time(start_time)
-        self._assert_mesh_pertinence()
+        self._assert_mesh_validity()
 
         self.initialize(initialization_script)
 
@@ -724,7 +738,7 @@ class OpenTURNSFMUPointToFieldFunction(ot.OpenTURNSPythonPointToFieldFunction):
         else:
             self.start_time = self.model.get_default_experiment_start_time()
 
-    def _assert_mesh_pertinence(self):
+    def _assert_mesh_validity(self):
         """Raise an error if the mesh is not comprised between the start and
         final simulation time.
         """
@@ -740,7 +754,7 @@ class OpenTURNSFMUPointToFieldFunction(ot.OpenTURNSPythonPointToFieldFunction):
 
         assert (
             mesh_max <= self.final_time + tol
-        ), """The mesh final time must be <= to FMU final time.\n
+        ), f"""The mesh final time ({mesh_max}) must be <= to FMU final time ({self.final_time}).\n
             To set the FMU final time, use the argument final_time in
             FMUPointToFieldFunction constructor."""
 
