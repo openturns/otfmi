@@ -31,8 +31,8 @@ path_fmu = otfmi.example.utility.get_path_fmu("epid")
 mesh = ot.RegularGrid(0.0, 0.1, 20)
 
 function = otfmi.FMUPointToFieldFunction(
-    mesh,
     path_fmu,
+    mesh,
     inputs_fmu=["infection_rate", "healing_rate"],
     outputs_fmu=["infected"],
     start_time=0.0,
@@ -49,8 +49,8 @@ print(outputSample)
 # algorithm running the simulation, and require simulation silent mode.
 
 midlevel_function = otfmi.OpenTURNSFMUPointToFieldFunction(
-    mesh,
     path_fmu,
+    mesh,
     inputs_fmu=["infection_rate", "healing_rate"],
     outputs_fmu=["infected"],
     start_time=0.0,

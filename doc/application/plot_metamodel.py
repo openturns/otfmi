@@ -53,8 +53,8 @@ path_fmu = otfmi.example.utility.get_path_fmu("epid")
 mesh = ot.RegularGrid(0.0, 0.05, 20)
 
 function = otfmi.FMUPointToFieldFunction(
-    mesh,
     path_fmu,
+    mesh,
     inputs_fmu=["infection_rate"],
     outputs_fmu=["infected"],
     start_time=0.0,
