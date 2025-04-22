@@ -42,8 +42,8 @@ print(meshSample)
 # Wrap the FMU in an :py:class:`openturns.PointToFieldFunction` object:
 
 function = otfmi.FMUPointToFieldFunction(
-    mesh,
     path_fmu,
+    mesh,
     inputs_fmu=["infection_rate"],
     outputs_fmu=["infected"],
     start_time=0.0,

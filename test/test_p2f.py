@@ -17,10 +17,16 @@ def mesh():
     return ot.RegularGrid(2.0, 0.5, 50)
 
 
+def test_default_mesh(path_fmu):
+    _ = otfmi.FMUPointToFieldFunction(path_fmu,
+                                      inputs_fmu=["infection_rate", "healing_rate"],
+                                      outputs_fmu=["infected"])
+
+
 def test_start_time_coherence(path_fmu, mesh):
     """Check if incoherent start time raises an error"""
     with pytest.raises(AssertionError):
-        _ = otfmi.FMUPointToFieldFunction(mesh, path_fmu,
+        _ = otfmi.FMUPointToFieldFunction(path_fmu, mesh,
                                           inputs_fmu=["infection_rate", "healing_rate"],
                                           outputs_fmu=["infected"],
                                           start_time=10)
@@ -29,15 +35,15 @@ def test_start_time_coherence(path_fmu, mesh):
 def test_start_time(path_fmu, mesh):
     """Check if start times are taken into account."""
     model_fmu_1 = otfmi.FMUPointToFieldFunction(
-        mesh,
         path_fmu,
+        mesh,
         inputs_fmu=["infection_rate", "healing_rate"],
         outputs_fmu=["infected"],
         start_time=0,
     )
     model_fmu_2 = otfmi.FMUPointToFieldFunction(
-        mesh,
         path_fmu,
+        mesh,
         inputs_fmu=["infection_rate", "healing_rate"],
         outputs_fmu=["infected"],
         start_time=1,
@@ -51,7 +57,7 @@ def test_start_time(path_fmu, mesh):
 def test_final_time_coherence(path_fmu, mesh):
     """Check if incoherent final time raises an error."""
     with pytest.raises(AssertionError):
-        _ = otfmi.FMUPointToFieldFunction(mesh, path_fmu,
+        _ = otfmi.FMUPointToFieldFunction(path_fmu, mesh,
                                           inputs_fmu=["infection_rate", "healing_rate"],
                                           outputs_fmu=["infected"],
                                           final_time=10)
