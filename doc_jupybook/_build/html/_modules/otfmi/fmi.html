@@ -1,0 +1,1103 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>otfmi.fmi &#8212; otfmi</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/proof.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.4cbf315f70debaebd550c87a6162cf0f.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../../_static/sphinx-thebe.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/otfmi/fmi';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../_static/logo.png" class="logo__image only-light" alt="otfmi - Home"/>
+    <script>document.write(`<img src="../../_static/logo.png" class="logo__image only-dark" alt="otfmi - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../../index.html">
+                    Otfmi documentation
+                </a>
+            </li>
+        </ul>
+        <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Installation</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../api_doc/api_documentation.html">API documentation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../api_doc/_generated/otfmi.FMUFunction.html">otfmi.FMUFunction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api_doc/_generated/otfmi.OpenTURNSFMUFunction.html">otfmi.OpenTURNSFMUFunction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api_doc/_generated/otfmi.FMUPointToFieldFunction.html">otfmi.FMUPointToFieldFunction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api_doc/_generated/otfmi.OpenTURNSFMUPointToFieldFunction.html">otfmi.OpenTURNSFMUPointToFieldFunction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api_doc/_generated/otfmi.FunctionExporter.html">otfmi.FunctionExporter</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../api_doc/static_analysis.html">Static analysis</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api_doc/_generated/otfmi.FMUFunction.html">otfmi.FMUFunction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api_doc/_generated/otfmi.OpenTURNSFMUFunction.html">otfmi.OpenTURNSFMUFunction</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../api_doc/dynamic_analysis.html">Dynamic analysis</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api_doc/_generated/otfmi.FMUPointToFieldFunction.html">otfmi.FMUPointToFieldFunction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api_doc/_generated/otfmi.OpenTURNSFMUPointToFieldFunction.html">otfmi.OpenTURNSFMUPointToFieldFunction</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../api_doc/common_low_level_functions.html">Common low-level functions</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api_doc/_generated/otfmi.fmi.load_fmu.html">otfmi.fmi.load_fmu</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api_doc/_generated/otfmi.fmi.simulate.html">otfmi.fmi.simulate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api_doc/_generated/otfmi.fmi.parse_kwargs_simulate.html">otfmi.fmi.parse_kwargs_simulate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api_doc/_generated/otfmi.fmi.apply_initialization_script.html">otfmi.fmi.apply_initialization_script</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api_doc/_generated/otfmi.fmi.get_name_variable.html">otfmi.fmi.get_name_variable</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api_doc/_generated/otfmi.fmi.get_causality_str.html">otfmi.fmi.get_causality_str</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api_doc/_generated/otfmi.fmi.get_variability.html">otfmi.fmi.get_variability</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api_doc/_generated/otfmi.fmi.get_fixed_value.html">otfmi.fmi.get_fixed_value</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api_doc/_generated/otfmi.fmi.get_start_value.html">otfmi.fmi.get_start_value</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api_doc/_generated/otfmi.fmi.set_dict_value.html">otfmi.fmi.set_dict_value</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../api_doc/from_openturns_to_fmi.html">From OpenTURNS to FMI</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api_doc/_generated/otfmi.FunctionExporter.html">otfmi.FunctionExporter</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../../markdown.html">Markdown Files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks.html">Content with notebooks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../markdown-notebooks.html">Notebooks with MyST Markdown</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../mymarkdownfile.html">My sample title</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2F_modules/otfmi/fmi.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1></h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for otfmi.fmi</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Copyright 2016 EDF. This software was developed with the collaboration of</span>
+<span class="c1"># Phimeca Engineering (Sylvain Girard, girard@phimeca.com).</span>
+<span class="sd">&quot;&quot;&quot;Utility functions for common FMU manipulations.&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">io</span>
+<span class="kn">import</span> <span class="nn">pyfmi</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">import</span> <span class="nn">otfmi</span>
+
+
+<div class="viewcode-block" id="load_fmu"><a class="viewcode-back" href="../../api_doc/_generated/otfmi.fmi.load_fmu.html#otfmi.fmi.load_fmu">[docs]</a><span class="k">def</span> <span class="nf">load_fmu</span><span class="p">(</span><span class="n">path_fmu</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Load and FMU.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    path_fmu : String, path to the FMU file.</span>
+
+<span class="sd">    kind : String, one of &quot;ME&quot; (model exchange) or &quot;CS&quot; (co-simulation)</span>
+<span class="sd">        select a kind of FMU if both are available.</span>
+<span class="sd">        Note:</span>
+<span class="sd">        Contrary to pyfmi, the default here is &quot;CS&quot; (co-simulation). The</span>
+<span class="sd">        rationale behind this choice is is that co-simulation may be used to</span>
+<span class="sd">        impose a solver not available in pyfmi.</span>
+
+<span class="sd">    Additional keyword arguments are passed on to pyfmi&#39;s &#39;load_fmu&#39; function.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># pyfmi writes a log file in current folder even with log_level=0</span>
+    <span class="n">kwargs</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;log_file_name&quot;</span><span class="p">,</span> <span class="n">io</span><span class="o">.</span><span class="n">StringIO</span><span class="p">())</span>
+
+    <span class="k">if</span> <span class="n">kind</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">pyfmi</span><span class="o">.</span><span class="n">load_fmu</span><span class="p">(</span><span class="n">path_fmu</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s2">&quot;CS&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">pyfmi</span><span class="o">.</span><span class="n">fmi</span><span class="o">.</span><span class="n">FMUException</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">pyfmi</span><span class="o">.</span><span class="n">load_fmu</span><span class="p">(</span><span class="n">path_fmu</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s2">&quot;auto&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">pyfmi</span><span class="o">.</span><span class="n">load_fmu</span><span class="p">(</span><span class="n">path_fmu</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="n">kind</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="simulate"><a class="viewcode-back" href="../../api_doc/_generated/otfmi.fmi.simulate.html#otfmi.fmi.simulate">[docs]</a><span class="k">def</span> <span class="nf">simulate</span><span class="p">(</span>
+    <span class="n">model</span><span class="p">,</span>
+    <span class="n">initialization_script</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">initialization_parameters</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">reset</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">kwargs</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Simulate an FMU.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    model : Pyfmi model object (pyfmi.fmi.FMUModelXXX).</span>
+
+<span class="sd">    initialization_script : String, path to the script file.</span>
+
+<span class="sd">    initialization_parameters : tuple of keys/values to initialize parameters</span>
+
+<span class="sd">    reset : Boolean</span>
+<span class="sd">        Toggle resetting the FMU prior to simulation. True by default.</span>
+
+<span class="sd">    Additional keyword arguments are passed on to pyfmi.simulate.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">reset</span><span class="p">:</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+        <span class="c1"># Needed (?!) for restoring default values in some settings (windows</span>
+        <span class="c1"># co-simulation).</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">model</span><span class="o">.</span><span class="n">free_instance</span><span class="p">()</span>
+            <span class="n">model</span><span class="o">.</span><span class="n">instantiate</span><span class="p">()</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+            <span class="k">pass</span>  <span class="c1"># Probably FMI version 1.</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">apply_initialization_script</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">initialization_script</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
+        <span class="k">pass</span>
+
+    <span class="k">if</span> <span class="n">initialization_parameters</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">apply_initialization_parameters</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">initialization_parameters</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">model</span><span class="o">.</span><span class="n">simulate</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="parse_kwargs_simulate"><a class="viewcode-back" href="../../api_doc/_generated/otfmi.fmi.parse_kwargs_simulate.html#otfmi.fmi.parse_kwargs_simulate">[docs]</a><span class="k">def</span> <span class="nf">parse_kwargs_simulate</span><span class="p">(</span>
+    <span class="n">value_input</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">name_input</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">name_output</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Parse simulation keyword arguments and feed the</span>
+<span class="sd">    simulate method of pyfmi&#39;s object.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    value_input : Vector or array-like with time steps as rows.</span>
+
+<span class="sd">    name_input : Sequence of string</span>
+<span class="sd">        input names.</span>
+
+<span class="sd">    name_output : Sequence of string</span>
+<span class="sd">        output names</span>
+
+<span class="sd">    model : pyfmi.FMUModel*</span>
+<span class="sd">        fmu model.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">value_input_array</span> <span class="o">=</span> <span class="n">reshape_input</span><span class="p">(</span><span class="n">value_input</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">name_input</span><span class="p">))</span>
+    <span class="n">time</span><span class="p">,</span> <span class="n">kwargs</span> <span class="o">=</span> <span class="n">guess_time</span><span class="p">(</span><span class="n">value_input_array</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="n">options</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;dict_option&quot;</span><span class="p">,</span> <span class="nb">dict</span><span class="p">())</span>
+
+    <span class="c1"># store only interest variables</span>
+    <span class="n">options</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;filter&quot;</span><span class="p">,</span> <span class="n">name_output</span><span class="p">)</span>
+
+    <span class="c1"># store results in memory instead of binary file, cleaner and a bit faster</span>
+    <span class="n">options</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;result_handling&quot;</span><span class="p">,</span> <span class="s2">&quot;memory&quot;</span><span class="p">)</span>
+
+    <span class="c1"># only available for CS model</span>
+    <span class="k">if</span> <span class="s2">&quot;FMUModelCS&quot;</span> <span class="ow">in</span> <span class="n">model</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">:</span>
+        <span class="n">options</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;silent_mode&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+
+    <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;options&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">options</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">time</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">kwargs</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;start_time&quot;</span><span class="p">,</span> <span class="n">time</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">kwargs</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;final_time&quot;</span><span class="p">,</span> <span class="n">time</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+
+    <span class="k">if</span> <span class="n">value_input</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">fmix_input</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">pyfmi</span><span class="o">.</span><span class="n">fmi</span><span class="o">.</span><span class="n">FMI2_INPUT</span>
+            <span class="k">if</span> <span class="n">model</span><span class="o">.</span><span class="n">get_version</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;2.0&quot;</span>
+            <span class="k">else</span> <span class="n">pyfmi</span><span class="o">.</span><span class="n">fmi</span><span class="o">.</span><span class="n">FMI_INPUT</span>
+        <span class="p">)</span>
+
+        <span class="c1"># remap desired variables to fmi inputs/parameters:</span>
+        <span class="n">causality</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">name_input</span><span class="p">,</span> <span class="n">get_causality</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">name_input</span><span class="p">)))</span>
+        <span class="n">name_input_fmi</span> <span class="o">=</span> <span class="p">[</span><span class="n">var</span> <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">name_input</span> <span class="k">if</span> <span class="n">causality</span><span class="p">[</span><span class="n">var</span><span class="p">]</span> <span class="o">==</span> <span class="n">fmix_input</span><span class="p">]</span>
+
+        <span class="c1"># 1. PARAMETER variables must be set using model.set (initialization_parameters)</span>
+        <span class="k">if</span> <span class="n">model</span><span class="o">.</span><span class="n">get_version</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;2.0&quot;</span><span class="p">:</span>
+            <span class="n">name_parameter_fmi</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">var</span> <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">name_input</span> <span class="k">if</span> <span class="n">causality</span><span class="p">[</span><span class="n">var</span><span class="p">]</span> <span class="o">==</span> <span class="n">pyfmi</span><span class="o">.</span><span class="n">fmi</span><span class="o">.</span><span class="n">FMI2_PARAMETER</span>
+            <span class="p">]</span>
+            <span class="n">indices_parameter_fmi</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">i</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">name_input</span><span class="p">))</span>
+                <span class="k">if</span> <span class="n">causality</span><span class="p">[</span><span class="n">name_input</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">==</span> <span class="n">pyfmi</span><span class="o">.</span><span class="n">fmi</span><span class="o">.</span><span class="n">FMI2_PARAMETER</span>
+            <span class="p">]</span>
+            <span class="n">value_parameter_fmi</span> <span class="o">=</span> <span class="p">[</span><span class="n">value_input</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">indices_parameter_fmi</span><span class="p">]</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">name_parameter_fmi</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;initialization_parameters&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="n">name_parameter_fmi</span><span class="p">,</span>
+                    <span class="n">value_parameter_fmi</span><span class="p">,</span>
+                <span class="p">)</span>
+
+        <span class="c1"># 2. INPUT variables values are passed with model.simulate (input)</span>
+        <span class="n">indices_input_fmi</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">name_input</span><span class="p">))</span> <span class="k">if</span> <span class="n">causality</span><span class="p">[</span><span class="n">name_input</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">==</span> <span class="n">fmix_input</span>
+        <span class="p">]</span>
+        <span class="n">value_input_fmi</span> <span class="o">=</span> <span class="p">[</span><span class="n">value_input</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">indices_input_fmi</span><span class="p">]</span>
+        <span class="n">value_input_fmi</span> <span class="o">=</span> <span class="n">reshape_input</span><span class="p">(</span><span class="n">value_input_fmi</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">name_input_fmi</span><span class="p">))</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">name_input_fmi</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;input&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">name_input_fmi</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">column_stack</span><span class="p">((</span><span class="n">time</span><span class="p">,</span> <span class="n">value_input_fmi</span><span class="p">)))</span>
+
+    <span class="k">return</span> <span class="n">kwargs</span></div>
+
+
+<span class="k">def</span> <span class="nf">strip_simulation</span><span class="p">(</span><span class="n">simulation</span><span class="p">,</span> <span class="n">name_output</span><span class="p">,</span> <span class="n">final</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Extract some final values or trajectories from a PyFMI result object.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    simulation : PyFMI result object (pyfmi.fmi_algorithm_drivers.FMIResult),</span>
+<span class="sd">    simulation result.</span>
+
+<span class="sd">    name_output : Sequence of strings, output variables names.</span>
+
+<span class="sd">    final : String</span>
+<span class="sd">        If &quot;final&quot; (default), return only final values instead of whole</span>
+<span class="sd">        trajectories.</span>
+<span class="sd">        If &quot;result&quot; return the pyfmi &quot;result&quot; object.</span>
+<span class="sd">        If &quot;trajectory&quot; returns outputs trajectories.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">final</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">final</span> <span class="o">=</span> <span class="s2">&quot;final&quot;</span>
+
+    <span class="k">if</span> <span class="n">final</span> <span class="o">==</span> <span class="s2">&quot;final&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">simulation</span><span class="o">.</span><span class="n">final</span><span class="p">(</span><span class="n">name</span><span class="p">)</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">name_output</span><span class="p">]</span>
+    <span class="k">elif</span> <span class="n">final</span> <span class="o">==</span> <span class="s2">&quot;result&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">simulation</span>
+    <span class="k">elif</span> <span class="n">final</span> <span class="o">==</span> <span class="s2">&quot;trajectory&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="n">simulation</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">],</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">column_stack</span><span class="p">([</span><span class="n">simulation</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">name_output</span><span class="p">]),</span>
+        <span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unexpected value for the &#39;final&#39; parameter: &#39;</span><span class="si">%s</span><span class="s2">&#39;.&quot;</span> <span class="o">%</span> <span class="n">final</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">reshape_input</span><span class="p">(</span><span class="n">value_input</span><span class="p">,</span> <span class="n">input_dimension</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Ensure appropriate number of dimensions for input data.</span>
+<span class="sd">    Note: only the dimension is affected. The exact shape is not checked.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    value_input : Sequence or array of data.</span>
+
+<span class="sd">    input_dimension : Integer, number of input variables.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">value_input</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="k">if</span> <span class="n">input_dimension</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_2d</span><span class="p">(</span><span class="n">value_input</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">value_input</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">guess_time</span><span class="p">(</span><span class="n">value_input</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Guess the time vector from input data.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    value_input : Pandas dataframe with a time index or array-like with</span>
+<span class="sd">    timesteps as rows.</span>
+
+<span class="sd">    time : Sequence of floats, time vector (optional).</span>
+
+<span class="sd">    timestep : Float, timestep in seconds (optional).</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">time</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;time&quot;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">value_input</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="n">kwargs</span>
+
+        <span class="n">timestep</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;timestep&quot;</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># Is value_input a time-indexed pandas dataframe?</span>
+            <span class="n">time_index</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">value_input</span><span class="o">.</span><span class="n">values</span><span class="p">())[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">index</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+            <span class="c1"># value_input is array-like.</span>
+            <span class="n">time</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">value_input</span><span class="p">))</span> <span class="o">*</span> <span class="n">timestep</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">time</span> <span class="o">=</span> <span class="p">(</span><span class="n">time_index</span> <span class="o">-</span> <span class="n">time_index</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">total_seconds</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">time</span><span class="p">,</span> <span class="n">kwargs</span>
+
+
+<span class="k">def</span> <span class="nf">parse_initialization_line</span><span class="p">(</span><span class="n">line</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Parse one line of a Dymola initialization script.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    line : String, line to parse.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># TODO: use a custom error for better discrimination in catching.</span>
+    <span class="n">name</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;=&quot;</span><span class="p">)</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+    <span class="n">value</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;;&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;true&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;false&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">}[</span><span class="n">value</span><span class="o">.</span><span class="n">lower</span><span class="p">()]</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="n">message</span> <span class="o">=</span> <span class="s2">&quot;The value &#39;</span><span class="si">%s</span><span class="s2">&#39; could not be interpreted.&quot;</span> <span class="o">%</span> <span class="n">value</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span>
+
+
+<span class="k">def</span> <span class="nf">parse_initialization_script</span><span class="p">(</span><span class="n">path_script</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Parse a Dymola initialization script.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    path_script : String, path to the script file.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">list_name</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">list_value</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path_script</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;//&quot;</span><span class="p">):</span>
+                <span class="k">continue</span>
+
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">name</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="n">parse_initialization_line</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                    <span class="s2">&quot;Following line could not be parsed:</span><span class="se">\n</span><span class="s2"> </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">line</span><span class="p">),</span>
+                    <span class="ne">SyntaxWarning</span><span class="p">,</span>
+                <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">list_name</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+                <span class="n">list_value</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">list_name</span><span class="p">,</span> <span class="n">list_value</span>
+
+
+<span class="k">def</span> <span class="nf">apply_initialization_parameters</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">initialization_parameters</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Apply a list of initialization parameters to a model.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    model : Pyfmi model object (pyfmi.fmi.FMUModelXXX).</span>
+
+<span class="sd">    initialization_parameters : tuple of keys/values</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">list_name</span><span class="p">,</span> <span class="n">list_value</span> <span class="o">=</span> <span class="n">initialization_parameters</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">list_name</span><span class="p">,</span> <span class="n">list_value</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">pyfmi</span><span class="o">.</span><span class="n">fmi</span><span class="o">.</span><span class="n">FMUException</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">list_name</span><span class="p">,</span> <span class="n">list_value</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">model</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+            <span class="k">except</span> <span class="n">pyfmi</span><span class="o">.</span><span class="n">fmi</span><span class="o">.</span><span class="n">FMUException</span><span class="p">:</span>
+                <span class="k">pass</span>
+
+
+<div class="viewcode-block" id="apply_initialization_script"><a class="viewcode-back" href="../../api_doc/_generated/otfmi.fmi.apply_initialization_script.html#otfmi.fmi.apply_initialization_script">[docs]</a><span class="k">def</span> <span class="nf">apply_initialization_script</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">path_script</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Apply an initialization script to a model.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    model : Pyfmi model object (pyfmi.fmi.FMUModelXXX).</span>
+
+<span class="sd">    path_script : String, path to the script file.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">list_name</span><span class="p">,</span> <span class="n">list_value</span> <span class="o">=</span> <span class="n">parse_initialization_script</span><span class="p">(</span><span class="n">path_script</span><span class="p">)</span>
+    <span class="n">apply_initialization_parameters</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="p">(</span><span class="n">list_name</span><span class="p">,</span> <span class="n">list_value</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="get_name_variable"><a class="viewcode-back" href="../../api_doc/_generated/otfmi.fmi.get_name_variable.html#otfmi.fmi.get_name_variable">[docs]</a><span class="k">def</span> <span class="nf">get_name_variable</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get the list of variable names.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    model : Pyfmi model object (pyfmi.fmi.FMUModelXXX) or path to an FMU.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    var_names : list of str</span>
+<span class="sd">        Variable names</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="s2">&quot;get_model_variables&quot;</span><span class="p">):</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="nb">str</span><span class="p">),</span> <span class="s2">&quot;model should be an FMU model or a str&quot;</span>
+        <span class="n">path_fmu</span> <span class="o">=</span> <span class="n">model</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">load_fmu</span><span class="p">(</span><span class="n">path_fmu</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">get_model_variables</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span></div>
+
+
+<span class="k">def</span> <span class="nf">get_causality</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">names</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get the causality of the variables (input, output, or other).</span>
+
+<span class="sd">    If the variable causality is &quot;input&quot; or &quot;parameter&quot;, its value can be</span>
+<span class="sd">    modified using otfmi.fmi.set_dict_value. Setting the value of a variable</span>
+<span class="sd">    with other causality is not possible (nonphysical).</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    model : Pyfmi model object (pyfmi.fmi.FMUModelXXX) or path to an FMU.</span>
+
+<span class="sd">    names : Sequence of string, default=None</span>
+<span class="sd">        Variable names</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    causality : list of int</span>
+<span class="sd">        FMI1: INPUT(0), OUTPUT(1), INTERNAL(2), NONE(3), UNKNOWN(4)</span>
+
+<span class="sd">        FMI2: PARAMETER(0), CALCULATED_PARAMETER(1), INPUT(2), OUTPUT(3), LOCAL(4), INDEPENDENT(5), UNKNOWN(6)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">get_variable_causality</span>
+    <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">load_fmu</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">names</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">names</span> <span class="o">=</span> <span class="n">get_name_variable</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="p">[</span><span class="n">model</span><span class="o">.</span><span class="n">get_variable_causality</span><span class="p">(</span><span class="n">name</span><span class="p">)</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">names</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="get_causality_str"><a class="viewcode-back" href="../../api_doc/_generated/otfmi.fmi.get_causality_str.html#otfmi.fmi.get_causality_str">[docs]</a><span class="k">def</span> <span class="nf">get_causality_str</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get the causality of a variable (input, output, or other).</span>
+
+<span class="sd">    If the variable causality is &quot;input&quot; or &quot;parameter&quot;, its value can be</span>
+<span class="sd">    modified using otfmi.fmi.set_dict_value. Setting the value of a variable</span>
+<span class="sd">    with other causality is not possible (nonphysical).</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    model : pyfmi.fmi.FMUModelXXX or str</span>
+<span class="sd">        Pyfmi model object or path to an FMU.</span>
+
+<span class="sd">    name : str</span>
+<span class="sd">        Variable name</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    causality : str</span>
+<span class="sd">        Causality identifier</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">causality1str</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">pyfmi</span><span class="o">.</span><span class="n">fmi</span><span class="o">.</span><span class="n">FMI_INPUT</span><span class="p">:</span> <span class="s2">&quot;INPUT&quot;</span><span class="p">,</span>
+        <span class="n">pyfmi</span><span class="o">.</span><span class="n">fmi</span><span class="o">.</span><span class="n">FMI_OUTPUT</span><span class="p">:</span> <span class="s2">&quot;OUTPUT&quot;</span><span class="p">,</span>
+        <span class="n">pyfmi</span><span class="o">.</span><span class="n">fmi</span><span class="o">.</span><span class="n">FMI_INTERNAL</span><span class="p">:</span> <span class="s2">&quot;INTERNAL&quot;</span><span class="p">,</span>
+        <span class="n">pyfmi</span><span class="o">.</span><span class="n">fmi</span><span class="o">.</span><span class="n">FMI_NONE</span><span class="p">:</span> <span class="s2">&quot;NONE&quot;</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="n">causality2str</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">pyfmi</span><span class="o">.</span><span class="n">fmi</span><span class="o">.</span><span class="n">FMI2_PARAMETER</span><span class="p">:</span> <span class="s2">&quot;PARAMETER&quot;</span><span class="p">,</span>
+        <span class="n">pyfmi</span><span class="o">.</span><span class="n">fmi</span><span class="o">.</span><span class="n">FMI2_CALCULATED_PARAMETER</span><span class="p">:</span> <span class="s2">&quot;CALCULATED_PARAMETER&quot;</span><span class="p">,</span>
+        <span class="n">pyfmi</span><span class="o">.</span><span class="n">fmi</span><span class="o">.</span><span class="n">FMI2_INPUT</span><span class="p">:</span> <span class="s2">&quot;INPUT&quot;</span><span class="p">,</span>
+        <span class="n">pyfmi</span><span class="o">.</span><span class="n">fmi</span><span class="o">.</span><span class="n">FMI2_OUTPUT</span><span class="p">:</span> <span class="s2">&quot;OUTPUT&quot;</span><span class="p">,</span>
+        <span class="n">pyfmi</span><span class="o">.</span><span class="n">fmi</span><span class="o">.</span><span class="n">FMI2_LOCAL</span><span class="p">:</span> <span class="s2">&quot;LOCAL&quot;</span><span class="p">,</span>
+        <span class="n">pyfmi</span><span class="o">.</span><span class="n">fmi</span><span class="o">.</span><span class="n">FMI2_INDEPENDENT</span><span class="p">:</span> <span class="s2">&quot;INDEPENDENT&quot;</span><span class="p">,</span>
+        <span class="n">pyfmi</span><span class="o">.</span><span class="n">fmi</span><span class="o">.</span><span class="n">FMI2_UNKNOWN</span><span class="p">:</span> <span class="s2">&quot;UNKNOWN&quot;</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="n">causalitystr</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;1.0&quot;</span><span class="p">:</span> <span class="n">causality1str</span><span class="p">,</span> <span class="s2">&quot;2.0&quot;</span><span class="p">:</span> <span class="n">causality2str</span><span class="p">}</span>
+    <span class="k">return</span> <span class="n">causalitystr</span><span class="p">[</span><span class="n">model</span><span class="o">.</span><span class="n">get_version</span><span class="p">()]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+        <span class="n">get_causality</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="p">[</span><span class="n">name</span><span class="p">])[</span><span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;UNKNOWN&quot;</span>
+    <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="get_variability"><a class="viewcode-back" href="../../api_doc/_generated/otfmi.fmi.get_variability.html#otfmi.fmi.get_variability">[docs]</a><span class="k">def</span> <span class="nf">get_variability</span><span class="p">(</span><span class="n">model</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get the variability of the variables (constant, discrete, continuous,</span>
+<span class="sd">    or other).</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    model : Pyfmi model object (pyfmi.fmi.FMUModelXXX) or path to an FMU.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    variability : list of int</span>
+<span class="sd">        FMI1: CONSTANT(0), PARAMETER(1), DISCRETE(2), CONTINUOUS(3), UNKNOWN(4)</span>
+
+<span class="sd">        FMI2: CONSTANT(0), FIXED(1), TUNABLE(2), DISCRETE(3), CONTINUOUS(4), UNKNOWN(5)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">get_variable_variability</span>
+    <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">load_fmu</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="p">[</span><span class="n">model</span><span class="o">.</span><span class="n">get_variable_variability</span><span class="p">(</span><span class="n">name</span><span class="p">)</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">get_name_variable</span><span class="p">(</span><span class="n">model</span><span class="p">)]</span></div>
+
+
+<div class="viewcode-block" id="get_fixed_value"><a class="viewcode-back" href="../../api_doc/_generated/otfmi.fmi.get_fixed_value.html#otfmi.fmi.get_fixed_value">[docs]</a><span class="k">def</span> <span class="nf">get_fixed_value</span><span class="p">(</span><span class="n">model</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get the values of the variables with &#39;fixed&#39; variability,</span>
+<span class="sd">    ignoring aliases.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    model : Pyfmi model object (pyfmi.fmi.FMUModelXXX) or path to an FMU.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">get_model_variables</span>
+    <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">load_fmu</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+
+    <span class="n">list_name_variable</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">get_model_variables</span><span class="p">(</span><span class="n">include_alias</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">variability</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+    <span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">setup_experiment</span><span class="p">()</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">initialize</span><span class="p">()</span>
+    <span class="k">except</span> <span class="n">pyfmi</span><span class="o">.</span><span class="n">fmi</span><span class="o">.</span><span class="n">FMUException</span><span class="p">:</span>
+        <span class="k">pass</span>
+    <span class="k">return</span> <span class="p">{</span><span class="n">name</span><span class="p">:</span> <span class="n">model</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">)</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">list_name_variable</span><span class="p">}</span></div>
+
+
+<div class="viewcode-block" id="get_start_value"><a class="viewcode-back" href="../../api_doc/_generated/otfmi.fmi.get_start_value.html#otfmi.fmi.get_start_value">[docs]</a><span class="k">def</span> <span class="nf">get_start_value</span><span class="p">(</span><span class="n">model</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get the values of the variables with a start value ignoring aliases.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    model : Pyfmi model object (pyfmi.fmi.FMUModelXXX) or path to an FMU.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    start_vars : dict of int/float</span>
+<span class="sd">        Names and values of start variables</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">get_model_variables</span>
+    <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">load_fmu</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+
+    <span class="n">list_name_variable</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="c1"># Real=0, Int=1, Bool=2, String=3, Enumeration=4</span>
+    <span class="k">for</span> <span class="n">typ</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+        <span class="n">lnvt</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span>
+            <span class="n">model</span><span class="o">.</span><span class="n">get_model_variables</span><span class="p">(</span>
+                <span class="nb">type</span><span class="o">=</span><span class="n">typ</span><span class="p">,</span> <span class="n">include_alias</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">only_start</span><span class="o">=</span><span class="kc">True</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+        <span class="p">)</span>
+        <span class="n">list_name_variable</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">lnvt</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="p">{</span><span class="n">name</span><span class="p">:</span> <span class="n">model</span><span class="o">.</span><span class="n">get_variable_start</span><span class="p">(</span><span class="n">name</span><span class="p">)</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">list_name_variable</span><span class="p">}</span></div>
+
+
+<div class="viewcode-block" id="set_dict_value"><a class="viewcode-back" href="../../api_doc/_generated/otfmi.fmi.set_dict_value.html#otfmi.fmi.set_dict_value">[docs]</a><span class="k">def</span> <span class="nf">set_dict_value</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">dict_value</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set values from a dictionary with variable names as keys.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    model : Pyfmi model object (pyfmi.fmi.FMUModelXXX) or path to an FMU.</span>
+
+<span class="sd">    dict_value : Dictionary, with variable names as keys.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">set</span>
+    <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">load_fmu</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+
+    <span class="n">model</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="o">*</span><span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="nb">list</span><span class="p">(</span><span class="n">dict_value</span><span class="o">.</span><span class="n">items</span><span class="p">()))))</span></div>
+
+
+<span class="k">def</span> <span class="nf">format_trajectory</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">trajectory</span><span class="p">,</span> <span class="n">time_interpolate</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Store trajectories in a dictionary, and possibly reinterpolate them.</span>
+
+<span class="sd">    Arguments:</span>
+<span class="sd">    model -- OpenTURNSFMUFunction, simulated model.</span>
+
+<span class="sd">    time -- Sequence of floats, simulation time.</span>
+
+<span class="sd">    trajectory -- Array of floats, trajectories.</span>
+
+<span class="sd">    time_interpolate -- Sequence of floats, time for interpolation of</span>
+<span class="sd">    trajectories.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">list_output</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">getFMUOutputDescription</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">time_interpolate</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">list_trajectory</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">interp</span><span class="p">(</span><span class="n">time_interpolate</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">zz</span><span class="p">)</span> <span class="k">for</span> <span class="n">zz</span> <span class="ow">in</span> <span class="n">trajectory</span><span class="o">.</span><span class="n">T</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">list_trajectory</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">trajectory</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+
+    <span class="n">dict_trajectory</span> <span class="o">=</span> <span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="n">value</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">list_output</span><span class="p">,</span> <span class="n">list_trajectory</span><span class="p">)}</span>
+    <span class="k">return</span> <span class="n">dict_trajectory</span>
+
+
+<span class="c1"># TODO: refactor format_sample_trajectory.</span>
+<span class="k">def</span> <span class="nf">format_sample_trajectory</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">list_output</span><span class="p">,</span> <span class="n">time_interpolate</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Store samples of trajectories in a dictionary, and possibly</span>
+<span class="sd">    reinterpolate them.</span>
+
+<span class="sd">    Arguments:</span>
+<span class="sd">    model -- OpenTURNSFMUFunction, simulated model.</span>
+
+<span class="sd">    list_output -- Sequence of pairs of time (vector of floats) and</span>
+<span class="sd">    trajectories (array of floats).</span>
+
+<span class="sd">    time_interpolate -- Sequence of floats, time for interpolation of</span>
+<span class="sd">    trajectories.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">list_dict_trajectory</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">time</span><span class="p">,</span> <span class="n">trajectory</span> <span class="ow">in</span> <span class="n">list_output</span><span class="p">:</span>
+        <span class="n">list_dict_trajectory</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">format_trajectory</span><span class="p">(</span>
+                <span class="n">model</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">trajectory</span><span class="p">,</span> <span class="n">time_interpolate</span><span class="o">=</span><span class="n">time_interpolate</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+
+    <span class="n">dict_trajectory_sample</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">name_output</span> <span class="ow">in</span> <span class="n">model</span><span class="o">.</span><span class="n">getFMUOutputDescription</span><span class="p">():</span>
+        <span class="n">dict_trajectory_sample</span><span class="p">[</span><span class="n">name_output</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">column_stack</span><span class="p">(</span>
+            <span class="p">[</span><span class="n">dd</span><span class="p">[</span><span class="n">name_output</span><span class="p">]</span> <span class="k">for</span> <span class="n">dd</span> <span class="ow">in</span> <span class="n">list_dict_trajectory</span><span class="p">]</span>
+        <span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">time_interpolate</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">list_time</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">list_output</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">list_time</span> <span class="o">=</span> <span class="p">[</span><span class="n">time_interpolate</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">list_output</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">list_time</span><span class="p">,</span> <span class="n">dict_trajectory_sample</span>
+
+
+<span class="k">def</span> <span class="nf">simulate_trajectory</span><span class="p">(</span>
+    <span class="n">path_fmu</span><span class="p">,</span>
+    <span class="n">value_input</span><span class="p">,</span>
+    <span class="n">timestep</span><span class="p">,</span>
+    <span class="n">list_input</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">list_output</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">final_time</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">ncp</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Simulate a sample of trajectories with an FMU.</span>
+
+<span class="sd">    Arguments:</span>
+<span class="sd">    list_input -- Sequence of strings, input names.</span>
+
+<span class="sd">    list_output -- Sequence of strings or single string, output names.</span>
+
+<span class="sd">    path_fmu -- String, path to FMU.</span>
+
+<span class="sd">    value_input -- Sequence of floats, input values.</span>
+
+<span class="sd">    timestep -- Float or sequence of floats, time step or sequence of times</span>
+<span class="sd">    for trajectory interpolation.</span>
+
+<span class="sd">    final_time -- Float, simulation final time.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">list_output</span><span class="o">.</span><span class="fm">__iter__</span>
+    <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+        <span class="n">list_output</span> <span class="o">=</span> <span class="p">[</span><span class="n">list_output</span><span class="p">]</span>
+
+    <span class="n">model</span> <span class="o">=</span> <span class="n">otfmi</span><span class="o">.</span><span class="n">OpenTURNSFMUFunction</span><span class="p">(</span>
+        <span class="n">path_fmu</span><span class="o">=</span><span class="n">path_fmu</span><span class="p">,</span> <span class="n">inputs_fmu</span><span class="o">=</span><span class="n">list_input</span><span class="p">,</span> <span class="n">outputs_fmu</span><span class="o">=</span><span class="n">list_output</span>
+    <span class="p">)</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">_OpenTURNSFMUFunction__final</span> <span class="o">=</span> <span class="s2">&quot;trajectory&quot;</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">_OpenTURNSFMUFunction__expect_trajectory</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1"># False is the default</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">timestep</span><span class="o">.</span><span class="fm">__iter__</span>
+    <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+        <span class="n">time_interpolate</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">final_time</span><span class="p">,</span> <span class="n">final_time</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">timestep</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">time_interpolate</span> <span class="o">=</span> <span class="n">timestep</span>
+        <span class="n">final_time</span> <span class="o">=</span> <span class="n">time_interpolate</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="n">options</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">ncp</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">options</span><span class="p">[</span><span class="s2">&quot;ncp&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ncp</span>
+
+    <span class="n">out</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">simulate_sample</span><span class="p">(</span>
+        <span class="n">list_value_input</span><span class="o">=</span><span class="n">value_input</span><span class="p">,</span> <span class="n">final_time</span><span class="o">=</span><span class="n">final_time</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">options</span>
+    <span class="p">)</span>
+    <span class="n">list_time</span><span class="p">,</span> <span class="n">dict_trajectory</span> <span class="o">=</span> <span class="n">format_sample_trajectory</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">out</span><span class="p">,</span> <span class="n">time_interpolate</span><span class="p">)</span>
+    <span class="n">time</span> <span class="o">=</span> <span class="n">list_time</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">time</span><span class="p">,</span> <span class="n">dict_trajectory</span>
+</pre></div>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Sylvain Girard, Valentin Pibernus
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
