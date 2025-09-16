@@ -8,7 +8,7 @@ jobs:
       - name: Build
         run: |
           docker pull openturns/archlinux-module
-          docker run --rm -v `pwd`:/io openturns/archlinux-module /io/.ci_support/run_docker_linux.sh `id -u` `id -g`
+          docker run --rm -v `pwd`:/io openturns/archlinux-module /io/.ci_support/run_docker_linux.sh `id -u`:`id -g`
       - name: Upload
         if: ${{ github.ref == 'refs/heads/master' }}
         run: |
