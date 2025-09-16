@@ -1,33 +1,10 @@
 Examples
 ========
 
-The mathematical methods applying to static or dynamic FMUs are pretty different.
-Hence `Otfmi <../index>`__ provides different wrappers for these two kinds of physical models.
+Epidemiologic example
+---------------------
 
-.. note::
-   | A *static* FMU yields one or several time-invariant output(s).
-   | A *dynamic* FMU yields one or several output(s) that evolve over time; the FMU simulation time is important to set.
-
-Explore static FMUs
--------------------
-
-All static examples rely on *deviation.fmu*.
-This mechanical model represents the deviation of a cantilever beam submitted to a load at its end.
-
-.. image:: ../_static/beam.png
-   :scale: 25 %
-   :alt: alternate text
-   :align: center
-
-.. toctree::
-   :maxdepth: 1
-
-   ../auto_example/static/index.rst
-
-Explore dynamic FMUs
---------------------
-
-All dynamic examples rely on *epid.fmu*. This epidemiologic model represents the spreading of an epidemic through a population.
+These examples rely on *epid.fmu*. This epidemiologic model represents the spreading of an epidemic through a population.
 
 .. image:: ../_static/epid.png
    :scale: 80 %
@@ -37,16 +14,17 @@ All dynamic examples rely on *epid.fmu*. This epidemiologic model represents the
 .. toctree::
    :maxdepth: 1
 
-   ../auto_example/dynamic/index.rst
+   ../auto_example/epid/index.rst
 
 Common low-level functions
 --------------------------
 
-| The 4 classes mentionned here upper are based on low-level functions
-  from the submodule ``otfmi.fmi``.
-| These functions can be used to load, initialize or simulate the FMU
-  with more control. The tutorials are based on the static
-  *deviation.fmu* example.
+The 4 classes mentioned here upper are based on low-level functions
+from the submodule ``otfmi.fmi``.
+
+These functions can be used to load, initialize or simulate the FMU
+with more control. The tutorials are based on the static
+*deviation.fmu* example.
 
 .. toctree::
    :maxdepth: 1
@@ -67,3 +45,20 @@ the metamodel *instead of the FMU* in the simulation tool.
    :maxdepth: 1
 
    ../auto_example/ot_to_fmu/index.rst
+
+Cantilever beam example
+-----------------------
+
+These examples rely on *deviation.fmu*.
+This mechanical model represents the deviation of a cantilever beam submitted to a load at its end.
+Unlike most FMI models the deviation model is static, i.e. its output does not evolve over time.
+
+.. image:: ../_static/beam.png
+   :scale: 25 %
+   :alt: alternate text
+   :align: center
+
+.. toctree::
+   :maxdepth: 1
+
+   ../auto_example/deviation/index.rst

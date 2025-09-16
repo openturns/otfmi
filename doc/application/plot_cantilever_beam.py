@@ -23,8 +23,6 @@ Estimate the probability of a threshold excedance
 # threshold ?**
 #
 #
-# We load the FMU as a FMUFunction (see the
-# :doc:`tutorial<../_generated/otfmi.FMUFunction>`):
 
 import openturns as ot
 import otfmi
@@ -33,6 +31,9 @@ import openturns.viewer as otv
 
 path_fmu = otfmi.example.utility.get_path_fmu("deviation")
 
+# %%
+# We load the FMU as a :class:`~otfmi.FMUFunction` here as the event
+# explicitely requires a function of type :py:class:`openturns.Function`.
 model_fmu = otfmi.FMUFunction(
     path_fmu, inputs_fmu=["E", "F", "L", "I"], outputs_fmu="y"
 )
@@ -40,7 +41,7 @@ model_fmu = otfmi.FMUFunction(
 # %%
 # We test the function wrapping the deviation model on a point:
 point = ot.Point([3e7, 2e4, 255, 350])
-model_evaluation = model_fmu(point)
+model_evaluation = model_fmu(point)[-1]
 print(f"Running the FMU: deviation = {model_evaluation}")
 
 

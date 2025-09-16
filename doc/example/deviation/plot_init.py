@@ -1,6 +1,6 @@
 """
-Initialize FMUFunction
-======================
+Initialize FMUPointToFieldFunction
+==================================
 """
 
 # %%
@@ -16,9 +16,6 @@ Initialize FMUFunction
 # - to restart simulation from a given point.
 
 # %%
-# ------------
-
-# %%
 # First, retrieve the path to the FMU *deviation.fmu*.
 # Recall the deviation model is static, i.e. its output does not evolve over
 # time.
@@ -32,7 +29,7 @@ path_fmu = otfmi.example.utility.get_path_fmu("deviation")
 
 
 # %%
-# The initialization script must be provided to `FMUFunction` constructor.
+# The initialization script must be provided to :class:`~otfmi.FMUPointToFieldFunction` constructor.
 # We thus create it now (using Python for clarity).
 
 # %%
@@ -49,11 +46,11 @@ with open(temporary_file, "w") as f:
 # default initial value (as set in the FMU).
 
 # %%
-# We can now build the `FMUFunction`. In the example below, we use the
+# We can now build the :class:`~otfmi.FMUPointToFieldFunction`. In the example below, we use the
 # initialization script to fix the values of ``L`` and ``F`` in the FMU whereas
 # ``E`` and ``I`` are the function variables.
 
-function = otfmi.FMUFunction(
+function = otfmi.FMUPointToFieldFunction(
     path_fmu,
     inputs_fmu=["E", "I"],
     outputs_fmu=["y"],
@@ -61,7 +58,7 @@ function = otfmi.FMUFunction(
 )
 
 inputPoint = ot.Point([2e9, 7e7])
-outputPoint = function(inputPoint)
+outputPoint = function(inputPoint)[-1]
 print(outputPoint)
 
 # %%
@@ -75,7 +72,7 @@ print(outputPoint)
 # result is different from above, as the input point overrides the values from
 # the initialization script.
 
-smallExampleFunction = otfmi.FMUFunction(
+smallExampleFunction = otfmi.FMUPointToFieldFunction(
     path_fmu,
     inputs_fmu=["E", "F", "L", "I"],
     outputs_fmu=["y"],
@@ -84,7 +81,7 @@ smallExampleFunction = otfmi.FMUFunction(
 
 inputPoint = ot.Point([2e9, 2e4, 800, 7e7])
 outputPoint = smallExampleFunction(inputPoint)
-print(outputPoint)
+print(outputPoint[-1])
 
 # %%
 # Come back to the function with 2 input variables defined above.
@@ -99,6 +96,7 @@ dist = ot.ComposedDistribution([lawE, lawI])
 inputSample = dist.getSample(10)
 
 outputSample = function(inputSample)
+outputSample = [y[-1] for y in outputSample]
 
 graph = ot.HistogramFactory().build(outputSample).drawPDF()
 view = viewer.View(graph)

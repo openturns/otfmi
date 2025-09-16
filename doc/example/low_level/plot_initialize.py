@@ -71,7 +71,7 @@ with open(temporary_file, "w") as f:
     f.write("F = 25000;\n")
 
 # %%
-# Otfmi ``simulate`` function launches FMU initialization, using the
+# otfmi ``simulate`` function launches FMU initialization, using the
 # designated script, then simulates the FMU.
 result = otfmi.fmi.simulate(model, initialization_script=abspath(temporary_file))
 

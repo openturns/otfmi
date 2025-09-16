@@ -22,7 +22,7 @@ model = otfmi.fmi.load_fmu(path_fmu)
 # to impose a solver not available in PyFMI.
 
 # %%
-# All options of `pyfmi.load_fmu` can be passed on to Otfmi:
+# All options of `pyfmi.load_fmu` can be passed on to otfmi:
 print(help(pyfmi.load_fmu))
 
 # %%
@@ -32,10 +32,10 @@ model = otfmi.fmi.load_fmu(path_fmu, kind="CS", log_file_name="deviation.log")
 
 # %%
 # .. note::
-#    Otfmi `load_fmu` is an overlay of PyFMI `load_fmu` function.
+#    otfmi `load_fmu` is an overlay of PyFMI `load_fmu` function.
 #    Hence the FMU loaded here upper benefits of all PyFMI's methods.
 
 # %%
 # For example, ``get_description`` is a PyFMI method (not re-implemented in
-# Otfmi):
+# otfmi):
 model.get_description()
