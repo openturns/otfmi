@@ -1,9 +1,9 @@
-Otfmi documentation
+otfmi documentation
 ===================
 
-`Otfmi <https://github.com/openturns/otfmi>`__ facilitates the probabilistic study of functional mockup units (FMUs) by interfacing `OpenTURNS <http://openturns.github.io/openturns/master/contents.html>`__ with `PyFMI <https://pypi.org/project/PyFMI/>`__. Using Otfmi, modelers can perform advanced probabilistic analysis on their FMU.
+`otfmi <https://github.com/openturns/otfmi>`__ facilitates the probabilistic study of functional mockup units (FMUs) by interfacing `OpenTURNS <http://openturns.github.io/openturns/master/contents.html>`__ with `PyFMI <https://pypi.org/project/PyFMI/>`__. Using otfmi, modelers can perform advanced probabilistic analysis on their FMU.
 
-The core features of `Otfmi <https://github.com/openturns/otfmi>`__ are:
+The core features of `otfmi <https://github.com/openturns/otfmi>`__ are:
 
 * load an FMU in an OpenTURNS object
 * set some initial values to ease initialisation
@@ -14,7 +14,7 @@ The core features of `Otfmi <https://github.com/openturns/otfmi>`__ are:
      :align: left
      :scale: 5%
 
-| `Otfmi <https://github.com/openturns/otfmi>`__ is notably employed as backend for `Persalys <https://persalys.fr/?la=en>`__ (OpenTURNS GUI).
+| `otfmi <https://github.com/openturns/otfmi>`__ is notably employed as backend for `Persalys <https://persalys.fr/?la=en>`__ (OpenTURNS GUI).
 | The software is free and can be downloaded `here <https://persalys.fr/obtenir.php?la=en">`__.
 
 .. container:: clearer
@@ -75,7 +75,7 @@ propagate and handle uncertainties.
 `PyFMI <https://pypi.org/project/PyFMI/>`__ is a package for loading and
 interacting with FMUs in Python.
 
-The need for Otfmi
+The need for otfmi
 ------------------
 
 Using Python to easily perform computer experiments on 0D/1D models is
@@ -83,7 +83,7 @@ seducing. Yet the tool chain, from the physical model to OpenTURNS, was
 incomplete. PyFMI objects, close to the FMUs methods, were to be adapted
 for an easier use with OpenTURNS’ methods.
 
-Otfmi is developed by `Phimeca <http://www.phimeca.com>`__, on the
+otfmi is developed by `Phimeca <http://www.phimeca.com>`__, on the
 demand of EDF Prisme department, to meet this need of compatibility
 between PyFMI objects and OpenTURNS.
 
@@ -100,7 +100,7 @@ In the `FMI standard <https://fmi-standard.org/docs/3.0.1/#ModelVariables>`__
 * a FMU *input* evolves during simulation (time-dependent values).
 
 In OpenTURNS, the terms *input* and *parameter* are synonym and designate a variable in input of a probabilistic model.
-To reconcile the two worlds, we employ in Otfmi the terms of *parameter* and *input* in the sense of FMI.
+To reconcile the two worlds, we employ in otfmi the terms of *parameter* and *input* in the sense of FMI.
 We call the input variables of a probabilistic model *variables*, or *input variables*.
 
 **FMI : ME or CS?**
@@ -111,12 +111,12 @@ the ModelExchange FMUs simulate with the solver of their host tool.
 
 Choosing ME or CS depends on the use of the FMU (see
 `here <https://www.modelon.com/fmi-functional-mock-up-unit-types/>`__).
-Both kinds are handled similarly by Otfmi (and `Persalys <https://persalys.fr/?la=en>`__).
+Both kinds are handled similarly by otfmi (and `Persalys <https://persalys.fr/?la=en>`__).
 
 Contact
 -------
 
-| You can contribute to the project or signal issues on `Otfmi GitHub
+| You can contribute to the project or signal issues on `otfmi GitHub
   repository <https://github.com/openturns/otfmi>`__.
 | For questions on the code, contact `Sylvain
   Girard <https://github.com/SG-phimeca>`__.

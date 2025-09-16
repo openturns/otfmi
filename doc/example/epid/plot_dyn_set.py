@@ -12,13 +12,7 @@ Set FMU simulation parameters
 # ``OpenTURNSFMUPointToFieldFunction``.
 
 # %%
-# ------------
-
-# %%
 # First, retrieve the path to *epid.fmu*.
-# Recall the deviation model is dynamic, i.e. its output evolves over
-# time.
-
 import otfmi.example.utility
 import openturns as ot
 
@@ -62,7 +56,7 @@ outputPoint = midlevel_function.simulate(
 )
 
 # %%
-# For advanced users, the middle-level class ``OpenTURNSFMUFunction`` also gives
+# For advanced users, the middle-level class ``OpenTURNSFMUPointToFieldFunction`` also gives
 # access to the PyFMI model. We can hence access all PyFMI's object methods:
 
 pyfmi_model = midlevel_function.model
@@ -70,5 +64,5 @@ print(dir(pyfmi_model))
 
 # %%
 # .. note::
-#    Otfmi' classes ``FMUPointToFieldFunction`` and ``OpenTURNSFMUPointToFieldFunction``
+#    otfmi' classes ``FMUPointToFieldFunction`` and ``OpenTURNSFMUPointToFieldFunction``
 #    are designed to highlight the most useful PyFMI's methods and simplify their use!

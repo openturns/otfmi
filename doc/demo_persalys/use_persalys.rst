@@ -5,7 +5,7 @@ Sensitivity analysis with Persalys
      :align: left
      :scale: 5%
 
-`Persalys <https://persalys.fr/>`__ is a graphical user interface to some Otfmi
+`Persalys <https://persalys.fr/>`__ is a graphical user interface to some otfmi
 and `OpenTURNS <http://openturns.github.io/openturns/master/contents.html>`__ methods.
 The software is free and can be downloaded `here <https://persalys.fr/obtenir.php?la=en">`__.
 

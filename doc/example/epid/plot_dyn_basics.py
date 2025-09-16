@@ -4,31 +4,24 @@ FMUPointToFieldFunction basics
 """
 
 # %%
-# ``otfmi.FMUPointToFieldFunction`` wraps the FMU into an
+# :class:`~otfmi.FMUPointToFieldFunction` wraps the FMU into an
 # :py:class:`openturns.PointToFieldFunction` object.
 # This kind of function accepts :py:class:`openturns.Point` or
 # :py:class:`openturns.Sample` as inputs, and outputs a
 # :py:class:`openturns.Sample` or a set of :py:class:`openturns.Field`.
 
 # %%
-# ------------
-
-# %%
 # First, retrieve the path to *epid.fmu*.
-# Recall the deviation model is dynamic, i.e. its output evolves over
-# time.
 import openturns as ot
 import otfmi.example.utility
 import matplotlib.pyplot as plt
 import openturns.viewer as viewer
-
 
 path_fmu = otfmi.example.utility.get_path_fmu("epid")
 
 # %%
 # Define the time grid for the FMU's output. The last value of the time grid,
 # here 10., will define the FMU stop time for simulation.
-
 mesh = ot.RegularGrid(0.0, 0.1, 2000)
 meshSample = mesh.getVertices()
 print(meshSample)

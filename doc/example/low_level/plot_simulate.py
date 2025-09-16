@@ -4,7 +4,7 @@ Simulate an FMU
 """
 
 # %%
-# The Otfmi ``simulate`` function instanciates, initializes and simulates the
+# The otfmi ``simulate`` function instanciates, initializes and simulates the
 # FMU.
 
 # %%
@@ -19,13 +19,13 @@ model = otfmi.fmi.load_fmu(path_fmu)
 
 # %%
 # .. note::
-#   | *model* is a PyFMI object, loaded with Otfmi’s overlay.
+#   | *model* is a PyFMI object, loaded with otfmi’s overlay.
 #   | As such, ``model.simulate()`` is a pure PyFMI method.
-#   | Use ``otfmi.fmi.simulate(model)`` to benefit from Otfmi’s overlay.
+#   | Use ``otfmi.fmi.simulate(model)`` to benefit from otfmi’s overlay.
 
 
 # %%
-# Otfmi ``simulate`` function notably eases initializing a FMU, see
+# otfmi ``simulate`` function notably eases initializing a FMU, see
 # :ref:`sphx_glr_auto_example_low_level_plot_initialize.py`.
 
 # %%
@@ -36,7 +36,7 @@ result = otfmi.fmi.simulate(
     start_time=0,  # PyFMI keyword
     final_time=1,  # PyFMI keyword
     initialization_parameters=(["L"], [300]),
-)  # Otfmi keyword
+)  # otfmi keyword
 print("y = %g" % result.final("y"))
 
 # %%
