@@ -1,39 +1,15 @@
 API documentation
 =================
 
-Otfmi facilitates the analysis of FMUs **at a given time step and/or
-over time** (*static* versus *dynamic* analyses).
+otfmi facilitates the analysis of FMUs over time.
 
-Static analysis
----------------
-
-
-The class **FMUFunction** wraps the FMU in an :py:class:`openturns.Function`.
-Its output corresponds to the FMU’s output at its last simulation time.
-When the FMU is static (i.e. its output is time-independent),
-the value of the last simulation time is indifferent.
-
-.. currentmodule:: otfmi
-
-.. autosummary::
-   :toctree: _generated/
-   :template: class.rst_t
-
-       FMUFunction
-
-Its lower-level counterpart is **OpenTURNSFMUFunction**, closer to PyFMI’s methods but not directly usable with OpenTURNS.
-
-.. autosummary::
-   :toctree: _generated/
-   :template: class.rst_t
-
-   OpenTURNSFMUFunction
-
-Dynamic analysis
-----------------
+Main API
+--------
 
 The class **FMUPointToFieldFunction** wraps the FMU in an :py:class:`openturns.PointToFieldFunction`.
 Its output is a :py:class:`openturns.Field` gathering the outputs as function of time.
+
+.. currentmodule:: otfmi
 
 .. autosummary::
    :toctree: _generated/
@@ -49,6 +25,15 @@ PyFMI’s methods but not directly usable with OpenTURNS.
    :template: class.rst_t
 
    OpenTURNSFMUPointToFieldFunction
+
+For convenience the **FMUFunction** is provided for cases in which we absolutely need
+a :py:class:`openturns.Function` instead of a :py:class:`openturns.PointToFieldFunction`.
+
+.. autosummary::
+   :toctree: _generated/
+   :template: class.rst_t
+
+   FMUFunction
 
 Common low-level functions
 --------------------------

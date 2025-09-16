@@ -22,16 +22,16 @@ extensions = [
 sphinx_gallery_conf = {
     "examples_dirs": [
         "application",
-        "example/static",
-        "example/dynamic",
+        "example/deviation",
+        "example/epid",
         "example/low_level",
         "example/ot_to_fmu",
     ],  # # path to
     # example scripts
     "gallery_dirs": [
         "auto_application",
-        "auto_example/static",
-        "auto_example/dynamic",
+        "auto_example/deviation",
+        "auto_example/epid",
         "auto_example/low_level",
         "auto_example/ot_to_fmu",
     ],

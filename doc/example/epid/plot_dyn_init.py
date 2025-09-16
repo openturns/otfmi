@@ -16,13 +16,7 @@ Initialize FMUPointToFieldFunction
 # - to restart simulation from a given point.
 
 # %%
-# ------------
-
-# %%
 # First, retrieve the path to the FMU *deviation.fmu*.
-# Recall the epidemiological model is dynamic, i.e. its output evolves over
-# time.
-
 import otfmi.example.utility
 import otfmi
 import openturns as ot
