@@ -31,12 +31,6 @@ class FMUFunction(ot.Function):
         Names of the variable from the fmu to be used as output variables.
         By default assigns variables with FMI causality OUTPUT.
 
-    inputs : Sequence of str
-        Optional names to use as variables descriptions.
-
-    outputs : Sequence of str
-        Optional names to use as variables descriptions.
-
     n_cpus : int
         Number of cores to use for multiprocessing.
 
@@ -69,8 +63,6 @@ class FMUFunction(ot.Function):
         path_fmu=None,
         inputs_fmu=None,
         outputs_fmu=None,
-        inputs=None,
-        outputs=None,
         n_cpus=None,
         kind=None,
         initialization_script=None,
@@ -80,9 +72,7 @@ class FMUFunction(ot.Function):
             path_fmu=path_fmu,
             inputs_fmu=inputs_fmu,
             outputs_fmu=outputs_fmu,
-            inputs=inputs,
             n_cpus=n_cpus,
-            outputs=outputs,
             kind=kind,
             initialization_script=initialization_script,
             final_time=final_time,
@@ -108,12 +98,6 @@ class OpenTURNSFMUFunction(ot.OpenTURNSPythonFunction):
     outputs_fmu : Sequence of str, default=None
         Names of the variable from the fmu to be used as output variables.
         By default assigns variables with FMI causality OUTPUT.
-
-    inputs : Sequence of str
-        Optional names to use as variables descriptions.
-
-    outputs : Sequence of str
-        Optional names to use as variables descriptions.
 
     n_cpus : int
         Number of cores to use for multiprocessing.
@@ -144,8 +128,6 @@ class OpenTURNSFMUFunction(ot.OpenTURNSPythonFunction):
         path_fmu,
         inputs_fmu=None,
         outputs_fmu=None,
-        inputs=None,
-        outputs=None,
         n_cpus=None,
         initialization_script=None,
         kind=None,
@@ -161,8 +143,9 @@ class OpenTURNSFMUFunction(ot.OpenTURNSPythonFunction):
         super(OpenTURNSFMUFunction, self).__init__(
             n=len(self.inputs_fmu), p=len(self.outputs_fmu)
         )
-        self._set_inputs(inputs)
-        self._set_outputs(outputs)
+        self.setInputDescription(self.inputs_fmu)
+        self.setOutputDescription(self.outputs_fmu)
+
         self._set_final_time(final_time)
 
         self.n_cpus = n_cpus
@@ -216,19 +199,6 @@ class OpenTURNSFMUFunction(ot.OpenTURNSPythonFunction):
 
         self.inputs_fmu = inputs_fmu
 
-    def _set_inputs(self, inputs=None):
-        """Set input variable names.
-
-        Parameters
-        ----------
-        inputs : Sequence of strings, optional names to use as variables
-        descriptions.
-
-        """
-        if inputs is None:
-            inputs = self.inputs_fmu
-        self.setInputDescription(inputs)
-
     def _set_outputs_fmu(self, outputs_fmu):
         """Set output variable names.
 
@@ -275,19 +245,6 @@ class OpenTURNSFMUFunction(ot.OpenTURNSPythonFunction):
                         + ")"
                     )
         self.outputs_fmu = outputs_fmu
-
-    def _set_outputs(self, outputs=None):
-        """Set output variable names.
-
-        Parameters
-        ----------
-        outputs : Sequence of strings, optional names to use as variables
-        descriptions.
-
-        """
-        if outputs is None:
-            outputs = self.outputs_fmu
-        self.setOutputDescription(outputs)
 
     def __call__(self, X, **kwargs):
         X = np.atleast_1d(np.squeeze(X))
@@ -493,12 +450,6 @@ class FMUPointToFieldFunction(ot.PointToFieldFunction):
         Names of the variable from the fmu to be used as output variables.
         By default assigns variables with FMI causality OUTPUT.
 
-    inputs : Sequence of str
-        Optional names to use as variables descriptions.
-
-    outputs : Sequence of str
-        Optional names to use as variables descriptions.
-
     initialization_script : str (optional)
         Path to the initialization script.
 
@@ -523,8 +474,6 @@ class FMUPointToFieldFunction(ot.PointToFieldFunction):
         mesh=None,
         inputs_fmu=None,
         outputs_fmu=None,
-        inputs=None,
-        outputs=None,
         kind=None,
         initialization_script=None,
         start_time=None,
@@ -535,8 +484,6 @@ class FMUPointToFieldFunction(ot.PointToFieldFunction):
             mesh=mesh,
             inputs_fmu=inputs_fmu,
             outputs_fmu=outputs_fmu,
-            inputs=inputs,
-            outputs=outputs,
             kind=kind,
             initialization_script=initialization_script,
             start_time=start_time,
@@ -557,8 +504,6 @@ class OpenTURNSFMUPointToFieldFunction(ot.OpenTURNSPythonPointToFieldFunction):
         mesh=None,
         inputs_fmu=None,
         outputs_fmu=None,
-        inputs=None,
-        outputs=None,
         initialization_script=None,
         kind=None,
         expect_trajectory=False,
@@ -587,8 +532,8 @@ class OpenTURNSFMUPointToFieldFunction(ot.OpenTURNSPythonPointToFieldFunction):
         super(OpenTURNSFMUPointToFieldFunction, self).__init__(
             len(self.inputs_fmu), mesh, len(self.outputs_fmu)
         )
-        self._set_inputs(inputs)
-        self._set_outputs(outputs)
+        self.setInputDescription(self.inputs_fmu)
+        self.setOutputDescription(self.outputs_fmu)
         self._set_final_time(final_time)
         self._set_start_time(start_time)
         self._assert_mesh_validity()
@@ -639,19 +584,6 @@ class OpenTURNSFMUPointToFieldFunction(ot.OpenTURNSPythonPointToFieldFunction):
 
         self.inputs_fmu = inputs_fmu
 
-    def _set_inputs(self, inputs=None):
-        """Set input variable names.
-
-        Parameters
-        ----------
-        inputs : Sequence of strings, optional names to use as variables
-        descriptions.
-
-        """
-        if inputs is None:
-            inputs = self.inputs_fmu
-        self.setInputDescription(inputs)
-
     def _set_outputs_fmu(self, outputs_fmu):
         """Set output variable names.
 
@@ -698,19 +630,6 @@ class OpenTURNSFMUPointToFieldFunction(ot.OpenTURNSPythonPointToFieldFunction):
                         + ")"
                     )
         self.outputs_fmu = outputs_fmu
-
-    def _set_outputs(self, outputs=None):
-        """Set output variable names.
-
-        Parameters
-        ----------
-        outputs : Sequence of strings, optional names to use as variables
-        descriptions.
-
-        """
-        if outputs is None:
-            outputs = self.outputs_fmu
-        self.setOutputDescription(outputs)
 
     def _set_final_time(self, final_time):
         """Extract final time from keywords if exists.
