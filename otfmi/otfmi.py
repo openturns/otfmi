@@ -37,6 +37,9 @@ class FMUFunction(ot.Function):
     initialization_script : str (optional)
         Path to the initialization script.
 
+    start_time : float
+        The FMU simulation start time.
+
     final_time : float
         The output variables value is collected at t=final_time and returned by
         FMUFunction.
@@ -59,6 +62,7 @@ class FMUFunction(ot.Function):
         n_cpus=None,
         kind=None,
         initialization_script=None,
+        start_time=None,
         final_time=None,
     ):
         lowlevel = OpenTURNSFMUFunction(
@@ -68,6 +72,7 @@ class FMUFunction(ot.Function):
             n_cpus=n_cpus,
             kind=kind,
             initialization_script=initialization_script,
+            start_time=start_time,
             final_time=final_time,
         )
 
@@ -98,6 +103,9 @@ class OpenTURNSFMUFunction(ot.OpenTURNSPythonFunction):
     initialization_script : str (optional)
         Path to the initialization script.
 
+    start_time : float
+        The FMU simulation start time.
+
     final_time : float
         The output variables value is collected at t=final_time and returned by
         FMUFunction.
@@ -119,6 +127,7 @@ class OpenTURNSFMUFunction(ot.OpenTURNSPythonFunction):
         n_cpus=None,
         initialization_script=None,
         kind=None,
+        start_time=None,
         final_time=None,
         **kwargs
     ):
@@ -134,6 +143,7 @@ class OpenTURNSFMUFunction(ot.OpenTURNSPythonFunction):
         self.setOutputDescription(self.outputs_fmu)
 
         self._set_final_time(final_time)
+        self._set_start_time(start_time)
 
         self.n_cpus = n_cpus
 
@@ -252,6 +262,19 @@ class OpenTURNSFMUFunction(ot.OpenTURNSPythonFunction):
         else:
             self.final_time = self.model.get_default_experiment_stop_time()
 
+    def _set_start_time(self, start_time):
+        """Extract start time from keywords if exists.
+
+        Parameters
+        ----------
+        start_time: float (must be >= 0)
+
+        """
+        if start_time is not None:
+            self.start_time = start_time
+        else:
+            self.start_time = self.model.get_default_experiment_start_time()
+
     def _exec(self, value_input, **kwargs):
         """Simulate the FMU for a given set of input values.
 
@@ -368,7 +391,11 @@ class OpenTURNSFMUFunction(ot.OpenTURNSPythonFunction):
             raise Warning("final_time must be set in the constructor.")
 
         simulation = fmi.simulate(
-            self.model, reset=reset, final_time=self.final_time, **kwargs_simulate
+            self.model,
+            reset=reset,
+            start_time=self.start_time,
+            final_time=self.final_time,
+            **kwargs_simulate
         )
 
         return fmi.strip_simulation(
