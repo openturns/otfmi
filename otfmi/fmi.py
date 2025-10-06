@@ -638,7 +638,6 @@ def simulate_trajectory(
         path_fmu=path_fmu, inputs_fmu=list_input, outputs_fmu=list_output
     )
     model._OpenTURNSFMUFunction__final = "trajectory"
-    model._OpenTURNSFMUFunction__expect_trajectory = False  # False is the default
 
     try:
         timestep.__iter__
