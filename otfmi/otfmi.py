@@ -12,7 +12,6 @@ import pyfmi
 import numpy as np
 import os
 from . import fmi
-from . import fmu_pool
 
 
 class FMUFunction(ot.Function):
@@ -30,9 +29,6 @@ class FMUFunction(ot.Function):
     outputs_fmu : Sequence of str, default=None
         Names of the variable from the fmu to be used as output variables.
         By default assigns variables with FMI causality OUTPUT.
-
-    n_cpus : int
-        Number of cores to use for multiprocessing.
 
     initialization_script : str (optional)
         Path to the initialization script.
@@ -59,7 +55,6 @@ class FMUFunction(ot.Function):
         path_fmu=None,
         inputs_fmu=None,
         outputs_fmu=None,
-        n_cpus=None,
         kind=None,
         initialization_script=None,
         start_time=None,
@@ -69,7 +64,6 @@ class FMUFunction(ot.Function):
             path_fmu=path_fmu,
             inputs_fmu=inputs_fmu,
             outputs_fmu=outputs_fmu,
-            n_cpus=n_cpus,
             kind=kind,
             initialization_script=initialization_script,
             start_time=start_time,
@@ -97,9 +91,6 @@ class OpenTURNSFMUFunction(ot.OpenTURNSPythonFunction):
         Names of the variable from the fmu to be used as output variables.
         By default assigns variables with FMI causality OUTPUT.
 
-    n_cpus : int
-        Number of cores to use for multiprocessing.
-
     initialization_script : str (optional)
         Path to the initialization script.
 
@@ -124,7 +115,6 @@ class OpenTURNSFMUFunction(ot.OpenTURNSPythonFunction):
         path_fmu,
         inputs_fmu=None,
         outputs_fmu=None,
-        n_cpus=None,
         initialization_script=None,
         kind=None,
         start_time=None,
@@ -144,8 +134,6 @@ class OpenTURNSFMUFunction(ot.OpenTURNSPythonFunction):
 
         self._set_final_time(final_time)
         self._set_start_time(start_time)
-
-        self.n_cpus = n_cpus
 
         self.initialize(initialization_script)
 
@@ -286,19 +274,6 @@ class OpenTURNSFMUFunction(ot.OpenTURNSPythonFunction):
 
         return self.simulate(value_input=value_input, **kwargs)
 
-    def _exec_sample(self, list_value_input, **kwargs):
-        """Simulate the FMU multiple times.
-
-        Parameters
-        ----------
-        list_value_input : Sequence of vectors of input values.
-
-        Additional keyword arguments are passed on to the 'simulate' method of
-        the underlying PyFMI model object.
-
-        """
-        return self.simulate_sample(list_value_input, **kwargs)
-
     def load_fmu(self, path_fmu, kind=None, **kwargs):
         """Load an FMU.
 
@@ -398,40 +373,6 @@ class OpenTURNSFMUFunction(ot.OpenTURNSPythonFunction):
 
         return fmi.strip_simulation(
             simulation, name_output=self.getOutputDescription())
-
-    def simulate_sample(self, list_value_input, **kwargs):
-        """Simulate the FMU multiple times.
-
-        Parameters
-        ----------
-        list_value_input : Sequence of vectors of input values.
-
-        Additional keyword arguments are passed on to the 'simulate' method of
-        the underlying PyFMI model object.
-
-        """
-
-        n_cpus = 1 if self.n_cpus is None else self.n_cpus
-        if n_cpus == 1:
-            return [self.simulate(point, **kwargs) for point in list_value_input]
-
-        kwargs.setdefault("initialization_script", self.initialization_script)
-
-        # TODO: re-factorize parsing of kwargs?
-
-        list_kwargs = []
-        for value_input in list_value_input:
-            kwargs_simulate = fmi.parse_kwargs_simulate(
-                value_input,
-                name_input=self.getFMUInputDescription(),
-                name_output=self.getFMUOutputDescription(),
-                model=self.model,
-                **kwargs
-            )
-            list_kwargs.append(kwargs_simulate)
-
-        pool = fmu_pool.FMUPool(self.model, n_process=n_cpus)
-        return pool.run(list_kwargs, final="final")
 
 
 class FMUPointToFieldFunction(ot.PointToFieldFunction):
