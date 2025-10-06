@@ -51,13 +51,6 @@ class FMUFunction(ot.Function):
 
     """
 
-    # expect_trajectory : bool, if True, the call inputs are assumed to be
-    # time dependent trajectories. Default is False
-    # TODO: Not implemented yet. Currently the __call__ from
-    # Function gets in the way and switch to sample execution.
-    # Hence a sequence of vectors is expected but a single vector is
-    # outputted.
-
     def __new__(
         self,
         path_fmu=None,
@@ -116,11 +109,6 @@ class OpenTURNSFMUFunction(ot.OpenTURNSPythonFunction):
         rationale behind this choice is is that co-simulation may be used to
         impose a solver not available in pyfmi.
 
-    expect_trajectory : bool
-        If True, the call inputs are assumed to be time dependent
-        trajectories. Default is False
-
-
     """
 
     def __init__(
@@ -131,7 +119,6 @@ class OpenTURNSFMUFunction(ot.OpenTURNSPythonFunction):
         n_cpus=None,
         initialization_script=None,
         kind=None,
-        expect_trajectory=False,
         final_time=None,
         **kwargs
     ):
@@ -152,7 +139,6 @@ class OpenTURNSFMUFunction(ot.OpenTURNSPythonFunction):
 
         self.initialize(initialization_script)
 
-        self.__expect_trajectory = expect_trajectory
         self.__final = kwargs.pop("final", None)
 
     def _set_inputs_fmu(self, inputs_fmu):
@@ -248,16 +234,10 @@ class OpenTURNSFMUFunction(ot.OpenTURNSPythonFunction):
 
     def __call__(self, X, **kwargs):
         X = np.atleast_1d(np.squeeze(X))
-        if self.__expect_trajectory:
-            if X.ndim > 2:
-                return self._exec_sample(X, **kwargs)
-            else:
-                return self._exec(X, **kwargs)
+        if X.ndim > 1:
+            return self._exec_sample(X, **kwargs)
         else:
-            if X.ndim > 1:
-                return self._exec_sample(X, **kwargs)
-            else:
-                return self._exec(X, **kwargs)
+            return self._exec(X, **kwargs)
 
     def _set_final_time(self, final_time):
         """Extract final time from keywords if exists.
@@ -506,7 +486,6 @@ class OpenTURNSFMUPointToFieldFunction(ot.OpenTURNSPythonPointToFieldFunction):
         outputs_fmu=None,
         initialization_script=None,
         kind=None,
-        expect_trajectory=False,
         start_time=None,
         final_time=None,
         **kwargs
