@@ -41,7 +41,7 @@ class _FMUBaseFunction:
                     tmax = min(tmax, final_time)
                 step = self._model.get_default_experiment_step()
                 n = int((tmax - tmin) / step)
-                mesh = ot.IntervalMesher([n]).build(ot.Interval(tmin, tmax))
+                mesh = ot.RegularGrid(tmin, step, n + 1)
             else:
                 assert isinstance(mesh, ot.Mesh), "Expected mesh of type ot.Mesh"
         self._mesh = mesh
