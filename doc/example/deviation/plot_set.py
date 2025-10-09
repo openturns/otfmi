@@ -43,7 +43,7 @@ midlevel_function = otfmi.OpenTURNSFMUPointToFieldFunction(
     path_fmu, inputs_fmu=["E", "I"], outputs_fmu=["y"]
 )
 
-outputPoint = midlevel_function.simulate(
+outputPoint = midlevel_function.base.simulate(
     inputPoint, algorithm="FMICSAlg", options={"silent_mode": True}
 )
 
@@ -51,7 +51,7 @@ outputPoint = midlevel_function.simulate(
 # For advanced users, the middle-level class :class:`~otfmi.OpenTURNSFMUPointToFieldFunction` also gives
 # access to the PyFMI model. We can hence access all PyFMI's object methods:
 
-pyfmi_model = midlevel_function.model
+pyfmi_model = midlevel_function.base.get_model()
 print(dir(pyfmi_model))
 
 # %%
