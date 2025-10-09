@@ -122,6 +122,9 @@ class OpenTURNSFMUFunction(ot.OpenTURNSPythonFunction):
         **kwargs
     ):
         self.load_fmu(path_fmu=path_fmu, kind=kind)
+        # for serialization
+        self._path_fmu = path_fmu
+        self._kind = kind
 
         self._set_inputs_fmu(inputs_fmu)
         self._set_outputs_fmu(outputs_fmu)
@@ -374,6 +377,18 @@ class OpenTURNSFMUFunction(ot.OpenTURNSPythonFunction):
         return fmi.strip_simulation(
             simulation, name_output=self.getOutputDescription())
 
+    def __getstate__(self):
+        data = super(OpenTURNSFMUFunction, self).__getstate__()
+        # remove pyfmi model
+        if "model" in data:
+            data.pop("model")
+        return data
+
+    def __setstate__(self, data):
+        self.__dict__.update(data)
+        # reload pyfmi model
+        self.load_fmu(self._path_fmu, self._kind)
+
 
 class FMUPointToFieldFunction(ot.PointToFieldFunction):
     """
@@ -456,6 +471,9 @@ class OpenTURNSFMUPointToFieldFunction(ot.OpenTURNSPythonPointToFieldFunction):
         **kwargs
     ):
         self.load_fmu(path_fmu=path_fmu, kind=kind)
+        # for serialization
+        self._path_fmu = path_fmu
+        self._kind = kind
 
         if mesh is None:
             tmin = self.model.get_default_experiment_start_time()
@@ -743,3 +761,15 @@ class OpenTURNSFMUPointToFieldFunction(ot.OpenTURNSPythonPointToFieldFunction):
             local_mesh, self.getOutputMesh(), self.getOutputDimension()
         )
         return interpolation(values)
+
+    def __getstate__(self):
+        data = super(OpenTURNSFMUPointToFieldFunction, self).__getstate__()
+        # remove pyfmi model
+        if "model" in data:
+            data.pop("model")
+        return data
+
+    def __setstate__(self, data):
+        self.__dict__.update(data)
+        # reload pyfmi model
+        self.load_fmu(self._path_fmu, self._kind)
