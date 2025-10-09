@@ -1,6 +1,6 @@
-# Copyright 2016 EDF. This software was developed with the collaboration of
-# Phimeca Engineering (Sylvain Girard, girard@phimeca.com).
-"""Utility functions for common FMU manipulations."""
+# Copyright 2016-2025 EDF Phimeca
+
+"""Low level utility functions for common FMU manipulations."""
 
 import io
 import pyfmi
