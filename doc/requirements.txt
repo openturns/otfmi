@@ -1,6 +1,5 @@
-sphinxcontrib-bibtex
 renku-sphinx-theme
-sphinx>=5,<7
+sphinx
 sphinx-gallery
 numpydoc
 matplotlib

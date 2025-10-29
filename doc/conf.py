@@ -75,7 +75,7 @@ master_doc = "index"
 
 # General information about the project.
 project = "otfmi"
-copyright = "2017-2023 EDF-Phimeca"
+copyright = "2017-2025 EDF-Phimeca"
 author = "Sylvain Girard"
 
 # List of patterns, relative to source directory, that match files and
