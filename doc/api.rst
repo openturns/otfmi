@@ -6,8 +6,9 @@ otfmi facilitates the analysis of FMUs over time.
 Main API
 --------
 
-The class **FMUPointToFieldFunction** wraps the FMU in an :py:class:`openturns.PointToFieldFunction`.
-Its output is a :py:class:`openturns.Field` gathering the outputs as function of time.
+The class **FMUPointToFieldFunction** wraps the FMU evaluation in an :py:class:`openturns.PointToFieldFunction`.
+Its input is a vector (:py:class:`openturns.Point`) and its output is a
+:py:class:`openturns.Field` gathering the outputs as function of time.
 
 .. currentmodule:: otfmi
 
@@ -17,23 +18,25 @@ Its output is a :py:class:`openturns.Field` gathering the outputs as function of
 
    FMUPointToFieldFunction
 
-Its lower-level counterpart is **OpenTURNSFMUPointToFieldFunction**, closer to
-PyFMI’s methods but not directly usable with OpenTURNS.
-
-.. autosummary::
-   :toctree: _generated/
-   :template: class.rst_t
-
-   OpenTURNSFMUPointToFieldFunction
-
-For convenience the **FMUFunction** is provided for cases in which we absolutely need
-a :py:class:`openturns.Function` instead of a :py:class:`openturns.PointToFieldFunction`.
+The **FMUFunction** allows to perform the FMU evaluation as a :py:class:`openturns.Function`.
+Both its input and output vector are a vector (:py:class:`openturns.Point`),
+the output consisting of the values at the final simulation time.
 
 .. autosummary::
    :toctree: _generated/
    :template: class.rst_t
 
    FMUFunction
+
+The class **FMUFieldToPointFunction** wraps the FMU evaluation in an :py:class:`openturns.FieldToPointFunction`.
+Its input is a :py:class:`openturns.Field` and its output is a vector
+(:py:class:`openturns.Point`) consisting of the values at the final simulation time.
+
+.. autosummary::
+   :toctree: _generated/
+   :template: class.rst_t
+
+   FMUFieldToPointFunction
 
 Common low-level functions
 --------------------------
