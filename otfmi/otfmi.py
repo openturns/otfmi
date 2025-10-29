@@ -15,8 +15,10 @@ class _FMUBaseFunction:
     def __init__(
         self,
         path_fmu,
+        field_input=False,
         field_output=True,
-        mesh=None,
+        input_mesh=None,
+        output_mesh=None,
         inputs_fmu=None,
         outputs_fmu=None,
         initialization_script=None,
@@ -30,23 +32,25 @@ class _FMUBaseFunction:
         self._path_fmu = path_fmu
         self._kind = kind
 
+        # set input mesh
+        self._field_input = field_input
+        if field_input:
+            if input_mesh is None:
+                input_mesh = self._get_default_mesh(start_time, final_time)
+            else:
+                if not isinstance(input_mesh, ot.Mesh):
+                    raise TypeError("Expected mesh of type ot.Mesh")
+        self._input_mesh = input_mesh
+
+        # set output mesh
         self._field_output = field_output
         if field_output:
-            if mesh is None:
-                tmin = self._model.get_default_experiment_start_time()
-                tmax = self._model.get_default_experiment_stop_time()
-                if start_time is not None:
-                    tmin = max(tmin, start_time)
-                if final_time is not None:
-                    tmax = min(tmax, final_time)
-                step = self._model.get_default_experiment_step()
-                n = int((tmax - tmin) / step)
-                mesh = ot.RegularGrid(tmin, step, n + 1)
+            if output_mesh is None:
+                output_mesh = input_mesh = self._get_default_mesh(start_time, final_time)
             else:
-                if not isinstance(mesh, ot.Mesh):
+                if not isinstance(output_mesh, ot.Mesh):
                     raise TypeError("Expected mesh of type ot.Mesh")
-
-        self._mesh = mesh
+        self._output_mesh = output_mesh
 
         self._set_inputs_fmu(inputs_fmu)
         self._set_outputs_fmu(outputs_fmu)
@@ -54,8 +58,10 @@ class _FMUBaseFunction:
         self._set_final_time(final_time)
         self._set_start_time(start_time)
 
+        if field_input:
+            self._assert_mesh_validity(self._input_mesh)
         if field_output:
-            self._assert_mesh_validity()
+            self._assert_mesh_validity(self._output_mesh)
 
         self.initialize(initialization_script)
 
@@ -150,12 +156,12 @@ class _FMUBaseFunction:
                     )
         self._outputs_fmu = outputs_fmu
 
-    def _assert_mesh_validity(self):
+    def _assert_mesh_validity(self, mesh):
         """Raise an error if the mesh is not comprised between the start and
         final simulation time.
         """
-        mesh_min = self._mesh.getVertices().getMin()[0]
-        mesh_max = self._mesh.getVertices().getMax()[0]
+        mesh_min = mesh.getVertices().getMin()[0]
+        mesh_max = mesh.getVertices().getMax()[0]
         tol = (mesh_max - mesh_min) * 1e-6
         if mesh_min + tol < self._start_time:
             raise ValueError(f"""The mesh start time ({mesh_min}) must be >= to FMU start time ({self._start_time}).\n
@@ -164,6 +170,18 @@ class _FMUBaseFunction:
         if mesh_max > self._final_time + tol:
             raise ValueError(f"""The mesh final time ({mesh_max}) must be <= to FMU final time ({self._final_time}).\n
             To set the FMU final time, use the argument final_time in the constructor.""")
+
+    def _get_default_mesh(self, start_time, final_time):
+        tmin = self._model.get_default_experiment_start_time()
+        tmax = self._model.get_default_experiment_stop_time()
+        if start_time is not None:
+            tmin = max(tmin, start_time)
+        if final_time is not None:
+            tmax = min(tmax, final_time)
+        step = self._model.get_default_experiment_step()
+        n = int((tmax - tmin) / step)
+        mesh = ot.RegularGrid(tmin, step, n + 1)
+        return mesh
 
     def _set_final_time(self, final_time):
         """Extract final time from keywords if exists.
@@ -259,7 +277,15 @@ class _FMUBaseFunction:
 
         """
 
+        if "final_time" in kwargs.keys():
+            raise Warning("final_time must be set in the constructor.")
+        if "start_time" in kwargs.keys():
+            raise Warning("start_time must be set in the constructor.")
+
         kwargs.setdefault("initialization_script", self.initialization_script)
+
+        if self._field_input:
+            kwargs.setdefault("time", self._input_mesh.getVertices().asPoint())
 
         kwargs_simulate = fmi.parse_kwargs_simulate(
             value_input,
@@ -269,10 +295,9 @@ class _FMUBaseFunction:
             **kwargs
         )
 
-        if "final_time" in kwargs.keys():
-            raise Warning("final_time must be set in the constructor.")
-        if "start_time" in kwargs.keys():
-            raise Warning("start_time must be set in the constructor.")
+        if self._field_input:
+            kwargs_simulate.pop("start_time")
+            kwargs_simulate.pop("final_time")
 
         simulation = fmi.simulate(
             self._model,
@@ -288,7 +313,7 @@ class _FMUBaseFunction:
                 [[t] for t in time], [[i, i + 1] for i in range(len(time) - 1)]
             )
             interpolation = ot.P1LagrangeInterpolation(
-                local_mesh, self._mesh, len(self.get_outputs_fmu())
+                local_mesh, self._output_mesh, len(self.get_outputs_fmu())
             )
             return interpolation(values)
         else:
@@ -315,9 +340,13 @@ class _FMUBaseFunction:
         """Get the list of output variable names."""
         return self._outputs_fmu
 
-    def get_mesh(self):
-        """Get the list of output variable names."""
-        return self._mesh
+    def get_input_mesh(self):
+        """Get the input mesh."""
+        return self._input_mesh
+
+    def get_output_mesh(self):
+        """Get the output mesh."""
+        return self._output_mesh
 
     def get_model(self):
         """Get the fmi model."""
@@ -435,9 +464,9 @@ class OpenTURNSFMUFunction(ot.OpenTURNSPythonFunction):
                                      inputs_fmu=inputs_fmu, outputs_fmu=outputs_fmu,
                                      start_time=start_time, final_time=final_time,
                                      initialization_script=initialization_script,
-                                     field_output=False)
+                                     field_input=False, field_output=False)
 
-        super(OpenTURNSFMUFunction, self).__init__(
+        super().__init__(
             n=len(self.base.get_inputs_fmu()), p=len(self.base.get_outputs_fmu())
         )
         self.setInputDescription(self.base.get_inputs_fmu())
@@ -548,10 +577,10 @@ class OpenTURNSFMUPointToFieldFunction(ot.OpenTURNSPythonPointToFieldFunction):
                                      inputs_fmu=inputs_fmu, outputs_fmu=outputs_fmu,
                                      start_time=start_time, final_time=final_time,
                                      initialization_script=initialization_script,
-                                     mesh=mesh, field_output=True)
+                                     field_input=False, field_output=True, output_mesh=mesh)
 
-        super(OpenTURNSFMUPointToFieldFunction, self).__init__(
-            len(self.base.get_inputs_fmu()), self.base.get_mesh(), len(self.base.get_outputs_fmu())
+        super().__init__(
+            len(self.base.get_inputs_fmu()), self.base.get_output_mesh(), len(self.base.get_outputs_fmu())
         )
         self.setInputDescription(self.base.get_inputs_fmu())
         self.setOutputDescription(self.base.get_outputs_fmu())
@@ -567,4 +596,109 @@ class OpenTURNSFMUPointToFieldFunction(ot.OpenTURNSPythonPointToFieldFunction):
 
         """
 
+        return self.base.simulate(value_input=value_input, **kwargs)
+
+
+class FMUFieldToPointFunction(ot.FieldToPointFunction):
+    """
+    Define a FieldToPointFunction from a FMU file.
+
+    Parameters
+    ----------
+    path_fmu : str, path to the FMU file.
+
+    mesh : :class:`openturns.Mesh`
+        Time grid, has to be included in the start/end time defined in the FMU.
+        By default it takes into account the start/end time and default step defined the FMU.
+
+    inputs_fmu : Sequence of str, default=None
+        Names of the variable from the fmu to be used as input variables.
+        By default assigns variables with FMI causality INPUT.
+
+    outputs_fmu : Sequence of str, default=None
+        Names of the variable from the fmu to be used as output variables.
+        By default assigns variables with FMI causality OUTPUT.
+
+    initialization_script : str (optional)
+        Path to the initialization script.
+
+    kind : str, one of "ME" (model exchange) or "CS" (co-simulation)
+        Select a kind of FMU if both are available.
+        Note:
+        Contrary to pyfmi, the default here is "CS" (co-simulation). The
+        rationale behind this choice is that co-simulation may be used to
+        impose a solver not available in pyfmi.
+
+    start_time : float
+        The FMU simulation start time.
+
+    final_time : float
+        The FMU simulation stop time.
+
+    """
+
+    def __new__(
+        self,
+        path_fmu,
+        mesh=None,
+        inputs_fmu=None,
+        outputs_fmu=None,
+        kind=None,
+        initialization_script=None,
+        start_time=None,
+        final_time=None,
+    ):
+        lowlevel = OpenTURNSFMUFieldToPointFunction(
+            path_fmu=path_fmu,
+            mesh=mesh,
+            inputs_fmu=inputs_fmu,
+            outputs_fmu=outputs_fmu,
+            kind=kind,
+            initialization_script=initialization_script,
+            start_time=start_time,
+            final_time=final_time,
+        )
+
+        highlevel = ot.FieldToPointFunction(lowlevel)
+        # highlevel._model = lowlevel.model
+        return highlevel
+
+
+class OpenTURNSFMUFieldToPointFunction(ot.OpenTURNSPythonFieldToPointFunction):
+    """Define a FieldToPointFunction from a FMU file."""
+
+    def __init__(
+        self,
+        path_fmu,
+        mesh=None,
+        inputs_fmu=None,
+        outputs_fmu=None,
+        initialization_script=None,
+        kind=None,
+        start_time=None,
+        final_time=None,
+        **kwargs
+    ):
+        self.base = _FMUBaseFunction(path_fmu, kind=kind,
+                                     inputs_fmu=inputs_fmu, outputs_fmu=outputs_fmu,
+                                     start_time=start_time, final_time=final_time,
+                                     initialization_script=initialization_script,
+                                     field_input=True, input_mesh=mesh, field_output=False)
+
+        super().__init__(
+            self.base.get_input_mesh(), len(self.base.get_inputs_fmu()), len(self.base.get_outputs_fmu())
+        )
+        self.setInputDescription(self.base.get_inputs_fmu())
+        self.setOutputDescription(self.base.get_outputs_fmu())
+
+    def _exec(self, value_input, **kwargs):
+        """Simulate the FMU for a given set of input values.
+
+        Parameters
+        ----------
+        value_input : Vector or array-like with time steps as rows.
+
+        See the 'simulate' method for additional keyword arguments.
+
+        """
         return self.base.simulate(value_input=value_input, **kwargs)

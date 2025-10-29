@@ -155,8 +155,10 @@ def parse_kwargs_simulate(
         indices_input_fmi = [
             i for i in range(len(name_input)) if causality[name_input[i]] == fmix_input
         ]
-        value_input_fmi = [value_input[k] for k in indices_input_fmi]
-        value_input_fmi = reshape_input(value_input_fmi, len(name_input_fmi))
+        if value_input_array.ndim == 1:
+            value_input_fmi = value_input_array[indices_input_fmi]
+        else:  # 2-d array
+            value_input_fmi = value_input_array[:, indices_input_fmi]
         if len(name_input_fmi) > 0:
             kwargs["input"] = (name_input_fmi, np.column_stack((time, value_input_fmi)))
 
