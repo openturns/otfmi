@@ -1,0 +1,47 @@
+[build-system]
+requires = ["setuptools"]
+
+[project]
+name = "otfmi"
+version = "0.16.6"
+description = "Simulate FMUs from OpenTURNS"
+readme = "README.rst"
+dependencies = [
+  "openturns",
+  "numpy",
+  "pyfmi",
+  "dill",
+  "pythonfmu",
+  "jinja2",
+]
+authors = [
+  {name = "Sylvain Girard"},
+  {name = "Julien Schueller"},
+]
+license = {text= "LGPL-3.0-or-later"}
+classifiers = [
+  "Intended Audience :: Science/Research",
+  "Natural Language :: English",
+  "Topic :: Scientific/Engineering",
+]
+keywords = ["fmi", "modelica", "fmu"]
+
+[tool.setuptools]
+packages = ["otfmi",
+            "otfmi.example"]
+
+[tool.setuptools.package-data]
+othpc = ["example/file/initialization_script/*.mos",
+         "example/file/fmu/linux64/*.fmu",
+         "example/file/fmu/win64/*.fmu"]
+
+[project.optional-dependencies]
+doc = ["numpydoc", "sphinx-gallery", "sphinx"]
+
+[project.urls]
+Homepage = "https://github.com/openturns/otfmi"
+Documentation = "http://openturns.github.io/otfmi/master/"
+Repository = "https://github.com/openturns/otfmi.git"
+
+[project.scripts]
+mo2fmu = "otfmi.mo2fmu:main"
