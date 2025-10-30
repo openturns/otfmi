@@ -39,9 +39,13 @@ def mo2fmu(
         Verbose output
     """
 
-    assert isinstance(path_mo, str), "path_mo must be str"
-    assert isinstance(path_fmu, str), "path_fmu must be str"
-    assert isinstance(fmuType, str), "fmuType must be str"
+    if not isinstance(path_mo, str):
+        raise TypeError("path_mo must be of type str")
+    if not isinstance(path_fmu, str):
+        raise TypeError("path_fmu must be of type str")
+    if not isinstance(fmuType, str):
+        raise TypeError("fmuType must be of type str")
+
     try:
         [str(x) for x in libs]
     except Exception:
@@ -93,7 +97,6 @@ buildModelFMU({{ className }}, version="{{ version }}", fmuType="{{ fmuType }}",
         cp = subprocess.run(
             ["omc", "mo2fmu.mos"],
             capture_output=True,
-            shell=sys.platform.startswith("win"),
             cwd=workdir,
             check=True,
         )

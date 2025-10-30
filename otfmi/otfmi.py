@@ -43,7 +43,9 @@ class _FMUBaseFunction:
                 n = int((tmax - tmin) / step)
                 mesh = ot.RegularGrid(tmin, step, n + 1)
             else:
-                assert isinstance(mesh, ot.Mesh), "Expected mesh of type ot.Mesh"
+                if not isinstance(mesh, ot.Mesh):
+                    raise TypeError("Expected mesh of type ot.Mesh")
+
         self._mesh = mesh
 
         self._set_inputs_fmu(inputs_fmu)
@@ -62,7 +64,7 @@ class _FMUBaseFunction:
 
         Parameters
         ----------
-        inputs_fmu : Sequence of strings
+        inputs_fmu : Sequence of str
             Names of the variable from the fmu to be used as input variables.
         """
 
@@ -106,7 +108,7 @@ class _FMUBaseFunction:
 
         Parameters
         ----------
-        outputs_fmu : Sequence of strings
+        outputs_fmu : Sequence of str
             Names of the variable from the fmu to be used as output variables.
         """
 
@@ -155,17 +157,13 @@ class _FMUBaseFunction:
         mesh_min = self._mesh.getVertices().getMin()[0]
         mesh_max = self._mesh.getVertices().getMax()[0]
         tol = (mesh_max - mesh_min) * 1e-6
-        assert (
-            mesh_min + tol >= self._start_time
-        ), """The mesh start time must be >= to FMU start time.\n
-            To set the FMU start time, use the argument *start_time* in
-            FMUPointToFieldFunction constructor."""
+        if mesh_min + tol < self._start_time:
+            raise ValueError(f"""The mesh start time ({mesh_min}) must be >= to FMU start time ({self._start_time}).\n
+            To set the FMU start time, use the argument start_time in the constructor.""")
 
-        assert (
-            mesh_max <= self._final_time + tol
-        ), f"""The mesh final time ({mesh_max}) must be <= to FMU final time ({self._final_time}).\n
-            To set the FMU final time, use the argument final_time in
-            FMUPointToFieldFunction constructor."""
+        if mesh_max > self._final_time + tol:
+            raise ValueError(f"""The mesh final time ({mesh_max}) must be <= to FMU final time ({self._final_time}).\n
+            To set the FMU final time, use the argument final_time in the constructor.""")
 
     def _set_final_time(self, final_time):
         """Extract final time from keywords if exists.
@@ -185,7 +183,7 @@ class _FMUBaseFunction:
 
         Parameters
         ----------
-        start_time: float (must be >= 0)
+        start_time : float (must be >= 0)
 
         """
         if start_time is not None:

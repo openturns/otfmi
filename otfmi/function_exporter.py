@@ -31,8 +31,10 @@ class FunctionExporter(object):
     """
 
     def __init__(self, function, start=None):
-        assert hasattr(function, "getInputDimension"), "not an openturns function"
-        assert not hasattr(function, "getInputMesh"), "not a vector->vector|field function"
+        if not hasattr(function, "getInputDimension"):
+            raise ValueError("not an openturns.Function")
+        if hasattr(function, "getInputMesh"):
+            raise ValueError("vector->vector|field function not supported")
         if hasattr(function, "getOutputMesh") and function.getOutputMesh().getDimension() != 1:
             raise TypeError("Can only export field functions with mesh dimension=1 (temporal)")
         self._function = function
@@ -41,7 +43,8 @@ class FunctionExporter(object):
                 [float(x) for x in start]
             except Exception:
                 raise TypeError("start must be a sequence of float")
-            assert len(start) == function.getInputDimension(), "wrong input dimension"
+            if len(start) != function.getInputDimension():
+                raise ValueError("wrong input dimension")
         self._start = start
         self._workdir = tempfile.mkdtemp()
         self._xml_path = os.path.join(self._workdir, "function.xml")
@@ -698,10 +701,12 @@ end {{ className }};
         # "move" argument moves the the model from temporary folder to user folder (default=True)
         # not documented on purpose (private)
 
-        assert isinstance(model_path, str), "model_path must be str"
+        if not isinstance(model_path, str):
+            raise TypeError("model_path must be str")
         rawClassName, extension = os.path.splitext(os.path.basename(model_path))
         className = rawClassName[0].upper() + rawClassName[1:]
-        assert extension == ".mo", "Invalid model"
+        if extension != ".mo":
+            raise ValueError("Expected a .mo file name")
         dirName = os.path.expanduser(os.path.dirname(model_path))
 
         self._export_xml()
@@ -759,7 +764,8 @@ end {{ className }};
         rawClassName, extension = os.path.splitext(os.path.basename(fmu_path))
         className = rawClassName[0].upper() + rawClassName[1:]
         # name starting with lower case causes connection issues in OMEdit
-        assert extension == ".fmu", "Please give a FMU name as argument :)"
+        if extension != ".fmu":
+            raise ValueError("Expected a .fmu file name")
         dirName = os.path.expanduser(os.path.dirname(fmu_path))
         if not os.path.exists(self._workdir):
             os.makedirs(self._workdir)

@@ -25,7 +25,7 @@ def test_default_mesh(path_fmu):
 
 def test_start_time_coherence(path_fmu, mesh):
     """Check if incoherent start time raises an error"""
-    with pytest.raises(AssertionError):
+    with pytest.raises(ValueError):
         _ = otfmi.FMUPointToFieldFunction(path_fmu, mesh,
                                           inputs_fmu=["infection_rate", "healing_rate"],
                                           outputs_fmu=["infected"],
@@ -56,7 +56,7 @@ def test_start_time(path_fmu, mesh):
 
 def test_final_time_coherence(path_fmu, mesh):
     """Check if incoherent final time raises an error."""
-    with pytest.raises(AssertionError):
+    with pytest.raises(ValueError):
         _ = otfmi.FMUPointToFieldFunction(path_fmu, mesh,
                                           inputs_fmu=["infection_rate", "healing_rate"],
                                           outputs_fmu=["infected"],
