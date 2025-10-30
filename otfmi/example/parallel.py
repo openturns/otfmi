@@ -3,10 +3,11 @@
 # Phimeca Engineering (Sylvain Girard, girard@phimeca.com).
 """Run multiple FMU simulations in parallel."""
 
+import numpy as np
 import openturns as ot
 import otfmi
 import otfmi.example
-import sys
+import psutil
 import time
 
 # Define the input distribution
@@ -48,27 +49,18 @@ def instantiate_lowlevel():
 
 def ask_n_cpus():
     """Get integer number of cores from user."""
-    version_python = sys.version_info.major
     query = "How many cores do you want to use? "
-
-    while True:
-        if version_python == 3:
-            eval(input(query))
-        else:
-            how_many = input(query)
-
-        if how_many.lower() in ("", "q", "quit", "exit"):
-            print("Aborted.")
-            sys.exit()
-        try:
-            return int(how_many)
-        except ValueError:
-            print("Please enter an integer.")
+    try:
+        n_cpus = int(input(query))
+    except ValueError:
+        n_cpus = psutil.cpu_count(logical=False)
+        print("(Using the default number of cpus).")
+        return n_cpus
 
 
 def pause():
     """Interrupt execution."""
-    eval(input("(press RETURN to continue)"))
+    input("(press RETURN to continue)")
 
 
 def run_demo(n_simulation):
@@ -114,7 +106,6 @@ def run_demo(n_simulation):
     title = "Simulation results:"
     print(title)
     print(("-" * len(title)))
-    import numpy as np
 
     start = time.time()
     print(

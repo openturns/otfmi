@@ -354,7 +354,8 @@ def get_name_variable(model, **kwargs):
     """
 
     if not hasattr(model, "get_model_variables"):
-        assert isinstance(model, str), "model should be an FMU model or a str"
+        if not isinstance(model, str):
+            raise TypeError("model should be an FMU model or a str")
         path_fmu = model
         model = load_fmu(path_fmu)
 
