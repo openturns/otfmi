@@ -46,7 +46,7 @@ the atmospheric temperature ``T_atm.k``, ``angle_incidence.k``, ``radiation.k``.
 --------------
 
 The solar collector model is exported under the FMI standard 2.0 (Co-Simulation format) into *Solar.fmu*.
-We first load the FMU in Persalys v11.0.
+We first load the FMU in Persalys:
 
 .. image:: /_static/demo_persalys/select_fmu.png
    :scale: 60 %
