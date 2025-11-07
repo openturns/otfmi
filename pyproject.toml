@@ -31,9 +31,8 @@ packages = ["otfmi",
             "otfmi.example"]
 
 [tool.setuptools.package-data]
-othpc = ["example/file/initialization_script/*.mos",
-         "example/file/fmu/linux64/*.fmu",
-         "example/file/fmu/win64/*.fmu"]
+otfmi = ["example/file/fmu/linux-x86_64/*.fmu",
+         "example/file/fmu/win-amd64/*.fmu"]
 
 [project.optional-dependencies]
 doc = ["numpydoc", "sphinx-gallery", "sphinx"]
