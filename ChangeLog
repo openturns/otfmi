@@ -1,4 +1,4 @@
-2025 - release 0.17 (wip)
+2025-11-24 - release 0.17
 - Breaking change: mesh argument is now optional in FMUPointToFieldFunction
 - Breaking change: dropped useless inputs/outputs arguments
 - Add FMUFieldToPointFunction (field -> vector)
