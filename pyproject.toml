@@ -3,7 +3,7 @@ requires = ["setuptools"]
 
 [project]
 name = "otfmi"
-version = "0.16.6"
+version = "0.17"
 description = "Simulate FMUs from OpenTURNS"
 readme = "README.rst"
 dependencies = [
