@@ -666,7 +666,7 @@ end {{ className }};
         with open(os.path.join(self._workdir, className + ".mo"), "w") as mo:
             mo.write(data)
 
-    def export_model(self, model_path, gui=False, verbose=False, binary=True, mode="pyprocess", move=True):
+    def export_model(self, model_path, gui=False, verbose=False, binary=True, mode="pyprocess", **kwargs):
         """
         Export to model file (.mo).
 
@@ -698,9 +698,6 @@ end {{ className }};
               (not just the Python module that would be installed by pip for example).
         """
 
-        # "move" argument moves the the model from temporary folder to user folder (default=True)
-        # not documented on purpose (private)
-
         if not isinstance(model_path, str):
             raise TypeError("model_path must be str")
         rawClassName, extension = os.path.splitext(os.path.basename(model_path))
@@ -722,6 +719,10 @@ end {{ className }};
             raise ValueError(f"Invalid mode: {mode}")
         if binary:
             self._build_cwrapper(verbose)
+
+        # the "move" private kwarg moves the model from temporary folder to user folder
+        move = kwargs.get("move", True)
+
         self._write_modelica_wrapper(className, dirName, gui, move)
 
         if move:
