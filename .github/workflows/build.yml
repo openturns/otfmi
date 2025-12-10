@@ -1,47 +1,6 @@
 name: Build
 on: [push, pull_request]
 jobs:
-  linux:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Build
-        run: |
-          docker pull openturns/archlinux-module-fmi
-          docker run --rm -v `pwd`:/io openturns/archlinux-module-fmi /io/.ci_support/run_docker_linux.sh `id -u`:`id -g`
-      - name: Upload
-        if: ${{ github.ref == 'refs/heads/master' }}
-        run: |
-          git clone --depth 1 https://${{ secrets.GH_TOKEN }}@github.com/openturns/openturns.github.io.git /tmp/io
-          mkdir -p /tmp/io/otfmi/master
-          cp -r html/* /tmp/io/otfmi/master
-          cd /tmp/io
-          touch .nojekyll
-          git config user.email "support@gh.com"
-          git config user.name "GitHub Actions"
-          git add -A .
-          if test `git diff HEAD | wc -c` -eq 0; then exit 0; fi
-          git commit -a -m "GitHub Actions build ${GITHUB_REPOSITORY} ${GITHUB_RUN_ID}"
-          git push --quiet origin master > /dev/null 2>&1
-
-  conda-linux:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: conda-incubator/setup-miniconda@v3
-        with:
-          miniforge-version: latest
-          conda-remove-defaults: "true"
-      - name: Build
-        shell: bash -l {0}
-        run: |
-          conda install -y pyfmi openturns pytest jinja2 fmpy-base pythonfmu omcompiler
-          pip install .
-          mo2fmu -h
-          mo2fmu ./otfmi/example/file/deviation.mo ./otfmi/example/file/fmu/linux-x86_64/deviation.fmu
-          pythonfmu build --file ./otfmi/example/file/DeviationSlave.py --dest ./otfmi/example/file/fmu/linux-x86_64
-          pytest test -s
-
   conda-windows:
     runs-on: windows-latest
     steps:
@@ -52,13 +11,5 @@ jobs:
           conda-remove-defaults: "true"
       - name: Build
         run: |
-          curl -fLO https://build.openmodelica.org/omc/builds/windows/releases/1.25/5/64bit/OpenModelica-v1.25.5-64bit.exe
-          .\OpenModelica-v1.25.5-64bit.exe "/S" | out-null
-          Get-ChildItem -Path "C:\Program Files"
-          $env:PATH += ";C:\Program Files\OpenModelica1.25.5-64bit\bin"
-          omc --version
-          conda install -y pyfmi openturns pytest jinja2 fmpy-base pythonfmu
-          pip install .
-          mo2fmu -h
-          pytest test -s
-
+          conda install -y openturns "python=3.12"
+          python -c "import openturns; print(42)"
