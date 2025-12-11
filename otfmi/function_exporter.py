@@ -174,12 +174,10 @@ void c_func(int nin, double x[], int nout, double y[]) {
 
         # write CMakeLists
         data = """
-cmake_minimum_required (VERSION 3.13)
+cmake_minimum_required (VERSION 3.18)
 set (CMAKE_BUILD_TYPE "Release" CACHE STRING "build type")
 project (wrapper C)
-if (POLICY CMP0091)
-  cmake_policy (SET CMP0091 NEW)
-endif()
+
 # openmodelica uses -Bstatic on Linux
 add_library (cwrapper STATIC wrapper.c)
 set_target_properties (cwrapper PROPERTIES POSITION_INDEPENDENT_CODE ON
@@ -348,12 +346,9 @@ void c_func(int nin, double x[], int nout, double y[])
 
         # write CMakeLists
         data = r"""
-cmake_minimum_required (VERSION 3.13)
+cmake_minimum_required (VERSION 3.18)
 set (CMAKE_BUILD_TYPE "Release" CACHE STRING "build type")
 project (wrapper C)
-if (POLICY CMP0091)
-  cmake_policy (SET CMP0091 NEW)
-endif()
 
 # link dynamically for Python
 add_library (cwrapper SHARED wrapper.c)
@@ -440,12 +435,9 @@ void c_func(int nin, double x[], int nout, double y[])
 
         # write CMakeLists
         data = r"""
-cmake_minimum_required (VERSION 3.13)
+cmake_minimum_required (VERSION 3.18)
 set (CMAKE_BUILD_TYPE "Release" CACHE STRING "build type")
 project (wrapper CXX)
-if (POLICY CMP0091)
-  cmake_policy (SET CMP0091 NEW)
-endif()
 
 add_library (cwrapper SHARED wrapper.cxx)
 
@@ -476,19 +468,20 @@ endif()
         verbose : bool
             Verbose output (default=False).
         """
-        cmake_args = ["cmake", "."]
+        cmake_args = ["cmake", "-LAH"]
         if sys.platform.startswith("win"):
             # bits = platform.architecture()[0]
             # vsplat = {"64bit": "x64", "32bit": "x86"}[bits]
-            cmake_args.insert(1, "-DCMAKE_GENERATOR_PLATFORM=x64")
+            cmake_args += ["-DCMAKE_GENERATOR_PLATFORM=x64"]
 
-        # find OpenTURNS cmake config relative from python dir (for cxx mode)
-        ot_libdir = ot.__file__
-        for _ in range(4):
-            ot_libdir = os.path.dirname(ot_libdir)
-        ot_cmake_dir = os.path.join(ot_libdir, "cmake", "openturns")
-        if os.path.exists(os.path.join(ot_cmake_dir, "OpenTURNSConfig.cmake")):
-            cmake_args.insert(1, f"-DOpenTURNS_DIR={ot_cmake_dir}")
+        # find cmake config relative from python dir (for cxx mode)
+        ot_libdir = pathlib.Path(ot.__file__).parents[3]
+        ot_cmake_dir = ot_libdir / "cmake" / "openturns"
+        if (ot_cmake_dir / "OpenTURNSConfig.cmake").exists():
+            cmake_args += [f"-DOpenTURNS_DIR={ot_cmake_dir.as_posix()}"]
+
+        # in-source build
+        cmake_args += ["-S", "."]
 
         try:
             cp = subprocess.run(
@@ -497,7 +490,7 @@ endif()
             if verbose:
                 print(cp.stdout.decode(), file=sys.stderr)
         except subprocess.CalledProcessError as cpe:
-            print("Error occurred during cmake config:", cpe.stdout + cpe.stderr, file=sys.stderr)
+            print(f"Error occurred during cmake config:\n{cpe.stdout.decode()}\n{cpe.stderr.decode()}", file=sys.stderr)
             raise cpe
 
         try:
@@ -510,7 +503,7 @@ endif()
             if verbose:
                 print(cp.stdout.decode(), file=sys.stderr)
         except subprocess.CalledProcessError as cpe:
-            print("Error occurred during cmake build:", cpe.stdout + cpe.stderr, file=sys.stderr)
+            print(f"Error occurred during cmake build:\n{cpe.stdout.decode()}\n{cpe.stderr.decode()}", file=sys.stderr)
             raise cpe
 
     def _set_input_output(self):
