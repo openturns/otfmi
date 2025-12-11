@@ -119,10 +119,6 @@ def test_export_fmu_field(fmuType):
 @pytest.mark.parametrize("binary", [True, False])
 def test_export_model(mode, binary):
 
-    # OT lib in conda is not compatible with MSVC (compiled with MinGW)
-    if sys.platform.startswith("win") and mode == "cxx":
-        return
-
     # export model
     f = ot.SymbolicFunction(["E", "F", "L", "I"], ["(F*L^3)/(3.0*E*I)"])
     start = [3e7, 3e4, 250.0, 400.0]
