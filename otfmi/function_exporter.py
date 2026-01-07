@@ -3,15 +3,16 @@ import binascii
 import dill
 import glob
 import jinja2
-import tempfile
 import openturns as ot
 import os
+from pythonfmu import FmuBuilder
+import pathlib
 import re
 import subprocess
 import shutil
 import sys
-from pythonfmu import FmuBuilder
-import pathlib
+import sysconfig
+import tempfile
 
 dill.settings["recurse"] = True
 
@@ -345,7 +346,7 @@ void c_func(int nin, double x[], int nout, double y[])
             c.write(data)
 
         # write CMakeLists
-        data = r"""
+        data = fr"""
 cmake_minimum_required (VERSION 3.18)
 set (CMAKE_BUILD_TYPE "Release" CACHE STRING "build type")
 project (wrapper C)
@@ -353,13 +354,13 @@ project (wrapper C)
 # link dynamically for Python
 add_library (cwrapper SHARED wrapper.c)
 
-find_package (Python 3.8 COMPONENTS Development REQUIRED)
+find_package (Python {sysconfig.get_python_version()} COMPONENTS Development EXACT REQUIRED)
 target_link_libraries(cwrapper PRIVATE Python::Python)
 
 set_target_properties (cwrapper PROPERTIES MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>"
-                                           ARCHIVE_OUTPUT_DIRECTORY_RELEASE ${CMAKE_BINARY_DIR}
-                                           LIBRARY_OUTPUT_DIRECTORY_RELEASE ${CMAKE_BINARY_DIR}
-                                           RUNTIME_OUTPUT_DIRECTORY_RELEASE ${CMAKE_BINARY_DIR})
+                                           ARCHIVE_OUTPUT_DIRECTORY_RELEASE ${{CMAKE_BINARY_DIR}}
+                                           LIBRARY_OUTPUT_DIRECTORY_RELEASE ${{CMAKE_BINARY_DIR}}
+                                           RUNTIME_OUTPUT_DIRECTORY_RELEASE ${{CMAKE_BINARY_DIR}})
 if (MSVC)
   target_compile_definitions(cwrapper PRIVATE _CRT_SECURE_NO_WARNINGS)
 endif()
@@ -468,7 +469,7 @@ endif()
         verbose : bool
             Verbose output (default=False).
         """
-        cmake_args = ["cmake", "-LAH"]
+        cmake_args = ["cmake"]
         if sys.platform.startswith("win"):
             # bits = platform.architecture()[0]
             # vsplat = {"64bit": "x64", "32bit": "x86"}[bits]
