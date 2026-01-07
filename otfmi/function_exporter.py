@@ -660,7 +660,7 @@ end {{ className }};
         with open(os.path.join(self._workdir, className + ".mo"), "w") as mo:
             mo.write(data)
 
-    def export_model(self, model_path, gui=False, verbose=False, binary=True, mode="pyprocess", **kwargs):
+    def export_model(self, model_path, gui=False, verbose=False, binary=True, mode="cxx", **kwargs):
         """
         Export to model file (.mo).
 
@@ -682,12 +682,12 @@ end {{ className }};
         binary : bool, optional
             Whether to generate binaries or source (default=True)
         mode : str, optional, either 'pyprocess', 'cpython' or 'cxx'
-            - pyprocess (default): the function is run via a Python process by file I/O;
+            - pyprocess: the function is run via a Python process by file I/O;
               slow but should work almost everywhere.
               The Python environment is required to run the resulting FMU (eg run OMEdit from the conda env).
             - cpython: the function is run via the Python C API; quite fast (no file I/O)
               but requires Python development headers and libs.
-            - cxx: the function is directly evaluated trough the OpenTURNS C++ API;
+            - cxx (default): the function is directly evaluated trough the OpenTURNS C++ API;
               even faster but requires the OpenTURNS development headers and libraries
               (not just the Python module that would be installed by pip for example).
         """
