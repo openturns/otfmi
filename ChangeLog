@@ -1,3 +1,6 @@
+2026-01-07 - release 0.17.1
+- Default function export mode changed to cxx
+
 2025-11-24 - release 0.17
 - Breaking change: mesh argument is now optional in FMUPointToFieldFunction
 - Breaking change: dropped useless inputs/outputs arguments
