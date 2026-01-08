@@ -1,4 +1,4 @@
-__version__ = "0.17"
+__version__ = "0.17.1"
 
 from .otfmi import (
     FMUFunction,
