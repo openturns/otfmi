@@ -736,6 +736,8 @@ end {{ className }};
                 dest = os.path.join(dirName, file)
                 shutil.move(src, dest)
             shutil.rmtree(self._workdir)
+            file_list_msg = ", ".join(list_file[1:])
+            ot.Log.Warn(f"Exported modelica model into: {model_path} (and {file_list_msg})")
 
     def export_fmu(self, fmu_path, fmuType="me", mode="pyprocess", verbose=False):
         """
@@ -858,3 +860,4 @@ class {{ className }}(Fmi2Slave):
 
             FmuBuilder.build_FMU(slave_file, dest=os.path.dirname(fmu_path))
         shutil.rmtree(self._workdir)
+        ot.Log.Warn(f"Exported FMU into: {fmu_path}")
