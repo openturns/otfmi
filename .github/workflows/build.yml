@@ -52,10 +52,10 @@ jobs:
           conda-remove-defaults: "true"
       - name: Build
         run: |
-          curl -fLO https://build.openmodelica.org/omc/builds/windows/releases/1.25/5/64bit/OpenModelica-v1.25.5-64bit.exe
-          .\OpenModelica-v1.25.5-64bit.exe "/S" | out-null
+          curl -fLO https://build.openmodelica.org/omc/builds/windows/releases/1.26/0/64bin/OpenModelica-v1.26.0-64bit.exe
+          .\OpenModelica-v1.26.0-64bit.exe "/S" | out-null
           Get-ChildItem -Path "C:\Program Files"
-          $env:PATH += ";C:\Program Files\OpenModelica1.25.5-64bit\bin"
+          $env:PATH += ";C:\Program Files\OpenModelica1.26.0-64bit\bin"
           omc --version
           conda install -y pyfmi openturns pytest jinja2 fmpy-base pythonfmu
           pip install .
