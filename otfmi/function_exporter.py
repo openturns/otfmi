@@ -47,6 +47,9 @@ class FunctionExporter(object):
             if len(start) != function.getInputDimension():
                 raise ValueError("wrong input dimension")
         self._start = start
+
+    def _init_workdir(self):
+        """Reinitialize the working directory"""
         self._workdir = tempfile.mkdtemp()
         self._xml_path = os.path.join(self._workdir, "function.xml")
 
@@ -700,6 +703,7 @@ end {{ className }};
             raise ValueError("Expected a .mo file name")
         dirName = os.path.expanduser(os.path.dirname(model_path))
 
+        self._init_workdir()
         self._export_xml()
         c_ext = ".c"
         if mode == "pyprocess":
@@ -762,8 +766,7 @@ end {{ className }};
         if extension != ".fmu":
             raise ValueError("Expected a .fmu file name")
         dirName = os.path.expanduser(os.path.dirname(fmu_path))
-        if not os.path.exists(self._workdir):
-            os.makedirs(self._workdir)
+        self._init_workdir()
         if mode == "pyprocess":
             if hasattr(self._function, "getOutputMesh"):
                 raise TypeError("Can only export vectorial functions in pyprocess mode")
