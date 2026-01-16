@@ -2,21 +2,32 @@ import sys
 import os
 import subprocess
 
+# -- Project information -----------------------------------------------------
+# https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
+project = "otfmi"
+copyright = "2017-2025 EDF-Phimeca"
+author = "Sylvain Girard"
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 sys.path.insert(0, os.path.abspath("../"))
 
-# -- General configuration ------------------------------------------------
+# -- General configuration ---------------------------------------------------
+# https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
 extensions = [
     "sphinx.ext.autodoc",
-    "sphinx.ext.todo",
+    "sphinx.ext.extlinks",
     "sphinx.ext.intersphinx",
+    "sphinx.ext.mathjax",
+    "sphinx.ext.todo",
+    "sphinx.ext.viewcode",
     "sphinx.ext.autosummary",
     "numpydoc",
     "sphinx_gallery.gen_gallery",
+    "sphinx_copybutton",
+    "sphinx_design",
 ]
 
 sphinx_gallery_conf = {
@@ -40,6 +51,12 @@ sphinx_gallery_conf = {
     "show_signature": False,
 }
 
+# -- Options for internationalization ----------------------------------------
+# https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-internationalization
+
+language = "en"
+
+#
 
 autodoc_default_options = {"members": None, "inherited-members": None}
 
@@ -73,10 +90,7 @@ source_suffix = {'.rst': 'restructuredtext'}
 # The master toctree document.
 master_doc = "index"
 
-# General information about the project.
-project = "otfmi"
-copyright = "2017-2025 EDF-Phimeca"
-author = "Sylvain Girard"
+
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
@@ -94,9 +108,11 @@ pygments_style = "friendly"
 todo_include_todos = True
 
 
-# -- Options for HTML output ----------------------------------------------
+# -- Options for HTML output -------------------------------------------------
+# https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
-html_theme = "renku"
+html_title = "OTFMI documentation"
+html_theme = "breeze"
 # html_sidebars = {
 #     '**': [
 #         # 'about.html',
@@ -107,7 +123,7 @@ html_theme = "renku"
 #     ]
 # }
 
-html_theme_options = {"prev_next_buttons_location": None, "github_user": "openturns"}
+#html_theme_options = {"prev_next_buttons_location": None, "github_user": "openturns"}
 
 html_show_sourcelink = False
 
