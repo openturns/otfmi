@@ -30,7 +30,7 @@ A bridge between `OpenTURNS <http://openturns.github.io/openturns/master/content
 
     .. grid-item-card:: 🔌 Integrate an OpenTURNS model into a Modelica model.
 
-      You can export your machine learning built with OpenTURNS, to use it as a component of your Modelica model.        
+      You can export your machine learning model built with OpenTURNS, to use it as a component of your Modelica model.        
 
     .. grid-item-card:: 🍒 Use OTFMI through Persalys
 
@@ -44,9 +44,6 @@ A bridge between `OpenTURNS <http://openturns.github.io/openturns/master/content
 
 
 
-Contribution
-------------
-
 You can contribute to the project or signal issues on `otfmi GitHub repository <https://github.com/openturns/otfmi>`__.
 
 This package is licensed under the LGPL3.
@@ -57,6 +54,13 @@ This package is licensed under the LGPL3.
    :maxdepth: 1
 
    why_otfmi
+
+.. toctree::
+   :hidden:
+   :maxdepth: 1
+
+   terminology
+
 
 .. toctree::
    :hidden:
