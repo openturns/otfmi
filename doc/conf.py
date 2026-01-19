@@ -5,7 +5,7 @@ import subprocess
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 project = "otfmi"
-copyright = "2017-2025 EDF-Phimeca"
+copyright = "2017-2026 EDF-Phimeca"
 author = "Sylvain Girard"
 
 # If extensions (or modules to document with autodoc) are in another directory,
@@ -111,7 +111,7 @@ todo_include_todos = True
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
-html_title = "OTFMI documentation"
+html_title = "OTFMI"
 html_theme = "breeze"
 # html_sidebars = {
 #     '**': [
@@ -213,6 +213,28 @@ texinfo_documents = [
         "Miscellaneous",
     ),
 ]
+
+# -- Options for theme development -------------------------------------------
+
+version = os.environ.get("READTHEDOCS_VERSION", "latest")
+
+
+html_css_files = []
+html_js_files = []
+html_static_path = []
+html_context = {
+    "github_user": "openturns",
+    "github_repo": "otfmi",
+    "github_version": "main",
+    "doc_path": "docs",
+    "current_version": version,
+#    "version_switcher": "https://raw.githubusercontent.com/aksiome/breeze/refs/heads/main/docs/_static/switcher.json",
+    "languages": [
+        ("English", f"/en/{version}/%s/", "en"),
+    ],
+}
+
+# https://github.com/openturns/otfmi
 
 # Documents to append as an appendix to all manuals.
 # texinfo_appendices = []
