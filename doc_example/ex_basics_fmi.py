@@ -1,17 +1,28 @@
 """
-Basics of otfmi
-================
+Run simulations with low-level functions
+----------------------------------------
 """
 
+
 # %%
-# Load a FMU file
-# ----------------
+# Prerequisites
+# #############
+
+# %%
+# First, load the following libraries :
+import otfmi.example.utility
+import pyfmi
+import openturns as ot
+import matplotlib.pyplot as plt
+
+# %%
+# Load the model
+# ##############
 
 # %%
 # First, retrieve the path to the example FMU *deviation.fmu*.
 # Then, load the fmu with the `load_fmu` method.
 #
-import otfmi.example.utility
 
 path_fmu = otfmi.example.utility.get_path_fmu("deviation")
 model = otfmi.fmi.load_fmu(path_fmu)
@@ -30,13 +41,13 @@ model = otfmi.fmi.load_fmu(path_fmu, kind="CS", log_file_name="deviation.log")
 
 # %%
 # The link betwen otfmi and pyfmi
-# ---------------------------------
+# ###############################
 
 # %%
-# otfmi `load_fmu` is an overlay of PyFMI `load_fmu` function.
+# OTFMI `load_fmu` is an overlay of PyFMI `load_fmu` function.
 # Hence the FMU loaded here upper benefits of all PyFMI's methods.
 # You can get the list of options of `pyfmi.load_fmu` by typing :
-import pyfmi
+
 print(help(pyfmi.load_fmu))
 
 # %%
@@ -45,14 +56,15 @@ model.get_description()
 
 # %%
 # FMU exploration
-# -----------------
+# ###############
 
 # %%
-# | Knowledge about the FMU is necessary to setup a probabilistic approach:
-# | - What is the name of the FMU variables ?
-# | - Which are the inputs, outputs, parameters ?
-# | - Which are booleans, reals, integers ?
-# | - What is their default start value ?
+# Knowledge about the FMU is necessary to setup a simulations.
+#
+# - What is the name of each variable ?
+# - Which are the inputs, outputs, parameters ?
+# - Which are booleans, reals, integers ?
+# - What is their default start value ?
 
 # %%
 # You can get the FMU variables names with the ``get_name_variable`` method.
@@ -95,7 +107,7 @@ print(dict_start_value)
 
 # %%
 # Run a simulation
-# -----------------
+# ################
 
 # %%
 # The otfmi ``simulate`` function instanciates, initializes and simulates the
@@ -113,16 +125,15 @@ print("y = %g" % result.final("y"))
 
 # %%
 # .. note::
-#   | the *model* is a PyFMI object, loaded with otfmi’s overlay.
-#   | As such, ``model.simulate()`` is a pure PyFMI method.
-#   | Use ``otfmi.fmi.simulate(model)`` to benefit from otfmi’s overlay.
+#    The *model* is a PyFMI object, loaded with otfmi’s overlay.
+#    As such, ``model.simulate()`` is a pure PyFMI method.
+#    Use ``otfmi.fmi.simulate(model)`` to benefit from otfmi’s overlay.
 
 
 # %%
 # At this stage, simulations are ready to be executed.
 # We use OpenTURNS to generate a set of simulations, by sampling the initial
 # value of the the beam's length `L` with 10 different values from 1 to 100.
-import openturns as ot
 
 inputSample = ot.RegularGrid(1.0, 10.0, 10).getValues()
 
@@ -138,7 +149,6 @@ outputSample = ot.Sample([[xx] for xx in list_output])
 # %%
 # Finally, we use matplotlib to plot the results
 
-import matplotlib.pyplot as plt
 plt.figure()
 plt.plot(inputSample, outputSample)
 plt.xlabel("Initial value of the beam's length.")
@@ -146,13 +156,14 @@ plt.ylabel("Deviation.")
 plt.show()
 
 # %%
-# | The interest of the higher-level functions are:
-# | - avoid the *for* loop on the points of the design of experiment,
-# | - automatic formatting of the simulation outputs.
-
-
-
+# Conclusion
+# ################
 
 # %%
-# otfmi ``simulate`` function notably eases initializing a FMU, see
-# :ref:`sphx_glr_auto_example_low_level_plot_initialize.py`.
+# You have just seen how to run several simulations, by tuning just one parameter.
+# OTFMI provides higher-level functions to :
+#
+# - avoid the *for* loop on the points of the design of experiment,
+# - automatic formatting of the simulation outputs.
+#
+# The next example shows you a shorter and easier way to run a set of simulations.
