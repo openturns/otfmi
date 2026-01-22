@@ -28,26 +28,20 @@ extensions = [
     "sphinx_gallery.gen_gallery",
     "sphinx_copybutton",
     "sphinx_design",
+    "sphinx.ext.imgmath"
 ]
 
+# paths to example scripts and generated doc by sphinx
 sphinx_gallery_conf = {
     "examples_dirs": [
-        "application",
-        "example/deviation",
-        "example/epid",
-        "example/low_level",
-        "example/ot_to_fmu",
-    ],  # # path to
-    # example scripts
-    "gallery_dirs": [
-        "auto_application",
-        "auto_example/deviation",
-        "auto_example/epid",
-        "auto_example/low_level",
-        "auto_example/ot_to_fmu",
+        "../doc_example",
     ],
-    # path to where to save gallery gen. output
-    "filename_pattern": "/plot_",
+
+    "gallery_dirs": [
+        "auto_example",
+    ],
+    # only python files beginning by xxx will be executed
+    "filename_pattern": "/ex_",
     "show_signature": False,
 }
 
@@ -68,7 +62,7 @@ autosummary_generate = True
 numpydoc_show_class_members = True
 numpydoc_class_members_toctree = False
 
-extensions.append("sphinx.ext.imgmath")
+# -- Options for imgmath ----------------------------------------
 imgmath_latex_preamble = r"\usepackage{{{0}math_notations}}".format(
     os.path.dirname(__file__) + os.sep
 )
@@ -89,7 +83,6 @@ source_suffix = {'.rst': 'restructuredtext'}
 
 # The master toctree document.
 master_doc = "index"
-
 
 
 # List of patterns, relative to source directory, that match files and
@@ -123,7 +116,7 @@ html_theme = "breeze"
 #     ]
 # }
 
-#html_theme_options = {"prev_next_buttons_location": None, "github_user": "openturns"}
+html_theme_options = {"sidebar_secondary": ["sidebar-toc.html"]}
 
 html_show_sourcelink = False
 
@@ -136,8 +129,8 @@ html_favicon = "_static/Icon.ico"
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ["_static"]
-
-html_css_files = ['sphxglr.css']
+html_css_files = ["custom_download_button.css", "hide_links.css"]
+html_js_files = []
 
 # If not '', a 'Last updated on:' timestamp is inserted at every page bottom,
 # using the given strftime format.
@@ -145,6 +138,20 @@ html_last_updated_fmt = "%b %d, %Y"
 
 # Output file base name for HTML help builder.
 htmlhelp_basename = "otfmidoc"
+
+version = os.environ.get("READTHEDOCS_VERSION", "latest")
+
+html_context = {
+    "github_user": "openturns",
+    "github_repo": "otfmi",
+    "github_version": "main",
+    "doc_path": "docs",
+    "current_version": version,
+#    "version_switcher": "https://raw.githubusercontent.com/aksiome/breeze/refs/heads/main/docs/_static/switcher.json",
+    "languages": [
+        ("English", f"/en/{version}/%s/", "en"),
+    ],
+}
 
 # -- Options for LaTeX output ---------------------------------------------
 
@@ -214,25 +221,6 @@ texinfo_documents = [
     ),
 ]
 
-# -- Options for theme development -------------------------------------------
-
-version = os.environ.get("READTHEDOCS_VERSION", "latest")
-
-
-html_css_files = []
-html_js_files = []
-html_static_path = []
-html_context = {
-    "github_user": "openturns",
-    "github_repo": "otfmi",
-    "github_version": "main",
-    "doc_path": "docs",
-    "current_version": version,
-#    "version_switcher": "https://raw.githubusercontent.com/aksiome/breeze/refs/heads/main/docs/_static/switcher.json",
-    "languages": [
-        ("English", f"/en/{version}/%s/", "en"),
-    ],
-}
 
 # https://github.com/openturns/otfmi
 

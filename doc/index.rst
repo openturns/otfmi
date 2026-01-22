@@ -61,7 +61,6 @@ This package is licensed under the LGPL3.
 
    terminology
 
-
 .. toctree::
    :hidden:
    :maxdepth: 1
@@ -73,26 +72,7 @@ This package is licensed under the LGPL3.
    :maxdepth: 1
    :glob:
 
-   example/index
-
-.. toctree::
-   :hidden:
-   :maxdepth: 1
-   :glob:
-
-   application/application
-
-.. toctree::
-   :hidden:
-   :maxdepth: 1
-
-   fmus/index
-
-.. toctree::
-   :hidden:
-   :maxdepth: 1
-
-   demo_persalys/use_persalys.rst
+   Examples <auto_example/index>
 
 .. toctree::
    :hidden:
