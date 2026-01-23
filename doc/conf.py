@@ -33,20 +33,19 @@ extensions = [
 
 # paths to example scripts and generated doc by sphinx
 sphinx_gallery_conf = {
-    "examples_dirs": ["../doc_basic_example", "../doc_export_example"],
+    "examples_dirs": ["../doc_basic_example",
+                      "../doc_export_example",
+                      "../doc_application"],
 
-    "gallery_dirs": ["auto_basic_example", "auto_export_example"],
+    "gallery_dirs": ["auto_basic_example",
+                     "auto_export_example",
+                     "auto_application"],
     # only python files beginning by xxx will be executed
     "filename_pattern": "/ex_",
     "example_extensions": {".py"},
     "show_signature": False,
     "download_all_examples": False,
 }
-
-# -- Options for internationalization ----------------------------------------
-# https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-internationalization
-
-language = "en"
 
 #
 
@@ -82,11 +81,9 @@ source_suffix = {'.rst': 'restructuredtext'}
 # The master toctree document.
 master_doc = "index"
 
-
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 exclude_patterns = []
-
 
 # If true, the current module name will be prepended to all description
 # unit titles (such as .. function::).
@@ -98,6 +95,10 @@ pygments_style = "friendly"
 # If true, `todo` and `todoList` produce output, else they produce nothing.
 todo_include_todos = True
 
+# -- Options for internationalization ----------------------------------------
+# https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-internationalization
+
+language = "en"
 
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
