@@ -42,7 +42,9 @@ sphinx_gallery_conf = {
     ],
     # only python files beginning by xxx will be executed
     "filename_pattern": "/ex_",
+    "example_extensions": {".py"},
     "show_signature": False,
+    "download_all_examples": False,
 }
 
 # -- Options for internationalization ----------------------------------------
@@ -117,7 +119,6 @@ html_theme = "breeze"
 # }
 
 html_theme_options = {"sidebar_secondary": ["sidebar-toc.html"]}
-
 html_show_sourcelink = False
 
 # The name of an image file (within the static path) to use as favicon of the
@@ -220,7 +221,6 @@ texinfo_documents = [
         "Miscellaneous",
     ),
 ]
-
 
 # https://github.com/openturns/otfmi
 
