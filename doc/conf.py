@@ -33,13 +33,9 @@ extensions = [
 
 # paths to example scripts and generated doc by sphinx
 sphinx_gallery_conf = {
-    "examples_dirs": [
-        "../doc_example",
-    ],
+    "examples_dirs": ["../doc_basic_example", "../doc_export_example"],
 
-    "gallery_dirs": [
-        "auto_example",
-    ],
+    "gallery_dirs": ["auto_basic_example", "auto_export_example"],
     # only python files beginning by xxx will be executed
     "filename_pattern": "/ex_",
     "example_extensions": {".py"},
