@@ -2,41 +2,27 @@
 
 /* hide the top link note leading to footpage */
 div.sphx-glr-download-link-note {
-  height: 0px;
-  visibility: hidden;
+    display: none;
 }
 
-/* Boutons de téléchargement */
-div.sphx-glr-download {
-  margin: 1em auto;
-  vertical-align: middle;
-}
-
+/* re-style the download button */
 div.sphx-glr-download a {
-  background-color: var(--sg-download-a-background-color);
-  background-image: var(--sg-download-a-background-image);
-  border-radius: 4px;
-  border: 1px solid var(--sg-download-a-border-color);
-  color: var(--sg-download-a-color);
-  display: inline-block;
-  font-weight: bold;
-  padding: 1ex;
-  text-align: center;
+    background-color: #E3F0F6;
+    background-image: none;
+    color: var(--color-content-primary);
+    border: 0;
 }
 
-div.sphx-glr-download code.download {
-  display: inline-block;
-  white-space: normal;
-  word-break: normal;
-  overflow-wrap: break-word;
-  /* border and background are given by the enclosing 'a' */
-  border: none;
-  background: none;
+div.sphx-glr-download a:visited {
+    color: var(--color-content-primary);
 }
 
-div.sphx-glr-download a:hover {
-  box-shadow: inset 0 1px 0 var(--sg-download-a-hover-box-shadow-1), 0 1px 5px var(--sg-download-a-hover-box-shadow-2);
-  text-decoration: none;
-  background-image: none;
-  background-color: var(--sg-download-a-hover-background-color);
+/* ===== Dark mode (breeze) ===== */
+html[data-theme="dark"] div.sphx-glr-download a {
+    background-color: #1f3a4a;
+    color: #9fd3f0;
+}
+
+html[data-theme="dark"] div.sphx-glr-download a:hover {
+    background-color: #2a4f63;
 }
