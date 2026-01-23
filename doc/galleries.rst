@@ -12,6 +12,9 @@ This section contains several example galleries.
 
    auto_basic_example/index
    auto_export_example/index
+   auto_application/index
+   doc_application_persalys/use_persalys
+   model_description
 
 .. grid:: 1 1 2 2
     :gutter: 2 3 4 4
@@ -45,6 +48,61 @@ This section contains several example galleries.
         +++
 
         .. button-ref:: auto_export_example/index
+            :ref-type: doc
+            :expand:
+            :color: secondary
+            :click-parent:
+
+            kjfkdfjdkfkldjfk
+
+    .. grid-item-card::
+        :text-align: center
+
+        **Applications**
+        ^^^
+
+        Advanced
+
+        +++
+
+        .. button-ref:: auto_application/index
+            :ref-type: doc
+            :expand:
+            :color: secondary
+            :click-parent:
+
+            kjfkdfjdkfkldjfk
+
+
+    .. grid-item-card::
+        :text-align: center
+
+        **Persalys**
+        ^^^
+
+        Advanced
+
+        +++
+
+        .. button-ref:: doc_application_persalys/use_persalys
+            :ref-type: doc
+            :expand:
+            :color: secondary
+            :click-parent:
+
+            kjfkdfjdkfkldjfk
+
+    .. grid-item-card::
+        :text-align: center
+
+        **Model descriptions**
+        ^^^
+
+        Advanced
+
+        +++
+
+        .. button-ref:: model_description
             :ref-type: doc
             :expand:
             :color: secondary

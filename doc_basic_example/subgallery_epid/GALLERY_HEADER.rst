@@ -1,4 +1,4 @@
-Epidemiologic example
----------------------
+The epidemiological model
+-------------------------
 
-This epidemiologic model represents the spreading of an epidemic   through a population.
+The second example relies on a time-dependent model describing a disease propagation.
