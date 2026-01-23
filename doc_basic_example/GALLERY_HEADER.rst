@@ -4,9 +4,9 @@ First steps with a toy model
 Here are examples to understand how to use OTFMI with a very basic example, the "deviation" model.
 
 .. image:: ../_static/beam.png
-   :scale: 20 %
+   :scale: 15 %
    :alt: alternate text
-   :align: right
+   :align: left
 
 This mechanical model represents the deviation y of a cantilever beam submitted to a load F at its end.
 Unlike most FMI models the deviation model is static, i.e. its output does not evolve over time.

@@ -72,7 +72,7 @@ This package is licensed under the LGPL3.
    :maxdepth: 1
    :glob:
 
-   Examples <auto_example/index>
+   Examples <galleries>
 
 .. toctree::
    :hidden:
