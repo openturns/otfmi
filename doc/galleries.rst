@@ -5,8 +5,6 @@
 Example Galleries
 =================
 
-This section contains several example galleries.
-
 .. toctree::
    :hidden:
 
@@ -22,30 +20,18 @@ This section contains several example galleries.
     .. grid-item-card::
         :text-align: center
 
-        **Basic examples**
-        ^^^
-
-        Basics with simple models
-
-        +++
-
         .. button-ref:: auto_basic_example/index
             :ref-type: doc
             :expand:
             :color: secondary
             :click-parent:
 
-            Basic examples
+            **For beginners**
+
+        Play with OTFMI through very simple models to understand the main features.
 
     .. grid-item-card::
         :text-align: center
-
-        **Advanced examples**
-        ^^^
-
-        Advanced
-
-        +++
 
         .. button-ref:: auto_export_example/index
             :ref-type: doc
@@ -53,59 +39,48 @@ This section contains several example galleries.
             :color: secondary
             :click-parent:
 
-            kjfkdfjdkfkldjfk
+            **Advanced examples**
+
+        Here are more advanced examples
 
     .. grid-item-card::
         :text-align: center
-
-        **Applications**
-        ^^^
-
-        Advanced
-
-        +++
 
         .. button-ref:: auto_application/index
             :ref-type: doc
             :expand:
-            :color: secondary
+            :color: primary
             :click-parent:
 
-            kjfkdfjdkfkldjfk
+            **Applications**
+
+        Performs specific analysis with OpenTURNS and otfmi.
 
 
     .. grid-item-card::
         :text-align: center
-
-        **Persalys**
-        ^^^
-
-        Advanced
-
-        +++
 
         .. button-ref:: doc_application_persalys/use_persalys
             :ref-type: doc
             :expand:
-            :color: secondary
+            :color: primary
             :click-parent:
 
-            kjfkdfjdkfkldjfk
+            **Use Persalys**
+
+        Persalys imports fmu files with otfmi to performs various studies about sensitivity, reliability, etc.
 
     .. grid-item-card::
         :text-align: center
 
-        **Model descriptions**
-        ^^^
-
-        Advanced
-
-        +++
-
         .. button-ref:: model_description
             :ref-type: doc
             :expand:
-            :color: secondary
+            :color: primary
             :click-parent:
 
-            kjfkdfjdkfkldjfk
+            **Model descriptions**
+
+        Examples rely on models. This gallery leads you to their description.
+
+
