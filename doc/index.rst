@@ -1,6 +1,6 @@
 :hide-sidebar-secondary: true:
 
-otfmi documentation
+OTFMI documentation
 ===================
 
 A bridge between `OpenTURNS <http://openturns.github.io/openturns/master/contents.html>`__ and functional mockup units (FMUs), based on `PyFMI <https://pypi.org/project/PyFMI/>`__ .
@@ -11,11 +11,20 @@ A bridge between `OpenTURNS <http://openturns.github.io/openturns/master/content
    .. grid-item::
       :columns: auto
 
-      .. button-link:: install.html
+      .. button-link:: galleries.html
          :color: primary
          :shadow:
 
-         🚀 Get Started
+         🚀 Learn with examples
+
+   .. grid-item::
+      :columns: auto
+
+      .. button-link:: api.html
+         :color: primary
+         :shadow:
+
+         Read the API doc.
 
 .. grid:: 1 2 1 2
     :gutter: 3
@@ -42,7 +51,9 @@ A bridge between `OpenTURNS <http://openturns.github.io/openturns/master/content
       Persalys is free and can be downloaded `here <https://persalys.fr/obtenir.php?la=en">`__.
 
 
-
+.. include:: ../README.rst
+    :start-line: 24
+    :end-line: 29
 
 You can contribute to the project or signal issues on `otfmi GitHub repository <https://github.com/openturns/otfmi>`__.
 
@@ -60,12 +71,6 @@ This package is licensed under the LGPL3.
    :maxdepth: 1
 
    terminology
-
-.. toctree::
-   :hidden:
-   :maxdepth: 1
-
-   Installation instructions <install>
 
 .. toctree::
    :hidden:
