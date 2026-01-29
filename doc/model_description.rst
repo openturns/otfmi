@@ -1,5 +1,12 @@
+Models description
+==================
+
+Examples used in this documentation rely on several models.
+
+Following sections show how they works.
+
 The cantilever beam model
-=========================
+-------------------------
 
 .. image:: /_static/beam.png
   :scale: 20 %
@@ -39,8 +46,10 @@ This model is implemented in Modelica language:
    end deviation;
 
 
+
+
 The epidemiological model
-=========================
+--------------------------
 
 This model describes epidemics which propagate through human contact.
 An isolated population is considered, whose total number is constant.

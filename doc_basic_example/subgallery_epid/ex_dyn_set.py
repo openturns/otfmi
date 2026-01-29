@@ -4,12 +4,12 @@ Set FMU simulation parameters
 """
 
 # %%
-# ``FMUPointToFieldFunction`` is an OpenTURNS-friendly overlay of the class
-# ``ÒpenTURNSFMUPointToFieldFunction``, closer to the underlying PyFMI
+# :class:`~otfmi.FMUPointToFieldFunction` is an OpenTURNS-friendly overlay of the class
+# :py:class:`OpenTURNSFMUPointToFieldFunction`, closer to the underlying PyFMI
 # implementation.
-# Some FMU simulation parameters can be given to ``FMUPointToFieldFunction``,
+# Some FMU simulation parameters can be given to :class:`~otfmi.FMUPointToFieldFunction`,
 # yet most of them can only be passed to an
-# ``OpenTURNSFMUPointToFieldFunction``.
+# :py:class:`OpenTURNSFMUPointToFieldFunction`.
 
 # %%
 # First, retrieve the path to *epid.fmu*.
@@ -20,7 +20,7 @@ path_fmu = otfmi.example.utility.get_path_fmu("epid")
 
 # %%
 # The FMU simulation start and final times are the only simulation-related
-# parameter that can be passed to ``FMUPointToFieldFunction``.
+# parameter that can be passed to :class:`~otfmi.FMUPointToFieldFunction`.
 
 mesh = ot.RegularGrid(0.0, 0.1, 20)
 
@@ -39,7 +39,7 @@ print(outputSample)
 
 # %%
 # To set more parameters for the FMU simulation,
-# ``OpenTURNSFMUPointToFieldFunction`` can be employed. Below, we set the PyFMI
+# :py:class:`OpenTURNSFMUPointToFieldFunction` can be employed. Below, we set the PyFMI
 # algorithm running the simulation, and require simulation silent mode.
 
 midlevel_function = otfmi.OpenTURNSFMUPointToFieldFunction(
@@ -56,7 +56,7 @@ outputPoint = midlevel_function.base.simulate(
 )
 
 # %%
-# For advanced users, the middle-level class ``OpenTURNSFMUPointToFieldFunction`` also gives
+# For advanced users, the middle-level class :py:class:`OpenTURNSFMUPointToFieldFunction` also gives
 # access to the PyFMI model. We can hence access all PyFMI's object methods:
 
 pyfmi_model = midlevel_function.base.get_model()
@@ -64,5 +64,5 @@ print(dir(pyfmi_model))
 
 # %%
 # .. note::
-#    otfmi' classes ``FMUPointToFieldFunction`` and ``OpenTURNSFMUPointToFieldFunction``
+#    otfmi' classes :class:`~otfmi.FMUPointToFieldFunction` and :py:class:`OpenTURNSFMUPointToFieldFunction`
 #    are designed to highlight the most useful PyFMI's methods and simplify their use!
