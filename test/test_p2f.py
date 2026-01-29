@@ -2,7 +2,7 @@
 
 import openturns as ot
 import otfmi
-import otfmi.example.deviation
+import otfmi.example.utility
 import pytest
 
 
