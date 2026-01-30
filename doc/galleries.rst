@@ -8,11 +8,13 @@ Example Galleries
 .. toctree::
    :hidden:
 
-   auto_basic_example/index
-   auto_export_example/index
-   auto_application/index
-   doc_application_persalys/use_persalys
-   model_description
+   examples/doc_basic_example/GALLERY_HEADER.rst
+   examples/doc_basic_example/subgallery_beam/GALLERY_HEADER.rst
+   examples/doc_basic_example/subgallery_epid/GALLERY_HEADER.rst
+   examples/doc_export_example/GALLERY_HEADER.rst
+   examples/doc_application/GALLERY_HEADER.rst
+   examples/doc_application_persalys/use_persalys
+   examples/model_description
 
 .. grid:: 1 1 2 2
     :gutter: 2 3 4 4
@@ -20,7 +22,7 @@ Example Galleries
     .. grid-item-card::
         :text-align: center
 
-        .. button-ref:: auto_basic_example/index
+        .. button-ref:: examples/auto_basic_example/index
             :ref-type: doc
             :expand:
             :color: secondary
@@ -33,7 +35,7 @@ Example Galleries
     .. grid-item-card::
         :text-align: center
 
-        .. button-ref:: auto_export_example/index
+        .. button-ref:: examples/auto_export_example/index
             :ref-type: doc
             :expand:
             :color: secondary
@@ -46,7 +48,7 @@ Example Galleries
     .. grid-item-card::
         :text-align: center
 
-        .. button-ref:: auto_application/index
+        .. button-ref:: examples/auto_application/index
             :ref-type: doc
             :expand:
             :color: primary
@@ -60,7 +62,7 @@ Example Galleries
     .. grid-item-card::
         :text-align: center
 
-        .. button-ref:: doc_application_persalys/use_persalys
+        .. button-ref:: examples/doc_application_persalys/use_persalys
             :ref-type: doc
             :expand:
             :color: primary
@@ -73,7 +75,7 @@ Example Galleries
     .. grid-item-card::
         :text-align: center
 
-        .. button-ref:: model_description
+        .. button-ref:: examples/model_description
             :ref-type: doc
             :expand:
             :color: primary

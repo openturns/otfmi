@@ -1,0 +1,2287 @@
+{
+ "E": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns.dist_bundle1",
+   "module_short": "openturns",
+   "name": "Beta"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "Beta"
+  }
+ ],
+ "F": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns.dist_bundle2",
+   "module_short": "openturns",
+   "name": "LogNormal"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "LogNormal"
+  }
+ ],
+ "F.setParameter": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns.dist_bundle2",
+   "module_short": "openturns",
+   "name": "LogNormal.setParameter"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "LogNormal.setParameter"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns.model_copula",
+   "module_short": "openturns",
+   "name": "DistributionImplementation.setParameter"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "DistributionImplementation.setParameter"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns.common",
+   "module_short": "openturns.common",
+   "name": "PersistentObject.setParameter"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "PersistentObject.setParameter"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns.common",
+   "module_short": "openturns.common",
+   "name": "Object.setParameter"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "Object.setParameter"
+  }
+ ],
+ "II": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns.dist_bundle1",
+   "module_short": "openturns",
+   "name": "Beta"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "Beta"
+  }
+ ],
+ "L": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns.dist_bundle3",
+   "module_short": "openturns",
+   "name": "Uniform"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "Uniform"
+  }
+ ],
+ "R": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns.typ",
+   "module_short": "openturns",
+   "name": "CorrelationMatrix"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "CorrelationMatrix"
+  }
+ ],
+ "RS": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns.typ",
+   "module_short": "openturns",
+   "name": "CorrelationMatrix"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "CorrelationMatrix"
+  }
+ ],
+ "algo": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns.simulation",
+   "module_short": "openturns",
+   "name": "ProbabilitySimulationAlgorithm"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "ProbabilitySimulationAlgorithm"
+  }
+ ],
+ "algo.getResult": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns.simulation",
+   "module_short": "openturns",
+   "name": "ProbabilitySimulationAlgorithm.getResult"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "ProbabilitySimulationAlgorithm.getResult"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns.simulation",
+   "module_short": "openturns",
+   "name": "EventSimulation.getResult"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "EventSimulation.getResult"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns.simulation",
+   "module_short": "openturns.simulation",
+   "name": "SimulationAlgorithm.getResult"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "SimulationAlgorithm.getResult"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns.common",
+   "module_short": "openturns.common",
+   "name": "PersistentObject.getResult"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "PersistentObject.getResult"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns.common",
+   "module_short": "openturns.common",
+   "name": "Object.getResult"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "Object.getResult"
+  }
+ ],
+ "algo.run": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns.simulation",
+   "module_short": "openturns",
+   "name": "ProbabilitySimulationAlgorithm.run"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "ProbabilitySimulationAlgorithm.run"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns.simulation",
+   "module_short": "openturns",
+   "name": "EventSimulation.run"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "EventSimulation.run"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns.simulation",
+   "module_short": "openturns",
+   "name": "SimulationAlgorithm.run"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "SimulationAlgorithm.run"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns.common",
+   "module_short": "openturns.common",
+   "name": "PersistentObject.run"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "PersistentObject.run"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns.common",
+   "module_short": "openturns.common",
+   "name": "Object.run"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "Object.run"
+  }
+ ],
+ "algo.setMaximumCoefficientOfVariation": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns.simulation",
+   "module_short": "openturns",
+   "name": "ProbabilitySimulationAlgorithm.setMaximumCoefficientOfVariation"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "ProbabilitySimulationAlgorithm.setMaximumCoefficientOfVariation"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns.simulation",
+   "module_short": "openturns",
+   "name": "EventSimulation.setMaximumCoefficientOfVariation"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "EventSimulation.setMaximumCoefficientOfVariation"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns.simulation",
+   "module_short": "openturns",
+   "name": "SimulationAlgorithm.setMaximumCoefficientOfVariation"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "SimulationAlgorithm.setMaximumCoefficientOfVariation"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns.common",
+   "module_short": "openturns.common",
+   "name": "PersistentObject.setMaximumCoefficientOfVariation"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "PersistentObject.setMaximumCoefficientOfVariation"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns.common",
+   "module_short": "openturns.common",
+   "name": "Object.setMaximumCoefficientOfVariation"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "Object.setMaximumCoefficientOfVariation"
+  }
+ ],
+ "algo.setMaximumOuterSampling": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns.simulation",
+   "module_short": "openturns",
+   "name": "ProbabilitySimulationAlgorithm.setMaximumOuterSampling"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "ProbabilitySimulationAlgorithm.setMaximumOuterSampling"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns.simulation",
+   "module_short": "openturns",
+   "name": "EventSimulation.setMaximumOuterSampling"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "EventSimulation.setMaximumOuterSampling"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns.simulation",
+   "module_short": "openturns",
+   "name": "SimulationAlgorithm.setMaximumOuterSampling"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "SimulationAlgorithm.setMaximumOuterSampling"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns.common",
+   "module_short": "openturns.common",
+   "name": "PersistentObject.setMaximumOuterSampling"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "PersistentObject.setMaximumOuterSampling"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns.common",
+   "module_short": "openturns.common",
+   "name": "Object.setMaximumOuterSampling"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "Object.setMaximumOuterSampling"
+  }
+ ],
+ "event": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns.metamodel",
+   "module_short": "openturns",
+   "name": "ThresholdEvent"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "ThresholdEvent"
+  }
+ ],
+ "event.setName": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns.metamodel",
+   "module_short": "openturns",
+   "name": "ThresholdEvent.setName"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "ThresholdEvent.setName"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns.metamodel",
+   "module_short": "openturns",
+   "name": "RandomVector.setName"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "RandomVector.setName"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns.metamodel",
+   "module_short": "openturns.metamodel",
+   "name": "_RandomVectorImplementationTypedInterfaceObject.setName"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "_RandomVectorImplementationTypedInterfaceObject.setName"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns.common",
+   "module_short": "openturns",
+   "name": "InterfaceObject.setName"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "InterfaceObject.setName"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns.common",
+   "module_short": "openturns.common",
+   "name": "Object.setName"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "Object.setName"
+  }
+ ],
+ "experiment": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns.weightedexperiment",
+   "module_short": "openturns",
+   "name": "MonteCarloExperiment"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "MonteCarloExperiment"
+  }
+ ],
+ "graph": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns.viewer",
+   "module_short": "openturns.viewer",
+   "name": "View"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "View"
+  }
+ ],
+ "inputDistribution": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns.model_copula",
+   "module_short": "openturns",
+   "name": "ComposedDistribution"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "ComposedDistribution"
+  }
+ ],
+ "inputDistribution.setDescription": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns.model_copula",
+   "module_short": "openturns",
+   "name": "ComposedDistribution.setDescription"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "ComposedDistribution.setDescription"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns.model_copula",
+   "module_short": "openturns",
+   "name": "JointDistribution.setDescription"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "JointDistribution.setDescription"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns.model_copula",
+   "module_short": "openturns",
+   "name": "DistributionImplementation.setDescription"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "DistributionImplementation.setDescription"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns.common",
+   "module_short": "openturns.common",
+   "name": "PersistentObject.setDescription"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "PersistentObject.setDescription"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns.common",
+   "module_short": "openturns.common",
+   "name": "Object.setDescription"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "Object.setDescription"
+  }
+ ],
+ "inputRandomVector": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns.metamodel",
+   "module_short": "openturns",
+   "name": "RandomVector"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "RandomVector"
+  }
+ ],
+ "model_evaluation": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "float"
+  }
+ ],
+ "model_fmu": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns.func",
+   "module_short": "openturns",
+   "name": "Function"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "Function"
+  }
+ ],
+ "model_fmu.getInputDescription": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns.func",
+   "module_short": "openturns",
+   "name": "Function.getInputDescription"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "Function.getInputDescription"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns.func",
+   "module_short": "openturns.func",
+   "name": "_FunctionImplementationTypedInterfaceObject.getInputDescription"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "_FunctionImplementationTypedInterfaceObject.getInputDescription"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns.common",
+   "module_short": "openturns.common",
+   "name": "InterfaceObject.getInputDescription"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "InterfaceObject.getInputDescription"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns.common",
+   "module_short": "openturns.common",
+   "name": "Object.getInputDescription"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "Object.getInputDescription"
+  }
+ ],
+ "monte_carlo_result": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns.simulation",
+   "module_short": "openturns",
+   "name": "ProbabilitySimulationResult"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "ProbabilitySimulationResult"
+  }
+ ],
+ "monte_carlo_result.getProbabilityDistribution": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns.simulation",
+   "module_short": "openturns",
+   "name": "ProbabilitySimulationResult.getProbabilityDistribution"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "ProbabilitySimulationResult.getProbabilityDistribution"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns.simulation",
+   "module_short": "openturns.simulation",
+   "name": "SimulationResult.getProbabilityDistribution"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "SimulationResult.getProbabilityDistribution"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns.common",
+   "module_short": "openturns.common",
+   "name": "PersistentObject.getProbabilityDistribution"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "PersistentObject.getProbabilityDistribution"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns.common",
+   "module_short": "openturns.common",
+   "name": "Object.getProbabilityDistribution"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "Object.getProbabilityDistribution"
+  }
+ ],
+ "monte_carlo_result.getProbabilityEstimate": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns.simulation",
+   "module_short": "openturns",
+   "name": "ProbabilitySimulationResult.getProbabilityEstimate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "ProbabilitySimulationResult.getProbabilityEstimate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns.simulation",
+   "module_short": "openturns.simulation",
+   "name": "SimulationResult.getProbabilityEstimate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "SimulationResult.getProbabilityEstimate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns.common",
+   "module_short": "openturns.common",
+   "name": "PersistentObject.getProbabilityEstimate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "PersistentObject.getProbabilityEstimate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns.common",
+   "module_short": "openturns.common",
+   "name": "Object.getProbabilityEstimate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "Object.getProbabilityEstimate"
+  }
+ ],
+ "mycopula": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns.model_copula",
+   "module_short": "openturns",
+   "name": "NormalCopula"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "NormalCopula"
+  }
+ ],
+ "openturns.Function": [
+  {
+   "is_class": false,
+   "is_explicit": true,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "Function"
+  }
+ ],
+ "ot.Beta": [
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns.dist_bundle1",
+   "module_short": "openturns",
+   "name": "Beta"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "Beta"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns.model_copula",
+   "module_short": "openturns",
+   "name": "DistributionImplementation"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "DistributionImplementation"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns.common",
+   "module_short": "openturns",
+   "name": "PersistentObject"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "PersistentObject"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns.common",
+   "module_short": "openturns",
+   "name": "Object"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "Object"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "Beta"
+  }
+ ],
+ "ot.ComposedDistribution": [
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns.model_copula",
+   "module_short": "openturns",
+   "name": "ComposedDistribution"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "ComposedDistribution"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns.model_copula",
+   "module_short": "openturns",
+   "name": "JointDistribution"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "JointDistribution"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns.model_copula",
+   "module_short": "openturns",
+   "name": "DistributionImplementation"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "DistributionImplementation"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns.common",
+   "module_short": "openturns",
+   "name": "PersistentObject"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "PersistentObject"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns.common",
+   "module_short": "openturns",
+   "name": "Object"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "Object"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "ComposedDistribution"
+  }
+ ],
+ "ot.CompositeRandomVector": [
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns.metamodel",
+   "module_short": "openturns",
+   "name": "CompositeRandomVector"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "CompositeRandomVector"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns.randomvector",
+   "module_short": "openturns",
+   "name": "RandomVectorImplementation"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "RandomVectorImplementation"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns.common",
+   "module_short": "openturns",
+   "name": "PersistentObject"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "PersistentObject"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns.common",
+   "module_short": "openturns",
+   "name": "Object"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "Object"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "CompositeRandomVector"
+  }
+ ],
+ "ot.CorrelationMatrix": [
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns.typ",
+   "module_short": "openturns",
+   "name": "CorrelationMatrix"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "CorrelationMatrix"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns.typ",
+   "module_short": "openturns",
+   "name": "CovarianceMatrix"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "CovarianceMatrix"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns.typ",
+   "module_short": "openturns",
+   "name": "SymmetricMatrix"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "SymmetricMatrix"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns.typ",
+   "module_short": "openturns",
+   "name": "SquareMatrix"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "SquareMatrix"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns.typ",
+   "module_short": "openturns",
+   "name": "Matrix"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "Matrix"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns.typ",
+   "module_short": "openturns.typ",
+   "name": "_MatrixImplementationTypedInterfaceObject"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "_MatrixImplementationTypedInterfaceObject"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns.common",
+   "module_short": "openturns",
+   "name": "InterfaceObject"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "InterfaceObject"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns.common",
+   "module_short": "openturns",
+   "name": "Object"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "Object"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "CorrelationMatrix"
+  }
+ ],
+ "ot.Greater": [
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns.common",
+   "module_short": "openturns",
+   "name": "Greater"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "Greater"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns.common",
+   "module_short": "openturns",
+   "name": "ComparisonOperatorImplementation"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "ComparisonOperatorImplementation"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns.common",
+   "module_short": "openturns",
+   "name": "PersistentObject"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "PersistentObject"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns.common",
+   "module_short": "openturns",
+   "name": "Object"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "Object"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "Greater"
+  }
+ ],
+ "ot.LogNormal": [
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns.dist_bundle2",
+   "module_short": "openturns",
+   "name": "LogNormal"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "LogNormal"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns.model_copula",
+   "module_short": "openturns",
+   "name": "DistributionImplementation"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "DistributionImplementation"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns.common",
+   "module_short": "openturns",
+   "name": "PersistentObject"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "PersistentObject"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns.common",
+   "module_short": "openturns",
+   "name": "Object"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "Object"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "LogNormal"
+  }
+ ],
+ "ot.LogNormalMuSigma": [
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns.dist_bundle2",
+   "module_short": "openturns",
+   "name": "LogNormalMuSigma"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "LogNormalMuSigma"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns.model_copula",
+   "module_short": "openturns",
+   "name": "DistributionParametersImplementation"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "DistributionParametersImplementation"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns.common",
+   "module_short": "openturns",
+   "name": "PersistentObject"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "PersistentObject"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns.common",
+   "module_short": "openturns",
+   "name": "Object"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "Object"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "LogNormalMuSigma"
+  }
+ ],
+ "ot.MonteCarloExperiment": [
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns.weightedexperiment",
+   "module_short": "openturns",
+   "name": "MonteCarloExperiment"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "MonteCarloExperiment"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns.weightedexperiment",
+   "module_short": "openturns",
+   "name": "WeightedExperimentImplementation"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "WeightedExperimentImplementation"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns.experiment",
+   "module_short": "openturns",
+   "name": "ExperimentImplementation"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "ExperimentImplementation"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns.common",
+   "module_short": "openturns",
+   "name": "PersistentObject"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "PersistentObject"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns.common",
+   "module_short": "openturns",
+   "name": "Object"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "Object"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "MonteCarloExperiment"
+  }
+ ],
+ "ot.NormalCopula": [
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns.model_copula",
+   "module_short": "openturns",
+   "name": "NormalCopula"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "NormalCopula"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns.model_copula",
+   "module_short": "openturns",
+   "name": "DistributionImplementation"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "DistributionImplementation"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns.common",
+   "module_short": "openturns",
+   "name": "PersistentObject"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "PersistentObject"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns.common",
+   "module_short": "openturns",
+   "name": "Object"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "Object"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "NormalCopula"
+  }
+ ],
+ "ot.NormalCopula.GetCorrelationFromSpearmanCorrelation": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "function"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns.NormalCopula",
+   "module_short": "openturns.NormalCopula",
+   "name": "GetCorrelationFromSpearmanCorrelation"
+  }
+ ],
+ "ot.Point": [
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns.typ",
+   "module_short": "openturns",
+   "name": "Point"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "Point"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns.typ",
+   "module_short": "openturns.typ",
+   "name": "_ScalarPersistentCollection"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "_ScalarPersistentCollection"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns.common",
+   "module_short": "openturns",
+   "name": "PersistentObject"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "PersistentObject"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns.typ",
+   "module_short": "openturns",
+   "name": "ScalarCollection"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "ScalarCollection"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns.common",
+   "module_short": "openturns",
+   "name": "Object"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "Object"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "Point"
+  }
+ ],
+ "ot.ProbabilitySimulationAlgorithm": [
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns.simulation",
+   "module_short": "openturns",
+   "name": "ProbabilitySimulationAlgorithm"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "ProbabilitySimulationAlgorithm"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns.simulation",
+   "module_short": "openturns",
+   "name": "EventSimulation"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "EventSimulation"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns.simulation",
+   "module_short": "openturns",
+   "name": "SimulationAlgorithm"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "SimulationAlgorithm"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns.common",
+   "module_short": "openturns",
+   "name": "PersistentObject"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "PersistentObject"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns.common",
+   "module_short": "openturns",
+   "name": "Object"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "Object"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "ProbabilitySimulationAlgorithm"
+  }
+ ],
+ "ot.RandomGenerator.SetSeed": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "function"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns.RandomGenerator",
+   "module_short": "openturns.RandomGenerator",
+   "name": "SetSeed"
+  }
+ ],
+ "ot.RandomVector": [
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns.metamodel",
+   "module_short": "openturns",
+   "name": "RandomVector"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "RandomVector"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns.metamodel",
+   "module_short": "openturns.metamodel",
+   "name": "_RandomVectorImplementationTypedInterfaceObject"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "_RandomVectorImplementationTypedInterfaceObject"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns.common",
+   "module_short": "openturns",
+   "name": "InterfaceObject"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "InterfaceObject"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns.common",
+   "module_short": "openturns",
+   "name": "Object"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "Object"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "RandomVector"
+  }
+ ],
+ "ot.ThresholdEvent": [
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns.metamodel",
+   "module_short": "openturns",
+   "name": "ThresholdEvent"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "ThresholdEvent"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns.metamodel",
+   "module_short": "openturns",
+   "name": "RandomVector"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "RandomVector"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns.metamodel",
+   "module_short": "openturns.metamodel",
+   "name": "_RandomVectorImplementationTypedInterfaceObject"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "_RandomVectorImplementationTypedInterfaceObject"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns.common",
+   "module_short": "openturns",
+   "name": "InterfaceObject"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "InterfaceObject"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns.common",
+   "module_short": "openturns",
+   "name": "Object"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "Object"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "ThresholdEvent"
+  }
+ ],
+ "ot.Uniform": [
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns.dist_bundle3",
+   "module_short": "openturns",
+   "name": "Uniform"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "Uniform"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns.model_copula",
+   "module_short": "openturns",
+   "name": "DistributionImplementation"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "DistributionImplementation"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns.common",
+   "module_short": "openturns",
+   "name": "PersistentObject"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "PersistentObject"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns.common",
+   "module_short": "openturns",
+   "name": "Object"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "Object"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "Uniform"
+  }
+ ],
+ "otfmi.FMUFunction": [
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "otfmi.otfmi",
+   "module_short": "otfmi",
+   "name": "FMUFunction"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "otfmi",
+   "module_short": "otfmi",
+   "name": "FMUFunction"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns.func",
+   "module_short": "openturns",
+   "name": "Function"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "Function"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns.func",
+   "module_short": "openturns.func",
+   "name": "_FunctionImplementationTypedInterfaceObject"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "_FunctionImplementationTypedInterfaceObject"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns.common",
+   "module_short": "openturns",
+   "name": "InterfaceObject"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "InterfaceObject"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns.common",
+   "module_short": "openturns",
+   "name": "Object"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "Object"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "otfmi",
+   "module_short": "otfmi",
+   "name": "FMUFunction"
+  },
+  {
+   "is_class": false,
+   "is_explicit": true,
+   "module": "otfmi",
+   "module_short": "otfmi",
+   "name": "FMUFunction"
+  }
+ ],
+ "otfmi.example.utility.get_path_fmu": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "function"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "otfmi.example.utility",
+   "module_short": "otfmi.example.utility",
+   "name": "get_path_fmu"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "otfmi.example.utility",
+   "module_short": "otfmi.example.utility",
+   "name": "get_path_fmu"
+  }
+ ],
+ "otv.View": [
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns.viewer",
+   "module_short": "openturns.viewer",
+   "name": "View"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "View"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns.viewer",
+   "module_short": "openturns.viewer",
+   "name": "View"
+  }
+ ],
+ "otv.View.ShowAll": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "function"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns.viewer.View",
+   "module_short": "openturns.viewer.View",
+   "name": "ShowAll"
+  }
+ ],
+ "outputVariableOfInterest": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns.metamodel",
+   "module_short": "openturns",
+   "name": "CompositeRandomVector"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "CompositeRandomVector"
+  }
+ ],
+ "path_fmu": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "str"
+  }
+ ],
+ "point": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns.typ",
+   "module_short": "openturns",
+   "name": "Point"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "Point"
+  }
+ ],
+ "probability": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "float"
+  }
+ ],
+ "probabilityDistribution": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns.dist_bundle2",
+   "module_short": "openturns",
+   "name": "Normal"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "Normal"
+  }
+ ],
+ "probabilityDistribution.drawPDF": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns.dist_bundle2",
+   "module_short": "openturns",
+   "name": "Normal.drawPDF"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "Normal.drawPDF"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns.model_copula",
+   "module_short": "openturns",
+   "name": "EllipticalDistribution.drawPDF"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "EllipticalDistribution.drawPDF"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns.model_copula",
+   "module_short": "openturns",
+   "name": "DistributionImplementation.drawPDF"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "DistributionImplementation.drawPDF"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns.common",
+   "module_short": "openturns.common",
+   "name": "PersistentObject.drawPDF"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "PersistentObject.drawPDF"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns.common",
+   "module_short": "openturns.common",
+   "name": "Object.drawPDF"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "Object.drawPDF"
+  }
+ ],
+ "threshold": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "int"
+  }
+ ]
+}

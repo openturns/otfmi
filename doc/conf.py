@@ -18,10 +18,10 @@ sys.path.insert(0, os.path.abspath("../"))
 
 extensions = [
     "sphinx.ext.autodoc",
-    "sphinx.ext.extlinks",
+    #"sphinx.ext.extlinks",
     "sphinx.ext.intersphinx",
-    "sphinx.ext.mathjax",
-    "sphinx.ext.todo",
+    #"sphinx.ext.mathjax",
+    #"sphinx.ext.todo",
     "sphinx.ext.viewcode",
     "sphinx.ext.autosummary",
     "numpydoc",
@@ -33,13 +33,13 @@ extensions = [
 
 # paths to example scripts and generated doc by sphinx
 sphinx_gallery_conf = {
-    "examples_dirs": ["../doc_basic_example",
-                      "../doc_export_example",
-                      "../doc_application"],
+    "examples_dirs": ["examples/doc_basic_example",
+                      "examples/doc_export_example",
+                      "examples/doc_application"],
 
-    "gallery_dirs": ["auto_basic_example",
-                     "auto_export_example",
-                     "auto_application"],
+    "gallery_dirs": ["examples/auto_basic_example",
+                     "examples/auto_export_example",
+                     "examples/auto_application"],
     # only python files beginning by xxx will be executed
     "filename_pattern": "/ex_",
     "example_extensions": {".py"},
@@ -137,18 +137,16 @@ html_last_updated_fmt = "%b %d, %Y"
 # Output file base name for HTML help builder.
 htmlhelp_basename = "otfmidoc"
 
-version = os.environ.get("READTHEDOCS_VERSION", "latest")
+#version = os.environ.get("READTHEDOCS_VERSION", "latest")
 
 html_context = {
     "github_user": "openturns",
     "github_repo": "otfmi",
     "github_version": "main",
     "doc_path": "docs",
-    "current_version": version,
+#    "current_version": version,
 #    "version_switcher": "https://raw.githubusercontent.com/aksiome/breeze/refs/heads/main/docs/_static/switcher.json",
-    "languages": [
-        ("English", f"/en/{version}/%s/", "en"),
-    ],
+#    "languages": [("English", f"/en/{version}/%s/", "en")],
 }
 
 # -- Options for LaTeX output ---------------------------------------------
@@ -218,8 +216,6 @@ texinfo_documents = [
         "Miscellaneous",
     ),
 ]
-
-# https://github.com/openturns/otfmi
 
 # Documents to append as an appendix to all manuals.
 # texinfo_appendices = []

@@ -1,0 +1,482 @@
+{
+ "OpenTURNSFMUPointToFieldFunction": [
+  {
+   "is_class": false,
+   "is_explicit": true,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "OpenTURNSFMUPointToFieldFunction"
+  },
+  {
+   "is_class": false,
+   "is_explicit": true,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "OpenTURNSFMUPointToFieldFunction"
+  },
+  {
+   "is_class": false,
+   "is_explicit": true,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "OpenTURNSFMUPointToFieldFunction"
+  },
+  {
+   "is_class": false,
+   "is_explicit": true,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "OpenTURNSFMUPointToFieldFunction"
+  },
+  {
+   "is_class": false,
+   "is_explicit": true,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "OpenTURNSFMUPointToFieldFunction"
+  }
+ ],
+ "function": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns.func",
+   "module_short": "openturns",
+   "name": "PointToFieldFunction"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "PointToFieldFunction"
+  }
+ ],
+ "inputPoint": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns.typ",
+   "module_short": "openturns",
+   "name": "Point"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "Point"
+  }
+ ],
+ "mesh": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns.geom",
+   "module_short": "openturns",
+   "name": "RegularGrid"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "RegularGrid"
+  }
+ ],
+ "midlevel_function": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "otfmi.otfmi",
+   "module_short": "otfmi",
+   "name": "OpenTURNSFMUPointToFieldFunction"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "otfmi",
+   "module_short": "otfmi",
+   "name": "OpenTURNSFMUPointToFieldFunction"
+  }
+ ],
+ "midlevel_function.base.get_model": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "otfmi.otfmi",
+   "module_short": "otfmi.otfmi",
+   "name": "_FMUBaseFunction.get_model"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "otfmi",
+   "module_short": "otfmi",
+   "name": "_FMUBaseFunction.get_model"
+  }
+ ],
+ "midlevel_function.base.simulate": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "otfmi.otfmi",
+   "module_short": "otfmi.otfmi",
+   "name": "_FMUBaseFunction.simulate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "otfmi",
+   "module_short": "otfmi",
+   "name": "_FMUBaseFunction.simulate"
+  }
+ ],
+ "ot.Point": [
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns.typ",
+   "module_short": "openturns",
+   "name": "Point"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "Point"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns.typ",
+   "module_short": "openturns.typ",
+   "name": "_ScalarPersistentCollection"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "_ScalarPersistentCollection"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns.common",
+   "module_short": "openturns",
+   "name": "PersistentObject"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "PersistentObject"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns.typ",
+   "module_short": "openturns",
+   "name": "ScalarCollection"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "ScalarCollection"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns.common",
+   "module_short": "openturns",
+   "name": "Object"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "Object"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "Point"
+  }
+ ],
+ "ot.RegularGrid": [
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns.geom",
+   "module_short": "openturns",
+   "name": "RegularGrid"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "RegularGrid"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns.geom",
+   "module_short": "openturns",
+   "name": "Mesh"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "Mesh"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns.common",
+   "module_short": "openturns",
+   "name": "PersistentObject"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "PersistentObject"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns.common",
+   "module_short": "openturns",
+   "name": "Object"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "Object"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "RegularGrid"
+  }
+ ],
+ "otfmi.FMUPointToFieldFunction": [
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "otfmi.otfmi",
+   "module_short": "otfmi",
+   "name": "FMUPointToFieldFunction"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "otfmi",
+   "module_short": "otfmi",
+   "name": "FMUPointToFieldFunction"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns.func",
+   "module_short": "openturns",
+   "name": "PointToFieldFunction"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "PointToFieldFunction"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns.func",
+   "module_short": "openturns.func",
+   "name": "_PointToFieldFunctionImplementationTypedInterfaceObject"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "_PointToFieldFunctionImplementationTypedInterfaceObject"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns.common",
+   "module_short": "openturns",
+   "name": "InterfaceObject"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "InterfaceObject"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns.common",
+   "module_short": "openturns",
+   "name": "Object"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "Object"
+  },
+  {
+   "is_class": false,
+   "is_explicit": true,
+   "module": "otfmi",
+   "module_short": "otfmi",
+   "name": "FMUPointToFieldFunction"
+  },
+  {
+   "is_class": false,
+   "is_explicit": true,
+   "module": "otfmi",
+   "module_short": "otfmi",
+   "name": "FMUPointToFieldFunction"
+  },
+  {
+   "is_class": false,
+   "is_explicit": true,
+   "module": "otfmi",
+   "module_short": "otfmi",
+   "name": "FMUPointToFieldFunction"
+  },
+  {
+   "is_class": false,
+   "is_explicit": true,
+   "module": "otfmi",
+   "module_short": "otfmi",
+   "name": "FMUPointToFieldFunction"
+  }
+ ],
+ "otfmi.OpenTURNSFMUPointToFieldFunction": [
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "otfmi.otfmi",
+   "module_short": "otfmi",
+   "name": "OpenTURNSFMUPointToFieldFunction"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "otfmi",
+   "module_short": "otfmi",
+   "name": "OpenTURNSFMUPointToFieldFunction"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns.func",
+   "module_short": "openturns",
+   "name": "OpenTURNSPythonPointToFieldFunction"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "OpenTURNSPythonPointToFieldFunction"
+  }
+ ],
+ "otfmi.example.utility.get_path_fmu": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "function"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "otfmi.example.utility",
+   "module_short": "otfmi.example.utility",
+   "name": "get_path_fmu"
+  }
+ ],
+ "outputPoint": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns.typ",
+   "module_short": "openturns",
+   "name": "Sample"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "Sample"
+  }
+ ],
+ "outputSample": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns.typ",
+   "module_short": "openturns",
+   "name": "Sample"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "openturns",
+   "module_short": "openturns",
+   "name": "Sample"
+  }
+ ],
+ "path_fmu": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "str"
+  }
+ ],
+ "pyfmi_model": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "pyfmi.fmi2",
+   "module_short": "pyfmi",
+   "name": "FMUModelCS2"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "pyfmi",
+   "module_short": "pyfmi",
+   "name": "FMUModelCS2"
+  }
+ ]
+}

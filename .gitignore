@@ -3,6 +3,7 @@
 *.mat
 *.mos
 *_log.txt
+*.zip
 
 doc/_generated/
 doc/auto_*
