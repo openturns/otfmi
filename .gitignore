@@ -6,7 +6,7 @@
 *.zip
 
 doc/_generated/
-doc/auto_*
+doc/examples/auto_*
 otfmi.egg-info/
 build/
 dist/
