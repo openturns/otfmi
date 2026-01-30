@@ -120,4 +120,4 @@ This model is implemented in Modelica language. The default simulation time is 5
    end epid;
 
 We focus on the effect of the ``infection_rate`` and ``healing_rate`` on the evolution of the ``infected`` category.
-Hence **two input variables** and **one time-dependent output**.# 
+Hence **two input variables** and **one time-dependent output**.

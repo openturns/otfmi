@@ -1,7 +1,7 @@
 Sensitivity analysis with Persalys
 ==================================
 
-.. image:: ../_static/logo_persalys.png
+.. image:: ../../_static/logo_persalys.png
      :align: left
      :scale: 5%
 

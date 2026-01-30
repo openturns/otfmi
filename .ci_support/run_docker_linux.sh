@@ -14,7 +14,7 @@ pythonfmu build --file ./otfmi/example/file/DeviationSlave.py --dest ./otfmi/exa
 
 pytest test -s
 
-pip install doc/requirements.txt --break-system-packages
+pip install -r doc/requirements.txt --break-system-packages
 cd doc && make html BUILDDIR=~/.local/share/otfmi/doc
 
 UID_GID=$1
