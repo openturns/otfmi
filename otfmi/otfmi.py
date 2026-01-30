@@ -501,7 +501,7 @@ class FMUPointToFieldFunction(ot.PointToFieldFunction):
     ----------
     path_fmu : str, path to the FMU file.
 
-    mesh : :class:`openturns.Mesh`, default=None
+    mesh : :class:`openturns.Mesh`
         Time grid, has to be included in the start/end time defined in the FMU.
         By default it takes into account the start/end time and default step defined the FMU.
 
@@ -607,7 +607,7 @@ class FMUFieldToPointFunction(ot.FieldToPointFunction):
     ----------
     path_fmu : str, path to the FMU file.
 
-    mesh : :class:`openturns.Mesh`, default=None
+    mesh : :class:`openturns.Mesh`
         Time grid, has to be included in the start/end time defined in the FMU.
         By default it takes into account the start/end time and default step defined the FMU.
 
