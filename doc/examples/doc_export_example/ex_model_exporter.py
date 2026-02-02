@@ -4,8 +4,8 @@ Export a function as Modelica model
 """
 
 # %%
-# ``otfmi.FunctionExporter`` enables to export OpenTURNS functions as Modelica model.
-# The main interest is to use OpenTURNS metamodels in a simulation environment.
+# :class:`~otfmi.FunctionExporter` export OpenTURNS functions as Modelica model.
+# You can use OpenTURNS metamodels in a simulation environment.
 #
 # Currently, the inclusion of a metamodel in
 # `OpenModelica GUI <https://openmodelica.org/?id=78:omconnectioneditoromedit&catid=10:main-category>`_
@@ -23,7 +23,6 @@ import openturns as ot
 import otfmi
 import tempfile
 from os.path import join
-
 
 func = ot.SymbolicFunction("x", "exp(x)")
 inputPoint = [2.0]
@@ -47,7 +46,7 @@ modelExporter.export_model(model_path, gui=True)
 # Simple as it looks, this function actually does the following:
 #
 # - write a C-wrapper for the OpenTURNS function,
-# - write a Modelica model calling the C-wrapper as `External <shorturl.at/fhCU2>`_ function.
+# - write a Modelica model calling the C-wrapper as `External function <https://specification.modelica.org/master/functions.html#external-function-interface>`_.
 #
 # .. note::
 #   The export requires `CMake <https://cmake.org/>`_, a C compiler, and the
@@ -92,9 +91,8 @@ modelExporter.export_model(model_path, gui=True)
 #    :alt: alternate text
 #    :align: center
 #
-# .. warning::
-#    ⚠️ Compared to native Modelica functions, the included OpenTURNS function is
-#    slow. In this case, 11 seconds of simulation were required for 50 time
-#    steps (i.e. 50 function calls).
-#
-# Note that faster export modes are available with the "mode" keyword, depending on your setup.
+# .. note::
+#    3 modes are available to export the function (see :class:`~otfmi.FunctionExporter`).
+#    By default, the mode used to export the function is 'cxx'.
+#    This mode leads to the fastest version of the model, but you need to 
+#    install OpenTURNS with conda.

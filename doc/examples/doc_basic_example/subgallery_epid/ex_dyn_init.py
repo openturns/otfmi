@@ -16,7 +16,7 @@ Initialize FMUPointToFieldFunction
 # - to restart simulation from a given point.
 
 # %%
-# First, retrieve the path to the FMU *deviation.fmu*.
+# First, retrieve the path to the FMU *epid.fmu*.
 import otfmi.example.utility
 import otfmi
 import openturns as ot
