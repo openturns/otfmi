@@ -28,7 +28,7 @@ Metamodel a FMU time-dependent output
 
 # %%
 # We load the FMU as a FMUPointToFieldFunction (see the
-# :doc:`tutorial<../../_generated/otfmi.FMUPointToFieldFunction>`). 
+# :doc:`tutorial<../../_generated/otfmi.FMUPointToFieldFunction>`).
 # We concentrate on the first time unit of the epidemiological model output.
 # The single uncertain input of the model is the ``ìnfection_rate``.
 

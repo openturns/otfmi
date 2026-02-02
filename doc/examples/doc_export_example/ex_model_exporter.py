@@ -43,10 +43,9 @@ modelExporter = otfmi.FunctionExporter(func)
 modelExporter.export_model(model_path, gui=True)
 
 # %%
-# Simple as it looks, this function actually does the following:
-#
-# - write a C-wrapper for the OpenTURNS function,
-# - write a Modelica model calling the C-wrapper as `External function <https://specification.modelica.org/master/functions.html#external-function-interface>`_.
+# Simple as it looks, this function actually writes a C-wrapper for
+# the OpenTURNS function, then writes a Modelica model calling the C-wrapper
+# as `External function <https://specification.modelica.org/master/functions.html#external-function-interface>`_.
 #
 # .. note::
 #   The export requires `CMake <https://cmake.org/>`_, a C compiler, and the
@@ -94,5 +93,5 @@ modelExporter.export_model(model_path, gui=True)
 # .. note::
 #    3 modes are available to export the function (see :class:`~otfmi.FunctionExporter`).
 #    By default, the mode used to export the function is 'cxx'.
-#    This mode leads to the fastest version of the model, but you need to 
+#    This mode leads to the fastest version of the model, but you need to
 #    install OpenTURNS with conda.
