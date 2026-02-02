@@ -61,12 +61,9 @@ imgmath_latex_preamble = r"\usepackage{{{0}math_notations}}".format(
     os.path.dirname(__file__) + os.sep
 )
 imgmath_use_preview = True
-if (
-    subprocess.call(
-        "dvisvgm -V", shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE
-    )
-    == 0
-):
+
+if (subprocess.call("dvisvgm -V", shell=True,
+                    stdout=subprocess.PIPE, stderr=subprocess.PIPE) == 0):
     imgmath_image_format = "svg"
 
 # Add any paths that contain templates here, relative to this directory.
@@ -134,16 +131,16 @@ html_last_updated_fmt = "%b %d, %Y"
 # Output file base name for HTML help builder.
 htmlhelp_basename = "otfmidoc"
 
-#version = os.environ.get("READTHEDOCS_VERSION", "latest")
+# version = os.environ.get("READTHEDOCS_VERSION", "latest")
 
 html_context = {
     "github_user": "openturns",
     "github_repo": "otfmi",
     "github_version": "main",
     "doc_path": "docs",
-#    "current_version": version,
-#    "version_switcher": "https://raw.githubusercontent.com/aksiome/breeze/refs/heads/main/docs/_static/switcher.json",
-#    "languages": [("English", f"/en/{version}/%s/", "en")],
+    # "current_version": version,
+    # "version_switcher": "https://raw.githubusercontent.com/aksiome/breeze/refs/heads/main/docs/_static/switcher.json",
+    # "languages": [("English", f"/en/{version}/%s/", "en")],
 }
 
 # -- Options for LaTeX output ---------------------------------------------
@@ -163,7 +160,8 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, "otfmidoc.tex", "otfmi Documentation", "Sylvain Girard", "manual"),
+    (master_doc, "otfmidoc.tex", "OTFMI Documentation",
+     "Sylvain Girard", "manual"),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of

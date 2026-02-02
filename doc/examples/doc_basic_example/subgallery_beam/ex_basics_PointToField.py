@@ -21,11 +21,14 @@ from os.path import abspath
 # ###############
 
 # %%
-# Instead of loading the model with :class:`otfmi.fmi.load_fmu`, you can load it 
-# with the higher level object :class:`~otfmi.FMUPointToFieldFunction`.
-# It enables to use OpenTURNS' high level algorithms by wrapping the FMU into an :py:class:`openturns.Function` object.
+# Instead of loading the model with :class:`otfmi.fmi.load_fmu`,
+# you can load it with the higher level object
+# :class:`~otfmi.FMUPointToFieldFunction`.
+# It enables you to use OpenTURNS' high level algorithms by wrapping the FMU
+# into an :py:class:`openturns.Function` object.
 # So, let's load the FMU *deviation.fmu*.
-# Recall the deviation model is static, i.e. its output does not evolve over time.
+# Recall the deviation model is static, i.e. its output does not evolve over
+# time.
 
 path_fmu = otfmi.example.utility.get_path_fmu("deviation")
 function = otfmi.FMUPointToFieldFunction(
@@ -78,8 +81,9 @@ print(outputSample)
 #
 # - to save the value of all the variables of a model after simulation,
 # - to restart simulation from a given point.
-# 
-# The initialization script must be provided to :class:`~otfmi.FMUPointToFieldFunction` constructor.
+#
+# The initialization script must be provided to
+# :class:`~otfmi.FMUPointToFieldFunction` constructor.
 # We thus create it now (using Python for clarity).
 
 # %%
@@ -96,9 +100,10 @@ with open(temporary_file, "w") as f:
 # default initial value (as set in the FMU).
 
 # %%
-# We can now build the :class:`~otfmi.FMUPointToFieldFunction`. 
-# In the example below, we use the initialization script to fix the values of ``L`` and ``F`` in the FMU whereas
-# ``E`` and ``I`` are the function variables.
+# We can now build the :class:`~otfmi.FMUPointToFieldFunction`.
+# In the example below, we use the initialization script to fix the values
+# of ``L`` and ``F`` in the FMU whereas ``E`` and ``I`` are the function
+# variables.
 
 function = otfmi.FMUPointToFieldFunction(
     path_fmu,
@@ -154,15 +159,18 @@ print(outputPoint[-1])
 # ###################
 
 # %%
-# :class:`~otfmi.FMUPointToFieldFunction` is an OpenTURNS-friendly overlay of the class
-# :class:`~otfmi.OpenturnsFMUPointToFieldFunction`, closer to the underlying PyFMI implementation.
-# Some FMU simulation parameters can be given to :class:`~otfmi.FMUPointToFieldFunction`, yet most of
-# them can only be passed to an `~otfmi.OpenturnsFMUPointToFieldFunction`.
+# :class:`~otfmi.FMUPointToFieldFunction` is an OpenTURNS-friendly overlay of
+# the class :class:`~otfmi.OpenturnsFMUPointToFieldFunction`, closer to
+# the underlying PyFMI implementation.
+# Some FMU simulation parameters can be given to
+# :class:`~otfmi.FMUPointToFieldFunction`, yet most of them can only be passed
+# to an `~otfmi.OpenturnsFMUPointToFieldFunction`.
 
 # %%
 # The FMU simulation final time is the only simulation-related parameter that
-# can be passed to :class:`~otfmi.FMUPointToFieldFunction`. This parameter is useless if the FMU is
-# really time-independent (like this example); yet it can be come in use if the
+# can be passed to :class:`~otfmi.FMUPointToFieldFunction`.
+# This parameter is useless if the FMU is really time-independent
+# (like this example); yet it can be come in use if the
 # FMU requires time to converge.
 
 function = otfmi.FMUPointToFieldFunction(
@@ -174,7 +182,8 @@ outputPoint = function(inputPoint)
 print(outputPoint[-1])
 
 # %%
-# To set more parameters for the FMU simulation, `~otfmi.OpenTURNSFMUPointToFieldFunction` can be
+# To set more parameters for the FMU simulation,
+# :class:`~otfmi.OpenTURNSFMUPointToFieldFunction` can be
 # employed. Below, we set the PyFMI algorithm running the simulation,
 # and require simulation silent mode.
 
@@ -187,7 +196,8 @@ outputPoint = midlevel_function.base.simulate(
 )
 
 # %%
-# For advanced users, the middle-level class :class:`~otfmi.OpenTURNSFMUPointToFieldFunction` also gives
+# For advanced users, the middle-level class
+# :class:`~otfmi.OpenTURNSFMUPointToFieldFunction` also gives
 # access to the PyFMI model. We can hence access all PyFMI's object methods:
 
 pyfmi_model = midlevel_function.base.get_model()
@@ -195,5 +205,6 @@ print(dir(pyfmi_model))
 
 # %%
 # .. note::
-#    otfmi' classes `~otfmi.FMUPointToFieldFunction` and `~otfmi.OpenTURNSFMUPointToFieldFunction` are designed to
+#    otfmi' classes :class:`~otfmi.FMUPointToFieldFunction`
+#    and :class:`~otfmi.OpenTURNSFMUPointToFieldFunction` are designed to
 #    highlight the most useful PyFMI's methods and simplify their use!

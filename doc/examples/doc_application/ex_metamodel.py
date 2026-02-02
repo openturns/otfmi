@@ -8,8 +8,8 @@ Metamodel a FMU time-dependent output
 #
 # **To decrease the model simulation costs, let's create a metamodel.**
 #
-# Metamodeling a model which output depends on time is a difficult problem. We
-# will combine two methods: Karhunen-Loeve dimension reduction should precede 
+# Metamodeling a model with time-dependent output is a difficult problem. We
+# will combine two methods: Karhunen-Loeve dimension reduction should precede
 # the Kriging metamodeling.
 #
 # We will proceed the following way:
@@ -28,9 +28,9 @@ Metamodel a FMU time-dependent output
 
 # %%
 # We load the FMU as a FMUPointToFieldFunction (see the
-# :doc:`tutorial<../../_generated/otfmi.FMUPointToFieldFunction>`). We concentrate
-# on the first time unit of the epidemiological model output. The single
-# uncertain input of the model is the ``ìnfection_rate``.
+# :doc:`tutorial<../../_generated/otfmi.FMUPointToFieldFunction>`). 
+# We concentrate on the first time unit of the epidemiological model output.
+# The single uncertain input of the model is the ``ìnfection_rate``.
 
 import otfmi.example.utility
 import openturns as ot
@@ -49,8 +49,7 @@ function = otfmi.FMUPointToFieldFunction(
 )
 
 # %%
-# We create a Monte-Carlo design of experiment, on which we
-# simulate the FMU.
+# We create a Monte-Carlo design of experiment, on which we simulate the FMU.
 # The simulation inputs and outputs will be used to train the metamodel.
 
 inputLaw = ot.Uniform(1.5, 2.5)
@@ -62,7 +61,8 @@ graph.setTitle("FMU simulations")
 graph.setXTitle("Time")
 graph.setYTitle("Number of infected")
 graph.setLegends([f"{line[0]:.3f}" for line in inputSample[:15]] + ["_"] * 15)
-view = otv.View(graph, legend_kw={"title": "infection rate", "loc": "upper left"})
+view = otv.View(graph,
+                legend_kw={"title": "infection rate", "loc": "upper left"})
 
 # %%
 # We define a function to visualize the upcoming Karhunen-Loeve modes.
@@ -121,20 +121,23 @@ print(f"Karhunen-Loeve projection in dimension {n_mode}")
 # We metamodel the Karhunen-Loeve coefficients using ordinary Kriging.
 dim = inputSample.getDimension()  # only 1 input dimension
 univb = ot.ConstantBasisFactory(dim).build()  # univariate basis
-coll = [ot.AggregatedFunction([univb.build(i)] * n_mode) for i in range(univb.getSize())]
+coll = [ot.AggregatedFunction(
+    [univb.build(i)] * n_mode) for i in range(univb.getSize())]
+
 basis = ot.Basis(coll)  # multivariate basis
 covarianceModel = ot.SquaredExponential(dim)
 covarianceModel = ot.TensorizedCovarianceModel([covarianceModel] * n_mode)
 
 
-algo = ot.KrigingAlgorithm(inputSample, projectionSample, covarianceModel, basis)
+algo = ot.KrigingAlgorithm(inputSample, projectionSample,
+                           covarianceModel, basis)
 algo.run()
 result = algo.getResult()
 metamodel = result.getMetaModel()
 
 # %%
-# We have created all pieces for a "PointToField" metamodel. Let put these
-# pieces together:
+# We have created all pieces for a "PointToField" metamodel.
+# Let put these pieces together:
 
 
 def globalMetamodel(sample):
