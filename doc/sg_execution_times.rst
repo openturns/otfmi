@@ -6,7 +6,7 @@
 
 Computation times
 =================
-**00:59.528** total execution time for 9 files **from all galleries**:
+**01:12.356** total execution time for 9 files **from all galleries**:
 
 .. container::
 
@@ -33,29 +33,29 @@ Computation times
      - Time
      - Mem (MB)
    * - :ref:`sphx_glr_examples_auto_export_example_ex_fmu_exporter.py` (``examples/doc_export_example/ex_fmu_exporter.py``)
-     - 00:44.223
+     - 00:54.756
      - 0.0
    * - :ref:`sphx_glr_examples_auto_export_example_ex_model_exporter.py` (``examples/doc_export_example/ex_model_exporter.py``)
-     - 00:06.151
+     - 00:06.781
      - 0.0
    * - :ref:`sphx_glr_examples_auto_application_ex_threshold.py` (``examples/doc_application/ex_threshold.py``)
-     - 00:05.949
+     - 00:06.722
      - 0.0
    * - :ref:`sphx_glr_examples_auto_application_ex_metamodel.py` (``examples/doc_application/ex_metamodel.py``)
-     - 00:01.261
+     - 00:01.427
      - 0.0
    * - :ref:`sphx_glr_examples_auto_basic_example_subgallery_beam_ex_basics_PointToField.py` (``examples/doc_basic_example/subgallery_beam/ex_basics_PointToField.py``)
-     - 00:00.737
+     - 00:01.055
      - 0.0
    * - :ref:`sphx_glr_examples_auto_basic_example_subgallery_beam_ex_basics_fmi.py` (``examples/doc_basic_example/subgallery_beam/ex_basics_fmi.py``)
-     - 00:00.449
+     - 00:00.811
      - 0.0
    * - :ref:`sphx_glr_examples_auto_basic_example_subgallery_epid_ex_dyn_basics.py` (``examples/doc_basic_example/subgallery_epid/ex_dyn_basics.py``)
-     - 00:00.361
+     - 00:00.389
      - 0.0
    * - :ref:`sphx_glr_examples_auto_basic_example_subgallery_epid_ex_dyn_init.py` (``examples/doc_basic_example/subgallery_epid/ex_dyn_init.py``)
-     - 00:00.305
+     - 00:00.317
      - 0.0
    * - :ref:`sphx_glr_examples_auto_basic_example_subgallery_epid_ex_dyn_set.py` (``examples/doc_basic_example/subgallery_epid/ex_dyn_set.py``)
-     - 00:00.091
+     - 00:00.098
      - 0.0

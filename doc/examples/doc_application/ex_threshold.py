@@ -3,7 +3,7 @@ Estimate the probability of a threshold excedance
 =================================================
 """
 # %%
-# A load is applied to a :doc:`cantilever beam<../model_description>`. 
+# A load is applied to a :doc:`cantilever beam<../model_description>`.
 # The beam must not exceed a bending of 30 cm. The load (F), beam
 # Young's modulus (E), length (L) and section modulus (I) are uncertain.
 #
@@ -79,10 +79,10 @@ inputDistribution.setDescription(model_fmu.getInputDescription())
 # Create the event whose probability we want to estimate:
 
 inputRandomVector = ot.RandomVector(inputDistribution)
-outputVariableOfInterest = ot.CompositeRandomVector(model_fmu, inputRandomVector)
+outputVarOfInterest = ot.CompositeRandomVector(model_fmu, inputRandomVector)
 
 threshold = 30
-event = ot.ThresholdEvent(outputVariableOfInterest, ot.Greater(), threshold)
+event = ot.ThresholdEvent(outputVarOfInterest, ot.Greater(), threshold)
 event.setName("Deviation > %g cm" % threshold)
 
 # %%
