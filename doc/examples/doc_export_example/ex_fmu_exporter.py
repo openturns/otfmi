@@ -4,13 +4,13 @@ Export a function as FMU
 """
 
 # %%
-# ``otfmi.FunctionExporter`` enables to export OpenTURNS functions as FMUs. The
-# main interest of this class is to use OpenTURNS metamodels in a simulation environment.
+# ``otfmi.FunctionExporter`` enables you to export OpenTURNS functions as FMUs. The
+# main interest of this class is to integrate OpenTURNS models in another models.
 #
-# Currently, the inclusion of a metamodel in
+# One application of the inclusion of a metamodel in
 # `OpenModelica GUI <https://openmodelica.org/?id=78:omconnectioneditoromedit&catid=10:main-category>`_
-# has been performed once (see
-# `this paper <https://www.researchgate.net/publication/354810878_Analysis_and_reduction_of_models_using_Persalys>`_).
+# is described in
+# `this paper <https://www.researchgate.net/publication/354810878_Analysis_and_reduction_of_models_using_Persalys>`_.
 
 # %%
 # ------------
@@ -68,7 +68,7 @@ fmuExporter.export_fmu(fmu_path, fmuType="me")
 # FMU validation
 # ++++++++++++++
 #
-# We import the in OpenModelica GUI. We connect the wrapper to an input sine signal
+# We import the fmu in OpenModelica GUI. We connect the wrapper to an input sine signal
 # (*Modelica.Blocks.Sources.Sine*) and to an output block (*Modelica.Blocks.Interfaces.RealOutput*):
 #
 # .. image:: /_static/TestMyExponentialFMU.png

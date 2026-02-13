@@ -4,14 +4,15 @@ Export a function as Modelica model
 """
 
 # %%
-# :class:`~otfmi.FunctionExporter` export OpenTURNS functions as Modelica model.
-# You can use OpenTURNS metamodels in a simulation environment.
-#
-# Currently, the inclusion of a metamodel in
+# The method `export_model` of :class:`~otfmi.FunctionExporter` is another way to export OpenTURNS functions, but this time as Modelica model.
+# This can be useful if you want to include a function produced with OpenTURNS into a Modelica model.
+# Compared to `export_fmu`, here, you cannot export models with time-dependent outputs.
+
+# One application of the inclusion of a metamodel in
 # `OpenModelica GUI <https://openmodelica.org/?id=78:omconnectioneditoromedit&catid=10:main-category>`_
-# has been performed once (see
-# `this paper <https://www.researchgate.net/publication/354810878_Analysis_and_reduction_of_models_using_Persalys>`_).
-#
+# is described in
+# `this paper <https://www.researchgate.net/publication/354810878_Analysis_and_reduction_of_models_using_Persalys>`_.
+
 # ------------
 #
 # Model generation
