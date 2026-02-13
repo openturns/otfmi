@@ -1,6 +1,6 @@
 """
-Run simulations with low-level functions
-----------------------------------------
+Run simulations with pyfmi low-level functions
+----------------------------------------------
 """
 
 

@@ -8,9 +8,9 @@ Example Galleries
 .. toctree::
    :hidden:
 
-   examples/doc_basic_example/GALLERY_HEADER.rst
-   examples/doc_basic_example/subgallery_beam/GALLERY_HEADER.rst
-   examples/doc_basic_example/subgallery_epid/GALLERY_HEADER.rst
+   examples/doc_FMUPointToFieldFunction_example/GALLERY_HEADER.rst
+   examples/doc_FMUPointToFieldFunction_example/subgallery_beam/GALLERY_HEADER.rst
+   examples/doc_FMUPointToFieldFunction_example/subgallery_epid/GALLERY_HEADER.rst
    examples/doc_export_example/GALLERY_HEADER.rst
    examples/doc_application/GALLERY_HEADER.rst
    examples/doc_application_persalys/use_persalys
@@ -22,15 +22,15 @@ Example Galleries
     .. grid-item-card::
         :text-align: center
 
-        .. button-ref:: examples/auto_basic_example/index
+        .. button-ref:: examples/auto_FMUPointToFieldFunction_example/index
             :ref-type: doc
             :expand:
-            :color: secondary
+            :color: primary
             :click-parent:
 
-            **For beginners**
+            **Model with scalar inputs**
 
-        Play with OTFMI through very simple models to understand the main features.
+        How to run simulations with models with time-independent inputs.
 
     .. grid-item-card::
         :text-align: center
@@ -38,12 +38,12 @@ Example Galleries
         .. button-ref:: examples/auto_export_example/index
             :ref-type: doc
             :expand:
-            :color: secondary
+            :color: primary
             :click-parent:
 
-            **Advanced examples**
+            **Export models**
 
-        Here are more advanced examples
+        OTFMI can transform your OpenTURNS functions into FMU or Modelica model, ready to be integrated in larger models.
 
     .. grid-item-card::
         :text-align: center
@@ -56,7 +56,7 @@ Example Galleries
 
             **Applications**
 
-        Performs specific analysis with OpenTURNS and otfmi.
+        Here are some specific analysis you can perform with OpenTURNS and OTFMI.
 
 
     .. grid-item-card::
@@ -70,7 +70,7 @@ Example Galleries
 
             **Use Persalys**
 
-        Persalys imports fmu files with otfmi to performs various studies about sensitivity, reliability, etc.
+        You can import fmu files into Persalys, which uses OTFMI, to study the effect of uncertain parameters on the output.
 
     .. grid-item-card::
         :text-align: center
@@ -83,6 +83,4 @@ Example Galleries
 
             **Model descriptions**
 
-        Examples rely on models. This gallery leads you to their description.
-
-
+        See descriptions of the models used in examples.

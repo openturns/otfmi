@@ -1,6 +1,6 @@
 """
-Run simulations with high-level functions
------------------------------------------
+Run simulations with FMUPointToFieldFunction
+--------------------------------------------
 """
 
 # %%
