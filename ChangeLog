@@ -1,3 +1,6 @@
+2026-?? - release 0.18 (wip)
+- Add FMUFieldFunction (field -> field)
+
 2026-01-08 - release 0.17.1
 - Default function export mode changed to cxx
 - Fix multiple function export and cpython mode with conda envs

@@ -28,6 +28,16 @@ the output consisting of the values at the final simulation time.
 
    FMUFunction
 
+The class **FMUFieldFunction** wraps the FMU evaluation in an :py:class:`openturns.FieldFunction`.
+Its input is a :py:class:`openturns.Field` and its output is a
+:py:class:`openturns.Field` gathering the outputs as function of time.
+
+.. autosummary::
+   :toctree: _generated/
+   :template: class.rst_t
+
+   FMUFieldFunction
+
 The class **FMUFieldToPointFunction** wraps the FMU evaluation in an :py:class:`openturns.FieldToPointFunction`.
 Its input is a :py:class:`openturns.Field` and its output is a vector
 (:py:class:`openturns.Point`) consisting of the values at the final simulation time.
