@@ -711,3 +711,118 @@ class OpenTURNSFMUFieldToPointFunction(ot.OpenTURNSPythonFieldToPointFunction):
 
         """
         return self.base.simulate(value_input=value_input, **kwargs)
+
+
+class FMUFieldFunction(ot.FieldFunction):
+    """
+    Define a FieldFunction from a FMU file.
+
+    Parameters
+    ----------
+    path_fmu : str, path to the FMU file.
+
+    input_mesh : :class:`openturns.Mesh`, default=None
+        Time grid of the input variables, has to be included in the start/final time defined in the FMU.
+
+    output_mesh : :class:`openturns.Mesh`, default=None
+        Time grid of the output variables, has to be included in the start/final time defined in the FMU.
+
+    inputs_fmu : Sequence of str, default=None
+        Names of the variable from the fmu to be used as input variables.
+        By default assigns variables with FMI causality INPUT.
+
+    outputs_fmu : Sequence of str, default=None
+        Names of the variable from the fmu to be used as output variables.
+        By default assigns variables with FMI causality OUTPUT.
+
+    initialization_script : str, default=None
+        Path to the initialization script.
+
+    kind : str, default=None
+        Either "ME" (model exchange) or "CS" (co-simulation)
+        Select a kind of FMU if both are available.
+        Note:
+        Contrary to pyfmi, the default here is "CS" (co-simulation). The
+        rationale behind this choice is that co-simulation may be used to
+        impose a solver not available in pyfmi.
+
+    start_time : float, default=None
+        The FMU simulation start time.
+        The default behavior is to use the default start time defined the FMU.
+
+    final_time : float, default=None
+        The FMU simulation stop time.
+        The default behavior is to use the default stop time defined the FMU.
+
+    """
+
+    def __new__(
+        self,
+        path_fmu,
+        input_mesh=None,
+        output_mesh=None,
+        inputs_fmu=None,
+        outputs_fmu=None,
+        kind=None,
+        initialization_script=None,
+        start_time=None,
+        final_time=None,
+    ):
+        lowlevel = OpenTURNSFMUFieldFunction(
+            path_fmu=path_fmu,
+            input_mesh=input_mesh,
+            output_mesh=output_mesh,
+            inputs_fmu=inputs_fmu,
+            outputs_fmu=outputs_fmu,
+            kind=kind,
+            initialization_script=initialization_script,
+            start_time=start_time,
+            final_time=final_time,
+        )
+
+        highlevel = ot.FieldFunction(lowlevel)
+        # highlevel._model = lowlevel.model
+        return highlevel
+
+
+class OpenTURNSFMUFieldFunction(ot.OpenTURNSPythonFieldFunction):
+    """Define a FieldFunction from a FMU file."""
+
+    def __init__(
+        self,
+        path_fmu,
+        input_mesh=None,
+        output_mesh=None,
+        inputs_fmu=None,
+        outputs_fmu=None,
+        initialization_script=None,
+        kind=None,
+        start_time=None,
+        final_time=None,
+        **kwargs
+    ):
+        self.base = _FMUBaseFunction(path_fmu, kind=kind,
+                                     inputs_fmu=inputs_fmu, outputs_fmu=outputs_fmu,
+                                     start_time=start_time, final_time=final_time,
+                                     initialization_script=initialization_script,
+                                     field_input=True, input_mesh=input_mesh,
+                                     output_mesh=output_mesh, field_output=True)
+
+        super().__init__(
+            self.base.get_input_mesh(), len(self.base.get_inputs_fmu()),
+            self.base.get_output_mesh(), len(self.base.get_outputs_fmu())
+        )
+        self.setInputDescription(self.base.get_inputs_fmu())
+        self.setOutputDescription(self.base.get_outputs_fmu())
+
+    def _exec(self, value_input, **kwargs):
+        """Simulate the FMU for a given set of input values.
+
+        Parameters
+        ----------
+        value_input : Vector or array-like with time steps as rows.
+
+        See the 'simulate' method for additional keyword arguments.
+
+        """
+        return self.base.simulate(value_input=value_input, **kwargs)
