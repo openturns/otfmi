@@ -11,6 +11,7 @@ Example Galleries
    examples/doc_FMUPointToFieldFunction_example/GALLERY_HEADER.rst
    examples/doc_FMUPointToFieldFunction_example/subgallery_beam/GALLERY_HEADER.rst
    examples/doc_FMUPointToFieldFunction_example/subgallery_epid/GALLERY_HEADER.rst
+   examples/doc_FieldFunction_example/GALLERY_HEADER.rst
    examples/doc_export_example/GALLERY_HEADER.rst
    examples/doc_application/GALLERY_HEADER.rst
    examples/doc_application_persalys/use_persalys
@@ -31,6 +32,19 @@ Example Galleries
             **Model with scalar inputs**
 
         How to run simulations with models with time-independent inputs.
+
+    .. grid-item-card::
+        :text-align: center
+
+        .. button-ref:: examples/auto_FieldFunction_example/index
+            :ref-type: doc
+            :expand:
+            :color: primary
+            :click-parent:
+
+            **Model with time-dependent inputs**
+
+        How to run simulations with models with time-dependent inputs.
 
     .. grid-item-card::
         :text-align: center

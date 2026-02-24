@@ -31,10 +31,12 @@ extensions = [
 # paths to example scripts and generated doc by sphinx
 sphinx_gallery_conf = {
     "examples_dirs": ["examples/doc_FMUPointToFieldFunction_example",
+                      "examples/doc_FieldFunction_example",
                       "examples/doc_export_example",
                       "examples/doc_application"],
 
     "gallery_dirs": ["examples/auto_FMUPointToFieldFunction_example",
+                     "examples/auto_FieldFunction_example",
                      "examples/auto_export_example",
                      "examples/auto_application"],
     # only python files beginning by xxx will be executed
@@ -42,6 +44,7 @@ sphinx_gallery_conf = {
     "example_extensions": {".py"},
     "show_signature": False,
     "download_all_examples": False,
+    "write_computation_times": False,
 }
 
 #

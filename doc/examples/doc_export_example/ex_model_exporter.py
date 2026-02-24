@@ -4,27 +4,25 @@ Export a function as Modelica model
 """
 
 # %%
-# The method `export_model` of :class:`~otfmi.FunctionExporter` is another way to export OpenTURNS functions, but this time as Modelica model.
-# This can be useful if you want to include a function produced with OpenTURNS into a Modelica model.
-# Compared to `export_fmu`, here, you cannot export models with time-dependent outputs.
+# The method `export_model` of :class:`~otfmi.FunctionExporter` is another way
+# to export OpenTURNS functions, but this time as Modelica model.
+# This can be useful if you want to include a function produced with OpenTURNS
+# into a Modelica model.
+# Compared to `export_fmu`, here, you cannot export models with time-dependent
+# outputs.
 
 # One application of the inclusion of a metamodel in
 # `OpenModelica GUI <https://openmodelica.org/?id=78:omconnectioneditoromedit&catid=10:main-category>`_
 # is described in
 # `this paper <https://www.researchgate.net/publication/354810878_Analysis_and_reduction_of_models_using_Persalys>`_.
 
-# ------------
-#
-# Model generation
-# ++++++++++++++++
-#
-# First, we create the OpenTURNS function to export as Modelica model.
-
 import openturns as ot
 import otfmi
 import tempfile
 from os.path import join
 
+# %%
+# First, we create the OpenTURNS function to export as Modelica
 func = ot.SymbolicFunction("x", "exp(x)")
 inputPoint = [2.0]
 print(func(inputPoint))
@@ -52,10 +50,6 @@ modelExporter.export_model(model_path, gui=True)
 #   The export requires `CMake <https://cmake.org/>`_, a C compiler, and the
 #   OpenModelica compiler `OMC <https://www.openmodelica.org/?id=51:open-modelica-compiler-omccecatid=10:main-category>`_.
 #
-# ----------------------
-#
-# Model validation
-# ++++++++++++++++
 #
 # We import this model in OpenModelica GUI. We can check the Modelica code:
 #
@@ -92,7 +86,8 @@ modelExporter.export_model(model_path, gui=True)
 #    :align: center
 #
 # .. note::
-#    3 modes are available to export the function (see :class:`~otfmi.FunctionExporter`).
+#    3 modes are available to export the function
+#    (see :class:`~otfmi.FunctionExporter`).
 #    By default, the mode used to export the function is 'cxx'.
 #    This mode leads to the fastest version of the model, but you need to
 #    install OpenTURNS with conda.
