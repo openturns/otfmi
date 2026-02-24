@@ -1,7 +1,6 @@
 API documentation
 =================
 
-otfmi facilitates the analysis of FMUs over time.
 
 Main API
 --------
@@ -48,6 +47,19 @@ Its input is a :py:class:`openturns.Field` and its output is a vector
 
    FMUFieldToPointFunction
 
+
+From OpenTURNS to FMI
+---------------------
+
+OTFMI can also export an OpenTURNS function in a Modelica source model (.mo) or Functional Mock-up Unit (.fmu).
+
+.. autosummary::
+   :toctree: _generated/
+   :template: class.rst_t
+
+   FunctionExporter
+
+
 Common low-level functions
 --------------------------
 
@@ -67,13 +79,4 @@ The submodule **otfmi.fmi** gathers a set of useful functions, employed by the (
    fmi.get_start_value
    fmi.set_dict_value
 
-From OpenTURNS to FMI
----------------------
 
-OTFMI can also export an OpenTURNS function in a Modelica source model (.mo) or Functional Mock-up Unit (.fmu).
-
-.. autosummary::
-   :toctree: _generated/
-   :template: class.rst_t
-
-   FunctionExporter

@@ -1,5 +1,7 @@
-renku-sphinx-theme
+sphinx-breeze-theme
 sphinx
 sphinx-gallery
+sphinx_copybutton
+sphinx_design
 numpydoc
 matplotlib

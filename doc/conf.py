@@ -2,44 +2,49 @@ import sys
 import os
 import subprocess
 
+# -- Project information -----------------------------------------------------
+# https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
+project = "otfmi"
+copyright = "2017-2026 EDF-Phimeca"
+author = "Sylvain Girard"
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 sys.path.insert(0, os.path.abspath("../"))
 
-# -- General configuration ------------------------------------------------
+# -- General configuration ---------------------------------------------------
+# https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
 extensions = [
     "sphinx.ext.autodoc",
-    "sphinx.ext.todo",
     "sphinx.ext.intersphinx",
+    "sphinx.ext.viewcode",
     "sphinx.ext.autosummary",
     "numpydoc",
     "sphinx_gallery.gen_gallery",
+    "sphinx_copybutton",
+    "sphinx_design",
+    "sphinx.ext.imgmath"
 ]
 
+# paths to example scripts and generated doc by sphinx
 sphinx_gallery_conf = {
-    "examples_dirs": [
-        "application",
-        "example/deviation",
-        "example/epid",
-        "example/low_level",
-        "example/ot_to_fmu",
-    ],  # # path to
-    # example scripts
-    "gallery_dirs": [
-        "auto_application",
-        "auto_example/deviation",
-        "auto_example/epid",
-        "auto_example/low_level",
-        "auto_example/ot_to_fmu",
-    ],
-    # path to where to save gallery gen. output
-    "filename_pattern": "/plot_",
+    "examples_dirs": ["examples/doc_FMUPointToFieldFunction_example",
+                      "examples/doc_export_example",
+                      "examples/doc_application"],
+
+    "gallery_dirs": ["examples/auto_FMUPointToFieldFunction_example",
+                     "examples/auto_export_example",
+                     "examples/auto_application"],
+    # only python files beginning by xxx will be executed
+    "filename_pattern": "/ex_",
+    "example_extensions": {".py"},
     "show_signature": False,
+    "download_all_examples": False,
 }
 
+#
 
 autodoc_default_options = {"members": None, "inherited-members": None}
 
@@ -51,17 +56,14 @@ autosummary_generate = True
 numpydoc_show_class_members = True
 numpydoc_class_members_toctree = False
 
-extensions.append("sphinx.ext.imgmath")
+# -- Options for imgmath ----------------------------------------
 imgmath_latex_preamble = r"\usepackage{{{0}math_notations}}".format(
     os.path.dirname(__file__) + os.sep
 )
 imgmath_use_preview = True
-if (
-    subprocess.call(
-        "dvisvgm -V", shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE
-    )
-    == 0
-):
+
+if (subprocess.call("dvisvgm -V", shell=True,
+                    stdout=subprocess.PIPE, stderr=subprocess.PIPE) == 0):
     imgmath_image_format = "svg"
 
 # Add any paths that contain templates here, relative to this directory.
@@ -73,15 +75,9 @@ source_suffix = {'.rst': 'restructuredtext'}
 # The master toctree document.
 master_doc = "index"
 
-# General information about the project.
-project = "otfmi"
-copyright = "2017-2025 EDF-Phimeca"
-author = "Sylvain Girard"
-
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 exclude_patterns = []
-
 
 # If true, the current module name will be prepended to all description
 # unit titles (such as .. function::).
@@ -93,10 +89,16 @@ pygments_style = "friendly"
 # If true, `todo` and `todoList` produce output, else they produce nothing.
 todo_include_todos = True
 
+# -- Options for internationalization ----------------------------------------
+# https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-internationalization
 
-# -- Options for HTML output ----------------------------------------------
+language = "en"
 
-html_theme = "renku"
+# -- Options for HTML output -------------------------------------------------
+# https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
+
+html_title = "OTFMI"
+html_theme = "breeze"
 # html_sidebars = {
 #     '**': [
 #         # 'about.html',
@@ -107,8 +109,7 @@ html_theme = "renku"
 #     ]
 # }
 
-html_theme_options = {"prev_next_buttons_location": None, "github_user": "openturns"}
-
+html_theme_options = {"sidebar_secondary": ["sidebar-toc.html"]}
 html_show_sourcelink = False
 
 # The name of an image file (within the static path) to use as favicon of the
@@ -120,8 +121,8 @@ html_favicon = "_static/Icon.ico"
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ["_static"]
-
-html_css_files = ['sphxglr.css']
+html_css_files = ["custom_download_button.css", "hide_links.css"]
+html_js_files = []
 
 # If not '', a 'Last updated on:' timestamp is inserted at every page bottom,
 # using the given strftime format.
@@ -129,6 +130,18 @@ html_last_updated_fmt = "%b %d, %Y"
 
 # Output file base name for HTML help builder.
 htmlhelp_basename = "otfmidoc"
+
+# version = os.environ.get("READTHEDOCS_VERSION", "latest")
+
+html_context = {
+    "github_user": "openturns",
+    "github_repo": "otfmi",
+    "github_version": "main",
+    "doc_path": "docs",
+    # "current_version": version,
+    # "version_switcher": "https://raw.githubusercontent.com/aksiome/breeze/refs/heads/main/docs/_static/switcher.json",
+    # "languages": [("English", f"/en/{version}/%s/", "en")],
+}
 
 # -- Options for LaTeX output ---------------------------------------------
 
@@ -147,7 +160,8 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, "otfmidoc.tex", "otfmi Documentation", "Sylvain Girard", "manual"),
+    (master_doc, "otfmidoc.tex", "OTFMI Documentation",
+     "Sylvain Girard", "manual"),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
