@@ -108,6 +108,38 @@ plt.ylabel(outputs_vars[0])
 plt.plot(inlet_temperatures[0], outlet_temperatures[0])
 plt.show()
 
+
+# %%
+# -----------------------
+# Change other parameters 
+# +++++++++++++++++++++++
+# By the same method, you can change other parameters to another constant value.
+# Let's change the heat transfer coefficient, from is default value
+# 192 kW/K, to 180kW/K.
+
+input_values = []
+for time in input_mesh.getVertices():
+    Temp_air_inlet = 25 + 0.01 * time[0]
+    Temp_coolant_inlet = 50 + 0.02 * time[0]
+    HeatTransfer = 180.0
+    input_values.append([Temp_air_inlet, Temp_coolant_inlet, HeatTransfer])
+
+inputs_vars = ["Temp_air_inlet", "Temp_coolant_inlet", "HeatTransfer_coeff"]
+outputs_vars = ["Temp_air_outlet", "Temp_coolant_outlet"]
+
+HX_model = otfmi.FMUFieldFunction(path_fmu,
+                                  input_mesh,
+                                  inputs_fmu=inputs_vars,
+                                  outputs_fmu=outputs_vars)
+
+outlet_temperatures = HX_model(input_values)
+
+plt.xlabel(inputs_vars[0])
+plt.ylabel(outputs_vars[0])
+plt.plot(inlet_temperatures[0], outlet_temperatures[0])
+plt.show()
+
+
 # %%
 # --------------------------------------------------
 # Alternative : Define the `FMUFieldToPointFunction`
@@ -128,10 +160,4 @@ HX_model = otfmi.FMUFieldToPointFunction(path_fmu,
 # +++++++++++++++++++
 
 outlet_temperatures = HX_model(inlet_temperatures)
-
-# %%
-# -------------------
-# See results
-# +++++++++++++++++++
-
 print(outlet_temperatures)
