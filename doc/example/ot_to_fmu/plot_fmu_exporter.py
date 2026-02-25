@@ -13,20 +13,15 @@ Export a function as FMU
 # `this paper <https://www.researchgate.net/publication/354810878_Analysis_and_reduction_of_models_using_Persalys>`_).
 
 # %%
-# ------------
-#
-# FMU generation
-# ++++++++++++++
-#
-# First, we create the OpenTURNS function to export as FMU.
-# This example being solely a demonstrator, we consider a very simple
-# exponential function.
-
 import openturns as ot
 import otfmi
 import tempfile
 from os.path import join
 
+# %%
+# First, we create the OpenTURNS function to export as FMU.
+# This example being solely a demonstrator, we consider a very simple
+# exponential function.
 func = ot.SymbolicFunction(["x"], ["exp(x)"])
 inputPoint = [2.0]
 print(func(inputPoint))
@@ -63,12 +58,7 @@ fmuExporter.export_fmu(fmu_path, fmuType="me")
 # .. warning::
 #    The path to the C-wrapper is hard-coded in the model & in the FMU.
 #
-# ----------------------
-#
-# FMU validation
-# ++++++++++++++
-#
-# We import the in OpenModelica GUI. We connect the wrapper to an input sine signal
+# We import the FMU in OpenModelica GUI. We connect the wrapper to an input sine signal
 # (*Modelica.Blocks.Sources.Sine*) and to an output block (*Modelica.Blocks.Interfaces.RealOutput*):
 #
 # .. image:: /_static/TestMyExponentialFMU.png
