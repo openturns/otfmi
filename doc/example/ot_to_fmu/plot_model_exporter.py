@@ -11,20 +11,15 @@ Export a function as Modelica model
 # `OpenModelica GUI <https://openmodelica.org/?id=78:omconnectioneditoromedit&catid=10:main-category>`_
 # has been performed once (see
 # `this paper <https://www.researchgate.net/publication/354810878_Analysis_and_reduction_of_models_using_Persalys>`_).
-#
-# ------------
-#
-# Model generation
-# ++++++++++++++++
-#
-# First, we create the OpenTURNS function to export as Modelica model.
 
+# %%
 import openturns as ot
 import otfmi
 import tempfile
 from os.path import join
 
-
+# %%
+# First, we create the OpenTURNS function to export as Modelica model.
 func = ot.SymbolicFunction("x", "exp(x)")
 inputPoint = [2.0]
 print(func(inputPoint))
@@ -52,11 +47,6 @@ modelExporter.export_model(model_path, gui=True)
 # .. note::
 #   The export requires `CMake <https://cmake.org/>`_, a C compiler, and the
 #   OpenModelica compiler `OMC <https://www.openmodelica.org/?id=51:open-modelica-compiler-omccecatid=10:main-category>`_.
-#
-# ----------------------
-#
-# Model validation
-# ++++++++++++++++
 #
 # We import this model in OpenModelica GUI. We can check the Modelica code:
 #
