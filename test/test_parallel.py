@@ -42,7 +42,7 @@ def test_sampling_sobol():
 
     # MC DOE
     N = 200
-    x = ot.ComposedDistribution([ot.Uniform(-m.pi, m.pi)] * 3).getSample(N)
+    x = ot.JointDistribution([ot.Uniform(-m.pi, m.pi)] * 3).getSample(N)
 
     # evaluate DOE
     process = psutil.Process(os.getpid())

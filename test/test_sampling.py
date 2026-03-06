@@ -39,7 +39,7 @@ def test_sampling_sobol():
     )
 
     # Sobol' DOE
-    X = ot.ComposedDistribution([ot.Uniform(-m.pi, m.pi)] * 3)
+    X = ot.JointDistribution([ot.Uniform(-m.pi, m.pi)] * 3)
     N = 20
     x = ot.SobolIndicesExperiment(X, N).generate()
     size = len(x)

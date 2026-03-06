@@ -18,7 +18,7 @@ II = ot.Beta(2.5, 4.0, 310.0, 450.0)
 
 
 # Create the input probability distribution of dimension 4
-inputDistribution = ot.ComposedDistribution([E, F, L, II])
+inputDistribution = ot.JointDistribution([E, F, L, II])
 # Give a description of each component of the input distribution
 inputDistribution.setDescription(("E", "F", "L", "I"))
 # Create the input random vector

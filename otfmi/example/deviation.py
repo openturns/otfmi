@@ -29,7 +29,7 @@ R = ot.NormalCopula.GetCorrelationFromSpearmanCorrelation(RS)
 mycopula = ot.NormalCopula(R)
 
 # Create the input probability distribution of dimension 4
-inputDistribution = ot.ComposedDistribution([E, F, L, II], mycopula)
+inputDistribution = ot.JointDistribution([E, F, L, II], mycopula)
 
 # Give a description of each component of the input distribution
 inputDistribution.setDescription(("E", "F", "L", "I"))
