@@ -90,23 +90,15 @@ class _FMUBaseFunction:
             if difference:
                 raise pyfmi.common.io.VariableNotFoundError(", ".join(difference))
 
+            input_causality_map = {"1.0": pyfmi.fmi.FMI_INPUT,
+                                   "2.0": pyfmi.fmi.FMI2_INPUT}
+            accepted_causality = [input_causality_map[self._model.get_version()]]
+            if self._model.get_version() == "2.0" and not self._field_input:
+                accepted_causality.append(pyfmi.fmi.FMI2_PARAMETER)
             for name in inputs_fmu:
-                if (
-                    self._model.get_version() == "2.0"
-                    and not causality[name]
-                    in [pyfmi.fmi.FMI2_PARAMETER, pyfmi.fmi.FMI2_INPUT]
-                ) or (
-                    self._model.get_version() == "1.0"
-                    and causality[name] != pyfmi.fmi.FMI_INPUT
-                ):
-                    raise ValueError(
-                        'Variable "'
-                        + name
-                        + '" cannot be used as a function input (causality '
-                        + fmi.get_causality_str(self._model, name)
-                        + ")"
-                    )
-
+                if not causality[name] in accepted_causality:
+                    raise ValueError(f"Variable {name} cannot be used as a function input"
+                                     f" (causality {fmi.get_causality_str(self._model, name)})")
         self._inputs_fmu = inputs_fmu
 
     def _set_outputs_fmu(self, outputs_fmu):
