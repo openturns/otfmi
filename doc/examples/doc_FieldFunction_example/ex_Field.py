@@ -82,6 +82,11 @@ input_mesh = HX_model.getInputMesh()
 # Here we suppose a sinusoidal evolution of temperatures.
 # You can change the frequency (Hz). The phase is randomly set.
 
+# .. note::
+#   The inputs given to otfmi must be declared as `input` in the Modelica model.
+#   If you try to change parameters, it won't work.
+#
+
 freq_air = 0.5
 omega_air = 2 * np.pi * freq_air
 
