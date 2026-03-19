@@ -6,7 +6,7 @@
 
 Computation times
 =================
-**00:41.742** total execution time for 9 files **from all galleries**:
+**00:00.015** total execution time for 10 files **from all galleries**:
 
 .. container::
 
@@ -32,30 +32,33 @@ Computation times
    * - Example
      - Time
      - Mem (MB)
-   * - :ref:`sphx_glr_examples_auto_export_example_ex_fmu_exporter.py` (``examples/doc_export_example/ex_fmu_exporter.py``)
-     - 00:29.974
-     - 0.0
-   * - :ref:`sphx_glr_examples_auto_export_example_ex_model_exporter.py` (``examples/doc_export_example/ex_model_exporter.py``)
-     - 00:04.827
-     - 0.0
-   * - :ref:`sphx_glr_examples_auto_application_ex_threshold.py` (``examples/doc_application/ex_threshold.py``)
-     - 00:04.773
-     - 0.0
-   * - :ref:`sphx_glr_examples_auto_application_ex_metamodel.py` (``examples/doc_application/ex_metamodel.py``)
-     - 00:00.929
+   * - :ref:`sphx_glr_examples_auto_FieldFunction_example_ex_Field.py` (``examples/doc_FieldFunction_example/ex_Field.py``)
+     - 00:00.015
      - 0.0
    * - :ref:`sphx_glr_examples_auto_FMUPointToFieldFunction_example_subgallery_beam_ex_PointToField.py` (``examples/doc_FMUPointToFieldFunction_example/subgallery_beam/ex_PointToField.py``)
-     - 00:00.460
+     - 00:00.000
      - 0.0
    * - :ref:`sphx_glr_examples_auto_FMUPointToFieldFunction_example_subgallery_beam_ex_pyfmi_lowlevel.py` (``examples/doc_FMUPointToFieldFunction_example/subgallery_beam/ex_pyfmi_lowlevel.py``)
-     - 00:00.274
+     - 00:00.000
      - 0.0
    * - :ref:`sphx_glr_examples_auto_FMUPointToFieldFunction_example_subgallery_epid_ex_dyn_basics.py` (``examples/doc_FMUPointToFieldFunction_example/subgallery_epid/ex_dyn_basics.py``)
-     - 00:00.242
+     - 00:00.000
      - 0.0
    * - :ref:`sphx_glr_examples_auto_FMUPointToFieldFunction_example_subgallery_epid_ex_dyn_init.py` (``examples/doc_FMUPointToFieldFunction_example/subgallery_epid/ex_dyn_init.py``)
-     - 00:00.200
+     - 00:00.000
      - 0.0
    * - :ref:`sphx_glr_examples_auto_FMUPointToFieldFunction_example_subgallery_epid_ex_dyn_set.py` (``examples/doc_FMUPointToFieldFunction_example/subgallery_epid/ex_dyn_set.py``)
-     - 00:00.063
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_examples_auto_application_ex_metamodel.py` (``examples/doc_application/ex_metamodel.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_examples_auto_application_ex_threshold.py` (``examples/doc_application/ex_threshold.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_examples_auto_export_example_ex_fmu_exporter.py` (``examples/doc_export_example/ex_fmu_exporter.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_examples_auto_export_example_ex_model_exporter.py` (``examples/doc_export_example/ex_model_exporter.py``)
+     - 00:00.000
      - 0.0

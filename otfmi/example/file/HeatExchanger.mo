@@ -1,4 +1,3 @@
-
 model HeatExchanger
 
 // Heat exchanger
@@ -11,8 +10,9 @@ model HeatExchanger
   Modelica.Units.SI.HeatFlowRate Power_exchanged "Heat Power exchanged by the HX";
 
 // air
-  parameter Modelica.Units.NonSI.Temperature_degC Temp_air_inlet = 25.0 "Inlet air temperature" annotation(
-    Dialog(group = "Air"));
+  //parameter Modelica.Units.NonSI.Temperature_degC Temp_air_inlet = 25 "Inlet air temperature" annotation(Dialog(group = "Air"));
+  input Modelica.Units.NonSI.Temperature_degC Temp_air_inlet = 25 "Inlet air temperature" annotation(Dialog(group = "Air"));
+
   parameter Real density_air = 1.0 annotation(
     Dialog(group = "Air"));
   parameter Modelica.Units.SI.SpecificHeatCapacity cp_air = 1006 annotation(
@@ -24,8 +24,9 @@ model HeatExchanger
   Modelica.Units.NonSI.Temperature_degC Temp_air_outlet(min = 0.0);
   
 //coolant
-  parameter Modelica.Units.NonSI.Temperature_degC Temp_coolant_inlet = 50.0  "Inlet coolant temperature" annotation(
-    Dialog(group = "Coolant"));
+  //parameter Modelica.Units.NonSI.Temperature_degC Temp_coolant_inlet = 50  "Inlet coolant temperature" annotation(Dialog(group = "Coolant"));
+  input Modelica.Units.NonSI.Temperature_degC Temp_coolant_inlet = 50  "Inlet coolant temperature" annotation(Dialog(group = "Coolant"));
+
   parameter Real density_cool = 1.1 annotation(
     Dialog(group = "Coolant"));
   parameter Modelica.Units.SI.SpecificHeatCapacity cp_cool = 3600 annotation(
@@ -64,5 +65,3 @@ equation
     </html>"));
 
 end HeatExchanger;
-
-

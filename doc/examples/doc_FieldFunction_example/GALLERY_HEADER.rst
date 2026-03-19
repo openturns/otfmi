@@ -3,6 +3,5 @@
 Run simulations with time-independent inputs
 ============================================
 
-If your model's inputs are time-independent scalars, you can handle it with an object `FMUPointToFieldFunction`.
-These examples below show you how to proceed.
+If your model's inputs are time-dependent variables, you can handle it with an object `FMUFieldFunction`.
 

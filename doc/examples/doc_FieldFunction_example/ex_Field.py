@@ -15,10 +15,7 @@ Run simulations with FMUFieldFunction
 # Here, we define time-dependent temperatures for air and coolant at inlet,
 # and we study the evolution the temperature of air and coolant at the outlet.
 
-# TODO : see https://github.com/openturns/otfmi/blob/master/test/test_f2f.py
-
 # Modif :
-# Nettoyer le formatage, pas de titre dans les cellules.
 # Evol en sinus des températures + random, pour faire plusieurs simulations.
 
 # %%
@@ -33,13 +30,15 @@ Run simulations with FMUFieldFunction
 
 # %%
 # Prerequisites
-# ###############
+# ##############
 # We use the HeatExchanger example,
 # with the function :class:`~otfmi.FMUFieldFunction`.
 
-import otfmi
 import numpy as np
-import matplotlib.pyplot as plt
+import otfmi
+import otfmi.example.utility
+import openturns as ot
+import openturns.viewer as otv
 
 path_fmu = otfmi.example.utility.get_path_fmu("HeatExchanger")
 
@@ -80,77 +79,62 @@ input_mesh = HX_model.getInputMesh()
 # to see their effects on outlet temperatures.
 # Inputs are defined in one list.
 # Each element is itself a list, giving for each time the values of the inputs.
-# Here, we suppose a linear dependancy between temperatures and time.
+# Here we suppose a sinusoidal evolution of temperatures.
+# You can change the frequency (Hz). The phase is randomly set.
 
-inlet_temperatures = []
+freq_air = 0.5
+omega_air = 2 * np.pi * freq_air
+
+freq_cool = 1.5
+omega_cool = 2 * np.pi * freq_cool
+
+phi = np.random.uniform(0, 2 * np.pi)
+
+input_timeseries = []
 for time in input_mesh.getVertices():
-    Temp_air_inlet = 25 + 0.01 * time[0]
-    Temp_coolant_inlet = 50 + 0.02 * time[0]
-    inlet_temperatures.append([Temp_air_inlet, Temp_coolant_inlet])
+    Temp_air_inlet = float(25 + 4 * np.sin(omega_air * time[0] + phi))
+    Temp_coolant_inlet = float(50 + 4 * np.sin(omega_cool * time[0] + phi))
+    input_timeseries.append([Temp_air_inlet, Temp_coolant_inlet])
 
-# Here we suppose a non-linear evolution of temperatures
-# Paramètres
-freq = 2                     # Fréquence en Hz
-omega = 2 * np.pi * freq     # Pulsation (ω = 2πf)
-phi = np.random.uniform(0, 2*np.pi)  # Phase aléatoire entre 0 et 2π
+graph_in = ot.Graph("Inlet Temperatures evolution",
+                    "FMU simulation time (s)",
+                    "Temperature (°C)", True, "")
 
+curve_TairIn = ot.Curve(input_mesh.getVertices(),
+                        ot.Sample(np.array(input_timeseries)).getMarginal(0))
+curve_TairIn.setColor("green")
+graph_in.add(curve_TairIn)
 
-for time in input_mesh.getVertices():
-    Temp_air_inlet = 25 * np.sin(omega * time[0] + phi)
-    Temp_coolant_inlet = 50 * np.sin(omega * time[0] + phi)
-    inlet_temperatures.append([Temp_air_inlet, Temp_coolant_inlet])
+curve_TcoolIn = ot.Curve(input_mesh.getVertices(),
+                         ot.Sample(np.array(input_timeseries)).getMarginal(1))
+curve_TcoolIn.setColor("blue")
+graph_in.add(curve_TcoolIn)
 
+graph_in.setIntegerXTick(True)
+view = otv.View(graph_in)
+view.show()
 
 # %%
 # Run the simulation
 # ##################
 
-outlet_temperatures = HX_model(inlet_temperatures)
+outlet_temperatures = HX_model(input_timeseries)
 
 # %%
 # See results
 # ###########
 
-plt.xlabel("FMU simulation time (s)")
-plt.ylabel(outputs_vars[0])
-plt.plot(input_mesh.getVertices(), outlet_temperatures[0])
-plt.show()
+graph = ot.Graph("Outlet Air Temperature evolution",
+                 "FMU simulation time (s)",
+                 "Temperature (°C)", True, "")
 
-plt.xlabel(inputs_vars[0])
-plt.ylabel(outputs_vars[0])
-plt.plot(inlet_temperatures[0], outlet_temperatures[0])
-plt.show()
-
-
-# %%
-# Change other parameters
-# #######################
-# By the same method, you can change other parameters to another constant
-# value.
-# Let's change the heat transfer coefficient, from is default value
-# 192 kW/K, to 180kW/K.
-
-input_values = []
-for time in input_mesh.getVertices():
-    Temp_air_inlet = 25 + 0.01 * time[0]
-    Temp_coolant_inlet = 50 + 0.02 * time[0]
-    HeatTransfer = 180.0
-    input_values.append([Temp_air_inlet, Temp_coolant_inlet, HeatTransfer])
-
-inputs_vars = ["Temp_air_inlet", "Temp_coolant_inlet", "HeatTransfer_coeff"]
-outputs_vars = ["Temp_air_outlet", "Temp_coolant_outlet"]
-
-HX_model = otfmi.FMUFieldFunction(path_fmu,
-                                  inputs_fmu=inputs_vars,
-                                  outputs_fmu=outputs_vars)
-
-outlet_temperatures = HX_model(input_values)
-
-plt.xlabel(inputs_vars[0])
-plt.ylabel(outputs_vars[0])
-plt.plot(inlet_temperatures[0], outlet_temperatures[0])
-plt.show()
-
+curve = ot.Curve(input_mesh.getVertices(),
+                 outlet_temperatures.getMarginal(0))
+curve.setColor("red")
+graph.add(curve)
+graph.setIntegerXTick(True)
+view = otv.View(graph)
+view.show()
 
 # %%
 # Alternative : Define the `FMUFieldToPointFunction`
@@ -169,5 +153,5 @@ HX_model = otfmi.FMUFieldToPointFunction(path_fmu,
 # Run the simulation
 # ##################
 
-outlet_temperatures = HX_model(inlet_temperatures)
+outlet_temperatures = HX_model(input_timeseries)
 print(outlet_temperatures)
