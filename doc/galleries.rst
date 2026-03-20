@@ -8,6 +8,7 @@ Example Galleries
 .. toctree::
    :hidden:
 
+   examples/doc_FieldFunction_example/GALLERY_HEADER.rst
    examples/doc_FMUPointToFieldFunction_example/GALLERY_HEADER.rst
    examples/doc_FMUPointToFieldFunction_example/subgallery_beam/GALLERY_HEADER.rst
    examples/doc_FMUPointToFieldFunction_example/subgallery_epid/GALLERY_HEADER.rst
