@@ -4,29 +4,24 @@ Export a function as FMU
 """
 
 # %%
-# ``otfmi.FunctionExporter`` enables you to export OpenTURNS functions as FMUs. The
-# main interest of this class is to integrate OpenTURNS models in another models.
+# ``otfmi.FunctionExporter`` enables you to export OpenTURNS functions as FMUs.
+# The main interest of this class is to integrate OpenTURNS models in another
+# models.
 #
 # One application of the inclusion of a metamodel in
 # `OpenModelica GUI <https://openmodelica.org/?id=78:omconnectioneditoromedit&catid=10:main-category>`_
 # is described in
 # `this paper <https://www.researchgate.net/publication/354810878_Analysis_and_reduction_of_models_using_Persalys>`_.
 
-# %%
-# ------------
-#
-# FMU generation
-# ++++++++++++++
-#
-# First, we create the OpenTURNS function to export as FMU.
-# This example being solely a demonstrator, we consider a very simple
-# exponential function.
-
 import openturns as ot
 import otfmi
 import tempfile
 from os.path import join
 
+# %%
+# First, we create the OpenTURNS function to export as FMU.
+# This example being solely a demonstrator, we consider a very simple
+# exponential function.
 func = ot.SymbolicFunction(["x"], ["exp(x)"])
 inputPoint = [2.0]
 print(func(inputPoint))
@@ -40,13 +35,15 @@ print(fmu_path)
 # %%
 # We export the OpenTURNS function as a Model Exchange FMU.
 # The counterpart is to export as CoSimulation FMU (embeds a solver).
-# Another option would be to export the function via pythonfmu (see the "mode" keyword)
+# Another option would be to export the function via pythonfmu
+# (see the "mode" keyword)
 # allowing export of temporal functions (not a concern here for our function).
 fmuExporter.export_fmu(fmu_path, fmuType="me")
 
 # %%
 # .. note::
-#   The export requires `CMake <https://cmake.org/>`_ build system, a C compiler (Visual Studio or
+#   The export requires `CMake <https://cmake.org/>`_ build system, 
+#   a C compiler (Visual Studio or
 #   GCC for instance), and the OpenModelica compiler
 #   `OMC <https://www.openmodelica.org/?id=51:open-modelica-compiler-omccecatid=10:main-category>`_.
 
@@ -63,13 +60,11 @@ fmuExporter.export_fmu(fmu_path, fmuType="me")
 # .. warning::
 #    The path to the C-wrapper is hard-coded in the model & in the FMU.
 #
-# ----------------------
 #
-# FMU validation
-# ++++++++++++++
-#
-# We import the fmu in OpenModelica GUI. We connect the wrapper to an input sine signal
-# (*Modelica.Blocks.Sources.Sine*) and to an output block (*Modelica.Blocks.Interfaces.RealOutput*):
+# We import the fmu in OpenModelica GUI.
+# We connect the wrapper to an input sine signal
+# (*Modelica.Blocks.Sources.Sine*) and to an output block
+# (*Modelica.Blocks.Interfaces.RealOutput*):
 #
 # .. image:: /_static/TestMyExponentialFMU.png
 #    :scale: 100 %
