@@ -1,0 +1,28 @@
+/* Custom style for download buttons according to color of breeze theme https://github.com/sphinx-gallery/sphinx-gallery/blob/master/sphinx_gallery/_static/sg_gallery.css*/
+
+/* hide the top link note leading to footpage */
+div.sphx-glr-download-link-note {
+    display: none;
+}
+
+/* re-style the download button */
+div.sphx-glr-download a {
+    background-color: #E3F0F6;
+    background-image: none;
+    color: var(--color-content-primary);
+    border: 0;
+}
+
+div.sphx-glr-download a:visited {
+    color: var(--color-content-primary);
+}
+
+/* ===== Dark mode (breeze) ===== */
+html[data-theme="dark"] div.sphx-glr-download a {
+    background-color: #1f3a4a;
+    color: #9fd3f0;
+}
+
+html[data-theme="dark"] div.sphx-glr-download a:hover {
+    background-color: #2a4f63;
+}
