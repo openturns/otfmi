@@ -8,11 +8,10 @@ Example Galleries
 .. toctree::
    :hidden:
 
-   examples/doc_FieldFunction_example/GALLERY_HEADER.rst
    examples/doc_FMUPointToFieldFunction_example/GALLERY_HEADER.rst
    examples/doc_FMUPointToFieldFunction_example/subgallery_beam/GALLERY_HEADER.rst
    examples/doc_FMUPointToFieldFunction_example/subgallery_epid/GALLERY_HEADER.rst
-   examples/doc_FMUFieldFunction_example/GALLERY_HEADER.rst
+   examples/doc_FieldFunction_example/GALLERY_HEADER.rst
    examples/doc_export_example/GALLERY_HEADER.rst
    examples/doc_application/GALLERY_HEADER.rst
    examples/doc_application_persalys/use_persalys

@@ -15,18 +15,13 @@ Run simulations with FMUFieldFunction
 # Here, we define time-dependent temperatures for air and coolant at inlet,
 # and we study the evolution the temperature of air and coolant at the outlet.
 
-# Modif :
-# Evol en sinus des températures + random, pour faire plusieurs simulations.
-
 # %%
-# -------------
-# Modelica
-# +++++++++++++
-# In Modelica models, one can model time-dependent variables with table
-# components.
-# To use your model with OTFMI, you must set your time-dependent input
-# as scalar parameter in the model. The temporal dependency is managed by
-# OTFMI.
+# .. note::
+#    In Modelica models, one can model time-dependent variables with table
+#    components.
+#    To use your model with OTFMI, you must set your time-dependent input
+#    as scalar inputs in the model. The temporal dependency is managed by
+#    OTFMI.
 
 # %%
 # Prerequisites
@@ -45,6 +40,7 @@ path_fmu = otfmi.example.utility.get_path_fmu("HeatExchanger")
 # %%
 # Define the `FMUFieldFunction`
 # #############################
+
 # We define the model with a `FMUFieldFunction` object, with
 # 2 inputs and 2 outputs.
 # You can change the time mesh (`input_mesh` and `output_mesh`).
@@ -63,6 +59,7 @@ print(HX_model)
 # %%
 # Define the time
 # ###############
+
 # The first work consists in defining the times the model will be evaluated.
 # You can recover the time grid defined in the model.
 
@@ -75,6 +72,7 @@ input_mesh = HX_model.getInputMesh()
 # %%
 # Define the inputs
 # #################
+
 # We want to drive inlet air and coolant temperatures,
 # to see their effects on outlet temperatures.
 # Inputs are defined in one list.
@@ -83,8 +81,8 @@ input_mesh = HX_model.getInputMesh()
 # You can change the frequency (Hz). The phase is randomly set.
 
 # .. note::
-#   The inputs given to otfmi must be declared as `input` in the Modelica model.
-#   If you try to change parameters, it won't work.
+#   The inputs given to otfmi must be declared as `input` in the Modelica 
+#   model. If you try to change parameters, it won't work.
 #
 
 freq_air = 0.5
@@ -144,6 +142,7 @@ view.show()
 # %%
 # Alternative : Define the `FMUFieldToPointFunction`
 # ##################################################
+
 # The previous function support timeseries as inputs and outputs.
 # If you are interested in only a scalar output, OTFMI offers a
 # variant :class:`~otfmi.FMUFieldToPointFunction`, to get only and directly

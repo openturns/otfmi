@@ -4,9 +4,12 @@ Export a function as Modelica model
 """
 
 # %%
-# The method `export_model` of :class:`~otfmi.FunctionExporter` is another way to export OpenTURNS functions, but this time as Modelica model.
-# This can be useful if you want to include a function produced with OpenTURNS into a Modelica model.
-# Compared to `export_fmu`, here, you cannot export models with time-dependent outputs.
+# The method `export_model` of :class:`~otfmi.FunctionExporter` is another way
+# to export OpenTURNS functions, but this time as Modelica model.
+# This can be useful if you want to include a function produced with OpenTURNS
+# into a Modelica model.
+# Compared to `export_fmu`, here, you cannot export models with time-dependent
+# outputs.
 
 # One application of the inclusion of a metamodel in
 # `OpenModelica GUI <https://openmodelica.org/?id=78:omconnectioneditoromedit&catid=10:main-category>`_
@@ -83,7 +86,8 @@ modelExporter.export_model(model_path, gui=True)
 #    :align: center
 #
 # .. note::
-#    3 modes are available to export the function (see :class:`~otfmi.FunctionExporter`).
+#    3 modes are available to export the function
+#    (see :class:`~otfmi.FunctionExporter`).
 #    By default, the mode used to export the function is 'cxx'.
 #    This mode leads to the fastest version of the model, but you need to
 #    install OpenTURNS with conda.
