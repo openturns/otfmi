@@ -36,7 +36,7 @@ Example Galleries
     .. grid-item-card::
         :text-align: center
 
-        .. button-ref:: examples/auto_FMUFieldFunction_example/index
+        .. button-ref:: examples/auto_FieldFunction_example/index
             :ref-type: doc
             :expand:
             :color: primary
