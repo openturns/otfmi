@@ -606,8 +606,9 @@ class FMUFieldToPointFunction(ot.FieldToPointFunction):
     ----------
     path_fmu : str, path to the FMU file.
 
-    mesh : :class:`openturns.Mesh`, default=None
-        Time grid of the input variables, has to be included in the start/final time defined in the FMU.
+    mesh : :class:`openturns.Mesh`
+        Time grid, has to be included in the start/end time defined in the FMU.
+        By default it takes into account the start/end time and default step defined the FMU.
 
     inputs_fmu : Sequence of str, default=None
         Names of the variable from the fmu to be used as input variables.
