@@ -44,6 +44,7 @@ sphinx_gallery_conf = {
     "example_extensions": {".py"},
     "show_signature": False,
     "download_all_examples": False,
+    "write_computation_times": False,
 }
 
 #
