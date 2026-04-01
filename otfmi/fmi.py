@@ -50,7 +50,7 @@ def simulate(
 
     Parameters
     ----------
-    model : Pyfmi model object (pyfmi.fmi.FMUModelXXX).
+    model : Pyfmi model object (pyfmi.fmi.FMUModelBase).
 
     initialization_script : String, path to the script file.
 
@@ -310,7 +310,7 @@ def apply_initialization_parameters(model, initialization_parameters):
 
     Parameters
     ----------
-    model : Pyfmi model object (pyfmi.fmi.FMUModelXXX).
+    model : Pyfmi model object (pyfmi.fmi.FMUModelBase).
 
     initialization_parameters : tuple of keys/values
 
@@ -332,7 +332,7 @@ def apply_initialization_script(model, path_script):
 
     Parameters
     ----------
-    model : Pyfmi model object (pyfmi.fmi.FMUModelXXX).
+    model : Pyfmi model object (pyfmi.fmi.FMUModelBase).
 
     path_script : String, path to the script file.
 
@@ -347,7 +347,7 @@ def get_name_variable(model, **kwargs):
 
     Parameters
     ----------
-    model : Pyfmi model object (pyfmi.fmi.FMUModelXXX) or path to an FMU.
+    model : Pyfmi model object (pyfmi.fmi.FMUModelBase) or path to an FMU.
 
     Returns
     -------
@@ -373,7 +373,7 @@ def get_causality(model, names=None):
 
     Parameters
     ----------
-    model : Pyfmi model object (pyfmi.fmi.FMUModelXXX) or path to an FMU.
+    model : Pyfmi model object (pyfmi.fmi.FMUModelBase) or path to an FMU.
 
     names : Sequence of string, default=None
         Variable names
@@ -407,7 +407,7 @@ def get_causality_str(model, name):
 
     Parameters
     ----------
-    model : pyfmi.fmi.FMUModelXXX or str
+    model : pyfmi.fmi.FMUModelBase or str
         Pyfmi model object or path to an FMU.
 
     name : str
@@ -446,7 +446,7 @@ def get_variability(model):
 
     Parameters
     ----------
-    model : Pyfmi model object (pyfmi.fmi.FMUModelXXX) or path to an FMU.
+    model : Pyfmi model object (pyfmi.fmi.FMUModelBase) or path to an FMU.
 
     Returns
     -------
@@ -470,7 +470,7 @@ def get_fixed_value(model):
 
     Parameters
     ----------
-    model : Pyfmi model object (pyfmi.fmi.FMUModelXXX) or path to an FMU.
+    model : Pyfmi model object (pyfmi.fmi.FMUModelBase) or path to an FMU.
 
     """
 
@@ -495,7 +495,7 @@ def get_start_value(model):
 
     Parameters
     ----------
-    model : Pyfmi model object (pyfmi.fmi.FMUModelXXX) or path to an FMU.
+    model : Pyfmi model object (pyfmi.fmi.FMUModelBase) or path to an FMU.
 
     Returns
     -------
@@ -527,7 +527,7 @@ def set_dict_value(model, dict_value):
 
     Parameters
     ----------
-    model : Pyfmi model object (pyfmi.fmi.FMUModelXXX) or path to an FMU.
+    model : Pyfmi model object (pyfmi.fmi.FMUModelBase) or path to an FMU.
 
     dict_value : Dictionary, with variable names as keys.
 
