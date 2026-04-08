@@ -74,9 +74,6 @@ time writes:
 
 
 
-.. raw:: html
-
-   <div style="margin-left:20px;width:300px;height:120px;">
 .. math::
 
    \begin{aligned}
@@ -85,9 +82,7 @@ time writes:
    \frac{\partial R}{\partial t}(t) &= \gamma I(t)
    \end{aligned}
 
-.. raw:: html
 
-   </div>
 
 
 This model is implemented in Modelica language. The default simulation time is 50 units of time (days for instance).

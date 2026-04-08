@@ -25,7 +25,7 @@ extensions = [
     "sphinx_gallery.gen_gallery",
     "sphinx_copybutton",
     "sphinx_design",
-    "sphinx.ext.imgmath"
+    "sphinx.ext.mathjax"
 ]
 
 # paths to example scripts and generated doc by sphinx
@@ -60,14 +60,15 @@ numpydoc_show_class_members = True
 numpydoc_class_members_toctree = False
 
 # -- Options for imgmath ----------------------------------------
-imgmath_latex_preamble = r"\usepackage{{{0}math_notations}}".format(
-    os.path.dirname(__file__) + os.sep
-)
-imgmath_use_preview = True
+#imgmath_latex_preamble = r"\usepackage{{{0}math_notations}}".format(
+#    os.path.dirname(__file__) + os.sep
+#)
+#imgmath_use_preview = True
+#
+#if (subprocess.call("dvisvgm -V", shell=True,
+#                    stdout=subprocess.PIPE, stderr=subprocess.PIPE) == 0):
+#    imgmath_image_format = "svg"
 
-if (subprocess.call("dvisvgm -V", shell=True,
-                    stdout=subprocess.PIPE, stderr=subprocess.PIPE) == 0):
-    imgmath_image_format = "svg"
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]
