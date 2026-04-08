@@ -29,7 +29,7 @@ Metamodel a FMU time-dependent output
 # %%
 # We load the FMU as a FMUPointToFieldFunction (see the
 # :doc:`tutorial<../../_generated/otfmi.FMUPointToFieldFunction>`).
-# We concentrate on the first time unit of the epidemiological model output.
+# We focus on the first time unit of the epidemiological model output.
 # The single uncertain input of the model is the ``ìnfection_rate``.
 
 import otfmi.example.utility
@@ -53,14 +53,15 @@ function = otfmi.FMUPointToFieldFunction(
 # The simulation inputs and outputs will be used to train the metamodel.
 
 inputLaw = ot.Uniform(1.5, 2.5)
-inputSample = inputLaw.getSample(30)
+inputSample = inputLaw.getSample(10)
 outputFMUSample = function(inputSample)
 
 graph = outputFMUSample.draw().getGraph(0, 0)
 graph.setTitle("FMU simulations")
 graph.setXTitle("Time")
 graph.setYTitle("Number of infected")
-graph.setLegends([f"{line[0]:.3f}" for line in inputSample[:15]] + ["_"] * 15)
+graph.setLegendFontSize(6.)
+graph.setLegends([f"{line[0]:.2f}" for line in inputSample[:10]])
 view = otv.View(graph,
                 legend_kw={"title": "infection rate", "loc": "upper left"})
 
@@ -216,12 +217,11 @@ print(Q2)
 # ----------------------
 #
 # The ``globalMetamodel`` (computationnally faster than the FMU) created with
-# the above script can now be used as a computationnally much cheaper
-# substitute to the FMU for
+# the above script can now be used as a faster substitute to the FMU for
 #
-# - `sensitivity analysis <openturns.github.io/openturns/latest/auto_reliability_sensitivity/index.html#sensitivity-analysis>`_,
-# - `parameter inference <openturns.github.io/openturns/latest/auto_calibration/index.html#bayesian-calibration>`_,
-# - `estimate a failure probability <openturns.github.io/openturns/latest/auto_reliability_sensitivity/index.html#reliability>`_,
+# - `sensitivity analysis <https://openturns.github.io/openturns/latest/auto_sensitivity_analysis/index.html>`_,
+# - `parameter inference <https://openturns.github.io/openturns/latest/auto_calibration/index.html>`_,
+# - `estimate a failure probability <https://openturns.github.io/openturns/latest/auto_reliability/index.html>`_,
 #
 # etc.
 

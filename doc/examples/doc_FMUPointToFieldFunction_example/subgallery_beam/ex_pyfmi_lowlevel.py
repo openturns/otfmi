@@ -166,4 +166,5 @@ plt.show()
 # - avoid the *for* loop on the points of the design of experiment,
 # - automatic formatting of the simulation outputs.
 #
-# The next example shows you a shorter and easier way to run a set of simulations.
+# The :doc:`nex example <ex_PointToField>` shows you a shorter and
+# easier way to run a set of simulations.
