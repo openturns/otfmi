@@ -8,8 +8,8 @@ Following sections show how they works.
 The cantilever beam model
 -------------------------
 
-.. image:: /_static/beam.png
-  :scale: 20 %
+.. image:: /_static/beam.svg
+  :scale: 100 %
   :alt: alternate text
   :align: center
 
