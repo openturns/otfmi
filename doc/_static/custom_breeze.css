@@ -1,0 +1,4 @@
+/* hide breeze footer */
+.bz-footer-copyright {
+    display: none !important;
+}
