@@ -1,6 +1,5 @@
 import sys
 import os
-import subprocess
 
 
 # If extensions (or modules to document with autodoc) are in another directory,
@@ -44,25 +43,14 @@ sphinx_gallery_conf = {
 autodoc_default_options = {"members": None, "inherited-members": None}
 
 intersphinx_mapping = {
-    "openturns": ("http://openturns.github.io/openturns/latest", None)
+    "openturns": ("https://openturns.github.io/openturns/latest", None)
 }
 autosummary_generate = True
 
 numpydoc_show_class_members = True
 numpydoc_class_members_toctree = False
 
-extensions.append("sphinx.ext.imgmath")
-imgmath_latex_preamble = r"\usepackage{{{0}math_notations}}".format(
-    os.path.dirname(__file__) + os.sep
-)
-imgmath_use_preview = True
-if (
-    subprocess.call(
-        "dvisvgm -V", shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE
-    )
-    == 0
-):
-    imgmath_image_format = "svg"
+extensions.append("sphinx.ext.mathjax")
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]
@@ -75,7 +63,7 @@ master_doc = "index"
 
 # General information about the project.
 project = "otfmi"
-copyright = "2017-2025 EDF-Phimeca"
+copyright = "2017-2026 EDF-Phimeca"
 author = "Sylvain Girard"
 
 # List of patterns, relative to source directory, that match files and
@@ -96,7 +84,7 @@ todo_include_todos = True
 
 # -- Options for HTML output ----------------------------------------------
 
-html_theme = "renku"
+html_theme = "breeze"
 # html_sidebars = {
 #     '**': [
 #         # 'about.html',
@@ -107,7 +95,7 @@ html_theme = "renku"
 #     ]
 # }
 
-html_theme_options = {"prev_next_buttons_location": None, "github_user": "openturns"}
+# html_theme_options = {}
 
 html_show_sourcelink = False
 
@@ -121,7 +109,7 @@ html_favicon = "_static/Icon.ico"
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ["_static"]
 
-html_css_files = ['sphxglr.css']
+html_css_files = ["sphxglr.css", "custom_download_button.css", "custom_breeze.css"]
 
 # If not '', a 'Last updated on:' timestamp is inserted at every page bottom,
 # using the given strftime format.

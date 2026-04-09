@@ -1,4 +1,4 @@
-renku-sphinx-theme
+sphinx-breeze-theme
 sphinx
 sphinx-gallery
 numpydoc
