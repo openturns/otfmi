@@ -8,9 +8,9 @@ In the following applications, advanced computer experiments are performed on th
 
 .. note::
    Here we demonstrate the potential of using OpenTURNS on FMUs.
-   For easier examples, see the section :doc:`Examples<../example/index>`.
+   For easier examples, see the section :doc:`Examples<../examples/index>`.
 
 .. toctree::
    :maxdepth: 1
 
-   ../auto_application/index.rst
+   ../auto_example/application/index.rst
