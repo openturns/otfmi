@@ -1,27 +1,14 @@
 """
-Estimate the probability of a threshold excedance
-=================================================
+Estimate the probability of a threshold exceedance
+==================================================
 """
 # %%
-# A load is applied to a cantilever beam. For construction
-# reasons, the beam must not exceed a bending of 30 cm. The load (F), beam
+# A load is applied to a :doc:`cantilever beam<../../examples/model_description>`.
+# The beam must not exceed a bending of 30 cm. The load (F), beam
 # Young's modulus (E), length (L) and section modulus (I) are uncertain.
-#
-# .. image:: /_static/beam.png
-#    :scale: 25 %
-#    :alt: alternate text
-#    :align: center
-#
-# --------
-#
-# See the cantilever beam model :doc:`here<../fmus/deviation>`.
-#
-# --------
-#
 #
 # **What is the probability that the deviation exceeds the
 # threshold ?**
-#
 #
 
 import openturns as ot
@@ -92,17 +79,14 @@ inputDistribution.setDescription(model_fmu.getInputDescription())
 # Create the event whose probability we want to estimate:
 
 inputRandomVector = ot.RandomVector(inputDistribution)
-outputVariableOfInterest = ot.CompositeRandomVector(model_fmu, inputRandomVector)
+deviation = ot.CompositeRandomVector(model_fmu, inputRandomVector)
 
 threshold = 30
-event = ot.ThresholdEvent(outputVariableOfInterest, ot.Greater(), threshold)
-event.setName("Deviation > %g cm" % threshold)
+event = ot.ThresholdEvent(deviation, ot.Greater(), threshold)
+event.setName(f"Deviation > {threshold} cm")
 
 # %%
 # Parameterize and run the Monte Carlo algorithm:
-
-ot.RandomGenerator.SetSeed(23091926)  # set seed for reproducibility
-
 experiment = ot.MonteCarloExperiment()
 algo = ot.ProbabilitySimulationAlgorithm(event, experiment)
 algo.setMaximumOuterSampling(200)

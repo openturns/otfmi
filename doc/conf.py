@@ -16,23 +16,22 @@ extensions = [
     "sphinx.ext.autosummary",
     "numpydoc",
     "sphinx_gallery.gen_gallery",
+    "sphinx_design",
 ]
 
 sphinx_gallery_conf = {
     "examples_dirs": [
-        "application",
-        "example/deviation",
-        "example/epid",
-        "example/low_level",
-        "example/ot_to_fmu",
+        "examples/application",
+        "examples/p2f",
+        "examples/f2f",
+        "examples/export",
     ],  # # path to
     # example scripts
     "gallery_dirs": [
-        "auto_application",
-        "auto_example/deviation",
-        "auto_example/epid",
-        "auto_example/low_level",
-        "auto_example/ot_to_fmu",
+        "auto_example/application",
+        "auto_example/p2f",
+        "auto_example/f2f",
+        "auto_example/export",
     ],
     # path to where to save gallery gen. output
     "filename_pattern": "/plot_",

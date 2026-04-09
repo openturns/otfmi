@@ -3,27 +3,14 @@ Metamodel a FMU time-dependent output
 =====================================
 """
 # %%
-# We are interested in the evolution of an epidemic through a
-# population (for instance, Covid!). We have an epidemiologic model describing
-# the epidemic dynamics. More precisely, we focus on the evolution of the number
-# of people infected by the disease.
-#
-# .. image:: /_static/epid.png
-#    :scale: 80 %
-#    :alt: alternate text
-#    :align: center
-#
-# --------
-#
-# See the epidemiological model :doc:`here<../fmus/epid>`.
-#
-# --------
-#
+# This example shows how to create a metamodel of the
+# :doc:`epidemiological model<../../examples/model_description>`.
 #
 # **To decrease the model simulation costs, let's create a metamodel.**
 #
-# Metamodeling a model which output depends on time is a difficult problem. We
-# will combine two methods: Karhunen-Loeve dimension reduction should precede the Kriging metamodeling.
+# Metamodeling a model with time-dependent output is a difficult problem. We
+# will combine two methods: Karhunen-Loeve dimension reduction should precede
+# the Kriging metamodeling.
 #
 # We will proceed the following way:
 #
@@ -40,10 +27,9 @@ Metamodel a FMU time-dependent output
 # ++++++++++++++++++++
 
 # %%
-# We load the FMU as a FMUPointToFieldFunction (see the
-# :doc:`tutorial<../_generated/otfmi.FMUPointToFieldFunction>`). We concentrate
-# on the first time unit of the epidemiological model output. The single
-# uncertain input of the model is the ``ìnfection_rate``.
+# We load the FMU as a :class:`~otfmi.FMUPointToFieldFunction`.
+# We concentrate on the first time unit of the epidemiological model output.
+# The single uncertain input of the model is the ``ìnfection_rate``.
 
 import otfmi.example.utility
 import openturns as ot
@@ -62,20 +48,21 @@ function = otfmi.FMUPointToFieldFunction(
 )
 
 # %%
-# We create a Monte-Carlo design of experiment, on which we
-# simulate the FMU.
+# We create a Monte-Carlo design of experiment, on which we simulate the FMU.
 # The simulation inputs and outputs will be used to train the metamodel.
 
 inputLaw = ot.Uniform(1.5, 2.5)
-inputSample = inputLaw.getSample(30)
+inputSample = inputLaw.getSample(10)
 outputFMUSample = function(inputSample)
 
 graph = outputFMUSample.draw().getGraph(0, 0)
 graph.setTitle("FMU simulations")
 graph.setXTitle("Time")
 graph.setYTitle("Number of infected")
-graph.setLegends([f"{line[0]:.3f}" for line in inputSample[:15]] + ["_"] * 15)
-view = otv.View(graph, legend_kw={"title": "infection rate", "loc": "upper left"})
+graph.setLegendFontSize(6.)
+graph.setLegends([f"{line[0]:.2f}" for line in inputSample[:10]])
+view = otv.View(graph,
+                legend_kw={"title": "infection rate", "loc": "upper left"})
 
 # %%
 # We define a function to visualize the upcoming Karhunen-Loeve modes.
@@ -134,7 +121,9 @@ print(f"Karhunen-Loeve projection in dimension {n_mode}")
 # We metamodel the Karhunen-Loeve coefficients using ordinary Kriging.
 dim = inputSample.getDimension()  # only 1 input dimension
 univb = ot.ConstantBasisFactory(dim).build()  # univariate basis
-coll = [ot.AggregatedFunction([univb.build(i)] * n_mode) for i in range(univb.getSize())]
+coll = [ot.AggregatedFunction(
+    [univb.build(i)] * n_mode) for i in range(univb.getSize())]
+
 basis = ot.Basis(coll)  # multivariate basis
 covarianceModel = ot.SquaredExponential(dim)
 covarianceModel = ot.TensorizedCovarianceModel([covarianceModel] * n_mode)
@@ -146,8 +135,8 @@ result = algo.getResult()
 metamodel = result.getMetaModel()
 
 # %%
-# We have created all pieces for a "PointToField" metamodel. Let put these
-# pieces together:
+# We have created all pieces for a "PointToField" metamodel.
+# Let put these pieces together:
 
 
 def globalMetamodel(sample):
@@ -226,12 +215,11 @@ print(Q2)
 # ----------------------
 #
 # The ``globalMetamodel`` (computationnally faster than the FMU) created with
-# the above script can now be used as a computationnally much cheaper
-# substitute to the FMU for
+# the above script can now be used as a faster substitute to the FMU for
 #
-# - `sensitivity analysis <openturns.github.io/openturns/latest/auto_reliability_sensitivity/index.html#sensitivity-analysis>`_,
-# - `parameter inference <openturns.github.io/openturns/latest/auto_calibration/index.html#bayesian-calibration>`_,
-# - `estimate a failure probability <openturns.github.io/openturns/latest/auto_reliability_sensitivity/index.html#reliability>`_,
+# - `sensitivity analysis <https://openturns.github.io/openturns/latest/auto_sensitivity_analysis/index.html>`_,
+# - `parameter inference <https://openturns.github.io/openturns/latest/auto_calibration/index.html>`_,
+# - `estimate a failure probability <https://openturns.github.io/openturns/latest/auto_reliability/index.html>`_,
 #
 # etc.
 

@@ -37,7 +37,7 @@ The core features of `otfmi <https://github.com/openturns/otfmi>`__ are:
    :maxdepth: 1
    :glob:
 
-   example/index
+   examples/index
 
 .. toctree::
    :maxdepth: 1
@@ -48,12 +48,7 @@ The core features of `otfmi <https://github.com/openturns/otfmi>`__ are:
 .. toctree::
    :maxdepth: 1
 
-   fmus/index
-
-.. toctree::
-   :maxdepth: 1
-
-   demo_persalys/use_persalys.rst
+   examples/persalys/use_persalys.rst
 
 --------------
 

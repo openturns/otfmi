@@ -1,17 +1,13 @@
 Sensitivity analysis with Persalys
 ==================================
 
-.. image:: ../_static/logo_persalys.png
+.. image:: /_static/logo_persalys.png
      :align: left
      :scale: 5%
 
 `Persalys <https://persalys.fr/>`__ is a graphical user interface to some otfmi
 and `OpenTURNS <http://openturns.github.io/openturns/master/contents.html>`__ methods.
 The software is free and can be downloaded `here <https://persalys.fr/obtenir.php?la=en">`__.
-
-.. container:: clearer
-
-  .. image :: ../_static/spacer.jpg
 
 A parabolic solar collector concentrates the sun light on a tube via parabolic mirrors.
 A fluid (generally oil) circulates in this tube and heats up thanks to the reverberated sunlight.
@@ -126,4 +122,4 @@ For further exploration of the solar collector model with Persalys, see
 Persalys <https://www.researchgate.net/publication/354810878_Analysis_and_reduction_of_models_using_Persalys>`__.
 In this paper, metamodeling (aka model reduction) is performed on the solar collector.
 The OpenTURNS metamodel is then inserted in a solar power plant model using
-`FMUExporter </auto_example/ot_to_fmu/plot_model_exporter>`__.
+:class:`~otfmi.FMUExporter`.

@@ -1,10 +1,12 @@
 #!/usr/bin/env python
 
+import math as m
 import openturns as ot
 import openturns.testing as ott
 import otfmi
 import otfmi.example.utility
 import pytest
+import sys
 
 
 @pytest.fixture
@@ -82,3 +84,24 @@ def test_final_time_coherence(path_fmu, input_mesh):
             outputs_fmu=["infected"],
             final_time=10,
         )
+
+
+@pytest.mark.skipif(sys.platform.startswith("win"), reason="N/A")
+def test_heat_exchanger():
+    path_fmu = otfmi.example.utility.get_path_fmu("HeatExchanger")
+    inputs_vars = ["Temp_air_inlet", "Temp_coolant_inlet"]
+    outputs_vars = ["Temp_air_outlet", "Temp_coolant_outlet"]
+    HX_model = otfmi.FMUFieldFunction(path_fmu, inputs_fmu=inputs_vars, outputs_fmu=outputs_vars)
+    input_mesh = HX_model.getInputMesh()
+    freq_air = 0.5
+    omega_air = 2 * m.pi * freq_air
+    freq_cool = 1.5
+    omega_cool = 2 * m.pi * freq_cool
+    phi = 3.78
+    input_timeseries = ot.Sample(0, 2)
+    for time in input_mesh.getVertices().asPoint():
+        Temp_air_inlet = 25.0 + 4.0 * m.sin(omega_air * time + phi)
+        Temp_coolant_inlet = 50.0 + 4.0 * m.sin(omega_cool * time + phi)
+        input_timeseries.add([Temp_air_inlet, Temp_coolant_inlet])
+    outlet_temperatures = HX_model(input_timeseries)
+    ott.assert_almost_equal(outlet_temperatures[-1], [41.6793, 47.7767])
