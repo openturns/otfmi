@@ -48,6 +48,22 @@ Its input is a :py:class:`openturns.Field` and its output is a vector
 
    FMUFieldToPointFunction
 
+
+Here is a summary of the different variants:
+
++-------------------------------------------+---------+----------+
+| Class                                     | Input   | Output   |
++===========================================+=========+==========+
+| :class:`~otfmi.FMUPointToFieldFunction`   | Point   | Field    |
++-------------------------------------------+---------+----------+
+| :class:`~otfmi.FMUFunction`               | Point   | Point    |
++-------------------------------------------+---------+----------+
+| :class:`~otfmi.FMUFieldFunction`          | Field   | Field    |
++-------------------------------------------+---------+----------+
+| :class:`~otfmi.FMUFieldToPointFunction`   | Field   | Point    |
++-------------------------------------------+---------+----------+
+
+
 Common low-level functions
 --------------------------
 
