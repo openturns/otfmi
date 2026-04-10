@@ -57,9 +57,11 @@ print(HX_model)
 # %%
 # Define the time grid
 # ~~~~~~~~~~~~~~~~~~~~
-# The first work consists in defining the time grid on which the model will be evaluated.
-# You can recover the time grid defined in the model.
+# The first work consists in defining the time grids on which the model
+# will be evaluated (for both input and output fields).
+# You can recover the default time grids defined in the model.
 input_mesh = HX_model.getInputMesh()
+output_mesh = HX_model.getOutputMesh()
 
 # %%
 # If you want to override this with your own timegrid,
@@ -92,7 +94,7 @@ for time in input_mesh.getVertices().asPoint():
 
 graph_in = ot.Graph("Inlet Temperatures evolution",
                     "FMU simulation time (s)",
-                    "Temperature (°C)", True, "")
+                    "Temperature (°C)", True)
 
 curve_TairIn = ot.Curve(input_mesh.getVertices(), input_timeseries[:, 0])
 curve_TairIn.setColor("green")
@@ -103,8 +105,10 @@ curve_TcoolIn.setColor("blue")
 graph_in.add(curve_TcoolIn)
 
 graph_in.setIntegerXTick(True)
+graph_in.setLegends(inputs_vars)
+graph_in.setLegendPosition("center right")
+
 view = otv.View(graph_in)
-view.show()
 
 # %%
 # Run the simulation
@@ -113,17 +117,23 @@ print(outlet_temperatures[-5:])
 
 # %%
 # See results
-graph = ot.Graph("Outlet Air Temperature evolution",
-                 "FMU simulation time (s)",
-                 "Temperature (°C)", True, "")
+graph_out = ot.Graph("Outlet Temperature evolution",
+                     "FMU simulation time (s)",
+                     "Temperature (°C)", True)
 
-curve = ot.Curve(input_mesh.getVertices(),
-                 outlet_temperatures.getMarginal(0))
-curve.setColor("red")
-graph.add(curve)
-graph.setIntegerXTick(True)
-view = otv.View(graph)
-view.show()
+curveTairOut = ot.Curve(output_mesh.getVertices(), outlet_temperatures[:, 0])
+curveTairOut.setColor("red")
+graph_out.add(curveTairOut)
+
+curveTcoolOut = ot.Curve(output_mesh.getVertices(), outlet_temperatures[:, 1])
+curveTcoolOut.setColor("orange")
+graph_out.add(curveTcoolOut)
+
+graph_out.setIntegerXTick(True)
+graph_out.setLegends(outputs_vars)
+graph_out.setLegendPosition("center right")
+
+view = otv.View(graph_out)
 
 # %%
 # Alternative : Define the `FMUFieldToPointFunction`
@@ -141,3 +151,6 @@ HX_model = otfmi.FMUFieldToPointFunction(path_fmu,
 # Run the simulation
 outlet_temperatures = HX_model(input_timeseries)
 print(outlet_temperatures)
+
+# %%
+otv.View.ShowAll()
