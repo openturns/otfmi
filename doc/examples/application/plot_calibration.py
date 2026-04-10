@@ -55,9 +55,7 @@ Calibration example
 #   14th June 2024, Sylvain Girard (girard@phimeca.com), Pascal Borel (pascal.borel@edf.fr)
 # - Girard2019: S. Girard, “A probabilistic take on system modeling with Modelica and Python”,
 #   Février 2019, https://sylvaingirard.net/pdf/girard17-probabilistic_modelica_python.pdf
-# - .. [anonymous1978] *Influenza in a boarding school*. In: British Medical Journal 587.1,
-#        `pdf <https://pmc.ncbi.nlm.nih.gov/articles/PMC1603269/pdf/brmedj00115-0064.pdf>`__
-#
+# - [anonymous1978]_
 
 # %%
 import otfmi

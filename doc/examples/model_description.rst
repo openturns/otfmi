@@ -116,3 +116,8 @@ This model is implemented in Modelica language. The default simulation time is 5
 
 We focus on the effect of the ``infection_rate`` and ``healing_rate`` on the evolution of the ``infected`` category.
 Hence **two input variables** and **one time-dependent output**.
+
+References
+~~~~~~~~~~
+.. [anonymous1978] *Influenza in a boarding school*. In: British Medical Journal 587.1,
+   `pdf <https://pmc.ncbi.nlm.nih.gov/articles/PMC1603269/pdf/brmedj00115-0064.pdf>`__

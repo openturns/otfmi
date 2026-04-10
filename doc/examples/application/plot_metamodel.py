@@ -20,6 +20,10 @@ Metamodel a FMU time-dependent output
 #
 # The composition of the coefficients metamodel with the inverse
 # Karhunen-Loeve will make the global metamodel.
+#
+# References
+# ----------
+# - [anonymous1978]_
 
 # %%
 #
@@ -27,30 +31,27 @@ Metamodel a FMU time-dependent output
 # ++++++++++++++++++++
 
 # %%
-# We load the FMU as a :class:`~otfmi.FMUPointToFieldFunction`.
-# We concentrate on the first time unit of the epidemiological model output.
-# The single uncertain input of the model is the ``ìnfection_rate``.
-
 import otfmi.example.utility
 import openturns as ot
 import openturns.viewer as otv
 
+# %%
+# We load the FMU as a :class:`~otfmi.FMUPointToFieldFunction`.
+# We concentrate on the first time unit of the epidemiological model output.
+# The single uncertain input of the model is the ``ìnfection_rate``.
 path_fmu = otfmi.example.utility.get_path_fmu("epid")
-mesh = ot.RegularGrid(0.0, 0.05, 20)
-
 function = otfmi.FMUPointToFieldFunction(
     path_fmu,
-    mesh,
     inputs_fmu=["infection_rate"],
     outputs_fmu=["infected"],
     start_time=0.0,
-    final_time=1.0,
+    final_time=15.0,
 )
+mesh = function.getOutputMesh()
 
 # %%
 # We create a Monte-Carlo design of experiment, on which we simulate the FMU.
 # The simulation inputs and outputs will be used to train the metamodel.
-
 inputLaw = ot.Uniform(1.5, 2.5)
 inputSample = inputLaw.getSample(10)
 outputFMUSample = function(inputSample)
@@ -95,8 +96,7 @@ def drawKL(scaledKL, KLev, mesh, title="Scaled KL modes"):
 # We compute the Karhunen-Loeve decomposition of the model outputs.
 # The underlying assumption is that these outputs are realizations of a
 # stochastic process.
-
-threshold = 0.0001
+threshold = 1e-4
 algoKL = ot.KarhunenLoeveSVDAlgorithm(outputFMUSample, threshold)
 algoKL.run()
 resultKL = algoKL.getResult()
@@ -154,16 +154,13 @@ def globalMetamodel(sample):
 # %%
 # We create a new Monte-Carlo design of experiment. On this design of
 # experiment, the FMU is simulated as well as the metamodel.
-
 inputTestSample = inputLaw.getSample(10)
 outputFMUTestSample = function(inputTestSample)
 outputMetamodelTestSample = globalMetamodel(inputTestSample)
 
 # %%
 # First, we have a visual check:
-
 gridLayout = ot.GridLayout(1, 2)
-
 graph1 = outputFMUTestSample.draw().getGraph(0, 0)
 graph1.setTitle("FMU simulations")
 graph2 = outputMetamodelTestSample.draw().getGraph(0, 0)
@@ -182,20 +179,16 @@ view = otv.View(
 
 # %%
 # We validate the pertinence of Karhunen-Loeve decomposition:
-
+# As the epidemiological model considers a population size of 763, the residual
+# mean error on the field is acceptable.
 validationKL = ot.KarhunenLoeveValidation(outputFMUTestSample, resultKL)
 graph = validationKL.computeResidualMean().draw()
 graph.setYTitle("infected residual mean")
-ot.Show(graph)
-
-# %%
-# As the epidemiological model considers a population size of 763, the residual
-# mean error on the field is acceptable.
+view = otv.View(graph)
 
 # %%
 # We validate the Kriging (using the Karhunen-Loeve coefficients of the test
 # sample):
-
 projectFunction = ot.KarhunenLoeveProjection(resultKL)
 coefficientSample = projectFunction(outputFMUTestSample)
 predictions = metamodel(inputTestSample)
