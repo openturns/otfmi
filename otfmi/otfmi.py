@@ -32,36 +32,16 @@ class _FMUBaseFunction:
         self._path_fmu = path_fmu
         self._kind = kind
 
+        self._set_simulation_time(start_time, final_time)
+
         # set input mesh
-        self._field_input = field_input
-        if field_input:
-            if input_mesh is None:
-                input_mesh = self._get_default_mesh(start_time, final_time)
-            else:
-                if not isinstance(input_mesh, ot.Mesh):
-                    raise TypeError("Expected mesh of type ot.Mesh")
-        self._input_mesh = input_mesh
+        self._set_input_mesh(input_mesh, field_input)
 
         # set output mesh
-        self._field_output = field_output
-        if field_output:
-            if output_mesh is None:
-                output_mesh = input_mesh = self._get_default_mesh(start_time, final_time)
-            else:
-                if not isinstance(output_mesh, ot.Mesh):
-                    raise TypeError("Expected mesh of type ot.Mesh")
-        self._output_mesh = output_mesh
+        self._set_output_mesh(output_mesh, field_output)
 
         self._set_inputs_fmu(inputs_fmu)
         self._set_outputs_fmu(outputs_fmu)
-
-        self._set_final_time(final_time)
-        self._set_start_time(start_time)
-
-        if field_input:
-            self._assert_mesh_validity(self._input_mesh)
-        if field_output:
-            self._assert_mesh_validity(self._output_mesh)
 
         self.initialize(initialization_script)
 
@@ -148,20 +128,37 @@ class _FMUBaseFunction:
                     )
         self._outputs_fmu = outputs_fmu
 
-    def _assert_mesh_validity(self, mesh):
-        """Raise an error if the mesh is not comprised between the start and
-        final simulation time.
-        """
-        mesh_min = mesh.getVertices().getMin()[0]
-        mesh_max = mesh.getVertices().getMax()[0]
-        tol = (mesh_max - mesh_min) * 1e-6
-        if mesh_min + tol < self._start_time:
-            raise ValueError(f"""The mesh start time ({mesh_min}) must be >= to FMU start time ({self._start_time}).\n
-            To set the FMU start time, use the argument start_time in the constructor.""")
+    def _set_input_mesh(self, input_mesh, field_input):
+        self._field_input = field_input
+        self._input_mesh = None
+        if field_input:
+            if input_mesh is None:
+                input_mesh = self._get_default_mesh(self._start_time, self._final_time)
+            else:
+                if not isinstance(input_mesh, ot.Mesh):
+                    raise TypeError("Expected mesh of type ot.Mesh")
+            self._input_mesh = input_mesh
+            self._check_mesh_validity(input_mesh)
 
-        if mesh_max > self._final_time + tol:
-            raise ValueError(f"""The mesh final time ({mesh_max}) must be <= to FMU final time ({self._final_time}).\n
-            To set the FMU final time, use the argument final_time in the constructor.""")
+    def _set_output_mesh(self, output_mesh, field_output):
+        self._field_output = field_output
+        self._output_mesh = None
+        if field_output:
+            if output_mesh is None:
+                output_mesh = self._get_default_mesh(self._start_time, self._final_time)
+            else:
+                if not isinstance(output_mesh, ot.Mesh):
+                    raise TypeError("Expected mesh of type ot.Mesh")
+            self._output_mesh = output_mesh
+            self._check_mesh_validity(output_mesh)
+
+    def _check_mesh_validity(self, mesh):
+        """Check if the mesh time interval and simulation time interval are consistent."""
+        mesh_time = ot.Interval(mesh.getVertices().getMin(), mesh.getVertices().getMax())
+        simulation_time = ot.Interval(self._start_time, self._final_time)
+        if simulation_time.intersect(mesh_time).getVolume() < 1e-3 * simulation_time.getVolume():
+            raise ValueError(f"The mesh time interval {mesh_time} does not contain a significant proportion "
+                             f"of the simulation time interval {simulation_time}")
 
     def _get_default_mesh(self, start_time, final_time):
         tmin = self._model.get_default_experiment_start_time()
@@ -175,31 +172,25 @@ class _FMUBaseFunction:
         mesh = ot.RegularGrid(tmin, step, n + 1)
         return mesh
 
-    def _set_final_time(self, final_time):
-        """Extract final time from keywords if exists.
-
-        Parameters
-        ----------
-        final_time: float (must be >= 0).
-
-        """
-        if final_time is not None:
-            self._final_time = final_time
-        else:
-            self._final_time = self._model.get_default_experiment_stop_time()
-
-    def _set_start_time(self, start_time):
-        """Extract start time from keywords if exists.
+    def _set_simulation_time(self, start_time, final_time):
+        """Set start/final time.
 
         Parameters
         ----------
         start_time : float (must be >= 0)
-
+        final_time : float (must be >= 0).
         """
         if start_time is not None:
+            assert start_time >= 0.0, "Start time must be positive"
             self._start_time = start_time
         else:
             self._start_time = self._model.get_default_experiment_start_time()
+        if final_time is not None:
+            assert final_time >= 0.0, "Final time must be positive"
+            self._final_time = final_time
+        else:
+            self._final_time = self._model.get_default_experiment_stop_time()
+        assert self._final_time > self._start_time, "Final time must be > start time"
 
     def load_fmu(self, path_fmu, kind=None, **kwargs):
         """Load an FMU.
@@ -287,6 +278,7 @@ class _FMUBaseFunction:
             **kwargs
         )
 
+        # do not override simulation time
         if self._field_input:
             kwargs_simulate.pop("start_time")
             kwargs_simulate.pop("final_time")
@@ -496,9 +488,9 @@ class FMUPointToFieldFunction(ot.PointToFieldFunction):
     path_fmu : str, path to the FMU file.
 
     mesh : :class:`openturns.Mesh`, default=None
-        Time grid of the output variables, has to be included in the start/final time defined in the FMU.
-        By default it takes into account the start/final time and default step defined the FMU.
-        If provided it does not overrides the start/final time of the simulation
+        Time grid of the output variables, must overlap the simulation time interval defined by start_time/final_time.
+        By default defined to a regular grid with the start/final time and default step defined the FMU.
+        It does not override the start/final time of the simulation
         but returned values are interpolated on the simulation time grid according to the given mesh.
 
     inputs_fmu : Sequence of str, default=None
@@ -607,7 +599,10 @@ class FMUFieldToPointFunction(ot.FieldToPointFunction):
     path_fmu : str, path to the FMU file.
 
     mesh : :class:`openturns.Mesh`, default=None
-        Time grid of the input variables, has to be included in the start/final time defined in the FMU.
+        Time grid of the input variables, must overlap the simulation time interval defined by start_time/final_time.
+        By default defined to a regular grid with the start/final time and default step defined the FMU.
+        It does not override the start/final time of the simulation
+        but input values are interpolated on the simulation time grid according to the given mesh.
 
     inputs_fmu : Sequence of str, default=None
         Names of the variable from the fmu to be used as input variables.
@@ -714,10 +709,16 @@ class FMUFieldFunction(ot.FieldFunction):
     path_fmu : str, path to the FMU file.
 
     input_mesh : :class:`openturns.Mesh`, default=None
-        Time grid of the input variables, has to be included in the start/final time defined in the FMU.
+        Time grid of the input variables, must overlap the simulation time interval defined by start_time/final_time.
+        By default defined to a regular grid with the start/final time and default step defined the FMU.
+        It does not override the start/final time of the simulation
+        but input values are interpolated on the simulation time grid according to the given mesh.
 
     output_mesh : :class:`openturns.Mesh`, default=None
-        Time grid of the output variables, has to be included in the start/final time defined in the FMU.
+        Time grid of the input variables, must overlap the simulation time interval defined by start_time,final_time.
+        By default defined to a regular grid with the start/final time and default step defined the FMU.
+        It does not override the start/final time of the simulation
+        but returned values are interpolated on the simulation time grid according to the given mesh.
 
     inputs_fmu : Sequence of str, default=None
         Names of the variable from the fmu to be used as input variables.
