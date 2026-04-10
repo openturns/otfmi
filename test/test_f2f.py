@@ -6,7 +6,6 @@ import openturns.testing as ott
 import otfmi
 import otfmi.example.utility
 import pytest
-import sys
 
 
 @pytest.fixture
