@@ -40,6 +40,7 @@ sphinx_gallery_conf = {
 
 
 autodoc_default_options = {"members": None, "inherited-members": None}
+autodoc_use_legacy_class_based = True
 
 intersphinx_mapping = {
     "openturns": ("https://openturns.github.io/openturns/latest", None)
@@ -196,3 +197,6 @@ texinfo_documents = [
 
 # If true, do not generate a @detailmenu in the "Top" node's menu.
 # texinfo_no_detailmenu = False
+
+# If true, Sphinx will warn about all references where the target cannot be found.
+nitpicky = True

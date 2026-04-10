@@ -122,4 +122,4 @@ For further exploration of the solar collector model with Persalys, see
 Persalys <https://www.researchgate.net/publication/354810878_Analysis_and_reduction_of_models_using_Persalys>`__.
 In this paper, metamodeling (aka model reduction) is performed on the solar collector.
 The OpenTURNS metamodel is then inserted in a solar power plant model using
-:class:`~otfmi.FMUExporter`.
+:class:`~otfmi.FunctionExporter`.
