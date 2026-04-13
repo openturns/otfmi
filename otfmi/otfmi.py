@@ -156,9 +156,9 @@ class _FMUBaseFunction:
         """Check if the mesh time interval and simulation time interval are consistent."""
         mesh_time = ot.Interval(mesh.getVertices().getMin(), mesh.getVertices().getMax())
         simulation_time = ot.Interval(self._start_time, self._final_time)
-        if simulation_time.intersect(mesh_time).getVolume() < 1e-3 * simulation_time.getVolume():
-            raise ValueError(f"The mesh time interval {mesh_time} does not contain a significant proportion "
-                             f"of the simulation time interval {simulation_time}")
+        if simulation_time.intersect(mesh_time).isEmpty():
+            raise ValueError(f"The mesh time interval {mesh_time} does not overlap"
+                             f" the simulation time interval {simulation_time}")
 
     def _get_default_mesh(self, start_time, final_time):
         tmin = self._model.get_default_experiment_start_time()
