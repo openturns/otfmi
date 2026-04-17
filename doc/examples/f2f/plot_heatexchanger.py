@@ -10,10 +10,10 @@ Run simulations with FMUFieldFunction
 # time-dependent outputs.
 #
 # We consider a model of heat exchanger.
-# Basically, it models a flow of liquid coolant flowing through tubes,
-# which are cooled by a flow of air.
+# Basically, it models a flow of liquid coolant flowing within tubes,
+# which are cooled down by an external flow of air.
 # Here, we define time-dependent temperatures for air and coolant at inlet,
-# and we study the evolution the temperature of air and coolant at the outlet.
+# and we study the evolution of the temperature of air and coolant at the outlet.
 #
 # .. note::
 #    In Modelica models, one can model time-dependent variables with table

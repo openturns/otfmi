@@ -1,6 +1,6 @@
 """
-Load an FMU
-===========
+Load a FMU file with pyfmi
+==========================
 """
 # %%
 # First, retrieve the path to the example FMU *deviation.fmu*.
