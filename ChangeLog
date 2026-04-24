@@ -1,7 +1,8 @@
-2026-04-?? - release 0.18 (wip)
+2026-04-17 - release 0.18
 - Add FMUFieldFunction (field -> field)
 - Reworked documentation
 - Add HeatExchanger example
+- Tweak function_exporter to use conda compiler
 
 2026-01-08 - release 0.17.1
 - Default function export mode changed to cxx

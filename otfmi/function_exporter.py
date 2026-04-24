@@ -4,6 +4,8 @@ import dill
 import glob
 import jinja2
 import openturns as ot
+import os
+import platform
 from pythonfmu import FmuBuilder
 from pathlib import Path
 import re
@@ -486,9 +488,16 @@ endif()
         # in-source build
         cmake_args += ["-S", "."]
 
+        # use conda compiler if available
+        env = None
+        if shutil.which(f"{platform.machine()}-conda-linux-gnu-cc") is not None:
+            env = os.environ.copy()
+            env["CC"] = f"{platform.machine()}-conda-linux-gnu-cc"
+            env["CXX"] = f"{platform.machine()}-conda-linux-gnu-c++"
+
         try:
             cp = subprocess.run(
-                cmake_args, capture_output=True, cwd=self._workdir, check=True
+                cmake_args, capture_output=True, cwd=self._workdir, check=True, env=env,
             )
             if verbose:
                 print(cp.stdout.decode(), file=sys.stderr)
@@ -595,7 +604,7 @@ endif()
             )
         return string
 
-    def _write_modelica_wrapper(self, className, dirName, gui, move):
+    def _write_modelica_wrapper(self, className, dirName, libs, gui, move):
         """
         Write the Modelica model importing Cfunction.
 
@@ -605,6 +614,8 @@ endif()
             The model prefix, used as name for the file and the model itself.
         dirName : path-like object
             Name of the folder required by the user
+        libs : str
+            List of libraries to link
         gui : bool
             If True, define the input/output connectors.
             The model cannot be exported as FMU in command line if gui=True.
@@ -620,7 +631,7 @@ function ExternalFunc
 input Real[{{ input_dim }}] x;
 output Real[{{ output_dim }}] y;
 external "C" c_func({{ input_dim }}, x, {{ output_dim }}, y);
-annotation(Library="cwrapper", LibraryDirectory="{{ link_dir }}");
+annotation(Library={{ libs }}, LibraryDirectory="{{ link_dir }}");
 end ExternalFunc;
 
 {{ io_vars }}
@@ -645,6 +656,7 @@ end {{ className }};
                 "className": className,
                 "input_dim": self._function.getInputDimension(),
                 "output_dim": self._function.getOutputDimension(),
+                "libs": libs,
                 "link_dir": path2uri(dirName) if move else path2uri(self._workdir),
                 "io_vars": self._set_connector() if gui else self._set_input_output(),
                 "inputs": ", ".join(
@@ -705,12 +717,14 @@ end {{ className }};
         self._init_workdir()
         self._export_xml()
         c_ext = ".c"
+        libs = r'"cwrapper"'
         if mode == "pyprocess":
             self._write_cwrapper_pyprocess()
         elif mode == "cpython":
             self._write_cwrapper_cpython()
         elif mode == "cxx":
             c_ext = ".cxx"
+            libs = r'{"cwrapper", "OT"}'
             self._write_cwrapper_cxx()
         else:
             raise ValueError(f"Invalid mode: {mode}")
@@ -720,7 +734,7 @@ end {{ className }};
         # the "move" private kwarg moves the model from temporary folder to user folder
         move = kwargs.get("move", True)
 
-        self._write_modelica_wrapper(className, dirName, gui, move)
+        self._write_modelica_wrapper(className, dirName, libs, gui, move)
 
         if move:
             list_file = [className + extension]
