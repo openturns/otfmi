@@ -11,7 +11,7 @@ def test_deviation():
     )
 
     # FMU model
-    path_fmu = path_fmu = otfmi.example.utility.get_path_fmu("deviation")
+    path_fmu = otfmi.example.utility.get_path_fmu("deviation")
     model_fmu = otfmi.FMUFunction(
         path_fmu, inputs_fmu=["E", "F", "L", "I"], outputs_fmu="y"
     )

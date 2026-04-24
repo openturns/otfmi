@@ -4,9 +4,8 @@ import dill
 import glob
 import jinja2
 import openturns as ot
-import os
 from pythonfmu import FmuBuilder
-import pathlib
+from pathlib import Path
 import re
 import subprocess
 import shutil
@@ -50,8 +49,8 @@ class FunctionExporter(object):
 
     def _init_workdir(self):
         """Reinitialize the working directory"""
-        self._workdir = tempfile.mkdtemp()
-        self._xml_path = os.path.join(self._workdir, "function.xml")
+        self._workdir = Path(tempfile.mkdtemp())
+        self._xml_path = self._workdir / "function.xml"
 
     def _export_xml(self):
         """
@@ -61,7 +60,7 @@ class FunctionExporter(object):
         ----------
         """
         study = ot.Study()
-        study.setStorageManager(ot.XMLStorageManager(self._xml_path))
+        study.setStorageManager(ot.XMLStorageManager(str(self._xml_path)))
         study.add("function", self._function)
         study.save()
 
@@ -165,15 +164,15 @@ void c_func(int nin, double x[], int nout, double y[]) {
                 ),
                 "input_dim": self._function.getInputDimension(),
                 "output_dim": self._function.getOutputDimension(),
-                "workdir": self._workdir.replace("\\", "\\\\"),
-                "path_point_in": os.path.join(self._workdir, "point.in").replace("\\", "\\\\"),
-                "path_point_out": os.path.join(self._workdir, "point.out").replace("\\", "\\\\"),
-                "path_wrapper_py": os.path.join(self._workdir, "wrapper.py").replace("\\", "\\\\"),
-                "path_error_log": os.path.join(self._workdir, "error.log").replace("\\", "\\\\"),
-                "path_function_xml": os.path.join(self._workdir, "function.xml").replace("\\", "\\\\"),
+                "workdir": str(self._workdir).replace("\\", "\\\\"),
+                "path_point_in": str(self._workdir / "point.in").replace("\\", "\\\\"),
+                "path_point_out": str(self._workdir / "point.out").replace("\\", "\\\\"),
+                "path_wrapper_py": str(self._workdir / "wrapper.py").replace("\\", "\\\\"),
+                "path_error_log": str(self._workdir / "error.log").replace("\\", "\\\\"),
+                "path_function_xml": str(self._workdir / "function.xml").replace("\\", "\\\\"),
             }
         )
-        with open(os.path.join(self._workdir, "wrapper.c"), "w") as c:
+        with open(self._workdir / "wrapper.c", "w") as c:
             c.write(data)
 
         # write CMakeLists
@@ -193,7 +192,7 @@ if (MSVC)
   target_compile_definitions(cwrapper PRIVATE _CRT_SECURE_NO_WARNINGS)
 endif()
 """
-        with open(os.path.join(self._workdir, "CMakeLists.txt"), "w") as cm:
+        with open(self._workdir / "CMakeLists.txt", "w") as cm:
             cm.write(data)
 
     def _write_cwrapper_cpython(self):
@@ -337,15 +336,15 @@ void c_func(int nin, double x[], int nout, double y[])
                 ),
                 "input_dim": self._function.getInputDimension(),
                 "output_dim": self._function.getOutputDimension(),
-                "workdir": self._workdir.replace("\\", "\\\\"),
-                "path_point_in": os.path.join(self._workdir, "point.in").replace("\\", "\\\\"),
-                "path_point_out": os.path.join(self._workdir, "point.out").replace("\\", "\\\\"),
-                "path_wrapper_py": os.path.join(self._workdir, "wrapper.py").replace("\\", "\\\\"),
-                "path_error_log": os.path.join(self._workdir, "error.log").replace("\\", "\\\\"),
-                "path_function_xml": os.path.join(self._workdir, "function.xml").replace("\\", "\\\\"),
+                "workdir": str(self._workdir).replace("\\", "\\\\"),
+                "path_point_in": str(self._workdir / "point.in").replace("\\", "\\\\"),
+                "path_point_out": str(self._workdir / "point.out").replace("\\", "\\\\"),
+                "path_wrapper_py": str(self._workdir / "wrapper.py").replace("\\", "\\\\"),
+                "path_error_log": str(self._workdir / "error.log").replace("\\", "\\\\"),
+                "path_function_xml": str(self._workdir / "function.xml").replace("\\", "\\\\"),
             }
         )
-        with open(os.path.join(self._workdir, "wrapper.c"), "w") as c:
+        with open(self._workdir / "wrapper.c", "w") as c:
             c.write(data)
 
         # write CMakeLists
@@ -368,7 +367,7 @@ if (MSVC)
   target_compile_definitions(cwrapper PRIVATE _CRT_SECURE_NO_WARNINGS)
 endif()
 """
-        with open(os.path.join(self._workdir, "CMakeLists.txt"), "w") as cm:
+        with open(self._workdir / "CMakeLists.txt", "w") as cm:
             cm.write(data)
 
     def _write_cwrapper_cxx(self):
@@ -434,7 +433,7 @@ void c_func(int nin, double x[], int nout, double y[])
                 ),
             }
         )
-        with open(os.path.join(self._workdir, "wrapper.cxx"), "w") as cxx:
+        with open(self._workdir / "wrapper.cxx", "w") as cxx:
             cxx.write(data)
 
         # write CMakeLists
@@ -458,7 +457,7 @@ if (MSVC)
   target_compile_definitions(cwrapper PRIVATE _CRT_SECURE_NO_WARNINGS)
 endif()
 """
-        with open(os.path.join(self._workdir, "CMakeLists.txt"), "w") as cm:
+        with open(self._workdir / "CMakeLists.txt", "w") as cm:
             cm.write(data)
 
     def _build_cwrapper(self, verbose):
@@ -479,7 +478,7 @@ endif()
             cmake_args += ["-DCMAKE_GENERATOR_PLATFORM=x64"]
 
         # find cmake config relative from python dir (for cxx mode)
-        ot_libdir = pathlib.Path(ot.__file__).parents[3]
+        ot_libdir = Path(ot.__file__).parents[3]
         ot_cmake_dir = ot_libdir / "cmake" / "openturns"
         if (ot_cmake_dir / "OpenTURNSConfig.cmake").exists():
             cmake_args += [f"-DOpenTURNS_DIR={ot_cmake_dir.as_posix()}"]
@@ -604,7 +603,7 @@ endif()
         ----------
         className : str
             The model prefix, used as name for the file and the model itself.
-        dirName : str
+        dirName : path-like object
             Name of the folder required by the user
         gui : bool
             If True, define the input/output connectors.
@@ -639,7 +638,7 @@ end {{ className }};
 """
 
         def path2uri(path):
-            return pathlib.Path(path).as_uri()
+            return Path(path).as_uri()
 
         data = jinja2.Template(tdata).render(
             {
@@ -660,7 +659,7 @@ end {{ className }};
                 ],
             }
         )
-        with open(os.path.join(self._workdir, className + ".mo"), "w") as mo:
+        with open(self._workdir / (className + ".mo"), "w") as mo:
             mo.write(data)
 
     def export_model(self, model_path, gui=False, verbose=False, binary=True, mode="cxx", **kwargs):
@@ -672,7 +671,7 @@ end {{ className }};
 
         Parameters
         ----------
-        model_path : str
+        model_path : str or path-like object
             Path to the generated .mo file.
             The model name is taken from the base name.
         gui : bool, optional
@@ -695,13 +694,13 @@ end {{ className }};
               (not just the Python module that would be installed by pip for example).
         """
 
-        if not isinstance(model_path, str):
-            raise TypeError("model_path must be str")
-        rawClassName, extension = os.path.splitext(os.path.basename(model_path))
+        p = Path(model_path)
+        rawClassName, extension = p.stem, p.suffix
         className = rawClassName[0].upper() + rawClassName[1:]
         if extension != ".mo":
             raise ValueError("Expected a .mo file name")
-        dirName = os.path.expanduser(os.path.dirname(model_path))
+        dirName = p.parent
+        assert dirName.exists(), f"parent directory {dirName} does not exist"
 
         self._init_workdir()
         self._export_xml()
@@ -727,13 +726,13 @@ end {{ className }};
             list_file = [className + extension]
             if binary:
                 # licwrapper.a/.so, cwrapper.lib/dll
-                libfiles = glob.glob(os.path.join(self._workdir, "*cwrapper*"))
-                list_file += [os.path.basename(x) for x in libfiles]
+                libfiles = glob.glob(str(self._workdir / "*cwrapper*"))
+                list_file += [Path(x).name for x in libfiles]
             else:
                 list_file += ["wrapper" + c_ext, "CMakeLists.txt"]
             for file in list_file:
-                src = os.path.join(self._workdir, file)
-                dest = os.path.join(dirName, file)
+                src = self._workdir / file
+                dest = dirName / file
                 shutil.move(src, dest)
             shutil.rmtree(self._workdir)
             file_list_msg = ", ".join(list_file[1:])
@@ -749,7 +748,7 @@ end {{ className }};
 
         Parameters
         ----------
-        fmu_path : str
+        fmu_path : str or path-like object
             Path to the generated .fmu file.
         fmuType : str
             model type, either me (model exchange), cs (co-simulation),
@@ -762,12 +761,14 @@ end {{ className }};
             Verbose output (default=False).
         """
 
-        rawClassName, extension = os.path.splitext(os.path.basename(fmu_path))
+        p = Path(fmu_path)
+        rawClassName, extension = p.stem, p.suffix
         className = rawClassName[0].upper() + rawClassName[1:]
         # name starting with lower case causes connection issues in OMEdit
         if extension != ".fmu":
             raise ValueError("Expected a .fmu file name")
-        dirName = os.path.expanduser(os.path.dirname(fmu_path))
+        dirName = p.parent
+        assert dirName.exists(), f"parent directory {dirName} does not exist"
         self._init_workdir()
         if mode == "pyprocess":
             if hasattr(self._function, "getOutputMesh"):
@@ -777,19 +778,18 @@ end {{ className }};
 
             self.export_model(model_path, gui=False, verbose=verbose, move=False)
 
-            path_mo = os.path.join(self._workdir, className + ".mo")
-            path_fmu = os.path.join(self._workdir, className + extension)
+            path_mo = self._workdir / (className + ".mo")
+            path_fmu = self._workdir / (className + extension)
             mo2fmu(path_mo, path_fmu=path_fmu, fmuType=fmuType, verbose=verbose)
 
-            shutil.move(
-                os.path.join(self._workdir, className + extension),
-                os.path.join(dirName, className + extension),
-            )
+            shutil.move(self._workdir / (className + extension),
+                        dirName / (className + extension))
 
         elif mode == "pythonfmu":
             self._export_xml()
             tdata = r"""
 import openturns as ot
+from pathlib import Path
 from pythonfmu.fmi2slave import Fmi2Slave, Fmi2Causality, Real
 import shutil
 import tempfile
@@ -803,12 +803,12 @@ class {{ className }}(Fmi2Slave):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         study = ot.Study()
-        workdir = tempfile.mkdtemp()
-        fname = os.path.join(workdir, "function.xml")
+        workdir = Path(tempfile.mkdtemp())
+        fname = workdir / "function.xml"
         xml_data = binascii.a2b_base64(xml_b64)
         with open(fname, "wb") as f:
             f.write(xml_data)
-        study.setStorageManager(ot.XMLStorageManager(fname))
+        study.setStorageManager(ot.XMLStorageManager(str(fname)))
         study.load()
 {% if is_field_f %}
         self._function = ot.PointToFieldFunction()
@@ -850,7 +850,7 @@ class {{ className }}(Fmi2Slave):
             data = jinja2.Template(tdata).render({"className": className,
                                                   "xml_b64": xml_b64,
                                                   "is_field_f": is_field_f})
-            slave_file = os.path.join(self._workdir, className + ".py")
+            slave_file = self._workdir / (className + ".py")
             with open(slave_file, "w") as fslave:
                 fslave.write(data)
 
@@ -858,6 +858,6 @@ class {{ className }}(Fmi2Slave):
             if not FmuBuilder.has_binary():
                 raise RuntimeError("pythonfmu.FmuBuilder binary is missing, check the pythonfmu installation")
 
-            FmuBuilder.build_FMU(slave_file, dest=os.path.dirname(fmu_path))
+            FmuBuilder.build_FMU(slave_file, dest=str(dirName))
         shutil.rmtree(self._workdir)
-        ot.Log.Warn(f"Exported FMU into: {fmu_path}")
+        ot.Log.Warn(f"Exported FMU into: {dirName}")

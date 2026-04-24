@@ -3,6 +3,7 @@
 """Low level utility functions for common FMU manipulations."""
 
 import io
+from pathlib import Path
 import pyfmi
 import numpy as np
 import warnings
@@ -14,9 +15,10 @@ def load_fmu(path_fmu, kind=None, **kwargs):
 
     Parameters
     ----------
-    path_fmu : String, path to the FMU file.
+    path_fmu : str or path-like
+        Path to the FMU file.
 
-    kind : String, one of "ME" (model exchange) or "CS" (co-simulation)
+    kind : str, one of "ME" (model exchange) or "CS" (co-simulation)
         select a kind of FMU if both are available.
         Note:
         Contrary to pyfmi, the default here is "CS" (co-simulation). The
@@ -30,13 +32,14 @@ def load_fmu(path_fmu, kind=None, **kwargs):
     # pyfmi writes a log file in current folder even with log_level=0
     kwargs.setdefault("log_file_name", io.StringIO())
 
+    p_fmu = str(Path(path_fmu).resolve())
     if kind is None:
         try:
-            return pyfmi.load_fmu(path_fmu, kind="CS", **kwargs)
+            return pyfmi.load_fmu(p_fmu, kind="CS", **kwargs)
         except pyfmi.fmi.FMUException:
-            return pyfmi.load_fmu(path_fmu, kind="auto", **kwargs)
+            return pyfmi.load_fmu(p_fmu, kind="auto", **kwargs)
     else:
-        return pyfmi.load_fmu(path_fmu, kind=kind, **kwargs)
+        return pyfmi.load_fmu(p_fmu, kind=kind, **kwargs)
 
 
 def simulate(

@@ -2,14 +2,27 @@
 # Phimeca Engineering (Sylvain Girard, girard@phimeca.com).
 """Utility functions for the examples."""
 
-import os
+from pathlib import Path
 import sysconfig
 
 
 def get_path_fmu(name):
-    path_example = os.path.dirname(os.path.abspath(__file__))
+    """
+    Get example file.
+
+    Parameters
+    ----------
+    name : str
+        Example name
+
+    Returns
+    -------
+    path_fmu : Path
+        FMU file path
+    """
+    path_example = Path(__file__).parent
     platform = sysconfig.get_platform()
-    path_fmu = os.path.join(path_example, "file", "fmu", platform, f"{name}.fmu")
-    if not os.path.exists(path_fmu):
-        raise RuntimeError(f"Example {name} is not available on your platform ({platform})")
+    path_fmu = path_example / "file" / "fmu" / platform / f"{name}.fmu"
+    if not path_fmu.exists():
+        raise RuntimeError(f"Example {name} is not available on your platform ({platform}) {path_fmu}")
     return path_fmu

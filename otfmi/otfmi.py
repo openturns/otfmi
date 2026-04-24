@@ -5,7 +5,6 @@
 import openturns as ot
 import pyfmi
 import numpy as np
-import os
 from . import fmi
 
 
@@ -197,9 +196,10 @@ class _FMUBaseFunction:
 
         Parameters
         ----------
-        path_fmu : String, path to the FMU file.
+        path_fmu : str or path-like
+            Path to the FMU file.
 
-        kind : String, one of "ME" (model exchange) or "CS" (co-simulation)
+        kind : str, one of "ME" (model exchange) or "CS" (co-simulation)
             Select a kind of FMU if both are available.
             Note:
             Contrary to pyfmi, the default here is "CS" (co-simulation). The
@@ -210,9 +210,8 @@ class _FMUBaseFunction:
         function.
 
         """
-
         self._model = fmi.load_fmu(
-            path_fmu=os.path.expanduser(path_fmu), kind=kind, **kwargs
+            path_fmu=path_fmu, kind=kind, **kwargs
         )
 
     def initialize(self, initialization_script=None):
@@ -248,12 +247,12 @@ class _FMUBaseFunction:
         ----------
         value_input : Vector of input values.
 
-        reset : Boolean, toggle resetting the FMU prior to simulation. True by
+        reset : bool, toggle resetting the FMU prior to simulation. True by
         default.
 
         time : Sequence of floats, time vector (optional).
 
-        timestep : Float, time step in seconds (optional).
+        timestep : float, time step in seconds (optional).
 
         Additional keyword arguments are passed on to the 'simulate' method of
         the underlying PyFMI model object.

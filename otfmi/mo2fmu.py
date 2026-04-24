@@ -1,6 +1,6 @@
 import argparse
 import jinja2
-import os
+from pathlib import Path
 import tempfile
 import subprocess
 import shutil
@@ -9,7 +9,7 @@ import sys
 
 def mo2fmu(
     path_mo,
-    path_fmu="",
+    path_fmu=None,
     fmuType="cs",
     version="2.0",
     libs=[],
@@ -21,12 +21,12 @@ def mo2fmu(
 
     Parameters
     ----------
-    path_mo : str
+    path_mo : str or path-like
         Path to the source model file
-    path_fmu : str, default=None
+    path_fmu : str or path-like, default=None
         Path to the destination FMU file
         If not provided write it in the current directory
-    fmuType : str
+    fmuType : str, default="cs"
         model type, either me (model exchange), cs (co-simulation),
         me_cs (both model exchange and co-simulation)
     version : str, default="2.0"
@@ -39,10 +39,11 @@ def mo2fmu(
         Verbose output
     """
 
-    if not isinstance(path_mo, str):
-        raise TypeError("path_mo must be of type str")
-    if not isinstance(path_fmu, str):
-        raise TypeError("path_fmu must be of type str")
+    p_mo = Path(path_mo)
+    assert p_mo.exists(), f"model file {path_mo} does not exist"
+    # assume the model name is the file name
+    model_name = p_mo.stem
+    p_fmu = Path.cwd() / (model_name + ".fmu") if path_fmu is None else Path(path_fmu)
     if not isinstance(fmuType, str):
         raise TypeError("fmuType must be of type str")
 
@@ -64,11 +65,8 @@ def mo2fmu(
         print("Error occured detecting the OpenModelica compiler omc:", cpe.stdout + cpe.stderr, file=sys.stderr)
         raise cpe
 
-    workdir = tempfile.mkdtemp()
-    path_mos = os.path.join(workdir, "mo2fmu.mos")
-    # assume the model name is the file name
-    model_name = os.path.splitext(os.path.basename(path_mo))[0]
-
+    workdir = Path(tempfile.mkdtemp())
+    path_mos = workdir / "mo2fmu.mos"
     tdata = """
 {%- for lib in libs %}
 loadModel({{ lib }}); getErrorString();
@@ -81,7 +79,7 @@ buildModelFMU({{ className }}, version="{{ version }}", fmuType="{{ fmuType }}",
     data = jinja2.Template(tdata).render(
         {
             "libs": libs,
-            "fileName": os.path.abspath(path_mo).replace("\\", "\\\\"),
+            "fileName": str(p_mo.resolve()).replace("\\", "\\\\"),
             "className": model_name,
             "version": version,
             "fmuType": fmuType,
@@ -105,12 +103,9 @@ buildModelFMU({{ className }}, version="{{ version }}", fmuType="{{ fmuType }}",
     except subprocess.CalledProcessError as cpe:
         print("Error occurred running the OpenModelica compiler omc:", cpe.stdout + cpe.stderr, file=sys.stderr)
         raise cpe
-    temp_fmu = os.path.join(workdir, model_name) + ".fmu"
-    if not os.path.exists(temp_fmu):
-        raise RuntimeError(f"omc failed to generate the FMU file {temp_fmu}")
-    if path_fmu == "":
-        path_fmu = os.path.join(os.getcwd(), model_name) + ".fmu"
-    shutil.move(temp_fmu, path_fmu)
+    temp_fmu = workdir / (model_name + ".fmu")
+    assert temp_fmu.exists(), f"omc failed to generate the FMU file {temp_fmu}"
+    shutil.move(temp_fmu, p_fmu)
     shutil.rmtree(workdir)
 
 
