@@ -11,7 +11,7 @@ jobs:
           conda-remove-defaults: "true"
       - name: Build
         run: |
-          
-          conda install -y --file requirements.txt
-          python -c "import openturns; print(42)"
+          #conda install -y --file requirements.txt
+          conda install -y openturns
+          python -c "import openturns; print(123456789)"
 
