@@ -121,7 +121,7 @@ function = otfmi.FMUPointToFieldFunction(
 
 lawE = ot.Uniform(65e9, 75e9)
 lawI = ot.Uniform(1.3e7, 1.7e7)
-dist = ot.ComposedDistribution([lawE, lawI])
+dist = ot.JointDistribution([lawE, lawI])
 inputSample = dist.getSample(10)
 
 outputSample = function(inputSample)

@@ -72,7 +72,7 @@ mycopula = ot.NormalCopula(R)
 
 # %%
 # And we endly create the composed input probability distribution.
-inputDistribution = ot.ComposedDistribution([E, F, L, II], mycopula)
+inputDistribution = ot.JointDistribution([E, F, L, II], mycopula)
 inputDistribution.setDescription(model_fmu.getInputDescription())
 
 # %%
