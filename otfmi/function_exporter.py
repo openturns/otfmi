@@ -22,6 +22,11 @@ class FunctionExporter(object):
     """
     Fonction export.
 
+    On Linux, for maximum binary compatibility we recommend to install Modelica and OpenTURNS
+    in a homogeneous environment, one possibility to do this is to use conda::
+
+        conda install -y openmodelica openturns
+
     Parameters
     ----------
     function : :py:class:`openturns.Function` or :py:class:`openturns.PointToFieldFunction`
@@ -702,8 +707,7 @@ end {{ className }};
             - cpython: the function is run via the Python C API; quite fast (no file I/O)
               but requires Python development headers and libs.
             - cxx (default): the function is directly evaluated trough the OpenTURNS C++ API;
-              even faster but requires the OpenTURNS development headers and libraries
-              (not just the Python module that would be installed by pip for example).
+              even faster but requires the OpenTURNS development headers and libraries.
         """
 
         p = Path(model_path)
