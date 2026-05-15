@@ -1,6 +1,6 @@
 """
-Run simulations with FMUPointToFieldFunction
---------------------------------------------
+Run simulations with OTFMI : FMUPointToFieldFunction
+----------------------------------------------------
 """
 
 # %%
