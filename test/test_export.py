@@ -12,23 +12,24 @@ import shutil
 import subprocess
 import time
 import pytest
+from pathlib import Path
 
 
 @pytest.mark.parametrize("mode", ["pyprocess", "pythonfmu"])
 @pytest.mark.parametrize("fmuType", ["cs", "me"])
 def test_export_fmu_vector(mode, fmuType):
+    if mode == "pyprocess" and sys.platform.startswith("win"):
+        # omc mingw cross-compiler cannot use otfmi msvc wrapper binary: Linking cwrapper-NOTFOUND
+        return
+
     # export fmu
     f = ot.SymbolicFunction(["E", "F", "L", "I"], ["(F*L^3)/(3.0*E*I)"])
     start = [3e7, 3e4, 250.0, 400.0]
-
-    if sys.platform.startswith("win"):
-        return
-
-    temp_path = tempfile.mkdtemp()
-    path_fmu = os.path.join(temp_path, "Deviation.fmu")
+    temp_path = Path(tempfile.mkdtemp())
+    path_fmu = temp_path / "Deviation.fmu"
     fe = otfmi.FunctionExporter(f, start)
     fe.export_fmu(path_fmu, fmuType=fmuType, mode=mode, verbose=True)
-    assert os.path.isfile(path_fmu), "fmu not created"
+    assert path_fmu.exists(), "fmu not created"
 
     # simulate with OMSimulator
     have_omsimulator = True
@@ -36,8 +37,9 @@ def test_export_fmu_vector(mode, fmuType):
         subprocess.run(["OMSimulator", "--help"], capture_output=True)
     except FileNotFoundError:
         have_omsimulator = False
-    if have_omsimulator:
-        subprocess.run(["OMSimulator", path_fmu], capture_output=True, check=True)
+    if have_omsimulator and mode != "pythonfmu":
+        # requires LD_PRELOAD for pythonfmu
+        subprocess.run(["OMSimulator", str(path_fmu)], capture_output=True, check=True)
 
     if mode == "pyprocess":
         # reimport fmu
@@ -78,7 +80,7 @@ def test_export_fmu_vector(mode, fmuType):
 
 @pytest.mark.skipif(sys.platform.startswith("win"), reason="N/A")
 @pytest.mark.parametrize("fmuType", ["cs", "me"])
-def test_export_fmu_field(fmuType):
+def test_export_fmu_field(fmuType, mode="pythonfmu"):
 
     N = 100
     start = 0.0
@@ -88,13 +90,13 @@ def test_export_fmu_field(fmuType):
     f = ot.VertexValuePointToFieldFunction(g, mesh)
     x0 = [4.0, 5.0]
 
-    temp_path = tempfile.mkdtemp()
-    path_fmu = os.path.join(temp_path, "Sin.fmu")
+    temp_path = Path(tempfile.mkdtemp())
+    path_fmu = temp_path / "Sin.fmu"
 
     # export
     fe = otfmi.FunctionExporter(f, x0)
-    fe.export_fmu(path_fmu, fmuType=fmuType, mode="pythonfmu", verbose=True)
-    assert os.path.isfile(path_fmu), f"fmu not created in {path_fmu}"
+    fe.export_fmu(path_fmu, fmuType=fmuType, mode=mode, verbose=True)
+    assert path_fmu.exists(), f"fmu not created in {path_fmu}"
 
     summary = fmpy.dump(path_fmu)
     print(summary)
@@ -109,8 +111,9 @@ def test_export_fmu_field(fmuType):
         subprocess.run(["OMSimulator", "--help"], capture_output=True)
     except FileNotFoundError:
         have_omsimulator = False
-    if have_omsimulator:
-        subprocess.run(["OMSimulator", path_fmu], capture_output=True, check=True)
+    if have_omsimulator and mode != "pythonfmu":
+        # requires LD_PRELOAD for pythonfmu
+        subprocess.run(["OMSimulator", str(path_fmu)], capture_output=True, check=True)
 
     shutil.rmtree(temp_path)
 
@@ -122,31 +125,30 @@ def test_export_model(mode, binary):
     # export model
     f = ot.SymbolicFunction(["E", "F", "L", "I"], ["(F*L^3)/(3.0*E*I)"])
     start = [3e7, 3e4, 250.0, 400.0]
-    name_model = "Deviation.mo"
+    className = "Deviation"
+    model_file = className + ".mo"
 
-    temp_path = tempfile.mkdtemp()
-    assert os.path.isdir(temp_path), "temp_path not created"
-    className, _ = os.path.splitext(name_model)
-    path_model = os.path.join(temp_path, name_model)
+    temp_path = Path(tempfile.mkdtemp())
+    path_model = temp_path / model_file
     fe = otfmi.FunctionExporter(f, start)
     fe.export_model(path_model, gui=False, verbose=True, binary=binary, mode=mode)
-    assert os.path.isfile(path_model), f"model not created in file {path_model}"
+    assert path_model.exists(), f"model not created in file {path_model}"
 
     if binary:
-        libfiles = glob.glob(os.path.join(temp_path, "*cwrapper*"))
+        libfiles = glob.glob(str(temp_path / "*cwrapper*"))
         assert len(libfiles) > 0, "lib file not created"
 
         # write simulation mos
-        path_mos = os.path.join(temp_path, "simulate.mos")
+        path_mos = temp_path / "simulate.mos"
         with open(path_mos, "w") as mos:
             mos.write(f'cd("{temp_path}");\n')
-            mos.write(f'loadFile("{name_model}"); getErrorString();\n')
+            mos.write(f'loadFile("{model_file}"); getErrorString();\n')
             mos.write(f"simulate ({className}, stopTime=3.0);\n")
-        subprocess.run(["omc", f"{path_mos}"], capture_output=True, check=True)
+        subprocess.run(["omc", str(path_mos)], capture_output=True, check=True)
     else:
         c_ext = ".cxx" if mode == "cxx" else ".c"
-        assert os.path.isfile(os.path.join(temp_path, "wrapper" + c_ext)), "wrapper source not created"
-        assert os.path.isfile(os.path.join(temp_path, "CMakeLists.txt")), "CMakeLists not created"
+        assert (temp_path / ("wrapper" + c_ext)).exists(), "wrapper source not created"
+        assert (temp_path / "CMakeLists.txt").exists(), "CMakeLists not created"
     shutil.rmtree(temp_path)
 
 

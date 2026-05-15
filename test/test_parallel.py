@@ -10,12 +10,13 @@ import shutil
 from time import time
 import psutil
 import concurrent.futures
+from pathlib import Path
 
 
 def test_sampling_sobol():
-    temp_path = tempfile.mkdtemp()
-    path_mo = os.path.join(temp_path, "IshigamiFunction.mo")
-    path_fmu = os.path.join(temp_path, "IshigamiFunction.fmu")
+    temp_path = Path(tempfile.mkdtemp())
+    path_mo = temp_path / "IshigamiFunction.mo"
+    path_fmu = temp_path / "IshigamiFunction.fmu"
     with open(path_mo, "w") as mo:
         mo.write("model IshigamiFunction\n")
         mo.write("  final parameter Real a = 7;\n")

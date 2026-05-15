@@ -35,7 +35,7 @@ jobs:
       - name: Build
         shell: bash -l {0}
         run: |
-          conda install -y pip pyfmi openturns pytest jinja2 fmpy-base pythonfmu omcompiler
+          conda install -y pip pyfmi openturns pytest jinja2 fmpy-base pythonfmu openmodelica
           pip install .
           mo2fmu -h
           mo2fmu ./otfmi/example/file/deviation.mo ./otfmi/example/file/fmu/linux-x86_64/deviation.fmu

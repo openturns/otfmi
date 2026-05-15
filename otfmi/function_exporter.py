@@ -774,7 +774,9 @@ end {{ className }};
         mode : str
             either pyprocess or pythonfmu
             Only pythonfmu mode is allowed for temporal models (PointToFieldFunction)
-            Note that pythonfmu mode yields cosimulation-only, pyfmi/otfmi incompatible fmus
+            Note that pythonfmu mode yields cosimulation-only, pyfmi/otfmi incompatible fmus.
+            While pythonfmu mode is fine for use with fmpy, for other tools (eg OMSimulator) it might require
+            LD_PRELOAD=/usr/lib/libpython3.so variable to be set (adjust depending on Python install path).
         verbose : bool
             Verbose output (default=False).
         """
@@ -790,9 +792,9 @@ end {{ className }};
         self._init_workdir()
         if mode == "pyprocess":
             if hasattr(self._function, "getOutputMesh"):
-                raise TypeError("Can only export vectorial functions in pyprocess mode")
+                raise TypeError("Cannot export field functions in pyprocess mode")
 
-            model_path = fmu_path.replace("fmu", "mo")
+            model_path = p.with_suffix(".mo")
 
             self.export_model(model_path, gui=False, verbose=verbose, move=False)
 
@@ -836,12 +838,13 @@ class {{ className }}(Fmi2Slave):
         study.fillObject("function", self._function)
         shutil.rmtree(workdir)
 
+        start = {{ start }}
         for i, var in enumerate(self._function.getInputDescription()):
-            setattr(self, var, 0.0)
+            setattr(self, var, start[i])
             self.register_variable(Real(var, causality=Fmi2Causality.input))
 
         for var in self._function.getOutputDescription():
-            setattr(self, var, 0.0)
+            setattr(self, var, -1.0)
             self.register_variable(Real(var, causality=Fmi2Causality.output))
 
     def do_step(self, current_time, step_size):
@@ -865,8 +868,10 @@ class {{ className }}(Fmi2Slave):
             with open(self._xml_path, "rb") as f:
                 xml_data = f.read()
             xml_b64 = binascii.b2a_base64(xml_data)
+            start = [0.0] * self._function.getInputDimension() if self._start is None else self._start
             data = jinja2.Template(tdata).render({"className": className,
                                                   "xml_b64": xml_b64,
+                                                  "start": start,
                                                   "is_field_f": is_field_f})
             slave_file = self._workdir / (className + ".py")
             with open(slave_file, "w") as fslave:

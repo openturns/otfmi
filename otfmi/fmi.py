@@ -53,13 +53,16 @@ def simulate(
 
     Parameters
     ----------
-    model : Pyfmi model object (pyfmi.fmi.FMUModelBase).
+    model : pyfmi.fmi.FMUModelBase
+        Pyfmi model object
 
-    initialization_script : String, path to the script file.
+    initialization_script : path-like
+        Path to the script file.
 
-    initialization_parameters : tuple of keys/values to initialize parameters
+    initialization_parameters : tuple of str/float pairs
+        tuple of keys/values to initialize parameters
 
-    reset : Boolean
+    reset : bool
         Toggle resetting the FMU prior to simulation. True by default.
 
     Additional keyword arguments are passed on to pyfmi.simulate.
@@ -284,8 +287,8 @@ def parse_initialization_script(path_script):
 
     Parameters
     ----------
-    path_script : String, path to the script file.
-
+    path_script : path-like
+        Path to the script file.
     """
 
     list_name = []
@@ -313,10 +316,9 @@ def apply_initialization_parameters(model, initialization_parameters):
 
     Parameters
     ----------
-    model : Pyfmi model object (pyfmi.fmi.FMUModelBase).
-
+    model : pyfmi.fmi.FMUModelBase
+        Pyfmi model object
     initialization_parameters : tuple of keys/values
-
     """
 
     list_name, list_value = initialization_parameters
@@ -335,10 +337,10 @@ def apply_initialization_script(model, path_script):
 
     Parameters
     ----------
-    model : Pyfmi model object (pyfmi.fmi.FMUModelBase).
-
-    path_script : String, path to the script file.
-
+    model : pyfmi.fmi.FMUModelBase
+        Pyfmi model object
+    path_script : path-like
+        Path to the script file.
     """
 
     list_name, list_value = parse_initialization_script(path_script)

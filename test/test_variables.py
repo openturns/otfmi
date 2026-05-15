@@ -2,19 +2,19 @@
 
 import openturns as ot
 import otfmi
-import os
 import pytest
 import tempfile
 import shutil
+from pathlib import Path
 
 
 @pytest.mark.parametrize("fmuType", ["cs", "me"])
 @pytest.mark.parametrize("version", ["2.0"])
 def test_var_field(fmuType, version):
 
-    temp_path = tempfile.mkdtemp()
-    path_mo = os.path.join(temp_path, "test_var_field.mo")
-    path_fmu = os.path.join(temp_path, "test_var_field.fmu")
+    temp_path = Path(tempfile.mkdtemp())
+    path_mo = temp_path / "test_var_field.mo"
+    path_fmu = temp_path / "test_var_field.fmu"
     with open(path_mo, "w") as mo:
         mo.write("model test_var_field\n")
         mo.write("  input Real input1 (start=6);\n")
@@ -60,9 +60,9 @@ def test_var_field(fmuType, version):
 @pytest.mark.parametrize("version", ["2.0"])
 def test_var_type(varType, fmuType, version):
 
-    temp_path = tempfile.mkdtemp()
-    path_mo = os.path.join(temp_path, "test_var_type.mo")
-    path_fmu = os.path.join(temp_path, "test_var_type.fmu")
+    temp_path = Path(tempfile.mkdtemp())
+    path_mo = temp_path / "test_var_type.mo"
+    path_fmu = temp_path / "test_var_type.fmu"
     with open(path_mo, "w") as mo:
         mo.write("model test_var_type\n")
         mo.write(f"  {varType} Real var1 = 0;\n")
