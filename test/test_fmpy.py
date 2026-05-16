@@ -1,10 +1,13 @@
-import fmpy
 import openturns.testing as ott
 import otfmi
 import otfmi.example.utility
+import importlib
+import pytest
 
 
+@pytest.mark.skipif(importlib.util.find_spec("fmpy") is None, reason="N/A")
 def test_fmpy():
+    import fmpy
     path_fmu = path_fmu = otfmi.example.utility.get_path_fmu("DeviationSlave")
     summary = fmpy.dump(path_fmu)
     print(summary)

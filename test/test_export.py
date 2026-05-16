@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 
-import fmpy
 import glob
 import openturns as ot
 import otfmi
@@ -13,6 +12,7 @@ import subprocess
 import time
 import pytest
 from pathlib import Path
+import importlib
 
 
 @pytest.mark.parametrize("mode", ["pyprocess", "pythonfmu"])
@@ -68,7 +68,8 @@ def test_export_fmu_vector(mode, fmuType):
         print("Speed=", size / (t1 - t0), "evals/s")
         print("Memory=", mem1 - mem0)
 
-    elif mode == "pythonfmu":
+    elif mode == "pythonfmu" and importlib.util.find_spec("fmpy") is not None:
+        import fmpy
         summary = fmpy.dump(path_fmu)
         print(summary)
         start_values = {"E": 6.70455e+10, "F": 300, "L": 2.55, "I": 1.45385e-07}
@@ -98,13 +99,6 @@ def test_export_fmu_field(fmuType, mode="pythonfmu"):
     fe.export_fmu(path_fmu, fmuType=fmuType, mode=mode, verbose=True)
     assert path_fmu.exists(), f"fmu not created in {path_fmu}"
 
-    summary = fmpy.dump(path_fmu)
-    print(summary)
-    var1, var2 = f.getInputDescription()
-    start_values = {var1: 4.0, var2: 5.0}
-    result = fmpy.simulate_fmu(path_fmu, start_values=start_values)
-    print(result)
-
     # simulate with OMSimulator
     have_omsimulator = True
     try:
@@ -114,6 +108,15 @@ def test_export_fmu_field(fmuType, mode="pythonfmu"):
     if have_omsimulator and mode != "pythonfmu":
         # requires LD_PRELOAD for pythonfmu
         subprocess.run(["OMSimulator", str(path_fmu)], capture_output=True, check=True)
+
+    if importlib.util.find_spec("fmpy") is not None:
+        import fmpy
+        summary = fmpy.dump(path_fmu)
+        print(summary)
+        var1, var2 = f.getInputDescription()
+        start_values = {var1: 4.0, var2: 5.0}
+        result = fmpy.simulate_fmu(path_fmu, start_values=start_values)
+        print(result)
 
     shutil.rmtree(temp_path)
 
