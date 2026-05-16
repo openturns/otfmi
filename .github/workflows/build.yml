@@ -38,8 +38,28 @@ jobs:
           conda install -y pip pyfmi openturns pytest jinja2 fmpy-base pythonfmu openmodelica
           pip install .
           mo2fmu -h
-          mo2fmu ./otfmi/example/file/deviation.mo ./otfmi/example/file/fmu/linux-x86_64/deviation.fmu
           pythonfmu build --file ./otfmi/example/file/DeviationSlave.py --dest ./otfmi/example/file/fmu/linux-x86_64
+          pytest test -s
+
+  conda-macos:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: conda-incubator/setup-miniconda@v4
+        with:
+          miniforge-version: latest
+          conda-remove-defaults: "true"
+      - name: Build
+        shell: bash -l {0}
+        run: |
+          conda install -y pip pyfmi openturns pytest jinja2 pythonfmu openmodelica # fmpy-base
+          pip install .
+          mo2fmu -h
+          mkdir -p ./otfmi/example/file/fmu/macosx-11.0-arm64
+          mo2fmu ./otfmi/example/file/deviation.mo ./otfmi/example/file/fmu/macosx-11.0-arm64/deviation.fmu
+          mo2fmu ./otfmi/example/file/epid.mo ./otfmi/example/file/fmu/macosx-11.0-arm64/epid.fmu
+          #mo2fmu ./otfmi/example/file/HeatExchanger.mo ./otfmi/example/file/fmu/macosx-11.0-arm64/HeatExchanger.fmu
+          pythonfmu build --file ./otfmi/example/file/DeviationSlave.py --dest ./otfmi/example/file/fmu/macosx-11.0-arm64
           pytest test -s
 
   conda-windows:
@@ -60,5 +80,6 @@ jobs:
           conda install -y pip pyfmi openturns pytest jinja2 fmpy-base pythonfmu
           pip install .
           mo2fmu -h
+          pythonfmu build --file ./otfmi/example/file/DeviationSlave.py --dest .\otfmi\example\file\fmu\win-amd64
           pytest test -s
 

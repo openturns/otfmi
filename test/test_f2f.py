@@ -6,6 +6,7 @@ import openturns.testing as ott
 import otfmi
 import otfmi.example.utility
 import pytest
+import sys
 
 
 @pytest.fixture
@@ -70,6 +71,7 @@ def test_mesh_time(path_fmu, input_mesh):
                                    start_time=30, final_time=40)
 
 
+@pytest.mark.skipif(sys.platform.startswith("darwin"), reason="N/A")
 def test_heat_exchanger():
     path_fmu = otfmi.example.utility.get_path_fmu("HeatExchanger")
     inputs_vars = ["Temp_air_inlet", "Temp_coolant_inlet"]
