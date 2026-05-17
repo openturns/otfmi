@@ -6,7 +6,6 @@ import jinja2
 import openturns as ot
 import os
 import platform
-from pythonfmu import FmuBuilder
 from pathlib import Path
 import re
 import subprocess
@@ -806,6 +805,7 @@ end {{ className }};
                         dirName / (className + extension))
 
         elif mode == "pythonfmu":
+            from pythonfmu import FmuBuilder
             self._export_xml()
             tdata = r"""
 import openturns as ot

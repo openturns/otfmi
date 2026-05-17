@@ -21,6 +21,8 @@ def test_export_fmu_vector(mode, fmuType):
     if mode == "pyprocess" and sys.platform.startswith("win"):
         # omc mingw cross-compiler cannot use otfmi msvc wrapper binary: Linking cwrapper-NOTFOUND
         return
+    if mode == "pythonfmu" and importlib.util.find_spec("pythonfmu") is None:
+        return
 
     # export fmu
     f = ot.SymbolicFunction(["E", "F", "L", "I"], ["(F*L^3)/(3.0*E*I)"])
