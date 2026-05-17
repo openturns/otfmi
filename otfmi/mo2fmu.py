@@ -103,8 +103,13 @@ buildModelFMU({{ className }}, version="{{ version }}", fmuType="{{ fmuType }}",
     except subprocess.CalledProcessError as cpe:
         print("Error occurred running the OpenModelica compiler omc:", cpe.stdout + cpe.stderr, file=sys.stderr)
         raise cpe
+
+    # check the fmu has actually been generated
     temp_fmu = workdir / (model_name + ".fmu")
-    assert temp_fmu.exists(), f"omc failed to generate the FMU file {temp_fmu}"
+    if not temp_fmu.exists():
+        print(cp.stdout.decode(), file=sys.stderr)
+        raise RuntimeError(f"omc failed to generate the FMU file {temp_fmu}")
+
     shutil.move(temp_fmu, p_fmu)
     shutil.rmtree(workdir)
 
