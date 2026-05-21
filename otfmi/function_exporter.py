@@ -2,6 +2,7 @@ from .mo2fmu import mo2fmu
 import binascii
 import dill
 import glob
+import hashlib
 import jinja2
 import openturns as ot
 import os
@@ -407,7 +408,7 @@ void c_func(int nin, double x[], int nout, double y[])
   if (!function.getEvaluation().getImplementation()->isActualImplementation())
   {
     Study study;
-    const String fileName = (std::filesystem::temp_directory_path() / "function.xml").string();
+    const String fileName = (std::filesystem::temp_directory_path() / "function_{{ xml_hash }}.xml").string();
     std::ofstream xmlFile(fileName, std::ios::out | std::ios::binary);
     if (xmlFile.good())
     {
@@ -432,11 +433,13 @@ void c_func(int nin, double x[], int nout, double y[])
 } // extern "C"
 """
 
+        xml_hash = hashlib.md5(xml_data).hexdigest()[:16]
         data = jinja2.Template(tdata).render(
             {
                 "xml_data_bin": ",".join(
                     ["0x{:02x}".format(byte) for byte in xml_data]
                 ),
+                "xml_hash": xml_hash,
             }
         )
         with open(self._workdir / "wrapper.cxx", "w") as cxx:
