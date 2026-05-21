@@ -715,7 +715,8 @@ end {{ className }};
         if extension != ".mo":
             raise ValueError("Expected a .mo file name")
         dirName = p.parent
-        assert dirName.exists(), f"parent directory {dirName} does not exist"
+        if not dirName.exists():
+            raise FileNotFoundError(f"parent directory {dirName} does not exist")
 
         self._init_workdir()
         self._export_xml()
@@ -787,7 +788,8 @@ end {{ className }};
         if extension != ".fmu":
             raise ValueError("Expected a .fmu file name")
         dirName = p.parent
-        assert dirName.exists(), f"parent directory {dirName} does not exist"
+        if not dirName.exists():
+            raise FileNotFoundError(f"parent directory {dirName} does not exist")
         self._init_workdir()
         if mode == "pyprocess":
             if hasattr(self._function, "getOutputMesh"):

@@ -40,7 +40,8 @@ def mo2fmu(
     """
 
     p_mo = Path(path_mo)
-    assert p_mo.exists(), f"model file {path_mo} does not exist"
+    if not p_mo.exists():
+        raise FileNotFoundError(f"model file {path_mo} does not exist")
     # assume the model name is the file name
     model_name = p_mo.stem
     p_fmu = Path.cwd() / (model_name + ".fmu") if path_fmu is None else Path(path_fmu)

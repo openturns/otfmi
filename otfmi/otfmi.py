@@ -180,16 +180,19 @@ class _FMUBaseFunction:
         final_time : float (must be >= 0).
         """
         if start_time is not None:
-            assert start_time >= 0.0, "Start time must be positive"
+            if start_time < 0.0:
+                raise ValueError("Start time must be positive")
             self._start_time = start_time
         else:
             self._start_time = self._model.get_default_experiment_start_time()
         if final_time is not None:
-            assert final_time >= 0.0, "Final time must be positive"
+            if final_time < 0.0:
+                raise ValueError("Final time must be positive")
             self._final_time = final_time
         else:
             self._final_time = self._model.get_default_experiment_stop_time()
-        assert self._final_time > self._start_time, "Final time must be > start time"
+        if self._final_time <= self._start_time:
+            raise ValueError("Final time must be > start time")
 
     def load_fmu(self, path_fmu, kind=None, **kwargs):
         """Load an FMU.
