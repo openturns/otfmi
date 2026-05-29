@@ -1,8 +1,8 @@
 model epid
 
 parameter Real total_pop = 763;
-input Real infection_rate = 2.0;
-input Real healing_rate = 0.5;
+input Real infection_rate (start=2.0);
+input Real healing_rate (start=0.5);
 
 Real infected;
 Real susceptible;

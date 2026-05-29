@@ -433,7 +433,7 @@ void c_func(int nin, double x[], int nout, double y[])
 } // extern "C"
 """
 
-        xml_hash = hashlib.md5(xml_data).hexdigest()[:16]
+        xml_hash = hashlib.md5(xml_data, usedforsecurity=False).hexdigest()[:16]
         data = jinja2.Template(tdata).render(
             {
                 "xml_data_bin": ",".join(
