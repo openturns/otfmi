@@ -412,13 +412,11 @@ def plotDistributionGridPDF(distribution):
 # Calibration with non linear least squares
 # Check that we can evaluate the parametric function.
 ot.ResourceMap.SetAsUnsignedInteger("NonLinearLeastSquaresCalibration-BootstrapSize", 0)
-# ot.ResourceMap.SetAsUnsignedInteger(
-#     "NonLinearLeastSquaresCalibration-MultiStartSize", 10
-# )
 calibrationAlgorithm = ot.NonLinearLeastSquaresCalibration(
     epidParametric, timeObservations, populationObservations, thetaPrior
 )
 calibrationAlgorithm.setOptimizationAlgorithm(ot.CMinpack())
+ot.Log.Show(ot.Log.NONE)  # hide evaluation errors from the solver
 calibrationAlgorithm.run()
 calibrationResult = calibrationAlgorithm.getResult()
 
