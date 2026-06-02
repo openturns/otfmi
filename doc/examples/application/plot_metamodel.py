@@ -67,6 +67,7 @@ def centerProcessSample(processSample, mean=None):
     centeredSample = ot.ProcessSample(processSample.getMesh(), centeredCollection)
     return centeredSample, mean
 
+
 graph = outputFMUSample.draw().getGraph(0, 0)
 graph.setTitle("FMU simulations")
 graph.setXTitle("Time")
