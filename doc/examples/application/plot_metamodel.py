@@ -10,7 +10,7 @@ Metamodel a FMU time-dependent output
 #
 # Metamodeling a model with time-dependent output is a difficult problem. We
 # will combine two methods: Karhunen-Loeve dimension reduction should precede
-# the Kriging metamodeling.
+# the chaos metamodeling.
 #
 # We will proceed the following way:
 #
@@ -53,10 +53,13 @@ mesh = function.getOutputMesh()
 # We create a Monte-Carlo design of experiment, on which we simulate the FMU.
 # The simulation inputs and outputs will be used to train the metamodel.
 inputLaw = ot.Uniform(1.5, 2.5)
-inputSample = inputLaw.getSample(10)
+inputSample = inputLaw.getSample(100)
 outputFMUSample = function(inputSample)
 
-graph = outputFMUSample.draw().getGraph(0, 0)
+outputFMUSample10 = ot.ProcessSample(outputFMUSample.getMesh(), 10, 1)
+for i in range(10):
+    outputFMUSample10.setField(outputFMUSample.getField(i), i)
+graph = outputFMUSample10.draw().getGraph(0, 0)
 graph.setTitle("FMU simulations")
 graph.setXTitle("Time")
 graph.setYTitle("Number of infected")
@@ -96,7 +99,7 @@ def drawKL(scaledKL, KLev, mesh, title="Scaled KL modes"):
 # We compute the Karhunen-Loeve decomposition of the model outputs.
 # The underlying assumption is that these outputs are realizations of a
 # stochastic process.
-threshold = 1e-4
+threshold = 0.0
 algoKL = ot.KarhunenLoeveSVDAlgorithm(outputFMUSample, threshold)
 algoKL.run()
 resultKL = algoKL.getResult()
@@ -118,7 +121,7 @@ print(f"Karhunen-Loeve projection in dimension {n_mode}")
 # %%
 # We keep on following our road map, by metamodeling the projection
 # of the curves on the smaller-dimension space.
-# We metamodel the Karhunen-Loeve coefficients using ordinary Kriging.
+# We metamodel the Karhunen-Loeve coefficients using ordinary chaos.
 dim = inputSample.getDimension()  # only 1 input dimension
 univb = ot.ConstantBasisFactory(dim).build()  # univariate basis
 coll = [ot.AggregatedFunction(
@@ -127,9 +130,7 @@ coll = [ot.AggregatedFunction(
 basis = ot.Basis(coll)  # multivariate basis
 covarianceModel = ot.SquaredExponential(dim)
 covarianceModel = ot.TensorizedCovarianceModel([covarianceModel] * n_mode)
-
-
-algo = ot.KrigingAlgorithm(inputSample, projectionSample, covarianceModel, basis)
+algo = ot.FunctionalChaosAlgorithm(inputSample, projectionSample, inputLaw)
 algo.run()
 result = algo.getResult()
 metamodel = result.getMetaModel()
@@ -187,7 +188,7 @@ graph.setYTitle("infected residual mean")
 view = otv.View(graph)
 
 # %%
-# We validate the Kriging (using the Karhunen-Loeve coefficients of the test
+# We validate the chaos (using the Karhunen-Loeve coefficients of the test
 # sample):
 projectFunction = ot.KarhunenLoeveProjection(resultKL)
 coefficientSample = projectFunction(outputFMUTestSample)
