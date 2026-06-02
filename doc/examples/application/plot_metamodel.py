@@ -10,7 +10,7 @@ Metamodel a FMU time-dependent output
 #
 # Metamodeling a model with time-dependent output is a difficult problem. We
 # will combine two methods: Karhunen-Loeve dimension reduction should precede
-# the chaos metamodeling.
+# the Kriging metamodeling.
 #
 # We will proceed the following way:
 #
@@ -34,6 +34,7 @@ Metamodel a FMU time-dependent output
 import otfmi.example.utility
 import openturns as ot
 import openturns.viewer as otv
+import numpy as np
 
 # %%
 # We load the FMU as a :class:`~otfmi.FMUPointToFieldFunction`.
@@ -53,13 +54,20 @@ mesh = function.getOutputMesh()
 # We create a Monte-Carlo design of experiment, on which we simulate the FMU.
 # The simulation inputs and outputs will be used to train the metamodel.
 inputLaw = ot.Uniform(1.5, 2.5)
-inputSample = inputLaw.getSample(100)
+inputSample = inputLaw.getSample(10)
 outputFMUSample = function(inputSample)
 
-outputFMUSample10 = ot.ProcessSample(outputFMUSample.getMesh(), 10, 1)
-for i in range(10):
-    outputFMUSample10.setField(outputFMUSample.getField(i), i)
-graph = outputFMUSample10.draw().getGraph(0, 0)
+
+def centerProcessSample(processSample, mean=None):
+    if mean is None:
+        mean = processSample.computeMean()
+    centeredCollection = [
+        ot.Sample(np.array(field) - np.array(mean)) for field in processSample
+    ]
+    centeredSample = ot.ProcessSample(processSample.getMesh(), centeredCollection)
+    return centeredSample, mean
+
+graph = outputFMUSample.draw().getGraph(0, 0)
 graph.setTitle("FMU simulations")
 graph.setXTitle("Time")
 graph.setYTitle("Number of infected")
@@ -99,8 +107,9 @@ def drawKL(scaledKL, KLev, mesh, title="Scaled KL modes"):
 # We compute the Karhunen-Loeve decomposition of the model outputs.
 # The underlying assumption is that these outputs are realizations of a
 # stochastic process.
-threshold = 0.0
-algoKL = ot.KarhunenLoeveSVDAlgorithm(outputFMUSample, threshold)
+threshold = 1e-4
+centeredOutputFMUSample, meanOutput = centerProcessSample(outputFMUSample)
+algoKL = ot.KarhunenLoeveSVDAlgorithm(centeredOutputFMUSample, threshold)
 algoKL.run()
 resultKL = algoKL.getResult()
 
@@ -114,14 +123,14 @@ view = otv.View(graph_modes_Y)
 # %%
 # Now that Karhunen-Loeve algorithm is trained, we can project them
 # in the smaller-dimension space:
-projectionSample = resultKL.project(outputFMUSample)
+projectionSample = resultKL.project(centeredOutputFMUSample)
 n_mode = projectionSample.getDimension()
 print(f"Karhunen-Loeve projection in dimension {n_mode}")
 
 # %%
 # We keep on following our road map, by metamodeling the projection
 # of the curves on the smaller-dimension space.
-# We metamodel the Karhunen-Loeve coefficients using ordinary chaos.
+# We metamodel the Karhunen-Loeve coefficients using ordinary Kriging.
 dim = inputSample.getDimension()  # only 1 input dimension
 univb = ot.ConstantBasisFactory(dim).build()  # univariate basis
 coll = [ot.AggregatedFunction(
@@ -130,7 +139,9 @@ coll = [ot.AggregatedFunction(
 basis = ot.Basis(coll)  # multivariate basis
 covarianceModel = ot.SquaredExponential(dim)
 covarianceModel = ot.TensorizedCovarianceModel([covarianceModel] * n_mode)
-algo = ot.FunctionalChaosAlgorithm(inputSample, projectionSample, inputLaw)
+
+
+algo = ot.KrigingAlgorithm(inputSample, projectionSample, covarianceModel, basis)
 algo.run()
 result = algo.getResult()
 metamodel = result.getMetaModel()
@@ -143,7 +154,7 @@ metamodel = result.getMetaModel()
 def globalMetamodel(sample):
     emulatedCoefficients = metamodel(sample)
     restoreFunction = ot.KarhunenLoeveLifting(resultKL)
-    emulatedProcessSample = restoreFunction(emulatedCoefficients)
+    emulatedProcessSample = restoreFunction(emulatedCoefficients) + meanOutput
     return emulatedProcessSample
 
 
@@ -182,16 +193,17 @@ view = otv.View(
 # We validate the pertinence of Karhunen-Loeve decomposition:
 # As the epidemiological model considers a population size of 763, the residual
 # mean error on the field is acceptable.
-validationKL = ot.KarhunenLoeveValidation(outputFMUTestSample, resultKL)
+centeredOutputFMUTestSample, _ = centerProcessSample(outputFMUTestSample, meanOutput)
+validationKL = ot.KarhunenLoeveValidation(centeredOutputFMUTestSample, resultKL)
 graph = validationKL.computeResidualMean().draw()
 graph.setYTitle("infected residual mean")
 view = otv.View(graph)
 
 # %%
-# We validate the chaos (using the Karhunen-Loeve coefficients of the test
+# We validate the Kriging (using the Karhunen-Loeve coefficients of the test
 # sample):
 projectFunction = ot.KarhunenLoeveProjection(resultKL)
-coefficientSample = projectFunction(outputFMUTestSample)
+coefficientSample = projectFunction(centeredOutputFMUTestSample)
 predictions = metamodel(inputTestSample)
 
 validation = ot.MetaModelValidation(coefficientSample, predictions)
