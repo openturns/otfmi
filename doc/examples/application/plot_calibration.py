@@ -43,10 +43,10 @@ Calibration example
 #
 # References
 # ----------
-# - Girard2024: OtFMI: interfacing OpenTURNS with the leading standard for model exchange
+# - Girard2024: OtFMI: *interfacing OpenTURNS with the leading standard for model exchange*
 #   14th June 2024, Sylvain Girard (girard@phimeca.com), Pascal Borel (pascal.borel@edf.fr)
-# - Girard2019: S. Girard, “A probabilistic take on system modeling with Modelica and Python”,
-#   Février 2019, https://sylvaingirard.net/pdf/girard17-probabilistic_modelica_python.pdf
+# - Girard2019: S. Girard, *A probabilistic take on system modeling with Modelica and Python*,
+#   February 2019, https://sylvaingirard.net/pdf/girard17-probabilistic_modelica_python.pdf
 # - [anonymous1978]_
 
 # %%
@@ -393,7 +393,6 @@ calibrationAlgorithm = ot.NonLinearLeastSquaresCalibration(
     epidParametric, timeObservations, populationObservations, thetaPrior
 )
 calibrationAlgorithm.setOptimizationAlgorithm(ot.CMinpack())
-ot.Log.Show(ot.Log.NONE)  # hide evaluation errors from the solver
 calibrationAlgorithm.run()
 calibrationResult = calibrationAlgorithm.getResult()
 
