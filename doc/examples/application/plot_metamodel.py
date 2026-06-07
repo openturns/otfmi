@@ -39,7 +39,7 @@ import numpy as np
 # %%
 # We load the FMU as a :class:`~otfmi.FMUPointToFieldFunction`.
 # We concentrate on the first time unit of the epidemiological model output.
-# The single uncertain input of the model is the ``ìnfection_rate``.
+# The single uncertain input of the model is the ``infection_rate``.
 path_fmu = otfmi.example.utility.get_path_fmu("epid")
 function = otfmi.FMUPointToFieldFunction(
     path_fmu,

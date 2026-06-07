@@ -29,7 +29,7 @@ function = otfmi.FMUPointToFieldFunction(
     final_time=15.0,
 )
 
-inputPoint = ot.Point([0.007, 0.02])
+inputPoint = ot.Point([2.0, 0.5])
 outputSample = function(inputPoint)
 print(outputSample)
 

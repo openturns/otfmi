@@ -79,11 +79,11 @@ outputProcessSample = function(inputSample)
 
 # %%
 # Visualize the time evolution of the ``infected`` over time, depending on the
-# `ìnfection_rate`` value:
+# ``infection_rate`` value:
 gridLayout = outputProcessSample.draw()
 graph = gridLayout.getGraph(0, 0)
 graph.setTitle("")
-graph.setXTitle("FMU simulation time (s)")
+graph.setXTitle("FMU simulation time (days)")
 graph.setYTitle("Number of infected")
 graph.setLegends([f"{line[0]:.4f}" for line in inputSample])
 view = viewer.View(graph, legend_kw={"title": "infection rate", "loc": "upper left"})

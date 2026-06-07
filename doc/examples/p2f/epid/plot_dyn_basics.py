@@ -65,7 +65,7 @@ print(Y)
 
 # %%
 # Visualize the time evolution of the ``infected`` over time, depending on the
-# `ìnfection_rate`` value:
+# ``infection_rate`` value:
 gridLayout = Y.draw()
 graph = gridLayout.getGraph(0, 0)
 graph.setTitle("")
