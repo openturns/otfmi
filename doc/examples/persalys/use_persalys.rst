@@ -7,7 +7,7 @@ Sensitivity analysis with Persalys
 
 `Persalys <https://persalys.fr/>`__ is a graphical user interface to some otfmi
 and `OpenTURNS <http://openturns.github.io/openturns/master/contents.html>`__ methods.
-The software is free and can be downloaded `here <https://persalys.fr/obtenir.php?la=en">`__.
+The software is free and can be downloaded `here <https://persalys.fr/obtenir.php?la=en>`__.
 
 A parabolic solar collector concentrates the sun light on a tube via parabolic mirrors.
 A fluid (generally oil) circulates in this tube and heats up thanks to the reverberated sunlight.

@@ -50,7 +50,7 @@ based on `PyFMI <https://pypi.org/project/PyFMI/>`__ .
          :scale: 3%
 
       OTFMI is used within the OpenTURNS GUI `Persalys <https://persalys.fr/?la=en>`__ .
-      Persalys is free and can be downloaded `here <https://persalys.fr/obtenir.php?la=en">`__.
+      Persalys is free and can be downloaded `here <https://persalys.fr/obtenir.php?la=en>`__.
 
 
 .. include:: ../README.rst
