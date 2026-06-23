@@ -67,7 +67,7 @@ Here is a summary of the different variants:
 Common low-level functions
 --------------------------
 
-The submodule **otfmi.fmi** gathers a set of useful functions, employed by the (higher-level) classes mentionned above.
+The submodule **otfmi.fmi** gathers a set of useful functions, employed by the (higher-level) classes mentioned above.
 
 .. autosummary::
    :toctree: _generated/fmi/

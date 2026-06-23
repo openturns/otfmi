@@ -68,9 +68,9 @@ We select the variables for the sensitivity analysis:
    :alt: alternate text
    :align: center
 
-Now that the variables are set, Persalys ‘’tree of possibles’’ appears.
+Now that the variables are set, Persalys ““tree of possibilities”” appears.
 The methods which can be used are colored in deep blue, whereas the methods with
-prerequisite steps appear with a forbidden pannel.
+prerequisite steps appear grayed out.
 
 We can see that, before performing sensitivity analysis, we first have to set a probabilistic model.
 In other words, we have to set the probability distribution of the 3 input variables.
@@ -95,7 +95,7 @@ We consider the following laws for the input variables:
    :align: center
 
 We select the Sobol’ indices as method for sensitivity analysis.
-The maximal computation time must be set to 5 minutes to enable convergence.
+The maximum computation time must be set to 5 minutes to enable convergence.
 
 .. image:: /_static/demo_persalys/start_sobol.png
    :scale: 60 %

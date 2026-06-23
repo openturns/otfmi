@@ -24,10 +24,10 @@ The need for otfmi
 ------------------
 
 Using Python to easily perform computer experiments on 0D/1D models is
-seducing. Yet the tool chain, from the physical model to OpenTURNS, was
-incomplete. PyFMI objects, close to the FMUs methods, were to be adapted
-for an easier use with OpenTURNS’ methods.
+seductive. Yet the tool chain, from the physical model to OpenTURNS, was
+incomplete. PyFMI objects, close to the FMU’s methods, had to be adapted
+for easier use with OpenTURNS’ methods.
 
-otfmi is developed by `Phimeca <http://www.phimeca.com>`__, on the
-demand of EDF Prisme department, to meet this need of compatibility
+otfmi is developed by `Phimeca <http://www.phimeca.com>`__, at the
+request of EDF Prisme department, to meet this need of compatibility
 between PyFMI objects and OpenTURNS.

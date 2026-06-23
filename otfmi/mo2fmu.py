@@ -63,7 +63,7 @@ def mo2fmu(
         if verbose:
             print("omc version:", cp.stdout.decode(), file=sys.stderr)
     except subprocess.CalledProcessError as cpe:
-        print("Error occured detecting the OpenModelica compiler omc:", cpe.stdout + cpe.stderr, file=sys.stderr)
+        print("Error occurred detecting the OpenModelica compiler omc:", cpe.stdout + cpe.stderr, file=sys.stderr)
         raise cpe
 
     workdir = Path(tempfile.mkdtemp())

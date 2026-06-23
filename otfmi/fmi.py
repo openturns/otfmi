@@ -11,7 +11,7 @@ import otfmi
 
 
 def load_fmu(path_fmu, kind=None, **kwargs):
-    """Load and FMU.
+    """Load an FMU.
 
     Parameters
     ----------
@@ -22,7 +22,7 @@ def load_fmu(path_fmu, kind=None, **kwargs):
         select a kind of FMU if both are available.
         Note:
         Contrary to pyfmi, the default here is "CS" (co-simulation). The
-        rationale behind this choice is is that co-simulation may be used to
+        rationale behind this choice is that co-simulation may be used to
         impose a solver not available in pyfmi.
 
     Additional keyword arguments are passed on to pyfmi's 'load_fmu' function.

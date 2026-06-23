@@ -32,7 +32,7 @@ based on `PyFMI <https://pypi.org/project/PyFMI/>`__ .
 
     .. grid-item-card:: 🎲 Load a FMU in OpenTURNS
 
-      You have a model in FMU format ? OTFMI transforms it into a `OpenTURNS <https://openturns.github.io/openturns/master/index.html>`__ function,
+      You have a model in FMU format? OTFMI transforms it into a `OpenTURNS <https://openturns.github.io/openturns/master/index.html>`__ function,
       to let you analyze your model.
 
     .. grid-item-card:: 🚀 Simulate the model

@@ -206,7 +206,7 @@ class _FMUBaseFunction:
             Select a kind of FMU if both are available.
             Note:
             Contrary to pyfmi, the default here is "CS" (co-simulation). The
-            rationale behind this choice is is that co-simulation may be used
+            rationale behind this choice is that co-simulation may be used
             to impose a solver not available in pyfmi.
 
         Additional keyword arguments are passed on to pyfmi's 'load_fmu'
@@ -432,8 +432,8 @@ class OpenTURNSFMUFunction(ot.OpenTURNSPythonFunction):
         Select a kind of FMU if both are available.
         Note:
         Contrary to pyfmi, the default here is "CS" (co-simulation). The
-        rationale behind this choice is is that co-simulation may be used to
-        impose a solver not available in pyfmi.
+        rationale behind this choice is that co-simulation may be used to
+         impose a solver not available in pyfmi.
 
     """
 
@@ -717,7 +717,7 @@ class FMUFieldFunction(ot.FieldFunction):
         but input values are interpolated on the simulation time grid according to the given mesh.
 
     output_mesh : :class:`openturns.Mesh`, default=None
-        Time grid of the input variables, must overlap the simulation time interval defined by start_time,final_time.
+        Time grid of the output variables, must overlap the simulation time interval defined by start_time,final_time.
         By default defined to a regular grid with the start/final time and default step defined the FMU.
         It does not override the start/final time of the simulation
         but returned values are interpolated on the simulation time grid according to the given mesh.

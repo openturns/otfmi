@@ -3,7 +3,7 @@ Models description
 
 Examples used in this documentation rely on several models.
 
-Following sections show how they works.
+Following sections show how they work.
 
 The cantilever beam model
 -------------------------
@@ -61,7 +61,7 @@ The people are divided in three categories:
 
 The disease can only be propagated from Infected to Susceptibles.
 This happens at a rate called ``infection rate`` :math:`\beta`.
-An Infected becomes Removed after an infection duration :math:`\gamma` corresponding to the inverse of the ``healing_rate``.
+An infected individual becomes removed after an infection duration :math:`\gamma` corresponding to the inverse of the ``healing_rate``.
 
 .. image:: /_static/epid.png
    :scale: 50 %

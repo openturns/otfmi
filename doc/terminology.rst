@@ -12,7 +12,7 @@ In the `FMI standard <https://fmi-standard.org/docs/3.0.2/#ModelVariables>`__
 * a FMU *parameter* remains constant during simulation (a single value);
 * a FMU *input* evolves during simulation (time-dependent values).
 
-In OpenTURNS, the terms *input* and *parameter* are synonym and designate a variable in input of a probabilistic model.
+In OpenTURNS, the terms *input* and *parameter* are synonymous and designate a variable in input of a probabilistic model.
 
 To reconcile the two worlds, we employ in otfmi the terms of *parameter* and *input* in the sense of FMI.
 We call the input variables of a probabilistic model *variables*, or *input variables*.

@@ -20,7 +20,7 @@ dill.settings["recurse"] = True
 
 class FunctionExporter(object):
     """
-    Fonction export.
+    Function export.
 
     On Linux, for maximum binary compatibility we recommend to install Modelica and OpenTURNS
     in a homogeneous environment, one possibility to do this is to use conda::
