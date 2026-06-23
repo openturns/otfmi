@@ -61,7 +61,8 @@ The people are divided in three categories:
 
 The disease can only be propagated from Infected to Susceptibles.
 This happens at a rate called ``infection rate`` :math:`\beta`.
-An infected individual becomes removed after an infection duration :math:`\gamma` corresponding to the inverse of the ``healing_rate``.
+An infected individual becomes removed after an infection duration :math:`\gamma`
+corresponding to the inverse of the ``healing_rate``.
 
 .. image:: /_static/epid.png
    :scale: 50 %
