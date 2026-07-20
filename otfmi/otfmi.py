@@ -6,6 +6,7 @@ import openturns as ot
 import pyfmi
 import numpy as np
 from . import fmi
+from pathlib import Path
 
 
 class _FMUBaseFunction:
@@ -200,22 +201,40 @@ class _FMUBaseFunction:
         Parameters
         ----------
         path_fmu : str or path-like
-            Path to the FMU file.
+            Path to the FMU file, or unzipped FMU directory.
 
         kind : str, one of "ME" (model exchange) or "CS" (co-simulation)
             Select a kind of FMU if both are available.
-            Note:
-            Contrary to pyfmi, the default here is "CS" (co-simulation). The
-            rationale behind this choice is that co-simulation may be used
-            to impose a solver not available in pyfmi.
 
         Additional keyword arguments are passed on to pyfmi's 'load_fmu'
         function.
 
         """
-        self._model = fmi.load_fmu(
-            path_fmu=path_fmu, kind=kind, **kwargs
-        )
+        if Path(path_fmu).is_file():
+            self._model = fmi.load_fmu(
+                path_fmu=path_fmu, kind=kind, **kwargs
+            )
+        else:
+            xml_file = Path(path_fmu) / "modelDescription.xml"
+            if not xml_file.exists():
+                raise FileNotFoundError(xml_file)
+            if kind is None:
+                with open(xml_file) as xmlf:
+                    for line in xmlf:
+                        if "CoSimulation" in line:
+                            kind = "CS"
+                            break
+                        if "ModelExchange" in line:
+                            kind = "ME"
+                            break
+            try:
+                if kind == "ME":
+                    self._model = pyfmi.fmi.FMUModelME2(fmu=path_fmu, allow_unzipped_fmu=True, **kwargs)
+                else:
+                    self._model = pyfmi.fmi.FMUModelCS2(fmu=path_fmu, allow_unzipped_fmu=True, **kwargs)
+            except pyfmi.fmi.InvalidVersionException:
+                # unified type for both ME and CS
+                self._model = pyfmi.fmi.FMUModelME3(fmu=path_fmu, allow_unzipped_fmu=True, **kwargs)
 
     def initialize(self, initialization_script=None):
         """Initialize the FMU, using initialization script if available.
