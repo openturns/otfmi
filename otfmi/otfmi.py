@@ -215,10 +215,8 @@ class _FMUBaseFunction:
                 path_fmu=path_fmu, kind=kind, **kwargs
             )
         else:
-            xml_file = Path(path_fmu) / "modelDescription.xml"
-            if not xml_file.exists():
-                raise FileNotFoundError(xml_file)
             if kind is None:
+                xml_file = Path(path_fmu) / "modelDescription.xml"
                 with open(xml_file) as xmlf:
                     for line in xmlf:
                         if "CoSimulation" in line:
