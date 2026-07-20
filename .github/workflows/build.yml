@@ -4,7 +4,7 @@ jobs:
   linux:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - name: Build
         run: |
           docker pull openturns/archlinux-module-fmi
@@ -27,7 +27,7 @@ jobs:
   conda-linux:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - uses: conda-incubator/setup-miniconda@v4
         with:
           miniforge-version: latest
@@ -44,7 +44,7 @@ jobs:
   conda-macos:
     runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - uses: conda-incubator/setup-miniconda@v4
         with:
           miniforge-version: latest
@@ -65,7 +65,7 @@ jobs:
   conda-windows:
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - uses: conda-incubator/setup-miniconda@v4
         with:
           miniforge-version: latest

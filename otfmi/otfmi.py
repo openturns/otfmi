@@ -227,11 +227,13 @@ class _FMUBaseFunction:
                         if "ModelExchange" in line:
                             kind = "ME"
                             break
+                if kind is None:
+                    raise ValueError("Cannot guess FMU type from modelDescription.xml")
             try:
-                if kind == "ME":
-                    self._model = pyfmi.fmi.FMUModelME2(fmu=path_fmu, allow_unzipped_fmu=True, **kwargs)
-                else:
+                if kind == "CS":
                     self._model = pyfmi.fmi.FMUModelCS2(fmu=path_fmu, allow_unzipped_fmu=True, **kwargs)
+                else:
+                    self._model = pyfmi.fmi.FMUModelME2(fmu=path_fmu, allow_unzipped_fmu=True, **kwargs)
             except pyfmi.fmi.InvalidVersionException:
                 # unified type for both ME and CS
                 self._model = pyfmi.fmi.FMUModelME3(fmu=path_fmu, allow_unzipped_fmu=True, **kwargs)
