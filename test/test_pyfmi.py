@@ -34,8 +34,15 @@ def test_pyfmi_reset(model):
 def test_model_unzipped():
     """Load an fmu."""
     path_fmu = otfmi.example.utility.get_path_fmu("deviation")
-    workdir = tempfile.mkdtemp()
-    with zipfile.ZipFile(path_fmu, "r") as zf:
-        zf.extractall(workdir)
-    model = pyfmi.fmi.FMUModelCS2(fmu=workdir, allow_unzipped_fmu=True)
-    model.simulate(options={"silent_mode": True})
+
+    def simulate_unzipped_fmu(workdir):
+        with zipfile.ZipFile(path_fmu, "r") as zf:
+            zf.extractall(workdir)
+        model = pyfmi.fmi.FMUModelCS2(
+            fmu=workdir,
+            allow_unzipped_fmu=True,
+        )
+        model.simulate(options={"silent_mode": True})
+
+    with tempfile.TemporaryDirectory() as workdir:
+        simulate_unzipped_fmu(workdir)
