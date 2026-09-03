@@ -142,7 +142,10 @@ covarianceModel = ot.SquaredExponential(dim)
 covarianceModel = ot.TensorizedCovarianceModel([covarianceModel] * n_mode)
 
 
-algo = ot.KrigingAlgorithm(inputSample, projectionSample, covarianceModel, basis)
+fitter = ot.GaussianProcessFitter(inputSample, projectionSample, covarianceModel, basis)
+fitter.run()
+fitter_result = fitter.getResult()
+algo = ot.GaussianProcessRegression(fitter_result)
 algo.run()
 result = algo.getResult()
 metamodel = result.getMetaModel()
