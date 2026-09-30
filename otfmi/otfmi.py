@@ -59,22 +59,17 @@ class _FMUBaseFunction:
 
         if inputs_fmu is None:
             # choose all variables with variability INPUT
-            fmix_input = (
-                pyfmi.fmi.FMI2_INPUT
-                if self._model.get_version() == "2.0"
-                else pyfmi.fmi.FMI_INPUT
-            )
+            fmix_input = fmi.get_causality_input(self._model)
             inputs_fmu = [name for name in all_vars if causality[name] == fmix_input]
         else:
             difference = set(inputs_fmu).difference(all_vars)
             if difference:
                 raise pyfmi.common.io.VariableNotFoundError(", ".join(difference))
 
-            input_causality_map = {"1.0": pyfmi.fmi.FMI_INPUT,
-                                   "2.0": pyfmi.fmi.FMI2_INPUT}
-            accepted_causality = [input_causality_map[self._model.get_version()]]
-            if self._model.get_version() == "2.0" and not self._field_input:
-                accepted_causality.append(pyfmi.fmi.FMI2_PARAMETER)
+            accepted_causality = [fmi.get_causality_input(self._model)]
+            fmix_parameter = fmi.get_causality_parameter(self._model)
+            if fmix_parameter is not None and not self._field_input:
+                accepted_causality.append(fmix_parameter)
             for name in inputs_fmu:
                 if not causality[name] in accepted_causality:
                     raise ValueError(f"Variable {name} cannot be used as a function input"
@@ -95,11 +90,7 @@ class _FMUBaseFunction:
 
         if outputs_fmu is None:
             # choose all variables with variability OUTPUT
-            fmix_output = (
-                pyfmi.fmi.FMI2_OUTPUT
-                if self._model.get_version() == "2.0"
-                else pyfmi.fmi.FMI_OUTPUT
-            )
+            fmix_output = fmi.get_causality_output(self._model)
             outputs_fmu = [name for name in all_vars if causality[name] == fmix_output]
             if len(outputs_fmu) == 0:
                 raise pyfmi.common.io.VariableNotFoundError(
@@ -110,21 +101,15 @@ class _FMUBaseFunction:
             if difference:
                 raise pyfmi.common.io.VariableNotFoundError(", ".join(difference))
 
+            accepted_causality = [fmi.get_causality_output(self._model)]
+            fmix_local = fmi.get_causality_local(self._model)
+            if fmix_local is not None:
+                accepted_causality.append(fmix_local)
             for name in outputs_fmu:
-                if (
-                    self._model.get_version() == "2.0"
-                    and not causality[name]
-                    in [pyfmi.fmi.FMI2_LOCAL, pyfmi.fmi.FMI2_OUTPUT]
-                ) or (
-                    self._model.get_version() == "1.0"
-                    and causality[name] != pyfmi.fmi.FMI_OUTPUT
-                ):
+                if not causality[name] in accepted_causality:
                     raise ValueError(
-                        'Variable "'
-                        + name
-                        + '" cannot be used as a function output (causality '
-                        + fmi.get_causality_str(self._model, name)
-                        + ")"
+                        f'Variable "{name}" cannot be used as a function output'
+                        f" (causality {fmi.get_causality_str(self._model, name)})"
                     )
         self._outputs_fmu = outputs_fmu
 
@@ -215,26 +200,9 @@ class _FMUBaseFunction:
                 path_fmu=path_fmu, kind=kind, **kwargs
             )
         else:
-            if kind is None:
-                xml_file = Path(path_fmu) / "modelDescription.xml"
-                with open(xml_file) as xmlf:
-                    for line in xmlf:
-                        if "CoSimulation" in line:
-                            kind = "CS"
-                            break
-                        if "ModelExchange" in line:
-                            kind = "ME"
-                            break
-                if kind is None:
-                    raise ValueError("Cannot guess FMU type from modelDescription.xml")
-            try:
-                if kind == "CS":
-                    self._model = pyfmi.fmi.FMUModelCS2(fmu=path_fmu, allow_unzipped_fmu=True, **kwargs)
-                else:
-                    self._model = pyfmi.fmi.FMUModelME2(fmu=path_fmu, allow_unzipped_fmu=True, **kwargs)
-            except pyfmi.fmi.InvalidVersionException:
-                # unified type for both ME and CS
-                self._model = pyfmi.fmi.FMUModelME3(fmu=path_fmu, allow_unzipped_fmu=True, **kwargs)
+            self._model = fmi.load_unzipped_fmu(
+                path_fmu=path_fmu, kind=kind, **kwargs
+            )
 
     def initialize(self, initialization_script=None):
         """Initialize the FMU, using initialization script if available.

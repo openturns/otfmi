@@ -22,12 +22,8 @@ def simulate_with_pyfmi(path_fmu, final_time=None):
         check_result = check_model.simulate(final_time=final_time)
     else:
         check_result = check_model.simulate()
-    # Get the infected column
-    list_variable = list(check_model.get_model_variables().keys())
-    infected_column = list_variable.index("infected") + 1
-    # +1 stands for time column, inserted as first in the data matrix
-    list_last_infected_value = check_result.data_matrix[infected_column][-5:]
-    return list_last_infected_value
+    # Get the 5 last values of the infected variable
+    return check_result["infected"][-5:]
 
 
 @pytest.fixture
