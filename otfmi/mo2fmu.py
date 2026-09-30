@@ -30,7 +30,7 @@ def mo2fmu(
         model type, either me (model exchange), cs (co-simulation),
         me_cs (both model exchange and co-simulation)
     version : str, default="2.0"
-        fmi version
+        fmi version, one of "1.0", "2.0", "3.0"
     libs : list of str, default=[]
         List of required libraries passed to loadModel
     platforms : list of str, default=[static]
@@ -47,6 +47,8 @@ def mo2fmu(
     p_fmu = Path.cwd() / (model_name + ".fmu") if path_fmu is None else Path(path_fmu)
     if not isinstance(fmuType, str):
         raise TypeError("fmuType must be of type str")
+    if version not in ("1.0", "2.0", "3.0"):
+        raise ValueError("version must be one of '1.0', '2.0', '3.0'")
 
     try:
         [str(x) for x in libs]
@@ -139,7 +141,7 @@ def main():
         "--version",
         metavar="VERSION",
         type=str,
-        help="fmi version 1.0|2.0",
+        help="fmi version 1.0|2.0|3.0",
         default=argparse.SUPPRESS,
     )
     parser.add_argument(
