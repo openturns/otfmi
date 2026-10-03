@@ -29,6 +29,17 @@ Choosing ME or CS depends on the use of the FMU (see
 `here <https://www.modelon.com/fmi-functional-mock-up-unit-types/>`__).
 Both kinds are handled similarly by otfmi (and `Persalys <https://persalys.fr/?la=en>`__).
 
+FMI backend
+-----------
+
+Driving a FMU requires an implementation of the FMI standard, which otfmi calls
+an *FMI backend*. Two are supported behind a common interface:
+`PyFMI <https://pypi.org/project/PyFMI/>`__ and
+`FMPy <https://pypi.org/project/fmpy/>`__. PyFMI is preferred when both are
+installed, otherwise otfmi falls back to FMPy. The active backend is reported by
+``otfmi.backend.BACKEND`` and can be selected with
+:func:`~otfmi.use_backend`, in the spirit of the matplotlib backends.
+
 OpenTURNS objects
 -----------------
 

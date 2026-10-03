@@ -4,7 +4,7 @@ OTFMI documentation
 ===================
 
 A bridge between `OpenTURNS <http://openturns.github.io/openturns/master/contents.html>`__ and functional mockup units (FMUs),
-based on `PyFMI <https://pypi.org/project/PyFMI/>`__ .
+based on `PyFMI <https://pypi.org/project/PyFMI/>`__ or `FMPy <https://pypi.org/project/fmpy/>`__ .
 
 .. grid::
    :gutter: 3

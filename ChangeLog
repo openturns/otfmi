@@ -1,5 +1,6 @@
 2026-?? - release 0.19
 - FMI 3.0 support
+- Add fmpy as an alternative FMI backend, selected with otfmi.use_backend
 
 2026-09-04 - release 0.18.2
 - Add support for unzipped fmu

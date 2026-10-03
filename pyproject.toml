@@ -9,7 +9,6 @@ readme = "README.rst"
 dependencies = [
   "openturns",
   "numpy",
-  "pyfmi",
   "dill",
   "pythonfmu",
   "jinja2",
@@ -28,6 +27,7 @@ keywords = ["fmi", "modelica", "fmu"]
 
 [tool.setuptools]
 packages = ["otfmi",
+            "otfmi.backend",
             "otfmi.example"]
 
 [tool.setuptools.package-data]
@@ -35,6 +35,9 @@ otfmi = ["example/file/fmu/linux-x86_64/*.fmu",
          "example/file/fmu/win-amd64/*.fmu"]
 
 [project.optional-dependencies]
+pyfmi = ["pyfmi"]
+fmpy = ["fmpy", "packaging"]
+all = ["pyfmi", "fmpy", "packaging"]
 doc = ["numpydoc", "sphinx-gallery", "sphinx"]
 
 [project.urls]

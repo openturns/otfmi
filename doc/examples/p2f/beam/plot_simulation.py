@@ -161,7 +161,7 @@ print(outputPoint[-1])
 # %%
 # :class:`~otfmi.FMUPointToFieldFunction` is an OpenTURNS-friendly overlay of
 # the class otfmi.OpenTURNSFMUPointToFieldFunction, closer to
-# the underlying PyFMI implementation.
+# the underlying FMI backend implementation.
 # Some FMU simulation parameters can be given to
 # :class:`~otfmi.FMUPointToFieldFunction`, yet most of them can only be passed
 # to an otfmi.OpenTURNSFMUPointToFieldFunction.
@@ -184,24 +184,26 @@ print(outputPoint[-1])
 # %%
 # To set more parameters for the FMU simulation,
 # class otfmi.OpenTURNSFMUPointToFieldFunction can be
-# employed. Below, we set the PyFMI algorithm running the simulation,
-# and require simulation silent mode.
+# employed. Backend-specific options use the pyfmi_options/fmpy_options
+# keywords: only the ones matching the model's backend are taken into
+# account. Below, silent mode is requested from the PyFMI backend.
 
 midlevel_function = otfmi.OpenTURNSFMUPointToFieldFunction(
     path_fmu, inputs_fmu=["E", "I"], outputs_fmu=["y"]
 )
 
 outputPoint = midlevel_function.base.simulate(
-    inputPoint, algorithm="FMICSAlg", options={"silent_mode": True}
+    inputPoint, algorithm="FMICSAlg", pyfmi_options={"silent_mode": True}
 )
 
 # %%
 # For advanced users, the middle-level class
 # class otfmi.OpenTURNSFMUPointToFieldFunction also gives
-# access to the PyFMI model. We can hence access all PyFMI's object methods:
+# access to the underlying backend model. We can hence access all its object
+# methods:
 
-pyfmi_model = midlevel_function.base.get_model()
-print(dir(pyfmi_model))
+fmu_model = midlevel_function.base.get_model()
+print(dir(fmu_model))
 
 # %%
 # .. note::

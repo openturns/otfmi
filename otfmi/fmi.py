@@ -1,87 +1,79 @@
-# Copyright 2016-2025 EDF Phimeca
+# Copyright 2016-2026 EDF Phimeca
 
 """Low level utility functions for common FMU manipulations."""
 
-import io
-from pathlib import Path
-import re
-import pyfmi
 import numpy as np
 import warnings
 import otfmi
-
-try:
-    from pyfmi import fmi3 as _fmi3
-except ImportError:  # pragma: no cover
-    # pyfmi release without FMI 3.0 support
-    _fmi3 = None
+from . import backend
 
 
-# Causality identifiers, per FMI version and per role. FMI 1.0 defines neither
-# the "parameter" nor the "local" causality.
-_CAUSALITY = {
-    "1.0": {"input": pyfmi.fmi.FMI_INPUT,
-            "output": pyfmi.fmi.FMI_OUTPUT,
-            "parameter": None,
-            "local": None},
-    "2.0": {"input": pyfmi.fmi.FMI2_INPUT,
-            "output": pyfmi.fmi.FMI2_OUTPUT,
-            "parameter": pyfmi.fmi.FMI2_PARAMETER,
-            "local": pyfmi.fmi.FMI2_LOCAL},
-}
+def _model_backend_name(model=None):
+    """Get the backend name bound to a model, or the active one.
 
-# Causality names, per FMI version.
-_CAUSALITY_NAME = {
-    "1.0": {pyfmi.fmi.FMI_INPUT: "INPUT",
-            pyfmi.fmi.FMI_OUTPUT: "OUTPUT",
-            pyfmi.fmi.FMI_INTERNAL: "INTERNAL",
-            pyfmi.fmi.FMI_NONE: "NONE"},
-    "2.0": {pyfmi.fmi.FMI2_PARAMETER: "PARAMETER",
-            pyfmi.fmi.FMI2_CALCULATED_PARAMETER: "CALCULATED_PARAMETER",
-            pyfmi.fmi.FMI2_INPUT: "INPUT",
-            pyfmi.fmi.FMI2_OUTPUT: "OUTPUT",
-            pyfmi.fmi.FMI2_LOCAL: "LOCAL",
-            pyfmi.fmi.FMI2_INDEPENDENT: "INDEPENDENT",
-            pyfmi.fmi.FMI2_UNKNOWN: "UNKNOWN"},
-}
+    The backend is inferred from the model type (pyfmi models live in
+    ``pyfmi.*`` modules, the fmpy wrapper in ``otfmi.backend.fmpy_backend``)
+    or from the ``_otfmi_backend`` attribute that wrappers record at load
+    time. This way switching the global backend later does not change how
+    an already loaded model is simulated or introspected. pyfmi model
+    objects use ``__slots__`` and accept neither attributes nor weak
+    references, hence the type-based inference.
+    """
+    if model is not None:
+        module = getattr(type(model), "__module__", "") or ""
+        if module.split(".")[0] == "pyfmi":
+            return "pyfmi"
+        if "fmpy_backend" in module:
+            return "fmpy"
+        name = getattr(model, "_otfmi_backend", None)
+        if name in ("pyfmi", "fmpy"):
+            return name
+    return backend.BACKEND
 
-# Numeric and boolean variable types, per FMI version. String-like types are
-# left out as their start values cannot be converted to float.
-_TYPES = {
-    "1.0": [pyfmi.fmi.FMI_REAL, pyfmi.fmi.FMI_INTEGER, pyfmi.fmi.FMI_BOOLEAN],
-    "2.0": [pyfmi.fmi.FMI2_REAL, pyfmi.fmi.FMI2_INTEGER, pyfmi.fmi.FMI2_BOOLEAN],
-}
 
-# pyfmi model classes, per FMI version and per kind.
-_MODEL_CLASS = {
-    ("1.0", "CS"): pyfmi.fmi.FMUModelCS1,
-    ("1.0", "ME"): pyfmi.fmi.FMUModelME1,
-    ("2.0", "CS"): pyfmi.fmi.FMUModelCS2,
-    ("2.0", "ME"): pyfmi.fmi.FMUModelME2,
-}
+def _model_backend(model=None):
+    """Get the backend module bound to a model, or the active one."""
+    return backend.get_backend(_model_backend_name(model))
 
-if _fmi3 is not None:
-    _CAUSALITY["3.0"] = {"input": _fmi3.FMI3_Causality.INPUT,
-                         "output": _fmi3.FMI3_Causality.OUTPUT,
-                         "parameter": _fmi3.FMI3_Causality.PARAMETER,
-                         "local": _fmi3.FMI3_Causality.LOCAL}
-    _CAUSALITY_NAME["3.0"] = {
-        _fmi3.FMI3_Causality.STRUCTURAL_PARAMETER: "STRUCTURAL_PARAMETER",
-        _fmi3.FMI3_Causality.PARAMETER: "PARAMETER",
-        _fmi3.FMI3_Causality.CALCULATED_PARAMETER: "CALCULATED_PARAMETER",
-        _fmi3.FMI3_Causality.INPUT: "INPUT",
-        _fmi3.FMI3_Causality.OUTPUT: "OUTPUT",
-        _fmi3.FMI3_Causality.LOCAL: "LOCAL",
-        _fmi3.FMI3_Causality.INDEPENDENT: "INDEPENDENT",
-        _fmi3.FMI3_Causality.UNKNOWN: "UNKNOWN"}
-    _TYPES["3.0"] = [_fmi3.FMI3_Type.FLOAT64, _fmi3.FMI3_Type.FLOAT32,
-                     _fmi3.FMI3_Type.INT64, _fmi3.FMI3_Type.INT32,
-                     _fmi3.FMI3_Type.INT16, _fmi3.FMI3_Type.INT8,
-                     _fmi3.FMI3_Type.UINT64, _fmi3.FMI3_Type.UINT32,
-                     _fmi3.FMI3_Type.UINT16, _fmi3.FMI3_Type.UINT8,
-                     _fmi3.FMI3_Type.BOOL]
-    _MODEL_CLASS[("3.0", "CS")] = _fmi3.FMUModelCS3
-    _MODEL_CLASS[("3.0", "ME")] = _fmi3.FMUModelME3
+
+def _tag_model(model):
+    """Record the active backend on a freshly loaded model, if possible."""
+    try:
+        model._otfmi_backend = backend.BACKEND
+    except (AttributeError, TypeError):
+        # pyfmi models use __slots__ and reject new attributes: the backend
+        # is then inferred from the model type (see _model_backend_name)
+        pass
+    return model
+
+
+def _option_key(model=None):
+    """Get the keyword holding the options of the model's backend.
+
+    Each backend exposes its own options dictionary, so that users can pass
+    options for several backends at once and let the active one pick its own.
+    """
+    return f"{_model_backend_name(model)}_options"
+
+
+def _other_option_key(model=None):
+    """Get the options keyword of the backend that is not the model's."""
+    return f"{'fmpy' if _model_backend_name(model) == 'pyfmi' else 'pyfmi'}_options"
+
+
+def _get_causality(model=None):
+    """Get causality constants from the model's backend."""
+    return _model_backend(model).CAUSALITY
+
+
+def _get_causality_name(model=None):
+    """Get causality names from the model's backend."""
+    return _model_backend(model).CAUSALITY_NAME
+
+
+def _get_types(model=None):
+    """Get variable types from the model's backend."""
+    return _model_backend(model).TYPES
 
 
 def get_fmi_version(model):
@@ -95,16 +87,17 @@ def get_fmi_version(model):
     Returns
     -------
     version : str
-        FMI version, one of "1.0", "2.0", "3.0" (depending on pyfmi).
+        FMI version, one of "1.0", "2.0", "3.0" (depending on the backend).
     """
 
     if not hasattr(model, "get_version"):
         model = load_fmu(model)
 
     version = model.get_version()
-    if version not in _CAUSALITY:
+    causality = _get_causality(model)
+    if version not in causality:
         raise ValueError(f"Unsupported FMI version {version} (supported versions:"
-                         f" {', '.join(_CAUSALITY)})")
+                         f" {', '.join(causality)})")
     return version
 
 
@@ -124,7 +117,7 @@ def get_causality_input(model):
         FMI3: INPUT(3)
     """
 
-    return _CAUSALITY[get_fmi_version(model)]["input"]
+    return _get_causality(model)[get_fmi_version(model)]["input"]
 
 
 def get_causality_output(model):
@@ -143,7 +136,7 @@ def get_causality_output(model):
         FMI3: OUTPUT(4)
     """
 
-    return _CAUSALITY[get_fmi_version(model)]["output"]
+    return _get_causality(model)[get_fmi_version(model)]["output"]
 
 
 def get_causality_parameter(model):
@@ -162,7 +155,7 @@ def get_causality_parameter(model):
         FMI3: PARAMETER(1)
     """
 
-    return _CAUSALITY[get_fmi_version(model)]["parameter"]
+    return _get_causality(model)[get_fmi_version(model)]["parameter"]
 
 
 def get_causality_local(model):
@@ -181,7 +174,7 @@ def get_causality_local(model):
         FMI3: LOCAL(5)
     """
 
-    return _CAUSALITY[get_fmi_version(model)]["local"]
+    return _get_causality(model)[get_fmi_version(model)]["local"]
 
 
 def load_fmu(path_fmu, kind=None, **kwargs):
@@ -199,21 +192,11 @@ def load_fmu(path_fmu, kind=None, **kwargs):
         rationale behind this choice is that co-simulation may be used to
         impose a solver not available in pyfmi.
 
-    Additional keyword arguments are passed on to pyfmi's 'load_fmu' function.
+    Additional keyword arguments are passed on to the backend's 'load_fmu'
+    function.
 
     """
-
-    # pyfmi writes a log file in current folder even with log_level=0
-    kwargs.setdefault("log_file_name", io.StringIO())
-
-    p_fmu = str(Path(path_fmu).resolve())
-    if kind is None:
-        try:
-            return pyfmi.load_fmu(p_fmu, kind="CS", **kwargs)
-        except pyfmi.fmi.FMUException:
-            return pyfmi.load_fmu(p_fmu, kind="auto", **kwargs)
-    else:
-        return pyfmi.load_fmu(p_fmu, kind=kind, **kwargs)
+    return _tag_model(backend.load_fmu(path_fmu, kind=kind, **kwargs))
 
 
 def load_unzipped_fmu(path_fmu, kind=None, **kwargs):
@@ -234,23 +217,10 @@ def load_unzipped_fmu(path_fmu, kind=None, **kwargs):
         rationale behind this choice is that co-simulation may be used to
         impose a solver not available in pyfmi.
 
-    Additional keyword arguments are passed on to the pyfmi model constructor.
+    Additional keyword arguments are passed on to the backend.
 
     """
-
-    # pyfmi writes a log file in current folder even with log_level=0
-    kwargs.setdefault("log_file_name", io.StringIO())
-    kwargs.setdefault("allow_unzipped_fmu", True)
-
-    version, fmu_kind = read_unzipped_model_description(path_fmu)
-    if kind is None:
-        kind = fmu_kind
-    try:
-        model_class = _MODEL_CLASS[(version, kind)]
-    except KeyError:
-        raise ValueError(f"Unsupported FMI version {version} combined with kind"
-                         f" {kind}")
-    return model_class(fmu=str(path_fmu), **kwargs)
+    return _tag_model(backend.load_unzipped_fmu(path_fmu, kind=kind, **kwargs))
 
 
 def read_unzipped_model_description(path_fmu):
@@ -270,31 +240,7 @@ def read_unzipped_model_description(path_fmu):
         Either "ME" (model exchange) or "CS" (co-simulation). Co-simulation
         takes precedence when the FMU provides both.
     """
-
-    xml_file = Path(path_fmu) / "modelDescription.xml"
-    if not xml_file.is_file():
-        raise FileNotFoundError(f"{xml_file} not found, it does not look like an"
-                                f" unzipped FMU")
-
-    # the file is scanned line by line instead of being parsed as XML: only the
-    # fmiVersion attribute and the FMU type elements are looked for
-    version, kind = None, None
-    with open(xml_file, encoding="utf-8") as xmlf:
-        for line in xmlf:
-            if version is None:
-                match = re.search(r"""fmiVersion\s*=\s*['"]([^'"]*)['"]""", line)
-                if match:
-                    version = match.group(1)
-            if "<CoSimulation" in line:
-                kind = "CS"
-                break
-            if "<ModelExchange" in line:
-                # keep scanning: co-simulation takes precedence when the FMU
-                # declares both kinds, as the schemas list ModelExchange first
-                kind = "ME"
-    if kind is None:
-        raise ValueError(f"Cannot guess FMU type from {xml_file}")
-    return version, kind
+    return backend.read_unzipped_model_description(path_fmu)
 
 
 def simulate(
@@ -308,8 +254,8 @@ def simulate(
 
     Parameters
     ----------
-    model : pyfmi.fmi.FMUModelBase
-        Pyfmi model object
+    model : pyfmi.fmi.FMUModelBase or backend model object
+        Model object, as returned by :func:`load_fmu`.
 
     initialization_script : path-like
         Path to the script file.
@@ -320,9 +266,28 @@ def simulate(
     reset : bool
         Toggle resetting the FMU prior to simulation. True by default.
 
-    Additional keyword arguments are passed on to pyfmi.simulate.
+    pyfmi_options, fmpy_options : dict
+        Backend-specific simulation options. Only the dictionary matching the
+        model's backend is forwarded; the other one is discarded.
+
+    Additional keyword arguments are passed on to the backend's simulate.
 
     """
+    # keep only the options of the model's backend, and rename them to whatever
+    # the underlying model expects: pyfmi spells it "options", whereas the fmpy
+    # wrapper reads "fmpy_options"
+    backend_name = _model_backend_name(model)
+    active, inactive = _option_key(model), _other_option_key(model)
+    kwargs.pop(inactive, None)
+    options = kwargs.pop(active, None)
+    if options is not None:
+        target = "options" if backend_name == "pyfmi" else "fmpy_options"
+        if backend_name == "pyfmi":
+            legacy = kwargs.pop("options", None)
+            if legacy is not None:
+                options = {**legacy, **options}
+        kwargs[target] = options
+
     if reset:
         model.reset()
         # Needed (?!) for restoring default values in some settings (windows
@@ -347,7 +312,7 @@ def parse_kwargs_simulate(
     value_input=None, name_input=None, name_output=None, model=None, **kwargs
 ):
     """Parse simulation keyword arguments and feed the
-    simulate method of pyfmi's object.
+    simulate method of the backend's object.
 
     Parameters
     ----------
@@ -361,6 +326,14 @@ def parse_kwargs_simulate(
 
     model : pyfmi.FMUModel*
         fmu model.
+
+    pyfmi_options : dict
+        Options forwarded to pyfmi's simulate method. Ignored if the model's
+        backend is not pyfmi.
+
+    fmpy_options : dict
+        Options forwarded to fmpy's simulate_fmu function. Ignored if the
+        model's backend is not fmpy.
     """
 
     value_input_array = reshape_input(value_input, len(name_input))
@@ -368,21 +341,30 @@ def parse_kwargs_simulate(
 
     version = get_fmi_version(model)
 
-    options = kwargs.pop("dict_option", dict())
+    # Backend-specific simulation options. Users pass pyfmi_options and/or
+    # fmpy_options; only the ones matching the model's backend are forwarded.
+    backend_name = _model_backend_name(model)
+    key = _option_key(model)
+    kwargs.pop(_other_option_key(model), None)
+    options = dict(kwargs.pop(key, dict()))
 
-    # store only interest variables
-    options.setdefault("filter", name_output)
+    if backend_name == "pyfmi":
+        # store only variables of interest
+        options.setdefault("filter", name_output)
 
-    if version != "3.0":
-        # store results in memory instead of binary file, cleaner and a bit
-        # faster (pyfmi cannot store FMI 3.0 results in memory)
-        options.setdefault("result_handling", "memory")
+        if version != "3.0":
+            # store results in memory instead of binary file, cleaner and a bit
+            # faster (pyfmi cannot store FMI 3.0 results in memory)
+            options.setdefault("result_handling", "memory")
 
-    # only available for CS model
-    if "FMUModelCS" in model.__class__.__name__:
-        options.setdefault("silent_mode", True)
+        # only available for CS model
+        if "FMUModelCS" in model.__class__.__name__:
+            options.setdefault("silent_mode", True)
+    else:
+        # fmpy spells the output filter 'output'
+        options.setdefault("output", name_output)
 
-    kwargs["options"] = options
+    kwargs[key] = options
 
     if len(time) > 1:
         kwargs.setdefault("start_time", time[0])
@@ -428,19 +410,19 @@ def parse_kwargs_simulate(
 
 
 def strip_simulation(simulation, name_output, final=None):
-    """Extract some final values or trajectories from a PyFMI result object.
+    """Extract some final values or trajectories from a simulation result.
 
     Parameters
     ----------
-    simulation : PyFMI result object (pyfmi.fmi_algorithm_drivers.FMIResult),
-    simulation result.
+    simulation : simulation result object
+        Backend-specific simulation result.
 
     name_output : Sequence of strings, output variables names.
 
     final : String
         If "final" (default), return only final values instead of whole
         trajectories.
-        If "result" return the pyfmi "result" object.
+        If "result" return the result object.
         If "trajectory" returns outputs trajectories.
 
     """
@@ -578,13 +560,14 @@ def apply_initialization_parameters(model, initialization_parameters):
     """
 
     list_name, list_value = initialization_parameters
+    FMUException = _model_backend(model).FMUException
     try:
         model.set(list_name, list_value)
-    except pyfmi.fmi.FMUException:
+    except FMUException:
         for name, value in zip(list_name, list_value):
             try:
                 model.set(name, value)
-            except pyfmi.fmi.FMUException:
+            except FMUException:
                 pass
 
 
@@ -683,7 +666,7 @@ def get_causality_str(model, name):
         Causality identifier
     """
 
-    causalitystr = _CAUSALITY_NAME[get_fmi_version(model)]
+    causalitystr = _get_causality_name(model)[get_fmi_version(model)]
     return causalitystr.get(get_causality(model, [name])[0], "UNKNOWN")
 
 
@@ -738,7 +721,7 @@ def get_fixed_value(model):
         pass
     try:
         model.initialize()
-    except pyfmi.fmi.FMUException:
+    except _model_backend(model).FMUException:
         pass
     return {name: model.get(name) for name in list_name_variable}
 
@@ -764,7 +747,7 @@ def get_start_value(model):
 
     list_name_variable = []
     # numeric and boolean types only, string-like types are filtered out
-    for typ in _TYPES[get_fmi_version(model)]:
+    for typ in _get_types(model)[get_fmi_version(model)]:
         lnvt = list(
             model.get_model_variables(
                 type=typ, include_alias=False, only_start=True

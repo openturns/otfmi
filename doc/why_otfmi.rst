@@ -1,8 +1,8 @@
 Why OTFMI ?
-============
+===========
 
-About FMI, OpenTURNS and PyFMI
-------------------------------
+About FMI, OpenTURNS and the FMI backends
+------------------------------------------
 
 The `functional mock-up interface (FMI)
 standard <https://fmi-standard.org/>`__ specifies a multipurpose
@@ -17,17 +17,19 @@ softwares, such as `OpenModelica <https://openmodelica.org/>`__,
 library proposes a large range of mathematical methods to quantify,
 propagate and handle uncertainties.
 
-`PyFMI <https://pypi.org/project/PyFMI/>`__ is a package for loading and
-interacting with FMUs in Python.
+`PyFMI <https://pypi.org/project/PyFMI/>`__ and
+`FMPy <https://pypi.org/project/fmpy/>`__ are packages for loading and
+interacting with FMUs in Python. otfmi uses PyFMI by default, and falls back
+to FMPy when PyFMI is not available.
 
 The need for otfmi
-------------------
+-------------------
 
 Using Python to easily perform computer experiments on 0D/1D models is
 seductive. Yet the tool chain, from the physical model to OpenTURNS, was
-incomplete. PyFMI objects, close to the FMU’s methods, had to be adapted
-for easier use with OpenTURNS’ methods.
+incomplete. FMI backend objects, close to the FMU methods, had to be
+adapted for easier use with OpenTURNS methods.
 
 otfmi is developed by `Phimeca <http://www.phimeca.com>`__, at the
 request of EDF Prisme department, to meet this need of compatibility
-between PyFMI objects and OpenTURNS.
+between FMI backend objects and OpenTURNS.
