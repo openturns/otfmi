@@ -15,7 +15,7 @@ akin to the wrappers familiar to the OpenTURNS’ community.
 The purpose of the otfmi Python module is to promote the use of the
 probabilistic approach with system models, in particular those written in
 Modelica, by enabling easy manipulation of FMUs with OpenTURNS. The otfmi
-module relies on PyFMI, a module for manipulating FMUs within Python.
+module relies on an FMI backend, PyFMI [PYFMI]_ by default, or FMPy [FMPY]_.
 
 
 Installation
@@ -26,8 +26,7 @@ The preferred installation media is Conda.
 First install OpenTURNS according to the `instructions <http://openturns.github.io/openturns/master/install.html#conda>`_.
 Then use the following commands to install OTFMI::
 
-    conda install -y otfmi 
-
+    conda install -y otfmi
 
 Documentation
 =============
@@ -44,4 +43,5 @@ This package is licensed under the LGPL3.
 Bibliography
 ============
 .. [PYFMI] PyFMI Python module. url: https://github.com/modelon-community/PyFMI
+.. [FMPY] FMPy Python module. url: https://github.com/CATIA-Systems/FMPy
 .. [FMUDEMOS] FMU demonstration files. https://github.com/openturns/otfmi/tree/master/otfmi/example/file/fmu

@@ -64,6 +64,39 @@ Here is a summary of the different variants:
 +-------------------------------------------+---------+----------+
 
 
+FMI backend
+-----------
+
+Driving a FMU requires an FMI backend, that is an implementation of the FMI
+standard. Two are supported, behind a common interface:
+`PyFMI <https://pypi.org/project/PyFMI/>`__ and
+`FMPy <https://pypi.org/project/fmpy/>`__ (see :doc:`terminology`).
+
+PyFMI is used by default whenever it is installed, otherwise otfmi falls back
+to FMPy. The active backend is reported by ``otfmi.backend.BACKEND`` and can be
+selected at runtime with **use_backend**, in the spirit of the matplotlib
+backends:
+
+.. code-block:: python
+
+    import otfmi
+
+    otfmi.backend.BACKEND  # 'pyfmi' or 'fmpy'
+    otfmi.use_backend("fmpy")
+
+Backend-specific simulation options are passed with the ``pyfmi_options`` and
+``fmpy_options`` keyword arguments. Only the options matching the active
+backend are taken into account, so the same call can carry options for both:
+
+.. code-block:: python
+
+    model(x, pyfmi_options={"silent_mode": True}, fmpy_options={"solver": "Euler"})
+
+.. autosummary::
+   :toctree: _generated/
+
+   use_backend
+
 Common low-level functions
 --------------------------
 

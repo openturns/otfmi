@@ -1,11 +1,11 @@
-# Copyright 2016-2025 EDF Phimeca
+# Copyright 2016-2026 EDF Phimeca
 
 """Middle and high level classes to simulate FMU files through OpenTURNS objects."""
 
 import openturns as ot
-import pyfmi
 import numpy as np
 from . import fmi
+from . import backend
 from pathlib import Path
 
 
@@ -27,7 +27,7 @@ class _FMUBaseFunction:
         final_time=None,
         **kwargs
     ):
-        self.load_fmu(path_fmu=path_fmu, kind=kind)
+        self.load_fmu(path_fmu=path_fmu, kind=kind, **kwargs)
         # for serialization we have to reload the pyfmi model, so save the parameters needed to reload
         self._path_fmu = path_fmu
         self._kind = kind
@@ -64,7 +64,9 @@ class _FMUBaseFunction:
         else:
             difference = set(inputs_fmu).difference(all_vars)
             if difference:
-                raise pyfmi.common.io.VariableNotFoundError(", ".join(difference))
+                VariableNotFoundError = fmi._model_backend(
+                    self._model).VariableNotFoundError
+                raise VariableNotFoundError(", ".join(difference))
 
             accepted_causality = [fmi.get_causality_input(self._model)]
             fmix_parameter = fmi.get_causality_parameter(self._model)
@@ -93,13 +95,15 @@ class _FMUBaseFunction:
             fmix_output = fmi.get_causality_output(self._model)
             outputs_fmu = [name for name in all_vars if causality[name] == fmix_output]
             if len(outputs_fmu) == 0:
-                raise pyfmi.common.io.VariableNotFoundError(
+                raise fmi._model_backend(self._model).VariableNotFoundError(
                     "No variables marked as OUTPUT please specify outputs_fmu"
                 )
         else:
             difference = set(outputs_fmu).difference(fmi.get_name_variable(self._model))
             if difference:
-                raise pyfmi.common.io.VariableNotFoundError(", ".join(difference))
+                VariableNotFoundError = fmi._model_backend(
+                    self._model).VariableNotFoundError
+                raise VariableNotFoundError(", ".join(difference))
 
             accepted_causality = [fmi.get_causality_output(self._model)]
             fmix_local = fmi.get_causality_local(self._model)
@@ -191,7 +195,7 @@ class _FMUBaseFunction:
         kind : str, one of "ME" (model exchange) or "CS" (co-simulation)
             Select a kind of FMU if both are available.
 
-        Additional keyword arguments are passed on to pyfmi's 'load_fmu'
+        Additional keyword arguments are passed on to the backend's 'load_fmu'
         function.
 
         """
@@ -203,6 +207,9 @@ class _FMUBaseFunction:
             self._model = fmi.load_unzipped_fmu(
                 path_fmu=path_fmu, kind=kind, **kwargs
             )
+        # record the backend the model was loaded with, so that backend
+        # switches and unpickling preserve the model's original backend
+        self._backend = getattr(self._model, "_otfmi_backend", backend.BACKEND)
 
     def initialize(self, initialization_script=None):
         """Initialize the FMU, using initialization script if available.
@@ -223,10 +230,11 @@ class _FMUBaseFunction:
             fmi.apply_initialization_script(self._model, self.initialization_script)
         except TypeError:
             pass  # No initialization script.
+        FMUException = fmi._model_backend(self._model).FMUException
         try:
             self._model.initialize()
-        except pyfmi.fmi.FMUException as ex:
-            raise pyfmi.fmi.FMUException(
+        except FMUException as ex:
+            raise FMUException(
                 str(ex) + "\n" + "\n".join([str(line) for line in self._model.get_log()])
             )
 
@@ -245,14 +253,14 @@ class _FMUBaseFunction:
         timestep : float, time step in seconds (optional).
 
         Additional keyword arguments are passed on to the 'simulate' method of
-        the underlying PyFMI model object.
+        the underlying backend model object.
 
         """
 
         if "final_time" in kwargs.keys():
-            raise Warning("final_time must be set in the constructor.")
+            raise ValueError("final_time must be set in the constructor.")
         if "start_time" in kwargs.keys():
-            raise Warning("start_time must be set in the constructor.")
+            raise ValueError("start_time must be set in the constructor.")
 
         kwargs.setdefault("initialization_script", self.initialization_script)
 
@@ -302,8 +310,18 @@ class _FMUBaseFunction:
 
     def __setstate__(self, data):
         self.__dict__.update(data)
-        # reload pyfmi model
-        self.load_fmu(self._path_fmu, self._kind)
+        # reload the model with the backend it was created with, not the
+        # backend that happens to be active in the unpickling process
+        name = getattr(self, "_backend", None)
+        if name in ("pyfmi", "fmpy") and name != backend.BACKEND:
+            current = backend.BACKEND
+            try:
+                backend.use_backend(name)
+                self.load_fmu(self._path_fmu, self._kind)
+            finally:
+                backend.use_backend(current)
+        else:
+            self.load_fmu(self._path_fmu, self._kind)
 
     def get_inputs_fmu(self):
         """Get the list of input variable names."""
@@ -372,6 +390,7 @@ class FMUFunction(ot.Function):
         initialization_script=None,
         start_time=None,
         final_time=None,
+        **kwargs
     ):
         lowlevel = OpenTURNSFMUFunction(
             path_fmu=path_fmu,
@@ -381,6 +400,7 @@ class FMUFunction(ot.Function):
             initialization_script=initialization_script,
             start_time=start_time,
             final_time=final_time,
+            **kwargs
         )
 
         highlevel = ot.Function(lowlevel)
@@ -439,7 +459,8 @@ class OpenTURNSFMUFunction(ot.OpenTURNSPythonFunction):
                                      inputs_fmu=inputs_fmu, outputs_fmu=outputs_fmu,
                                      start_time=start_time, final_time=final_time,
                                      initialization_script=initialization_script,
-                                     field_input=False, field_output=False)
+                                     field_input=False, field_output=False,
+                                     **kwargs)
 
         super().__init__(
             n=len(self.base.get_inputs_fmu()), p=len(self.base.get_outputs_fmu())
@@ -521,6 +542,7 @@ class FMUPointToFieldFunction(ot.PointToFieldFunction):
         initialization_script=None,
         start_time=None,
         final_time=None,
+        **kwargs
     ):
         lowlevel = OpenTURNSFMUPointToFieldFunction(
             path_fmu=path_fmu,
@@ -531,6 +553,7 @@ class FMUPointToFieldFunction(ot.PointToFieldFunction):
             initialization_script=initialization_script,
             start_time=start_time,
             final_time=final_time,
+            **kwargs
         )
 
         highlevel = ot.PointToFieldFunction(lowlevel)
@@ -557,7 +580,8 @@ class OpenTURNSFMUPointToFieldFunction(ot.OpenTURNSPythonPointToFieldFunction):
                                      inputs_fmu=inputs_fmu, outputs_fmu=outputs_fmu,
                                      start_time=start_time, final_time=final_time,
                                      initialization_script=initialization_script,
-                                     field_input=False, field_output=True, output_mesh=mesh)
+                                     field_input=False, field_output=True, output_mesh=mesh,
+                                     **kwargs)
 
         super().__init__(
             len(self.base.get_inputs_fmu()), self.base.get_output_mesh(), len(self.base.get_outputs_fmu())
@@ -632,6 +656,7 @@ class FMUFieldToPointFunction(ot.FieldToPointFunction):
         initialization_script=None,
         start_time=None,
         final_time=None,
+        **kwargs
     ):
         lowlevel = OpenTURNSFMUFieldToPointFunction(
             path_fmu=path_fmu,
@@ -642,6 +667,7 @@ class FMUFieldToPointFunction(ot.FieldToPointFunction):
             initialization_script=initialization_script,
             start_time=start_time,
             final_time=final_time,
+            **kwargs
         )
 
         highlevel = ot.FieldToPointFunction(lowlevel)
@@ -668,7 +694,8 @@ class OpenTURNSFMUFieldToPointFunction(ot.OpenTURNSPythonFieldToPointFunction):
                                      inputs_fmu=inputs_fmu, outputs_fmu=outputs_fmu,
                                      start_time=start_time, final_time=final_time,
                                      initialization_script=initialization_script,
-                                     field_input=True, input_mesh=mesh, field_output=False)
+                                     field_input=True, input_mesh=mesh, field_output=False,
+                                     **kwargs)
 
         super().__init__(
             self.base.get_input_mesh(), len(self.base.get_inputs_fmu()), len(self.base.get_outputs_fmu())
@@ -749,6 +776,7 @@ class FMUFieldFunction(ot.FieldFunction):
         initialization_script=None,
         start_time=None,
         final_time=None,
+        **kwargs
     ):
         lowlevel = OpenTURNSFMUFieldFunction(
             path_fmu=path_fmu,
@@ -760,6 +788,7 @@ class FMUFieldFunction(ot.FieldFunction):
             initialization_script=initialization_script,
             start_time=start_time,
             final_time=final_time,
+            **kwargs
         )
 
         highlevel = ot.FieldFunction(lowlevel)
@@ -788,7 +817,8 @@ class OpenTURNSFMUFieldFunction(ot.OpenTURNSPythonFieldFunction):
                                      start_time=start_time, final_time=final_time,
                                      initialization_script=initialization_script,
                                      field_input=True, input_mesh=input_mesh,
-                                     output_mesh=output_mesh, field_output=True)
+                                     output_mesh=output_mesh, field_output=True,
+                                     **kwargs)
 
         super().__init__(
             self.base.get_input_mesh(), len(self.base.get_inputs_fmu()),

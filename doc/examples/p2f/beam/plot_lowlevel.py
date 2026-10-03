@@ -5,7 +5,7 @@ Load an FMU
 # %%
 # First, retrieve the path to the example FMU *deviation.fmu*.
 #
-import pyfmi
+import otfmi
 import otfmi.example.utility
 
 path_fmu = otfmi.example.utility.get_path_fmu("deviation")
@@ -22,20 +22,22 @@ model = otfmi.fmi.load_fmu(path_fmu)
 # to impose a solver not available in PyFMI.
 
 # %%
-# All options of `pyfmi.load_fmu` can be passed on to otfmi:
-print(help(pyfmi.load_fmu))
+# otfmi drives the FMU through an FMI backend, PyFMI by default, FMPy as a
+# fallback. Both expose the same interface, so the code below is
+# backend-independent.
+print(f"backend = {otfmi.backend.BACKEND}")
 
 # %%
-# For instance, enforce CoSimulation kind and specify the filename for the
-# logs writing:
+# Backend-specific loading options can be passed on to otfmi.
+# With PyFMI, for instance, the log file name can be specified:
 model = otfmi.fmi.load_fmu(path_fmu, kind="CS", log_file_name="deviation.log")
 
 # %%
 # .. note::
-#    otfmi `load_fmu` is an overlay of PyFMI `load_fmu` function.
-#    Hence the FMU loaded here upper benefits of all PyFMI's methods.
+#    otfmi `load_fmu` is an overlay of the backend `load_fmu` function.
+#    Hence the FMU loaded here upper benefits of all the backend methods.
 
 # %%
-# For example, ``get_description`` is a PyFMI method (not re-implemented in
-# otfmi):
-model.get_description()
+# The model object also gives access to the underlying backend model, e.g. to
+# inspect the variables it exposes:
+sorted(model.get_model_variables().keys())

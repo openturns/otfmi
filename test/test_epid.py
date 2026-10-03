@@ -61,11 +61,11 @@ def test_final_time(path_fmu):
 
 
 def test_keyword(path_fmu):
-    """Check that specifying final time at simulation raises a Warning."""
+    """Check that specifying final time at simulation raises a ValueError."""
     lowlevel_model_fmu = otfmi.OpenTURNSFMUFunction(
         path_fmu,
         inputs_fmu=["infection_rate", "healing_rate"],
         outputs_fmu=["infected"],
     )
-    with pytest.raises(Warning):
+    with pytest.raises(ValueError):
         lowlevel_model_fmu._exec(input_value, final_time=50.0)

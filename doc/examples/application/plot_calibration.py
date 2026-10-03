@@ -54,7 +54,6 @@ import otfmi
 import otfmi.example.utility
 import openturns as ot
 import openturns.viewer as otv
-import pyfmi
 from matplotlib import pylab as plt
 
 # %%
@@ -98,7 +97,7 @@ print(f"path_fmu = {path_fmu}")
 
 # %%
 # Inspect variables
-check_model = pyfmi.load_fmu(path_fmu)
+check_model = otfmi.fmi.load_fmu(path_fmu)
 list_of_variables = list(check_model.get_model_variables().keys())
 for i in range(len(list_of_variables)):
     print(f"Variable #{i} / {len(list_of_variables)} = {list_of_variables[i]}")
