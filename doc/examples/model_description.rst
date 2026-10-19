@@ -122,3 +122,25 @@ References
 ~~~~~~~~~~
 .. [anonymous1978] *Influenza in a boarding school*. In: British Medical Journal 587.1,
    `pdf <https://pmc.ncbi.nlm.nih.gov/articles/PMC1603269/pdf/brmedj00115-0064.pdf>`__
+
+
+The heat exchanger model
+------------------------
+
+We consider a model of heat exchanger.
+Basically, it models a flow of liquid coolant flowing within tubes,
+which are cooled down by an external flow of air.
+The Heat eXchanger (HX) is in charge of heat dissipation
+from the coolant fluid to the air.
+
+Time-dependent temperatures for air and coolant at inlet are defined,
+and we study the evolution of the temperature of air and coolant at the outlet.
+Hence **two time-dependent inputs** ``Temp_air_inlet`` and ``Temp_coolant_inlet``
+and **two time-dependent outputs** ``Temp_air_outlet`` and ``Temp_coolant_outlet``.
+
+The thermal power exchanged is computed with the NTU approach
+from the heat transfer coefficient, the air and coolant thermal flow rates,
+and the inlet temperatures.
+Outlet temperatures then follow from the heat balance equations.
+
+This model is implemented in Modelica language (see ``HeatExchanger.mo``).
