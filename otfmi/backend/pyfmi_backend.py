@@ -110,20 +110,20 @@ def load_fmu(path_fmu, kind=None, **kwargs):
     ----------
     path_fmu : str or path-like
         Path to the FMU file.
-    kind : str, one of "ME" (model exchange) or "CS" (co-simulation)
+    kind : str, one of "ME" (model exchange) or "CS" (co-simulation), optional
         Select a kind of FMU if both are available.
-        Note:
-        Contrary to pyfmi, the default here is "CS" (co-simulation). The
-        rationale behind this choice is that co-simulation may be used to
+        Contrary to pyfmi, the default is to try CS first, then ME.
+        The rationale behind this choice is that co-simulation may be used to
         impose a solver not available in pyfmi.
 
     Additional keyword arguments are passed on to pyfmi's 'load_fmu' function.
 
     """
+    assert kind in (None, "CS", "ME"), f"Invalid FMU kind: {kind}"
+    p_fmu = Path(path_fmu)
+
     # pyfmi writes a log file in current folder even with log_level=0
     kwargs.setdefault("log_file_name", io.StringIO())
-
-    p_fmu = str(Path(path_fmu).resolve())
     if kind is None:
         try:
             return pyfmi.load_fmu(p_fmu, kind="CS", **kwargs)
@@ -144,17 +144,17 @@ def load_unzipped_fmu(path_fmu, kind=None, **kwargs):
     path_fmu : str or path-like
         Path to the directory of an unzipped FMU.
 
-    kind : str, one of "ME" (model exchange) or "CS" (co-simulation)
+    kind : str, one of "ME" (model exchange) or "CS" (co-simulation), optional
         Select a kind of FMU if both are available.
+        The default is to guess from the model description xml.
 
     Additional keyword arguments are passed on to the pyfmi model constructor.
 
     """
-    # pyfmi writes a log file in current folder even with log_level=0
-    kwargs.setdefault("log_file_name", io.StringIO())
-    kwargs.setdefault("allow_unzipped_fmu", True)
+    assert kind in (None, "CS", "ME"), f"Invalid FMU kind: {kind}"
+    p_fmu = Path(path_fmu)
 
-    version, fmu_kind = read_unzipped_model_description(path_fmu)
+    version, fmu_kind = _read_unzipped_model_description(p_fmu)
     if kind is None:
         kind = fmu_kind
     try:
@@ -162,10 +162,13 @@ def load_unzipped_fmu(path_fmu, kind=None, **kwargs):
     except KeyError:
         raise ValueError(f"Unsupported FMI version {version} combined with kind"
                          f" {kind}")
-    return model_class(fmu=str(path_fmu), **kwargs)
+    # pyfmi writes a log file in current folder even with log_level=0
+    kwargs.setdefault("log_file_name", io.StringIO())
+    kwargs.setdefault("allow_unzipped_fmu", True)
+    return model_class(fmu=p_fmu, **kwargs)
 
 
-def read_unzipped_model_description(path_fmu):
+def _read_unzipped_model_description(path_fmu):
     """Read the FMI version and kind of an unzipped FMU.
 
     Parameters

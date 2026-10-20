@@ -377,45 +377,9 @@ def load_unzipped_fmu(path_fmu, kind=None, **kwargs):
     _FMPYModel
         FMU model wrapper object.
     """
-    # check the directory looks like an unzipped FMU, and let fmpy pick the
-    # interface type itself (it supports both model exchange and co-simulation)
-    read_unzipped_model_description(path_fmu)
-    return _FMPYModel(path_fmu, kind=kind)
-
-
-def read_unzipped_model_description(path_fmu):
-    """Read the FMI version and kind of an unzipped FMU.
-
-    Parameters
-    ----------
-    path_fmu : str or path-like
-        Path to the directory of an unzipped FMU.
-
-    Returns
-    -------
-    version : str
-        FMI version, as declared in modelDescription.xml.
-
-    kind : str
-        Either "ME" (model exchange) or "CS" (co-simulation).
-    """
+    # check the directory looks like an unzipped FMU
     xml_file = Path(path_fmu) / "modelDescription.xml"
     if not xml_file.is_file():
         raise FileNotFoundError(f"{xml_file} not found, it does not look like an"
                                 f" unzipped FMU")
-
-    version, kind = None, None
-    with open(xml_file, encoding="utf-8") as xmlf:
-        for line in xmlf:
-            if version is None:
-                match = re.search(r"""fmiVersion\s*=\s*['"]([^'"]*)['"]""", line)
-                if match:
-                    version = match.group(1)
-            if "<CoSimulation" in line:
-                kind = "CS"
-                break
-            if "<ModelExchange" in line:
-                kind = "ME"
-    if kind is None:
-        raise ValueError(f"Cannot guess FMU type from {xml_file}")
-    return version, kind
+    return _FMPYModel(path_fmu, kind=kind)
