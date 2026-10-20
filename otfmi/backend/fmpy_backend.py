@@ -8,7 +8,6 @@ to provide an interface compatible with the pyfmi backend.
 """
 
 from pathlib import Path
-import re
 import numpy as np
 from packaging.version import Version
 
