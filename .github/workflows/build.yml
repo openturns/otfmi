@@ -72,7 +72,7 @@ jobs:
           conda-remove-defaults: "true"
       - name: Build
         run: |
-          curl -fLO https://build.openmodelica.org/omc/builds/windows/releases/1.27/1/64bin/OpenModelica-v1.27.1-64bit.exe
+          curl -fLO https://build.openmodelica.org/omc/builds/windows/releases/1.27/1/64bit/OpenModelica-v1.27.1-64bit.exe
           .\OpenModelica-v1.27.1-64bit.exe "/S" | out-null
           Get-ChildItem -Path "C:\Program Files"
           $env:PATH += ";C:\Program Files\OpenModelica1.27.1-64bit\bin"
