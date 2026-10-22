@@ -300,10 +300,17 @@ class _FMPYModel:
         fmpy leaves an attribute unset when the FMU does not provide it, while
         pyfmi substitutes a default. Fall back to the same values so that both
         backends agree on the simulation time interval and mesh.
+        Since fmpy 0.3.28 (FMPy#816) attributes are exposed as strings and
+        must be converted to float to match pyfmi's behavior.
         """
         experiment = self._model_description.defaultExperiment
-        value = getattr(experiment, name, None) if experiment else None
-        return default if value is None else value
+        value = getattr(experiment, name, None) if experiment is not None else None
+        if value is None:
+            return default
+        try:
+            return float(value)
+        except (TypeError, ValueError):
+            return default
 
     def get_log(self):
         """Get log messages (empty for fmpy)."""
