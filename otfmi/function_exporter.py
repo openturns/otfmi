@@ -681,6 +681,63 @@ end {{ className }};
         with open(self._workdir / (className + ".mo"), "w") as mo:
             mo.write(data)
 
+    def _copy_ot_libs(self, target_dir):
+        """
+        Copy OpenTURNS shared libs alongside the wrapper so that
+        OpenModelica can find -lOT via LibraryDirectory.
+
+        Recent OpenModelica resolves FMU/simulation external libs with
+        find_library(... PATHS ${EXTERNAL_LIBDIRECTORIES} NO_DEFAULT_PATH),
+        where EXTERNAL_LIBDIRECTORIES only contains LibraryDirectory and the
+        OpenModelica install dirs.  A user (non-system, non-conda) OpenTURNS
+        install (e.g. ../schueller/build/install/lib/libOT.so) is therefore
+        invisible and the link fails with "/usr/bin/ld: cannot find -lOT".
+        Copying libOT.* next to libcwrapper.* (i.e. into LibraryDirectory)
+        makes find_library succeed and the lib gets bundled into the FMU.
+        """
+        copied = []
+        try:
+            ot_libdir = Path(ot.__file__).parents[3]
+        except Exception:
+            return copied
+        if not ot_libdir.exists():
+            return copied
+        patterns = ("libOT.*", "OT.dll", "OT.lib")
+        seen = set()
+        for pattern in patterns:
+            try:
+                candidates = list(ot_libdir.glob(pattern))
+            except Exception:
+                continue
+            for src in candidates:
+                if src.name in seen:
+                    continue
+                seen.add(src.name)
+                # skip static archives of other libs, keep OT files only
+                dest = Path(target_dir) / src.name
+                if dest.exists():
+                    copied.append(src.name)
+                    continue
+                try:
+                    if src.is_symlink():
+                        linkto = os.readlink(src)
+                        try:
+                            if dest.is_symlink() or dest.exists():
+                                dest.unlink()
+                        except Exception:
+                            pass
+                        os.symlink(linkto, dest)
+                    else:
+                        shutil.copy2(src, dest, follow_symlinks=False)
+                    copied.append(src.name)
+                except Exception:
+                    try:
+                        shutil.copy2(src, dest)
+                        copied.append(src.name)
+                    except Exception:
+                        pass
+        return copied
+
     def export_model(self, model_path, gui=False, verbose=False, binary=True, mode="cxx", **kwargs):
         """
         Export to model file (.mo).
@@ -737,6 +794,9 @@ end {{ className }};
             raise ValueError(f"Invalid mode: {mode}")
         if binary:
             self._build_cwrapper(verbose)
+            if mode == "cxx":
+                # make -lOT discoverable via LibraryDirectory (see _copy_ot_libs)
+                self._copy_ot_libs(self._workdir)
 
         # the "move" private kwarg moves the model from temporary folder to user folder
         move = kwargs.get("move", True)
@@ -746,9 +806,17 @@ end {{ className }};
         if move:
             list_file = [className + extension]
             if binary:
-                # licwrapper.a/.so, cwrapper.lib/dll
+                # licwrapper.a/.so, cwrapper.lib/dll (+ libOT.* for cxx mode)
                 libfiles = glob.glob(str(self._workdir / "*cwrapper*"))
                 list_file += [Path(x).name for x in libfiles]
+                if mode == "cxx":
+                    otfiles = glob.glob(str(self._workdir / "libOT*"))
+                    otfiles += glob.glob(str(self._workdir / "OT.dll"))
+                    otfiles += glob.glob(str(self._workdir / "OT.lib"))
+                    for x in otfiles:
+                        name = Path(x).name
+                        if name not in list_file:
+                            list_file.append(name)
             else:
                 list_file += ["wrapper" + c_ext, "CMakeLists.txt"]
             for file in list_file:
@@ -800,7 +868,7 @@ end {{ className }};
 
             model_path = p.with_suffix(".mo")
 
-            self.export_model(model_path, gui=False, verbose=verbose, move=False)
+            self.export_model(model_path, gui=False, verbose=verbose, move=False, mode="pyprocess")
 
             path_mo = self._workdir / (className + ".mo")
             path_fmu = self._workdir / (className + extension)
