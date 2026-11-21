@@ -843,11 +843,15 @@ end {{ className }};
             model type, either me (model exchange), cs (co-simulation),
             me_cs (both model exchange and co-simulation)
         mode : str
-            either pyprocess or pythonfmu
+            either pyprocess, cxx or pythonfmu
             Only pythonfmu mode is allowed for temporal models (PointToFieldFunction)
             Note that pythonfmu mode yields cosimulation-only, pyfmi/otfmi incompatible fmus.
             While pythonfmu mode is fine for use with fmpy, for other tools (eg OMSimulator) it might require
             LD_PRELOAD=/usr/lib/libpython3.so variable to be set (adjust depending on Python install path).
+            The pyprocess/cxx modes go through the Modelica/omc path;
+            the wrapper mode is forwarded to export_model.
+            Note: the cpython wrapper is not supported here as the embedded
+            Python interpreter segfaults at FMU runtime (OMSimulator/fmpy).
         verbose : bool
             Verbose output (default=False).
         """
@@ -862,13 +866,13 @@ end {{ className }};
         if not dirName.exists():
             raise FileNotFoundError(f"parent directory {dirName} does not exist")
         self._init_workdir()
-        if mode == "pyprocess":
+        if mode in ("pyprocess", "cxx"):
             if hasattr(self._function, "getOutputMesh"):
-                raise TypeError("Cannot export field functions in pyprocess mode")
+                raise TypeError(f"Cannot export field functions in {mode} mode")
 
             model_path = p.with_suffix(".mo")
 
-            self.export_model(model_path, gui=False, verbose=verbose, move=False, mode="pyprocess")
+            self.export_model(model_path, gui=False, verbose=verbose, move=False, mode=mode)
 
             path_mo = self._workdir / (className + ".mo")
             path_fmu = self._workdir / (className + extension)
@@ -955,5 +959,7 @@ class {{ className }}(Fmi2Slave):
                 raise RuntimeError("pythonfmu.FmuBuilder binary is missing, check the pythonfmu installation")
 
             FmuBuilder.build_FMU(slave_file, dest=str(dirName))
+        else:
+            raise ValueError(f"Invalid mode: {mode}")
         shutil.rmtree(self._workdir)
         ot.Log.Warn(f"Exported FMU into: {dirName}")

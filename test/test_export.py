@@ -14,10 +14,10 @@ from pathlib import Path
 import importlib
 
 
-@pytest.mark.parametrize("mode", ["pyprocess", "pythonfmu"])
+@pytest.mark.parametrize("mode", ["pyprocess", "cxx", "pythonfmu"])
 @pytest.mark.parametrize("fmuType", ["cs", "me"])
 def test_export_fmu_vector(mode, fmuType):
-    if mode == "pyprocess" and sys.platform.startswith("win"):
+    if mode in ("pyprocess", "cxx") and sys.platform.startswith("win"):
         # omc mingw cross-compiler cannot use otfmi msvc wrapper binary: Linking cwrapper-NOTFOUND
         return
     if mode == "pythonfmu" and importlib.util.find_spec("pythonfmu") is None:
@@ -43,7 +43,7 @@ def test_export_fmu_vector(mode, fmuType):
             # requires LD_PRELOAD for pythonfmu
             subprocess.run(["OMSimulator", str(path_fmu)], capture_output=True, check=True)
 
-        if mode == "pyprocess":
+        if mode in ("pyprocess", "cxx"):
             # reimport fmu
             model_fmu = otfmi.FMUFunction(
                 path_fmu, inputs_fmu=["E", "F", "L", "I"], outputs_fmu=["y0"]
