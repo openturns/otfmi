@@ -800,7 +800,7 @@ end {{ className }};
 
             model_path = p.with_suffix(".mo")
 
-            self.export_model(model_path, gui=False, verbose=verbose, move=False)
+            self.export_model(model_path, gui=False, verbose=verbose, move=False, mode=mode)
 
             path_mo = self._workdir / (className + ".mo")
             path_fmu = self._workdir / (className + extension)
