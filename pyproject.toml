@@ -1,9 +1,10 @@
 [build-system]
-requires = ["setuptools"]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
 
 [project]
 name = "otfmi"
-version = "0.19"
+dynamic = ["version"]
 description = "Simulate FMUs from OpenTURNS"
 readme = "README.rst"
 dependencies = [
@@ -25,15 +26,6 @@ classifiers = [
 ]
 keywords = ["fmi", "modelica", "fmu"]
 
-[tool.setuptools]
-packages = ["otfmi",
-            "otfmi.backend",
-            "otfmi.example"]
-
-[tool.setuptools.package-data]
-otfmi = ["example/file/fmu/linux-x86_64/*.fmu",
-         "example/file/fmu/win-amd64/*.fmu"]
-
 [project.optional-dependencies]
 pyfmi = ["pyfmi"]
 fmpy = ["fmpy", "packaging"]
@@ -47,3 +39,24 @@ Repository = "https://github.com/openturns/otfmi.git"
 
 [project.scripts]
 mo2fmu = "otfmi.mo2fmu:main"
+
+[tool.hatch.version]
+path = "otfmi/__init__.py"
+
+[tool.hatch.build.targets.wheel]
+packages = ["otfmi"]
+
+[tool.hatch.build.targets.sdist]
+include = [
+  "otfmi",
+  "test",
+  "doc",
+  "README.rst",
+  "ChangeLog",
+  "COPYING",
+  "COPYING.LESSER",
+]
+exclude = [
+  "doc/_generated",
+  "doc/auto_*",
+]

@@ -1,8 +1,0 @@
-include README.rst
-recursive-include otfmi/example/file *.mos *.fmu
-graft doc
-prune doc/_generated
-
-global-exclude *~
-global-exclude *.pyo
-global-exclude *.pyc
